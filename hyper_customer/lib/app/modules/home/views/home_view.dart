@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/modules/home/widgets/color_button.dart';
@@ -18,6 +19,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    double statusBarHeight = MediaQuery.of(context).padding.top;
     return Scaffold(
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -28,55 +30,60 @@ class HomeView extends GetView<HomeController> {
               children: [
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
+                  decoration: BoxDecorations.header(),
                   height: controller.headerState.height,
-                  child: SvgPicture.asset(
-                    AppAssets.homeBg,
-                    fit: BoxFit.cover,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(5.r),
+                      bottomRight: Radius.circular(5.r),
+                    ),
+                    child: SvgPicture.asset(
+                      AppAssets.homeBg,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 SafeArea(
-                  child: Container(
-                    padding:
-                        EdgeInsets.only(left: 18.w, top: 11.h, right: 18.w),
-                    child: Column(
-                      children: [
-                        _header(),
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 18.h,
+                  child: Column(
+                    children: [
+                      TweenAnimationBuilder<double>(
+                        tween: Tween<double>(
+                          begin: controller.headerState.fullHeight -
+                              statusBarHeight,
+                          end: controller.headerState.height - statusBarHeight,
+                        ),
+                        duration: const Duration(milliseconds: 250),
+                        builder: (
+                          BuildContext context,
+                          double height,
+                          Widget? child,
+                        ) {
+                          return Container(
+                            padding: EdgeInsets.only(
+                                left: 18.w, top: 11.h, right: 18.w),
+                            height: height,
+                            child: Column(
+                              children: [
+                                _header(),
+                                !controller.headerState.isToggle
+                                    ? Column(
+                                        children: [
+                                          SizedBox(
+                                            height: 18.h,
+                                          ),
+                                          _wallet(),
+                                          SizedBox(
+                                            height: 18.h,
+                                          ),
+                                        ],
+                                      )
+                                    : Container(),
+                              ],
                             ),
-                            _wallet(),
-                            SizedBox(
-                              height: 36.h,
-                            ),
-                          ],
-                        ),
-                        SizeTransition(
-                          sizeFactor: controller.animation,
-                          child: Container(
-                            color: Colors.red,
-                            height: 100,
-                          ),
-                        ),
-                        Container(
-                          color: Colors.blue,
-                          height: 100,
-                        ),
-                      ],
-                    ),
-                    // AnimatedList(
-                    //   key: controller.contentKey,
-                    //   primary: false,
-                    //   shrinkWrap: true,
-                    //   initialItemCount: 4,
-                    //   itemBuilder: (context, index, animation) {
-                    //     return SizeTransition(
-                    //       sizeFactor: animation,
-                    //       child: content[index],
-                    //     );
-                    //   },
-                    // ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],

@@ -18,4 +18,12 @@ abstract class ShadowStyle {
       color: AppColors.black.withOpacity(0.05),
     ),
   ];
+  static List<BoxShadow> bottom = [
+    BoxShadow(
+      offset: const Offset(0, 2),
+      blurRadius: 4,
+      spreadRadius: 0,
+      color: AppColors.primary400.withOpacity(0.4),
+    ),
+  ];
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hyper_customer/app/bindings/initial_binding.dart';
 import 'package:hyper_customer/app/core/controllers/network_controller.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 
@@ -24,10 +23,6 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.light,
-  ));
 
   NetworkController.intance.init();
   TokenManager.instance.init();

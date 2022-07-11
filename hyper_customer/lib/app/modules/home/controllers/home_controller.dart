@@ -9,15 +9,6 @@ class HomeController extends BaseController {
   final contentKey = GlobalKey<AnimatedListState>();
   final HeaderState headerState = HeaderState();
 
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 3),
-    vsync: Navigator.of(Get.context!),
-  )..forward();
-  late final Animation<double> animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.fastOutSlowIn,
-  );
-
   void toggleHeader() {
     headerState.toggle();
   }

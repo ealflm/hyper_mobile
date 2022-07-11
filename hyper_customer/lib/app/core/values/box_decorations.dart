@@ -14,4 +14,14 @@ abstract class BoxDecorations {
       boxShadow: ShadowStyle.top,
     );
   }
+
+  static BoxDecoration header() {
+    return BoxDecoration(
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(5.r),
+        bottomRight: Radius.circular(5.r),
+      ),
+      boxShadow: ShadowStyle.bottom,
+    );
+  }
 }
