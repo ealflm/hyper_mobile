@@ -14,10 +14,10 @@ class ShowWallet extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
-      child: state
-          ? SizedBox(
-              height: 36.h,
-              child: Row(
+      child: SizedBox(
+        height: 36.h,
+        child: state
+            ? Row(
                 children: [
                   Text(
                     'Hiện ví',
@@ -29,11 +29,8 @@ class ShowWallet extends StatelessWidget {
                     color: AppColors.white,
                   ),
                 ],
-              ),
-            )
-          : SizedBox(
-              height: 36.h,
-              child: Row(
+              )
+            : Row(
                 children: [
                   Text(
                     'Ẩn ví',
@@ -46,7 +43,7 @@ class ShowWallet extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+      ),
     );
   }
 }

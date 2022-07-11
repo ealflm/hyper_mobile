@@ -9,6 +9,7 @@ import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/modules/home/widgets/color_button.dart';
+import 'package:hyper_customer/app/modules/home/widgets/service_container.dart';
 import 'package:hyper_customer/app/modules/home/widgets/show_wallet.dart';
 import 'package:hyper_customer/app/modules/home/widgets/user_avatar.dart';
 
@@ -83,6 +84,85 @@ class HomeView extends GetView<HomeController> {
                           );
                         },
                       ),
+                      Container(
+                        padding:
+                            EdgeInsets.only(left: 18.w, top: 18.h, right: 18.w),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ServiceContainer(
+                                  onPressed: () {},
+                                  title: 'Đặt xe',
+                                  backgroundAsset: AppAssets.booking,
+                                  iconAsset: AppAssets.bookingIcon,
+                                  color: AppColors.booking.withOpacity(0.4),
+                                ),
+                                SizedBox(
+                                  width: 18.w,
+                                ),
+                                ServiceContainer(
+                                  onPressed: () {},
+                                  title: 'Thuê xe',
+                                  backgroundAsset: AppAssets.renting,
+                                  iconAsset: AppAssets.rentingIcon,
+                                  color: AppColors.renting.withOpacity(0.4),
+                                ),
+                                SizedBox(
+                                  width: 18.w,
+                                ),
+                                ServiceContainer(
+                                  onPressed: () {},
+                                  title: 'Đi xe buýt',
+                                  backgroundAsset: AppAssets.busing,
+                                  iconAsset: AppAssets.busingIcon,
+                                  color: AppColors.busing.withOpacity(0.4),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 18.h,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.blue,
+                                borderRadius: BorderRadius.circular(9.r),
+                              ),
+                              width: 324.w,
+                              height: 160.h,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(9.r),
+                                child: SvgPicture.asset(
+                                  AppAssets.packageBanner,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 12.h,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.circle,
+                                  size: 8.w,
+                                  color: AppColors.indicator,
+                                ),
+                                SizedBox(
+                                  width: 16.w,
+                                ),
+                                Icon(
+                                  Icons.circle_outlined,
+                                  size: 8.w,
+                                  color: AppColors.indicator,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -125,7 +205,7 @@ class HomeView extends GetView<HomeController> {
                 onPressed: () {
                   debugPrint('Pressed');
                 },
-                icon: Icons.payments,
+                icon: Icons.payments_outlined,
               ),
               SizedBox(
                 width: 10.w,

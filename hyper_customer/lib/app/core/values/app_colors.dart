@@ -32,7 +32,7 @@ abstract class AppColors {
   static const Color lightBlack = Color(0xFF48445A);
   static const Color line = Color(0xFFF6F6F6);
   static const Color otp = Color(0xFFEAEAEA);
-  static const Color indicator = Color(0xFF626365);
+  static const Color indicator = Color(0xFFD1D0D8);
   static const Color caption = Color(0xFFA9A9A9);
   static const Color description = Color(0xFF626365);
   static const Color floatLabel = Color(0xFF666666);
@@ -43,4 +43,8 @@ abstract class AppColors {
   static const Color green = Color(0xFF35C947);
   static const Color purple = Color(0xFFA033FD);
   static const Color orange = Color(0xFFFA6D55);
+
+  static const Color booking = Color(0xFFF45B7D);
+  static const Color renting = Color(0xFF6AA3EE);
+  static const Color busing = Color(0xFFF5C401);
 }
