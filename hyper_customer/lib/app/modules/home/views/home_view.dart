@@ -8,10 +8,13 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/scroll_behavior.dart';
+import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/modules/home/widgets/color_button.dart';
 import 'package:hyper_customer/app/modules/home/widgets/service_container.dart';
 import 'package:hyper_customer/app/modules/home/widgets/show_wallet.dart';
 import 'package:hyper_customer/app/modules/home/widgets/user_avatar.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -21,155 +24,181 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Obx(
-            () => Stack(
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  decoration: BoxDecorations.header(),
-                  height: controller.headerState.height,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(5.r),
-                      bottomRight: Radius.circular(5.r),
-                    ),
-                    child: SvgPicture.asset(
-                      AppAssets.homeBg,
-                      fit: BoxFit.cover,
+
+    return StatusBar(
+      brightness: Brightness.light,
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Obx(
+              () => Stack(
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 250),
+                    decoration: BoxDecorations.header(),
+                    height: controller.headerState.height,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(5.r),
+                        bottomRight: Radius.circular(5.r),
+                      ),
+                      child: SvgPicture.asset(
+                        AppAssets.homeBg,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                SafeArea(
-                  child: Column(
-                    children: [
-                      TweenAnimationBuilder<double>(
-                        tween: Tween<double>(
-                          begin: controller.headerState.fullHeight -
-                              statusBarHeight,
-                          end: controller.headerState.height - statusBarHeight,
-                        ),
-                        duration: const Duration(milliseconds: 250),
-                        builder: (
-                          BuildContext context,
-                          double height,
-                          Widget? child,
-                        ) {
-                          return Container(
-                            padding: EdgeInsets.only(
-                                left: 18.w, top: 11.h, right: 18.w),
-                            height: height,
+                  RefreshIndicator(
+                    onRefresh: () {
+                      debugPrint('Trigged refresh');
+                      return Future.delayed(const Duration(seconds: 1));
+                    },
+                    child: ScrollConfiguration(
+                      behavior: NoneScrollBehavior(),
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          SafeArea(
                             child: Column(
                               children: [
-                                _header(),
-                                !controller.headerState.isToggle
-                                    ? Column(
+                                TweenAnimationBuilder<double>(
+                                  tween: Tween<double>(
+                                    begin: controller.headerState.fullHeight -
+                                        statusBarHeight,
+                                    end: controller.headerState.height -
+                                        statusBarHeight,
+                                  ),
+                                  duration: const Duration(milliseconds: 250),
+                                  builder: (
+                                    BuildContext context,
+                                    double height,
+                                    Widget? child,
+                                  ) {
+                                    return Container(
+                                      padding: EdgeInsets.only(
+                                          left: 18.w, top: 11.h, right: 18.w),
+                                      height: height,
+                                      child: Column(
                                         children: [
-                                          SizedBox(
-                                            height: 18.h,
+                                          _header(),
+                                          !controller.headerState.isToggle
+                                              ? Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 18.h,
+                                                    ),
+                                                    _wallet(),
+                                                    SizedBox(
+                                                      height: 18.h,
+                                                    ),
+                                                  ],
+                                                )
+                                              : Container(),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: 18.w, top: 18.h, right: 18.w),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          ServiceContainer(
+                                            onPressed: () {},
+                                            title: 'Đặt xe',
+                                            backgroundAsset: AppAssets.booking,
+                                            iconAsset: AppAssets.bookingIcon,
+                                            color: AppColors.booking
+                                                .withOpacity(0.4),
                                           ),
-                                          _wallet(),
                                           SizedBox(
-                                            height: 18.h,
+                                            width: 18.w,
+                                          ),
+                                          ServiceContainer(
+                                            onPressed: () {},
+                                            title: 'Thuê xe',
+                                            backgroundAsset: AppAssets.renting,
+                                            iconAsset: AppAssets.rentingIcon,
+                                            color: AppColors.renting
+                                                .withOpacity(0.4),
+                                          ),
+                                          SizedBox(
+                                            width: 18.w,
+                                          ),
+                                          ServiceContainer(
+                                            onPressed: () {},
+                                            title: 'Đi xe buýt',
+                                            backgroundAsset: AppAssets.busing,
+                                            iconAsset: AppAssets.busingIcon,
+                                            color: AppColors.busing
+                                                .withOpacity(0.4),
                                           ),
                                         ],
-                                      )
-                                    : Container(),
+                                      ),
+                                      SizedBox(
+                                        height: 18.h,
+                                      ),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue,
+                                          borderRadius:
+                                              BorderRadius.circular(9.r),
+                                        ),
+                                        width: 324.w,
+                                        height: 160.h,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(9.r),
+                                          child: SvgPicture.asset(
+                                            AppAssets.packageBanner,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 12.h,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.circle,
+                                            size: 8.w,
+                                            color: AppColors.indicator,
+                                          ),
+                                          SizedBox(
+                                            width: 16.w,
+                                          ),
+                                          Icon(
+                                            Icons.circle_outlined,
+                                            size: 8.w,
+                                            color: AppColors.indicator,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
-                      Container(
-                        padding:
-                            EdgeInsets.only(left: 18.w, top: 18.h, right: 18.w),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                ServiceContainer(
-                                  onPressed: () {},
-                                  title: 'Đặt xe',
-                                  backgroundAsset: AppAssets.booking,
-                                  iconAsset: AppAssets.bookingIcon,
-                                  color: AppColors.booking.withOpacity(0.4),
-                                ),
-                                SizedBox(
-                                  width: 18.w,
-                                ),
-                                ServiceContainer(
-                                  onPressed: () {},
-                                  title: 'Thuê xe',
-                                  backgroundAsset: AppAssets.renting,
-                                  iconAsset: AppAssets.rentingIcon,
-                                  color: AppColors.renting.withOpacity(0.4),
-                                ),
-                                SizedBox(
-                                  width: 18.w,
-                                ),
-                                ServiceContainer(
-                                  onPressed: () {},
-                                  title: 'Đi xe buýt',
-                                  backgroundAsset: AppAssets.busing,
-                                  iconAsset: AppAssets.busingIcon,
-                                  color: AppColors.busing.withOpacity(0.4),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 18.h,
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(9.r),
-                              ),
-                              width: 324.w,
-                              height: 160.h,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(9.r),
-                                child: SvgPicture.asset(
-                                  AppAssets.packageBanner,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.circle,
-                                  size: 8.w,
-                                  color: AppColors.indicator,
-                                ),
-                                SizedBox(
-                                  width: 16.w,
-                                ),
-                                Icon(
-                                  Icons.circle_outlined,
-                                  size: 8.w,
-                                  color: AppColors.indicator,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -234,13 +263,18 @@ class HomeView extends GetView<HomeController> {
           },
           state: controller.headerState.isToggle,
         ),
-        SizedBox(
-          height: 36.r,
-          width: 36.r,
-          child: Icon(
-            Icons.notifications_outlined,
-            color: AppColors.white,
-            size: 24.r,
+        GestureDetector(
+          onTap: () {
+            Get.toNamed(Routes.NOTIFICATION);
+          },
+          child: SizedBox(
+            height: 36.r,
+            width: 36.r,
+            child: Icon(
+              Icons.notifications_outlined,
+              color: AppColors.white,
+              size: 24.r,
+            ),
           ),
         ),
       ],

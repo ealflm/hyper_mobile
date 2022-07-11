@@ -6,6 +6,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/main/bindings/main_binding.dart';
 import '../modules/main/views/main_view.dart';
+import '../modules/notification/bindings/notification_binding.dart';
+import '../modules/notification/views/notification_view.dart';
 import '../modules/package/bindings/package_binding.dart';
 import '../modules/package/views/package_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -57,11 +59,19 @@ class AppPages {
       name: _Paths.MAIN,
       page: () => const MainView(),
       binding: MainBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.PACKAGE,
       page: () => const PackageView(),
       binding: PackageBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.NOTIFICATION,
+      page: () => const NotificationView(),
+      binding: NotificationBinding(),
+      transition: Transition.noTransition,
     ),
   ];
 }

@@ -11,6 +11,7 @@ import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
+import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 
 import '../controllers/start_controller.dart';
 
@@ -20,8 +21,7 @@ class StartView extends GetView<StartController> {
   Widget build(BuildContext context) {
     return StatusBar(
       brightness: Brightness.light,
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Unfocus(
         child: Scaffold(
           body: Stack(
             children: [
