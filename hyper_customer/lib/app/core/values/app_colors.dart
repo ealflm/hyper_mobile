@@ -26,7 +26,6 @@ abstract class AppColors {
   static const Color surface = Color(0xFFFFFFFF);
   static const Color white = Color(0xFFFFFFFF);
   static const Color gray = Color(0xFF949494);
-  static const Color fullBlack = Color(0xFF000000);
   static const Color black = Color(0xFF000000);
   static const Color softBlack = Color(0xFF090327);
   static const Color lightBlack = Color(0xFF48445A);

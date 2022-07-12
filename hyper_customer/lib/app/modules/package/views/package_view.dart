@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
-import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 
@@ -13,8 +12,6 @@ class PackageView extends GetView<PackageController> {
   const PackageView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    double statusBarHeight = MediaQuery.of(context).padding.top;
-
     return StatusBar(
       brightness: Brightness.dark,
       child: Scaffold(
@@ -25,22 +22,15 @@ class PackageView extends GetView<PackageController> {
               children: [
                 _header(),
                 SizedBox(height: 8.h),
-                Container(
-                  color: Colors.red,
-                  height: 1.sh -
-                      AppValues.bottomAppBarHeight -
-                      statusBarHeight -
-                      89.h,
-                  child: GetBuilder<PackageController>(
-                    init: PackageController(),
-                    initState: (_) {},
-                    builder: (_) {
-                      return PageStorage(
-                        bucket: controller.bucket,
-                        child: controller.currentScreen,
-                      );
-                    },
-                  ),
+                GetBuilder<PackageController>(
+                  init: PackageController(),
+                  initState: (_) {},
+                  builder: (_) {
+                    return PageStorage(
+                      bucket: controller.bucket,
+                      child: controller.currentScreen,
+                    );
+                  },
                 ),
               ],
             ),

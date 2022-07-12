@@ -10,6 +10,7 @@ abstract class ShadowStyle {
       color: AppColors.black.withOpacity(0.08),
     ),
   ];
+
   static List<BoxShadow> surface = [
     BoxShadow(
       offset: const Offset(0, 4),
@@ -18,12 +19,22 @@ abstract class ShadowStyle {
       color: AppColors.black.withOpacity(0.05),
     ),
   ];
+
   static List<BoxShadow> bottom = [
     BoxShadow(
       offset: const Offset(0, 2),
       blurRadius: 4,
       spreadRadius: 0,
       color: AppColors.primary400.withOpacity(0.4),
+    ),
+  ];
+
+  static List<BoxShadow> service = [
+    BoxShadow(
+      offset: const Offset(0, 2),
+      blurRadius: 10,
+      spreadRadius: 0,
+      color: AppColors.black.withOpacity(0.05),
     ),
   ];
 }

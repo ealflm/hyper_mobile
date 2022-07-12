@@ -24,4 +24,12 @@ abstract class BoxDecorations {
       boxShadow: ShadowStyle.bottom,
     );
   }
+
+  static BoxDecoration service() {
+    return BoxDecoration(
+      color: AppColors.white,
+      borderRadius: BorderRadius.circular(9.r),
+      boxShadow: ShadowStyle.service,
+    );
+  }
 }

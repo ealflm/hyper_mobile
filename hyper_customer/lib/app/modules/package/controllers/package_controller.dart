@@ -19,6 +19,12 @@ class PackageController extends GetxController
   PageStorageBucket bucket = PageStorageBucket();
   Widget get currentScreen => _screens[tabController.index];
 
+  var buildCounter = 0.obs;
+
+  void increaseBuildCount() {
+    buildCounter.value++;
+  }
+
   void changeTab(int index) {
     tabController.index = index;
     update();
