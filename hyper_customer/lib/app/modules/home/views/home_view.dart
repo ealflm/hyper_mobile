@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
@@ -15,6 +16,7 @@ import 'package:hyper_customer/app/modules/home/widgets/service_container.dart';
 import 'package:hyper_customer/app/modules/home/widgets/show_wallet.dart';
 import 'package:hyper_customer/app/modules/home/widgets/user_avatar.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -23,6 +25,8 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    RefreshController refreshController =
+        RefreshController(initialRefresh: false);
     double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return StatusBar(
@@ -36,37 +40,42 @@ class HomeView extends GetView<HomeController> {
               () => Stack(
                 children: [
                   _headerBackground(),
-                  RefreshIndicator(
-                    onRefresh: () {
-                      debugPrint('Trigged refresh');
-                      return Future.delayed(const Duration(seconds: 1));
-                    },
-                    child: ScrollConfiguration(
-                      behavior: NoneScrollBehavior(),
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-                          SafeArea(
-                            child: Column(
-                              children: [
-                                _header(statusBarHeight),
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 18.w, top: 18.h, right: 18.w),
-                                  child: Column(
-                                    children: [
-                                      _service(),
-                                      SizedBox(
-                                        height: 18.h,
-                                      ),
-                                      _packageBanner(),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                  ScrollConfiguration(
+                    behavior: NoneScrollBehavior(),
+                    child: SafeArea(
+                      child: SizedBox(
+                        height: 1.sh -
+                            statusBarHeight -
+                            AppValues.bottomAppBarHeight,
+                        child: SmartRefresher(
+                          controller: refreshController,
+                          onRefresh: () async {
+                            await Future.delayed(const Duration(seconds: 1));
+                            refreshController.refreshCompleted();
+                          },
+                          header: WaterDropMaterialHeader(
+                            distance: 50.h,
+                            backgroundColor: AppColors.hardBlue,
                           ),
-                        ],
+                          child: ListView(
+                            children: [
+                              _header(statusBarHeight),
+                              Container(
+                                padding: EdgeInsets.only(
+                                    left: 18.w, top: 18.h, right: 18.w),
+                                child: Column(
+                                  children: [
+                                    _service(),
+                                    SizedBox(
+                                      height: 18.h,
+                                    ),
+                                    _packageBanner(),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -84,7 +93,7 @@ class HomeView extends GetView<HomeController> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: AppColors.gray,
             borderRadius: BorderRadius.circular(9.r),
           ),
           width: 324.w,
@@ -260,7 +269,7 @@ class HomeView extends GetView<HomeController> {
   TweenAnimationBuilder<double> _header(double statusBarHeight) {
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(
-        begin: controller.headerState.fullHeight - statusBarHeight,
+        begin: controller.headerState.height - statusBarHeight,
         end: controller.headerState.height - statusBarHeight,
       ),
       duration: const Duration(milliseconds: 250),

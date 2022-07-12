@@ -1,4 +1,8 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 abstract class AppValues {
+  static double bottomAppBarHeight = 60.h;
+
   static const double padding = 16;
   static const double padding_zero = 0;
   static const double halfPadding = 8;

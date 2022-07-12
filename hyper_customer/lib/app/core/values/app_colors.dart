@@ -37,6 +37,7 @@ abstract class AppColors {
   static const Color description = Color(0xFF626365);
   static const Color floatLabel = Color(0xFF666666);
 
+  static const Color hardBlue = Color(0xFF5B5DE9);
   static const Color blue = Color(0xFF05AFFF);
   static const Color darkBlue = Color(0xFF0C7DFF);
   static const Color lightBlue = Color(0xFF05C5FB);
