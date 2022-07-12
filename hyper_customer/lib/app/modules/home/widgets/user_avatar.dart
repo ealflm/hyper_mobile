@@ -15,6 +15,7 @@ class UserAvatar extends StatelessWidget {
       children: [
         CircleAvatar(
           radius: 18.r,
+          backgroundColor: AppColors.primary100,
           backgroundImage: const NetworkImage(
               'https://i.pinimg.com/280x280_RS/bb/e1/68/bbe168d17c7e6b40b87cf464015f6b16.jpg'),
         ),
