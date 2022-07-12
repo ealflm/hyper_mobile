@@ -35,21 +35,7 @@ class HomeView extends GetView<HomeController> {
             Obx(
               () => Stack(
                 children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    decoration: BoxDecorations.header(),
-                    height: controller.headerState.height,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(5.r),
-                        bottomRight: Radius.circular(5.r),
-                      ),
-                      child: SvgPicture.asset(
-                        AppAssets.homeBg,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  _headerBackground(),
                   RefreshIndicator(
                     onRefresh: () {
                       debugPrint('Trigged refresh');
@@ -250,6 +236,24 @@ class HomeView extends GetView<HomeController> {
           ),
         ),
       ],
+    );
+  }
+
+  AnimatedContainer _headerBackground() {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      decoration: BoxDecorations.header(),
+      height: controller.headerState.height,
+      child: ClipRRect(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(5.r),
+          bottomRight: Radius.circular(5.r),
+        ),
+        child: SvgPicture.asset(
+          AppAssets.homeBg,
+          fit: BoxFit.cover,
+        ),
+      ),
     );
   }
 
