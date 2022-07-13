@@ -55,7 +55,7 @@ class HomeView extends GetView<HomeController> {
                           },
                           header: WaterDropMaterialHeader(
                             distance: 50.h,
-                            backgroundColor: AppColors.hardBlue,
+                            backgroundColor: AppColors.softRed,
                           ),
                           child: ListView(
                             children: [
@@ -175,7 +175,7 @@ class HomeView extends GetView<HomeController> {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(5.r),
-        boxShadow: ShadowStyle.surface,
+        boxShadow: ShadowStyles.surface,
       ),
       width: 324.w,
       height: 104.h,

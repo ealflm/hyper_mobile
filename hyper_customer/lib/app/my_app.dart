@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/bindings/initial_binding.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/widgets/scroll_behavior.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class MyApp extends StatefulWidget {
@@ -25,6 +26,7 @@ class _MyAppState extends State<MyApp> {
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
+          scrollBehavior: NoneScrollBehavior(),
           theme: ThemeData(
             colorScheme: const ColorScheme(
               primary: AppColors.primary400,

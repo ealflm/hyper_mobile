@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../modules/account/bindings/account_binding.dart';
+import '../modules/account/views/account_view.dart';
+import '../modules/activity/bindings/activity_binding.dart';
+import '../modules/activity/views/activity_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -12,6 +16,8 @@ import '../modules/package/bindings/package_binding.dart';
 import '../modules/package/views/package_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/scan/bindings/scan_binding.dart';
+import '../modules/scan/views/scan_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/start/bindings/start_binding.dart';
@@ -22,7 +28,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.SPLASH;
+  static const INITIAL = Routes.MAIN;
 
   static final routes = [
     GetPage(
@@ -72,6 +78,21 @@ class AppPages {
       page: () => const NotificationView(),
       binding: NotificationBinding(),
       transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.ACTIVITY,
+      page: () => const ActivityView(),
+      binding: ActivityBinding(),
+    ),
+    GetPage(
+      name: _Paths.ACCOUNT,
+      page: () => const AccountView(),
+      binding: AccountBinding(),
+    ),
+    GetPage(
+      name: _Paths.SCAN,
+      page: () => const ScanView(),
+      binding: ScanBinding(),
     ),
   ];
 }

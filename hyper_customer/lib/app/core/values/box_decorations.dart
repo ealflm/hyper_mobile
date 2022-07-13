@@ -11,7 +11,7 @@ abstract class BoxDecorations {
         topLeft: Radius.circular(12.r),
         topRight: Radius.circular(12.r),
       ),
-      boxShadow: ShadowStyle.top,
+      boxShadow: ShadowStyles.top,
     );
   }
 
@@ -21,7 +21,7 @@ abstract class BoxDecorations {
         bottomLeft: Radius.circular(5.r),
         bottomRight: Radius.circular(5.r),
       ),
-      boxShadow: ShadowStyle.bottom,
+      boxShadow: ShadowStyles.bottom,
     );
   }
 
@@ -29,7 +29,7 @@ abstract class BoxDecorations {
     return BoxDecoration(
       color: AppColors.white,
       borderRadius: BorderRadius.circular(9.r),
-      boxShadow: ShadowStyle.service,
+      boxShadow: ShadowStyles.service,
     );
   }
 }

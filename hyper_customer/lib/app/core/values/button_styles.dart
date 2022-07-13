@@ -8,8 +8,22 @@ abstract class ButtonStyles {
     return ElevatedButton.styleFrom(
       shadowColor: AppColors.primary400,
       padding: const EdgeInsets.symmetric(
-        horizontal: 8,
+        horizontal: 16,
         vertical: 16,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(50.r),
+      ),
+      textStyle: button.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+
+  static ButtonStyle primarySmall() {
+    return ElevatedButton.styleFrom(
+      shadowColor: AppColors.primary400,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 8,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.r),

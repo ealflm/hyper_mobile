@@ -10,6 +10,9 @@ abstract class Routes {
   static const MAIN = _Paths.MAIN;
   static const PACKAGE = _Paths.PACKAGE;
   static const NOTIFICATION = _Paths.NOTIFICATION;
+  static const ACTIVITY = _Paths.ACTIVITY;
+  static const ACCOUNT = _Paths.ACCOUNT;
+  static const SCAN = _Paths.SCAN;
 }
 
 abstract class _Paths {
@@ -22,4 +25,7 @@ abstract class _Paths {
   static const MAIN = '/main';
   static const PACKAGE = '/package';
   static const NOTIFICATION = '/notification';
+  static const ACTIVITY = '/activity';
+  static const ACCOUNT = '/account';
+  static const SCAN = '/scan';
 }
