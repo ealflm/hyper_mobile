@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/modules/package/views/explore_view.dart';
-import 'package:hyper_customer/app/modules/package/views/using_view.dart';
+import 'package:hyper_customer/app/modules/package/views/tab_views/explore_view.dart';
+import 'package:hyper_customer/app/modules/package/views/tab_views/using_view.dart';
 
 class PackageController extends GetxController
     with GetSingleTickerProviderStateMixin {

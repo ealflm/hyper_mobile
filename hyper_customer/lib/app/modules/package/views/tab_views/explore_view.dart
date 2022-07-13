@@ -1,20 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
-import 'package:hyper_customer/app/core/values/button_styles.dart';
-import 'package:hyper_customer/app/core/values/font_weights.dart';
-import 'package:hyper_customer/app/core/values/shadow_styles.dart';
-import 'package:hyper_customer/app/core/values/text_styles.dart';
-import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/modules/package/widget/package_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import '../controllers/package_controller.dart';
+import '../../controllers/package_controller.dart';
 
 class ExploreView extends GetView<PackageController> {
   const ExploreView({Key? key}) : super(key: key);
