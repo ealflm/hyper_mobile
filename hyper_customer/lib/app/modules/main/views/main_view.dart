@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/modules/main/widgets/nav_button.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 
 import '../controllers/main_controller.dart';
 
@@ -25,7 +26,9 @@ class MainView extends GetView<MainController> {
           Icons.qr_code_scanner,
           size: 30.r,
         ),
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed(Routes.SCAN);
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(

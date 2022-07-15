@@ -22,62 +22,73 @@ class ServiceContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Stack(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.r),
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, 4),
-                  blurRadius: 6,
-                  spreadRadius: 0,
-                  color: color,
-                ),
-              ],
-            ),
-            width: 95.w,
-            height: 95.w,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(5.r),
-              child: SvgPicture.asset(
-                backgroundAsset,
-                fit: BoxFit.cover,
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.r),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 4),
+                blurRadius: 6,
+                spreadRadius: 0,
+                color: color,
               ),
+            ],
+          ),
+          width: 95.w,
+          height: 95.w,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5.r),
+            child: SvgPicture.asset(
+              backgroundAsset,
+              fit: BoxFit.cover,
             ),
           ),
-          SizedBox(
-            width: 95.w,
-            height: 95.w,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: SizedBox(
-                      width: 40.w,
-                      height: 40.w,
-                      child: SvgPicture.asset(
-                        iconAsset,
-                        fit: BoxFit.cover,
-                        color: AppColors.white,
-                      ),
+        ),
+        SizedBox(
+          width: 95.w,
+          height: 95.w,
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child: SizedBox(
+                    width: 40.w,
+                    height: 40.w,
+                    child: SvgPicture.asset(
+                      iconAsset,
+                      fit: BoxFit.cover,
+                      color: AppColors.white,
                     ),
                   ),
                 ),
-                Text(
-                  title,
-                  style: subtitle2.copyWith(color: AppColors.white),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-              ],
+              ),
+              Text(
+                title,
+                style: subtitle2.copyWith(color: AppColors.white),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+            ],
+          ),
+        ),
+        Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(5.r),
+          child: InkWell(
+            onTap: onPressed,
+            child: Ink(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5.r),
+              ),
+              width: 95.w,
+              height: 95.w,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -1,23 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanController extends GetxController {
-  //TODO: Implement ScanController
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  Barcode? result;
+  QRViewController? qrController;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void onQRViewCreated(QRViewController controller) {
+    qrController = controller;
+    controller.resumeCamera();
+    controller.scannedDataStream.listen((scanData) {
+      result = scanData;
+      update();
+    });
   }
 
   @override
-  void onReady() {
-    super.onReady();
+  void dispose() {
+    qrController?.dispose();
+    super.dispose();
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
