@@ -12,9 +12,4 @@ class HomeController extends BaseController {
   void toggleHeader() {
     headerState.toggle();
   }
-
-  void logout() {
-    TokenManager.instance.clearToken();
-    Get.offAllNamed(Routes.LOGIN);
-  }
 }

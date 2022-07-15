@@ -1,23 +1,16 @@
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/network/dio_token_manager.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class AccountController extends GetxController {
-  //TODO: Implement AccountController
+  var fingerprintState = false.obs;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  void toggleFingerprint() {
+    fingerprintState.value = !fingerprintState.value;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void logout() {
+    TokenManager.instance.clearToken();
+    Get.offAllNamed(Routes.LOGIN);
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

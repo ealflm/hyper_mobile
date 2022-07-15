@@ -54,7 +54,7 @@ class HomeView extends GetView<HomeController> {
                             refreshController.refreshCompleted();
                           },
                           header: WaterDropMaterialHeader(
-                            distance: 50.h,
+                            distance: 40.h,
                             backgroundColor: AppColors.softRed,
                           ),
                           child: ListView(
