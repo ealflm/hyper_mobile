@@ -14,6 +14,8 @@ import '../modules/notification/bindings/notification_binding.dart';
 import '../modules/notification/views/notification_view.dart';
 import '../modules/package/bindings/package_binding.dart';
 import '../modules/package/views/package_view.dart';
+import '../modules/payment/bindings/payment_binding.dart';
+import '../modules/payment/views/payment_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/scan/bindings/scan_binding.dart';
@@ -28,7 +30,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.SPLASH;
+  static const INITIAL = Routes.MAIN;
 
   static final routes = [
     GetPage(
@@ -93,6 +95,11 @@ class AppPages {
       name: _Paths.SCAN,
       page: () => const ScanView(),
       binding: ScanBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT,
+      page: () => const PaymentView(),
+      binding: PaymentBinding(),
     ),
   ];
 }

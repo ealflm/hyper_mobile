@@ -32,4 +32,25 @@ abstract class BoxDecorations {
       boxShadow: ShadowStyles.service,
     );
   }
+
+  static BoxDecoration paymentChip() {
+    return BoxDecoration(
+      border: Border.all(
+        color: AppColors.caption,
+        width: 1.r,
+      ),
+      borderRadius: BorderRadius.circular(8.r),
+    );
+  }
+
+  static BoxDecoration paymentRadio() {
+    return BoxDecoration(
+      color: AppColors.primary300.withOpacity(0.05),
+      border: Border.all(
+        color: AppColors.primary300,
+        width: 1.r,
+      ),
+      borderRadius: BorderRadius.circular(8.r),
+    );
+  }
 }

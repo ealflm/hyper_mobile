@@ -199,7 +199,7 @@ class HomeView extends GetView<HomeController> {
               ColorButton(
                 'Nạp tiền',
                 onPressed: () {
-                  debugPrint('Pressed');
+                  Get.toNamed(Routes.PAYMENT);
                 },
                 icon: Icons.payments_outlined,
               ),

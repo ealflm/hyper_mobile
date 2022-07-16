@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 
 abstract class InputStyles {
@@ -20,6 +22,27 @@ abstract class InputStyles {
               child: prefixIcon,
             )
           : null,
+    );
+  }
+
+  static InputDecoration softBorder(
+      {String labelText = "", String hintText = ""}) {
+    return InputDecoration(
+      errorStyle: caption,
+      contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 15.w),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      labelText: labelText,
+      hintText: hintText,
+      suffixText: 'VNĐ',
+      floatingLabelStyle:
+          MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {
+        final Color color = states.contains(MaterialState.error)
+            ? Get.theme.errorColor
+            : AppColors.softBlack;
+        return TextStyle(color: color);
+      }),
     );
   }
 }

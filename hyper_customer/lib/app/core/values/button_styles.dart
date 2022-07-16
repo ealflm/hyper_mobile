@@ -7,9 +7,9 @@ abstract class ButtonStyles {
   static ButtonStyle primary() {
     return ElevatedButton.styleFrom(
       shadowColor: AppColors.primary400,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 16,
+      padding: EdgeInsets.symmetric(
+        horizontal: 16.w,
+        vertical: 16.h,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.r),
@@ -21,9 +21,9 @@ abstract class ButtonStyles {
   static ButtonStyle primarySmall() {
     return ElevatedButton.styleFrom(
       shadowColor: AppColors.primary400,
-      padding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.w,
+        vertical: 8.h,
       ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.r),
@@ -43,6 +43,53 @@ abstract class ButtonStyles {
     return ElevatedButton.styleFrom(
       shadowColor: AppColors.primary400,
       shape: const CircleBorder(),
+    );
+  }
+
+  static ButtonStyle paymentChip() {
+    return ElevatedButton.styleFrom(
+      shadowColor: AppColors.primary400,
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          color: AppColors.caption,
+          width: 1,
+          style: BorderStyle.solid,
+        ),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      textStyle: button.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+
+  static ButtonStyle paymentRadio() {
+    return ElevatedButton.styleFrom(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.w,
+        vertical: 14.h,
+      ),
+      primary: AppColors.primary300.withOpacity(0.05),
+      shape: RoundedRectangleBorder(
+        side: const BorderSide(
+          color: AppColors.primary400,
+          width: 1,
+          style: BorderStyle.solid,
+        ),
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      textStyle: button.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+
+  static ButtonStyle paymentRadioNotSelected() {
+    return ElevatedButton.styleFrom(
+      padding: EdgeInsets.symmetric(
+        horizontal: 10.w,
+        vertical: 14.h,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      textStyle: button.copyWith(fontWeight: FontWeight.bold),
     );
   }
 }

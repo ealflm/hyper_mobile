@@ -13,6 +13,7 @@ abstract class Routes {
   static const ACTIVITY = _Paths.ACTIVITY;
   static const ACCOUNT = _Paths.ACCOUNT;
   static const SCAN = _Paths.SCAN;
+  static const PAYMENT = _Paths.PAYMENT;
 }
 
 abstract class _Paths {
@@ -28,4 +29,5 @@ abstract class _Paths {
   static const ACTIVITY = '/activity';
   static const ACCOUNT = '/account';
   static const SCAN = '/scan';
+  static const PAYMENT = '/payment';
 }
