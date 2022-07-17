@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -13,12 +14,14 @@ class PaypalController extends BaseController {
 
   String id = '';
   var initialUrl = 'https://www.sandbox.paypal.com/checkoutnow?token=';
+  var firstLoad = true.obs;
 
   @override
   void onInit() {
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
     id = Get.arguments['id'];
     initialUrl += id;
+
     super.onInit();
   }
 
@@ -49,5 +52,9 @@ class PaypalController extends BaseController {
       Routes.PAYMENT_STATUS,
       arguments: {'status': result},
     );
+  }
+
+  void stopLoading() {
+    firstLoad.value = false;
   }
 }
