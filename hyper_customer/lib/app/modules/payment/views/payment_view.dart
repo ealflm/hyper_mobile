@@ -11,6 +11,7 @@ import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/payment/widgets/payment_radio_item.dart';
@@ -75,56 +76,25 @@ class PaymentView extends GetView<PaymentController> {
                       decoration: BoxDecorations.top(),
                       padding:
                           const EdgeInsets.only(left: 30, top: 20, right: 30),
-                      child: Column(
-                        children: [
-                          _balance(),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          _deposit(),
-                          SizedBox(
-                            height: 20.h,
-                          ),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Nguồn tiền',
-                                  style: subtitle1.copyWith(
-                                    fontWeight: FontWeights.medium,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 14.h,
-                                ),
-                                Obx(() => Column(
-                                      children: [
-                                        PaymentRadioItem(
-                                          onPressed: () {
-                                            controller.changePaymentMethod(0);
-                                          },
-                                          state: controller
-                                                  .selectedPaymentMethod
-                                                  .value ==
-                                              0,
-                                        ),
-                                        PaymentRadioItem(
-                                          onPressed: () {
-                                            controller.changePaymentMethod(1);
-                                          },
-                                          state: controller
-                                                  .selectedPaymentMethod
-                                                  .value ==
-                                              1,
-                                        ),
-                                      ],
-                                    )),
-                              ],
+                      child: Form(
+                        key: controller.formKey,
+                        child: Column(
+                          children: [
+                            _balance(),
+                            SizedBox(
+                              height: 20.h,
                             ),
-                          ),
-                        ],
+                            _deposit(),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            _source(),
+                            SizedBox(
+                              height: 20.h,
+                            ),
+                            _action(),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -137,33 +107,112 @@ class PaymentView extends GetView<PaymentController> {
     );
   }
 
+  Obx _action() {
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ButtonStyles.primary(),
+          onPressed: controller.isLoading
+              ? null
+              : () {
+                  controller.submit();
+                },
+          child: HyperButton.child(
+            status: controller.isLoading,
+            child: Text(
+              'Nạp tiền',
+              style: buttonBold,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  SizedBox _source() {
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Nguồn tiền',
+            style: subtitle1.copyWith(
+              fontWeight: FontWeights.medium,
+            ),
+          ),
+          SizedBox(
+            height: 14.h,
+          ),
+          GetBuilder<PaymentController>(
+            builder: (_) {
+              return Column(
+                children: [
+                  PaymentRadioItem(
+                    onPressed: () {
+                      controller.changePaymentMethod(1);
+                    },
+                    state: controller.selectedPaymentMethod == 1,
+                    svgAsset: AppAssets.vnpay,
+                    title: 'VNPAY',
+                    description: 'Thanh toán đa dạng',
+                  ),
+                  PaymentRadioItem(
+                    onPressed: () {
+                      controller.changePaymentMethod(0);
+                    },
+                    state: controller.selectedPaymentMethod == 0,
+                    svgAsset: AppAssets.paypal,
+                    title: 'PayPal',
+                    description: 'Thanh toán quốc tế',
+                  ),
+                ],
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   Column _deposit() {
     return Column(
       children: [
-        TextFormField(
-          controller: controller.depositController,
-          decoration: InputStyles.softBorder(
-            labelText: "Số tiền cần nạp",
-          ),
-          style: subtitle1.copyWith(
-            color: AppColors.softBlack,
-            fontWeight: FontWeights.medium,
-            fontSize: 18.sp,
-          ),
-          inputFormatters: [
-            CurrencyTextInputFormatter(
-              decimalDigits: 0,
-              locale: 'vi',
-              symbol: '',
-            )
-          ],
-          validator: (value) {
-            if (value.toString().isEmpty) {
-              return 'Vui lòng nhập số tiền để tiếp tục';
-            }
-            return null;
+        GetBuilder<PaymentController>(
+          builder: (_) {
+            return TextFormField(
+              validator: (value) {
+                if (value.toString().isEmpty) {
+                  return 'Vui lòng nhập số tiền để tiếp tục';
+                }
+                return null;
+              },
+              onSaved: (value) => controller.depositText = value,
+              focusNode: controller.depositFocusNode,
+              controller: controller.depositController,
+              decoration: InputStyles.softBorder(
+                labelText: "Số tiền cần nạp",
+                state: controller.isShowClear,
+                suffixAction: () {
+                  controller.changeDeposit('');
+                },
+              ),
+              style: subtitle1.copyWith(
+                color: AppColors.softBlack,
+                fontWeight: FontWeights.medium,
+                fontSize: 18.sp,
+              ),
+              inputFormatters: [
+                CurrencyTextInputFormatter(
+                  decimalDigits: 0,
+                  locale: 'vi',
+                  symbol: '',
+                )
+              ],
+              keyboardType: TextInputType.number,
+            );
           },
-          keyboardType: TextInputType.number,
         ),
         SizedBox(
           height: 10.h,

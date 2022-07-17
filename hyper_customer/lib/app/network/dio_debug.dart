@@ -5,6 +5,7 @@ class DioDebug extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     debugPrint('API debug >> make request: ${options.uri}');
+    debugPrint('API debug >> make request: ${options.headers}');
     debugPrint('API debug >> make request: ${options.data}');
     super.onRequest(options, handler);
   }

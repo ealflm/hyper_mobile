@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TokenManager extends Interceptor {
@@ -16,6 +18,16 @@ class TokenManager extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.headers['Authorization'] = 'Bearer $_token';
     super.onRequest(options, handler);
+  }
+
+  @override
+  void onError(DioError err, ErrorInterceptorHandler handler) {
+    var response = err.response;
+    if (response?.statusCode == 401) {
+      clearToken();
+      Get.offAllNamed(Routes.START);
+    }
+    super.onError(err, handler);
   }
 
   Future<void> init() async {

@@ -25,6 +25,7 @@ dependencies:
   percent_indicator: ^4.2.2
   qr_code_scanner: ^1.0.0
   currency_text_input_formatter: ^2.1.7
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_lints: 2.0.1

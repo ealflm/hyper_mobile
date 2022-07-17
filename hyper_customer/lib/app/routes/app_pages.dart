@@ -16,6 +16,8 @@ import '../modules/package/bindings/package_binding.dart';
 import '../modules/package/views/package_view.dart';
 import '../modules/payment/bindings/payment_binding.dart';
 import '../modules/payment/views/payment_view.dart';
+import '../modules/paypal/bindings/paypal_binding.dart';
+import '../modules/paypal/views/paypal_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/scan/bindings/scan_binding.dart';
@@ -100,6 +102,11 @@ class AppPages {
       name: _Paths.PAYMENT,
       page: () => const PaymentView(),
       binding: PaymentBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYPAL,
+      page: () => const PaypalView(),
+      binding: PaypalBinding(),
     ),
   ];
 }

@@ -25,8 +25,12 @@ abstract class InputStyles {
     );
   }
 
-  static InputDecoration softBorder(
-      {String labelText = "", String hintText = ""}) {
+  static InputDecoration softBorder({
+    String labelText = "",
+    String hintText = "",
+    bool state = false,
+    Function()? suffixAction,
+  }) {
     return InputDecoration(
       errorStyle: caption,
       contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 15.w),
@@ -35,6 +39,15 @@ abstract class InputStyles {
       ),
       labelText: labelText,
       hintText: hintText,
+      suffixIcon: state
+          ? TextButton(
+              onPressed: suffixAction,
+              child: const Icon(
+                Icons.cancel,
+                color: AppColors.softBlack,
+              ),
+            )
+          : null,
       suffixText: 'VNĐ',
       floatingLabelStyle:
           MaterialStateTextStyle.resolveWith((Set<MaterialState> states) {

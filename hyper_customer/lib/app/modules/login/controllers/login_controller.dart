@@ -18,12 +18,14 @@ class LoginController extends BaseController {
   var phoneNumber = ''.obs;
 
   @override
+  void onInit() {
+    phoneNumber.value = Get.arguments['phoneNumber'];
+    super.onInit();
+  }
+
+  @override
   void onReady() {
-    try {
-      phoneNumber.value = Get.arguments['phoneNumber'];
-    } catch (e) {
-      Get.offAllNamed(Routes.START);
-    }
+    if (phoneNumber.value.isEmpty) Get.offAllNamed(Routes.START);
     super.onReady();
   }
 

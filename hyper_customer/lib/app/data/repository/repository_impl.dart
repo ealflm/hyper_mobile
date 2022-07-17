@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -30,6 +31,37 @@ class RepositoryImpl extends BaseRepository implements Repository {
 
     try {
       return callApi(dioCall).then((response) => response.data['message']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> deposit(double amount, int method) {
+    var endpoint = "${DioProvider.baseUrl}/deposit";
+    var data = {
+      "amount": amount,
+      "method": method,
+    };
+    var formData = FormData.fromMap(data);
+    var dioCall = dioTokenClient.post(endpoint, data: formData);
+
+    try {
+      return callApi(dioCall).then((response) => response.data['body']['id']);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> checkDeposit(String id) {
+    var endpoint = "${DioProvider.baseUrl}/deposit/$id";
+    var dioCall = dioTokenClient.get(endpoint);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return response.data['statusCode'] == 200;
+      });
     } catch (e) {
       rethrow;
     }

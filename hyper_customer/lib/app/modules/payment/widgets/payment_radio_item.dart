@@ -11,10 +11,16 @@ class PaymentRadioItem extends StatelessWidget {
     Key? key,
     required this.state,
     required this.onPressed,
+    required this.svgAsset,
+    required this.title,
+    required this.description,
   }) : super(key: key);
 
   final Function() onPressed;
   final bool state;
+  final String svgAsset;
+  final String title;
+  final String description;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class PaymentRadioItem extends StatelessWidget {
       child: Row(
         children: [
           SvgPicture.asset(
-            AppAssets.vnpay,
+            svgAsset,
             width: 36.w,
             height: 36.w,
           ),
@@ -38,11 +44,11 @@ class PaymentRadioItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'VNPAY',
+                  title,
                   style: subtitle2.copyWith(color: AppColors.softBlack),
                 ),
                 Text(
-                  'Thanh toán đa dạng',
+                  description,
                   style: caption.copyWith(
                     color: AppColors.description,
                   ),

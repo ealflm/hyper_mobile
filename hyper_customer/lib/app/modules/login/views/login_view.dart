@@ -135,8 +135,10 @@ class LoginView extends GetView<LoginController> {
                                               },
                                         child: HyperButton.child(
                                           status: controller.isLoading,
-                                          child: Text('Đăng nhập',
-                                              style: buttonBold),
+                                          child: Text(
+                                            'Đăng nhập',
+                                            style: buttonBold,
+                                          ),
                                         ),
                                       ),
                                     ),
