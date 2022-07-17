@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
-import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -32,7 +31,7 @@ class PaypalController extends BaseController {
   Future<void> paymentReturn() async {
     var depositService = _repository.checkDeposit(id);
 
-    bool? result;
+    bool result = false;
 
     await callDataService(
       depositService,
@@ -46,14 +45,9 @@ class PaypalController extends BaseController {
       },
     );
 
-    if (result == null) {
-      Utils.showToast('Kết nối thất bại');
-    } else if (result == true) {
-      Utils.showToast('Thanh toán thành công');
-      Get.offAllNamed(Routes.MAIN);
-    } else if (result == false) {
-      Utils.showToast('Thanh toán thất bại');
-      Get.back();
-    }
+    Get.offAllNamed(
+      Routes.PAYMENT_STATUS,
+      arguments: {'status': result},
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -13,11 +14,15 @@ class UserAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 18.r,
-          backgroundColor: AppColors.gray,
-          backgroundImage: const NetworkImage(
-              'https://i.pinimg.com/280x280_RS/bb/e1/68/bbe168d17c7e6b40b87cf464015f6b16.jpg'),
+        ClipOval(
+          child: SizedBox.fromSize(
+            size: Size.fromRadius(18.r), // Image radius
+            child: CachedNetworkImage(
+              imageUrl:
+                  "https://i.pinimg.com/280x280_RS/bb/e1/68/bbe168d17c7e6b40b87cf464015f6b16.jpg",
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         SizedBox(
           width: 10.w,

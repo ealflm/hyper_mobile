@@ -4,6 +4,6 @@ abstract class Repository {
   Future<String> verify(String phoneNumber);
   Future<Auth> login(String phoneNumber, String password);
 
-  Future<String> deposit(double amount, int method);
+  Future<String> deposit(double amount, int method, String customerId);
   Future<bool> checkDeposit(String id);
 }

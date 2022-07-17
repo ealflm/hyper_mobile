@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
+import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class PaymentController extends BaseController {
@@ -66,7 +68,17 @@ class PaymentController extends BaseController {
     double depositValue =
         double.tryParse(depositText!.replaceAll('.', '')) ?? 0;
 
-    var depositService = _repository.deposit(depositValue, 0);
+    User? user = TokenManager.instance.user;
+    if (user == null) {
+      Get.offAllNamed(Routes.START);
+    }
+    String customerId = user?.customerId ?? '';
+
+    var depositService = _repository.deposit(
+      depositValue,
+      0,
+      customerId,
+    );
 
     String id = '';
 

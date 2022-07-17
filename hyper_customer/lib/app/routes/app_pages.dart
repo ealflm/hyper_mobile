@@ -35,6 +35,7 @@ class AppPages {
   AppPages._();
 
   static const INITIAL = Routes.SPLASH;
+  // static const INITIAL = Routes.SPLASH;
 
   static final routes = [
     GetPage(
@@ -89,31 +90,37 @@ class AppPages {
       name: _Paths.ACTIVITY,
       page: () => const ActivityView(),
       binding: ActivityBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.ACCOUNT,
       page: () => const AccountView(),
       binding: AccountBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.SCAN,
       page: () => const ScanView(),
       binding: ScanBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.PAYMENT,
       page: () => const PaymentView(),
       binding: PaymentBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.PAYPAL,
       page: () => const PaypalView(),
       binding: PaypalBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.PAYMENT_STATUS,
       page: () => const PaymentStatusView(),
       binding: PaymentStatusBinding(),
+      transition: Transition.noTransition,
     ),
   ];
 }

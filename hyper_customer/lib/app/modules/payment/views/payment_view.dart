@@ -15,6 +15,7 @@ import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/payment/widgets/payment_radio_item.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 
 import '../controllers/payment_controller.dart';
 
@@ -50,7 +51,7 @@ class PaymentView extends GetView<PaymentController> {
                                     primary: AppColors.softBlack,
                                   ),
                                   onPressed: () {
-                                    Get.back();
+                                    Get.offAllNamed(Routes.MAIN);
                                   },
                                   child: const Icon(
                                     Icons.arrow_back_ios_new,

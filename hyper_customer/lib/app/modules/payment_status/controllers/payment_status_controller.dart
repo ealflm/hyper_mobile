@@ -1,23 +1,12 @@
 import 'package:get/get.dart';
 
 class PaymentStatusController extends GetxController {
-  //TODO: Implement PaymentStatusController
-
-  final count = 0.obs;
+  bool state = false;
   @override
   void onInit() {
+    if (Get.arguments != null) {
+      state = Get.arguments['status'];
+    }
     super.onInit();
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

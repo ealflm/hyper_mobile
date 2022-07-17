@@ -79,6 +79,7 @@ class ServiceContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(5.r),
           child: InkWell(
             onTap: onPressed,
+            splashColor: color.withOpacity(0.5),
             child: Ink(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.r),

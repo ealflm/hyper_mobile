@@ -37,11 +37,12 @@ class RepositoryImpl extends BaseRepository implements Repository {
   }
 
   @override
-  Future<String> deposit(double amount, int method) {
+  Future<String> deposit(double amount, int method, String customerId) {
     var endpoint = "${DioProvider.baseUrl}/deposit";
     var data = {
       "amount": amount,
       "method": method,
+      "customerid": customerId,
     };
     var formData = FormData.fromMap(data);
     var dioCall = dioTokenClient.post(endpoint, data: formData);

@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
-import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/payment_status/controllers/payment_status_controller.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
+import 'package:lottie/lottie.dart';
 
 class PaymentStatusView extends GetView<PaymentStatusController> {
   const PaymentStatusView({Key? key}) : super(key: key);
@@ -50,95 +51,44 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
                       decoration: BoxDecorations.top(),
                       padding: EdgeInsets.only(
                           left: 30.w, top: 20.h, right: 30.w, bottom: 20.h),
-                      child: Form(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                      'Giao dịch thành công',
-                                      style: subtitle1.copyWith(
-                                        fontWeight: FontWeights.medium,
-                                        color: AppColors.lightBlack,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5.h,
-                                    ),
-                                    Text(
-                                      '100.000 đ',
-                                      style: h5.copyWith(
-                                        fontWeight: FontWeights.medium,
-                                        color: AppColors.softBlack,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 20.h,
-                                ),
-                                Column(
-                                  children: [
-                                    _detailItem(
-                                      'Thời gian thanh toán',
-                                      '11:11 - 17/07/2022',
-                                    ),
-                                    const Divider(
-                                      color: AppColors.line,
-                                    ),
-                                    _detailItem(
-                                      'Mã giao dịch',
-                                      '26455528012',
-                                    ),
-                                    const Divider(
-                                      color: AppColors.line,
-                                    ),
-                                    _detailItem(
-                                      'Dịch vụ',
-                                      'Nạp tiền vào ví',
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: [
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Get.offAllNamed(Routes.PAYMENT);
-                                    },
-                                    style: ButtonStyles.secondary(),
-                                    child: Text(
-                                      'Tiếp tục nạp tiền',
-                                      style: buttonBold,
-                                    ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          controller.state ? _successful() : _failed(),
+                          Column(
+                            children: [
+                              SizedBox(
+                                width: double.infinity,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Get.offAllNamed(Routes.PAYMENT);
+                                  },
+                                  style: ButtonStyles.secondary(),
+                                  child: Text(
+                                    'Tiếp tục nạp tiền',
+                                    style: buttonBold,
                                   ),
                                 ),
-                                SizedBox(
-                                  height: 10.h,
-                                ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Get.offAllNamed(Routes.MAIN);
-                                    },
-                                    style: ButtonStyles.primary(),
-                                    child: Text(
-                                      'Màn hình chính',
-                                      style: buttonBold,
-                                    ),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.offAllNamed(Routes.MAIN);
+                                  },
+                                  style: ButtonStyles.primary(),
+                                  child: Text(
+                                    'Màn hình chính',
+                                    style: buttonBold,
                                   ),
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -148,6 +98,98 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
           ),
         ),
       ),
+    );
+  }
+
+  Column _failed() {
+    return Column(
+      children: [
+        Column(
+          children: [
+            Lottie.asset(
+              AppAnimationAssets.error404,
+              height: 200.h,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              'Giao dịch thất bại',
+              style: h6.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.softBlack,
+              ),
+            ),
+            Text(
+              'Đã có lỗi xảy ra trong quá trình giao dịch',
+              style: subtitle1.copyWith(
+                color: AppColors.lightBlack,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Column _successful() {
+    return Column(
+      children: [
+        Column(
+          children: [
+            Lottie.asset(
+              AppAnimationAssets.successful,
+              repeat: false,
+              height: 138.h,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              'Giao dịch thành công',
+              style: subtitle1.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.lightBlack,
+              ),
+            ),
+            SizedBox(
+              height: 5.h,
+            ),
+            Text(
+              '100.000 đ',
+              style: h5.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.softBlack,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20.h,
+        ),
+        Column(
+          children: [
+            _detailItem(
+              'Thời gian thanh toán',
+              '11:11 - 17/07/2022',
+            ),
+            const Divider(
+              color: AppColors.line,
+            ),
+            _detailItem(
+              'Mã giao dịch',
+              '26455528012',
+            ),
+            const Divider(
+              color: AppColors.line,
+            ),
+            _detailItem(
+              'Dịch vụ',
+              'Nạp tiền vào ví',
+            ),
+          ],
+        ),
+      ],
     );
   }
 
