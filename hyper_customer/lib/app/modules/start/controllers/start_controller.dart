@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class StartController extends BaseController {
@@ -37,5 +38,11 @@ class StartController extends BaseController {
         }
       },
     );
+  }
+
+  @override
+  void onInit() {
+    TokenManager.instance.clearUser();
+    super.onInit();
   }
 }

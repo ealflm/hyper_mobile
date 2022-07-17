@@ -44,8 +44,7 @@ class LoginView extends GetView<LoginController> {
                                 TextButton(
                                   style: ButtonStyles.textCircle(),
                                   onPressed: () {
-                                    Get.offAllNamed(Routes.START);
-                                    debugPrint('Pressed');
+                                    controller.back();
                                   },
                                   child: const Icon(
                                     Icons.arrow_back_ios_new,
@@ -80,7 +79,9 @@ class LoginView extends GetView<LoginController> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'Xin chào',
+                                    controller.fullName.isEmpty
+                                        ? 'Xin chào'
+                                        : 'Xin chào, ${controller.fullName}',
                                     style: h6.copyWith(fontSize: 18.sp),
                                   ),
                                   Text(
@@ -105,7 +106,6 @@ class LoginView extends GetView<LoginController> {
                                     obscuringCharacter: '●',
                                     enableSuggestions: false,
                                     autocorrect: false,
-                                    autofocus: true,
                                     decoration: InputStyles.roundBorder(
                                       prefixIcon: const Icon(Icons.key),
                                       hintText: "Nhập mã PIN",
@@ -131,6 +131,9 @@ class LoginView extends GetView<LoginController> {
                                         onPressed: controller.isLoading
                                             ? null
                                             : () {
+                                                FocusManager
+                                                    .instance.primaryFocus
+                                                    ?.unfocus();
                                                 controller.submit();
                                               },
                                         child: HyperButton.child(

@@ -1,0 +1,18 @@
+{
+  "CustomerId": "f172a555-92b4-4e31-9efc-2cc8cc589e52",
+  "FirstName": "Đam",
+  "LastName": "Mê",
+  "Gender": "True",
+  "Phone": "0369085835",
+  "Address1": "",
+  "Address2": "",
+  "PhotoUrl": "",
+  "DateOfBirth": "1/1/0001 12:00:00 AM",
+  "Email": "",
+  "CreatedDate": "7/7/2022 2:27:49 PM",
+  "ModifiedDate": "7/7/2022 2:27:49 PM",
+  "Status": "1",
+  "Role": "Customer",
+  "jti": "e6dc020b-f6e4-48f4-9641-ca092db3e92f",
+  "exp": 1658131216
+}
