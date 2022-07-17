@@ -18,6 +18,23 @@ abstract class ButtonStyles {
     );
   }
 
+  static ButtonStyle secondary() {
+    return TextButton.styleFrom(
+      padding: EdgeInsets.symmetric(
+        horizontal: 16.w,
+        vertical: 16.h,
+      ),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: AppColors.primary400,
+          width: 1.w,
+        ),
+        borderRadius: BorderRadius.circular(50.r),
+      ),
+      textStyle: button.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+
   static ButtonStyle primarySmall() {
     return ElevatedButton.styleFrom(
       shadowColor: AppColors.primary400,

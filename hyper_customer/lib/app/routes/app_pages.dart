@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/modules/payment_status/bindings/payment_status_binding.dart';
+import 'package:hyper_customer/app/modules/payment_status/views/payment_status_view.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
@@ -32,7 +34,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.MAIN;
+  static const INITIAL = Routes.PAYMENT_STATUS;
 
   static final routes = [
     GetPage(
@@ -107,6 +109,11 @@ class AppPages {
       name: _Paths.PAYPAL,
       page: () => const PaypalView(),
       binding: PaypalBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_STATUS,
+      page: () => const PaymentStatusView(),
+      binding: PaymentStatusBinding(),
     ),
   ];
 }

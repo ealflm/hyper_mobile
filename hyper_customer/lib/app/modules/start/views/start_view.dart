@@ -52,7 +52,7 @@ class StartView extends GetView<StartController> {
                       width: 1.sw,
                       decoration: BoxDecorations.top(),
                       padding:
-                          const EdgeInsets.only(left: 30, top: 20, right: 30),
+                          EdgeInsets.only(left: 30.w, top: 20.h, right: 30.w),
                       child: Column(
                         children: [
                           Column(

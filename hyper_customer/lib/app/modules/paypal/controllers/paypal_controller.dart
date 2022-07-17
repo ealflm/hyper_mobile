@@ -56,9 +56,4 @@ class PaypalController extends BaseController {
       Get.back();
     }
   }
-
-  void paymentCancel() {
-    Utils.showToast('Đã huỷ thanh toán');
-    Get.back();
-  }
 }

@@ -75,7 +75,7 @@ class PaymentView extends GetView<PaymentController> {
                       width: 1.sw,
                       decoration: BoxDecorations.top(),
                       padding:
-                          const EdgeInsets.only(left: 30, top: 20, right: 30),
+                          EdgeInsets.only(left: 30.w, top: 20.h, right: 30.w),
                       child: Form(
                         key: controller.formKey,
                         child: Column(

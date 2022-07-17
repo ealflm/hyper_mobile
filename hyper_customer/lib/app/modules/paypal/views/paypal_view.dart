@@ -23,7 +23,7 @@ class PaypalView extends GetView<PaypalController> {
                 return NavigationDecision.prevent;
               }
               if (request.url.startsWith('https://example.com/hyper/cancel')) {
-                controller.paymentCancel();
+                controller.paymentReturn();
                 return NavigationDecision.prevent;
               }
               return NavigationDecision.navigate;
