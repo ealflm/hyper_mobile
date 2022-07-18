@@ -22,10 +22,8 @@ class UserAvatar extends StatelessWidget {
             size: Size.fromRadius(18.r), // Image radius
             child: CachedNetworkImage(
               placeholder: (context, url) {
-                return OverflowBox(
-                  child: Lottie.asset(
-                    AppAnimationAssets.cuteDancingChickenCrop,
-                  ),
+                return Lottie.asset(
+                  AppAnimationAssets.cuteDancingChickenCrop,
                 );
               },
               imageUrl:
