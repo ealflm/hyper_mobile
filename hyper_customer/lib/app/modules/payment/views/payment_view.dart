@@ -155,8 +155,8 @@ class PaymentView extends GetView<PaymentController> {
                       controller.changePaymentMethod(1);
                     },
                     state: controller.selectedPaymentMethod == 1,
-                    svgAsset: AppAssets.vnpay,
-                    title: 'VNPAY',
+                    svgAsset: AppAssets.momo,
+                    title: 'MoMo',
                     description: 'Thanh toán đa dạng',
                   ),
                   PaymentRadioItem(
