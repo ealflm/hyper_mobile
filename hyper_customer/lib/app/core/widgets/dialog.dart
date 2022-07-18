@@ -5,7 +5,10 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 
 abstract class HyperDialog {
   static void show(
-      {String title = '', String content = '', String buttonText = ''}) {
+      {String title = '',
+      String content = '',
+      String buttonText = '',
+      bool barrierDismissible = true}) {
     Get.dialog(
       AlertDialog(
         title: Text(
@@ -28,6 +31,7 @@ abstract class HyperDialog {
           ),
         ],
       ),
+      barrierDismissible: barrierDismissible,
     );
   }
 }

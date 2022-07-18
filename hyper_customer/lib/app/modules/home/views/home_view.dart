@@ -7,6 +7,7 @@ import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
+import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/scroll_behavior.dart';
@@ -191,6 +192,9 @@ class HomeView extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Số dư', style: body2.copyWith(color: AppColors.floatLabel)),
+          SizedBox(
+            height: 5.h,
+          ),
           GetBuilder<HomeController>(
             builder: (_) {
               Widget result = Shimmer.fromColors(
@@ -204,15 +208,23 @@ class HomeView extends GetView<HomeController> {
                     ),
                   ),
                   child: Text(
-                    '10.000.000 VNĐ',
-                    style: h6.copyWith(color: AppColors.softBlack),
+                    '1.000.000 VNĐ',
+                    style: subtitle1.copyWith(
+                      fontSize: 18.sp,
+                      color: AppColors.softBlack,
+                      fontWeight: FontWeights.medium,
+                    ),
                   ),
                 ),
               );
               if (controller.hasAccountBalance.value) {
                 result = Text(
                   controller.accountBlanceVND,
-                  style: h6.copyWith(color: AppColors.softBlack),
+                  style: subtitle1.copyWith(
+                    fontSize: 18.sp,
+                    color: AppColors.softBlack,
+                    fontWeight: FontWeights.medium,
+                  ),
                 );
               }
               return result;

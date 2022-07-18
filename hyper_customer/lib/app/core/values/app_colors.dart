@@ -35,6 +35,7 @@ abstract class AppColors {
   static const Color caption = Color(0xFFA9A9A9);
   static const Color description = Color(0xFF626365);
   static const Color floatLabel = Color(0xFF666666);
+  static const Color snackbar = Color(0xFF333436);
 
   static const Color softRed = Color(0xFFD73D64);
   static const Color hardBlue = Color(0xFF5B5DE9);
