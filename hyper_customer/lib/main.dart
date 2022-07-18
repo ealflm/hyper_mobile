@@ -1,6 +1,8 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyper_customer/app/core/controllers/network_controller.dart';
+import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 
 import 'app/my_app.dart';
@@ -26,6 +28,12 @@ void main() {
 
   NetworkController.intance.init();
   TokenManager.instance.init();
+
+  final appLinks = AppLinks();
+
+  appLinks.uriLinkStream.listen((uri) {
+    Utils.showToast(uri.toString());
+  });
 
   runApp(const MyApp());
 }
