@@ -34,7 +34,7 @@ class TokenManager extends Interceptor {
     var response = err.response;
     if (response?.statusCode == 401) {
       clearToken();
-      Get.offAllNamed(Routes.START);
+      Get.offAllNamed(Routes.LOGIN);
     }
     super.onError(err, handler);
   }

@@ -17,6 +17,7 @@ import 'package:hyper_customer/app/modules/home/widgets/show_wallet.dart';
 import 'package:hyper_customer/app/modules/home/widgets/user_avatar.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -50,7 +51,8 @@ class HomeView extends GetView<HomeController> {
                         child: SmartRefresher(
                           controller: refreshController,
                           onRefresh: () async {
-                            await Future.delayed(const Duration(seconds: 1));
+                            // await Future.delayed(const Duration(seconds: 1));
+                            await controller.reload();
                             refreshController.refreshCompleted();
                           },
                           header: WaterDropMaterialHeader(
@@ -189,9 +191,32 @@ class HomeView extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Số dư', style: body2.copyWith(color: AppColors.floatLabel)),
-          Text(
-            '932,561 VNĐ',
-            style: h6.copyWith(color: AppColors.softBlack),
+          GetBuilder<HomeController>(
+            builder: (_) {
+              Widget result = Shimmer.fromColors(
+                baseColor: AppColors.shimmerBaseColor,
+                highlightColor: AppColors.shimmerHighlightColor,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Text(
+                    '10.000.000 VNĐ',
+                    style: h6.copyWith(color: AppColors.softBlack),
+                  ),
+                ),
+              );
+              if (controller.hasAccountBalance.value) {
+                result = Text(
+                  controller.accountBlanceVND,
+                  style: h6.copyWith(color: AppColors.softBlack),
+                );
+              }
+              return result;
+            },
           ),
           SizedBox(
             height: 10.h,
@@ -230,7 +255,7 @@ class HomeView extends GetView<HomeController> {
           onPressed: () {
             controller.toggleHeader();
           },
-          state: controller.headerState.isToggle,
+          state: controller.headerState.walletUiState,
         ),
         GestureDetector(
           onTap: () {
@@ -286,7 +311,7 @@ class HomeView extends GetView<HomeController> {
           child: Column(
             children: [
               _appBar(),
-              !controller.headerState.isToggle
+              !controller.headerState.walletUiState
                   ? Column(
                       children: [
                         SizedBox(

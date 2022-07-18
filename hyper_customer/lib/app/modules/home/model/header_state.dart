@@ -6,14 +6,23 @@ class HeaderState {
   var lessHeight = 83.h;
 
   final _height = 212.h.obs;
-  final _isToggle = false.obs;
+  final _walletUiState = false.obs;
 
   get height => _height.value;
-  get isToggle => _isToggle.value;
+  get walletUiState => _walletUiState.value;
+
+  void setWalletUiState(bool value) {
+    _walletUiState.value = value;
+    if (!_walletUiState.value) {
+      _height.value = fullHeight;
+    } else {
+      _height.value = lessHeight;
+    }
+  }
 
   void toggle() {
-    _isToggle.value = !_isToggle.value;
-    if (!_isToggle.value) {
+    _walletUiState.value = !_walletUiState.value;
+    if (!_walletUiState.value) {
       _height.value = fullHeight;
     } else {
       _height.value = lessHeight;

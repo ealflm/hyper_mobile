@@ -1,5 +1,6 @@
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:intl/intl.dart';
 
 abstract class Utils {
   static void showToast(String message) {
@@ -10,4 +11,6 @@ abstract class Utils {
       timeInSecForIosWeb: 1,
     );
   }
+
+  static NumberFormat numberFormat = NumberFormat.decimalPattern('en_US');
 }

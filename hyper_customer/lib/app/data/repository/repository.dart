@@ -6,4 +6,6 @@ abstract class Repository {
 
   Future<String> deposit(double amount, int method, String customerId);
   Future<bool> checkDeposit(String id);
+
+  Future<double> getBalance(String customerId);
 }

@@ -67,4 +67,18 @@ class RepositoryImpl extends BaseRepository implements Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<double> getBalance(String customerId) {
+    var endpoint = "${DioProvider.baseUrl}/wallet/$customerId";
+    var dioCall = dioTokenClient.get(endpoint);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return double.parse(response.data['body']['accountBalance'].toString());
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
