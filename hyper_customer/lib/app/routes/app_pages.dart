@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/modules/payment_status/bindings/payment_status_binding.dart';
-import 'package:hyper_customer/app/modules/payment_status/views/payment_status_view.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
 import '../modules/activity/bindings/activity_binding.dart';
 import '../modules/activity/views/activity_view.dart';
+import '../modules/busing/bindings/busing_binding.dart';
+import '../modules/busing/views/busing_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -18,6 +18,8 @@ import '../modules/package/bindings/package_binding.dart';
 import '../modules/package/views/package_view.dart';
 import '../modules/payment/bindings/payment_binding.dart';
 import '../modules/payment/views/payment_view.dart';
+import '../modules/payment_status/bindings/payment_status_binding.dart';
+import '../modules/payment_status/views/payment_status_view.dart';
 import '../modules/paypal/bindings/paypal_binding.dart';
 import '../modules/paypal/views/paypal_view.dart';
 import '../modules/register/bindings/register_binding.dart';
@@ -120,6 +122,12 @@ class AppPages {
       name: _Paths.PAYMENT_STATUS,
       page: () => const PaymentStatusView(),
       binding: PaymentStatusBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BUSING,
+      page: () => const BusingView(),
+      binding: BusingBinding(),
       transition: Transition.noTransition,
     ),
   ];

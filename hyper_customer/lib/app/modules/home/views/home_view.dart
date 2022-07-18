@@ -158,7 +158,9 @@ class HomeView extends GetView<HomeController> {
               width: 18.w,
             ),
             ServiceContainer(
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed(Routes.BUSING);
+              },
               title: 'Đi xe buýt',
               backgroundAsset: AppAssets.busing,
               iconAsset: AppAssets.busingIcon,
