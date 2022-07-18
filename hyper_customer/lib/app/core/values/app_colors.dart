@@ -48,4 +48,7 @@ abstract class AppColors {
   static const Color booking = Color(0xFFF45B7D);
   static const Color renting = Color(0xFF6AA3EE);
   static const Color busing = Color(0xFFF5C401);
+
+  static const Color shimmerBaseColor = Color(0xFFEDEDED);
+  static const Color shimmerHighlightColor = Color(0xFFD1D1D1);
 }

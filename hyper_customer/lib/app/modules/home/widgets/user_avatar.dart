@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
@@ -18,6 +21,13 @@ class UserAvatar extends StatelessWidget {
           child: SizedBox.fromSize(
             size: Size.fromRadius(18.r), // Image radius
             child: CachedNetworkImage(
+              placeholder: (context, url) {
+                return OverflowBox(
+                  child: Lottie.asset(
+                    AppAnimationAssets.cuteDancingChickenCrop,
+                  ),
+                );
+              },
               imageUrl:
                   "https://i.pinimg.com/280x280_RS/bb/e1/68/bbe168d17c7e6b40b87cf464015f6b16.jpg",
               fit: BoxFit.cover,
