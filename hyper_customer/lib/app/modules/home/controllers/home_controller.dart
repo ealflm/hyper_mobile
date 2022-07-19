@@ -45,6 +45,7 @@ class HomeController extends BaseController {
 
   void toggleHeader() {
     headerState.toggle();
+    SettingController.intance.saveWalletUiStatus(headerState.walletUiState);
   }
 
   Future<void> _getAccountBalance() async {
@@ -61,8 +62,8 @@ class HomeController extends BaseController {
         debugPrint(dioError.message);
       },
     );
-    _saveSetting();
 
+    _saveSetting();
     update();
   }
 }
