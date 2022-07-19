@@ -7,10 +7,11 @@ class SettingController {
 
   bool walletUiState = false;
   bool hasAccountBalance = false;
-  double accountBalance = 0.0;
+  double accountBalance = -1.0;
 
   Future<void> init() async {
     await loadWalletUiStatus();
+    await loadAccountBalance();
   }
 
   Future<void> loadWalletUiStatus() async {
@@ -21,5 +22,20 @@ class SettingController {
   Future<void> saveWalletUiStatus(bool value) async {
     var prefs = await SharedPreferences.getInstance();
     await prefs.setBool('walletUiStatus', value);
+  }
+
+  Future<void> loadAccountBalance() async {
+    var prefs = await SharedPreferences.getInstance();
+    accountBalance = prefs.getDouble('accountBalance') ?? -1.0;
+    if (accountBalance == -1.0) {
+      hasAccountBalance = false;
+    } else {
+      hasAccountBalance = true;
+    }
+  }
+
+  Future<void> saveAccountBalance(double value) async {
+    var prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('accountBalance', value);
   }
 }

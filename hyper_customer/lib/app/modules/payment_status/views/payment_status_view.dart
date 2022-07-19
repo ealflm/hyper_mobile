@@ -156,7 +156,7 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
               height: 5.h,
             ),
             Text(
-              '100.000 đ',
+              controller.amountVND,
               style: h5.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
@@ -171,14 +171,14 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
           children: [
             _detailItem(
               'Thời gian thanh toán',
-              '11:11 - 17/07/2022',
+              '-',
             ),
             const Divider(
               color: AppColors.line,
             ),
             _detailItem(
               'Mã giao dịch',
-              '26455528012',
+              controller.uid,
             ),
             const Divider(
               color: AppColors.line,

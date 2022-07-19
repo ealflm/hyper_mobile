@@ -32,7 +32,6 @@ class MomoView extends GetView<MomoController> {
                 navigationDelegate: (NavigationRequest request) {
                   if (request.url
                       .startsWith('momo://?action=payWithAppToken')) {
-                    // controller.paymentReturn();
                     controller.goToUrl(request.url);
                     return NavigationDecision.prevent;
                   }

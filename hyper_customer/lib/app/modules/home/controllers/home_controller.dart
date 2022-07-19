@@ -12,11 +12,11 @@ class HomeController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
 
   final HeaderState headerState = HeaderState();
-  double accountBalance = 0.0;
+  double accountBalance = -1.0;
   var hasAccountBalance = false.obs;
 
   String get accountBlanceVND {
-    return "${Utils.numberFormat.format(accountBalance)} VNĐ";
+    return Utils.vnd(accountBalance);
   }
 
   @override
@@ -35,6 +35,7 @@ class HomeController extends BaseController {
   void _saveSetting() {
     SettingController.intance.hasAccountBalance = true;
     SettingController.intance.accountBalance = accountBalance;
+    SettingController.intance.saveAccountBalance(accountBalance);
   }
 
   Future<void> reload() async {
@@ -43,7 +44,6 @@ class HomeController extends BaseController {
 
   void toggleHeader() {
     headerState.toggle();
-    SettingController.intance.saveWalletUiStatus(headerState.walletUiState);
   }
 
   Future<void> _getAccountBalance() async {

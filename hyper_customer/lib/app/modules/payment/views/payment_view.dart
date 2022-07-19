@@ -16,6 +16,7 @@ import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/payment/widgets/payment_radio_item.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../controllers/payment_controller.dart';
 
@@ -114,13 +115,13 @@ class PaymentView extends GetView<PaymentController> {
         width: double.infinity,
         child: ElevatedButton(
           style: ButtonStyles.primary(),
-          onPressed: controller.isLoading
+          onPressed: controller.submitIsLoading.value
               ? null
               : () {
                   controller.submit();
                 },
           child: HyperButton.child(
-            status: controller.isLoading,
+            status: controller.submitIsLoading.value,
             child: Text(
               'Nạp tiền',
               style: buttonBold,
@@ -183,9 +184,16 @@ class PaymentView extends GetView<PaymentController> {
         GetBuilder<PaymentController>(
           builder: (_) {
             return TextFormField(
-              validator: (value) {
-                if (value.toString().isEmpty) {
+              validator: (text) {
+                if (text.toString().isEmpty) {
                   return 'Vui lòng nhập số tiền để tiếp tục';
+                }
+                double value = controller.getDouble(text!);
+                if (value < 5000) {
+                  return 'Số tiền tối thiểu là 5.000 VNĐ';
+                }
+                if (value > 10000000) {
+                  return 'Số tiền tối đa là 50.000.000 VNĐ';
                 }
                 return null;
               },
@@ -283,11 +291,36 @@ class PaymentView extends GetView<PaymentController> {
               'Số dư ví Hyper',
               style: body2.copyWith(color: AppColors.floatLabel),
             ),
-            Text(
-              '932,561 VNĐ',
-              style: subtitle2.copyWith(
-                color: AppColors.softBlack,
-              ),
+            GetBuilder<PaymentController>(
+              builder: (_) {
+                Widget result = Shimmer.fromColors(
+                  baseColor: AppColors.shimmerBaseColor,
+                  highlightColor: AppColors.shimmerHighlightColor,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: AppColors.white,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Text(
+                      '1.000.000 VNĐ',
+                      style: subtitle2.copyWith(
+                        color: AppColors.softBlack,
+                      ),
+                    ),
+                  ),
+                );
+                if (controller.hasAccountBalance.value) {
+                  result = Text(
+                    controller.accountBlanceVND,
+                    style: subtitle2.copyWith(
+                      color: AppColors.softBlack,
+                    ),
+                  );
+                }
+                return result;
+              },
             ),
           ],
         ),

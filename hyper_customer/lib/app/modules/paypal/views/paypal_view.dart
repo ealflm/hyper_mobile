@@ -30,8 +30,7 @@ class PaypalView extends GetView<PaypalController> {
                 javascriptMode: JavascriptMode.unrestricted,
                 initialUrl: controller.initialUrl,
                 navigationDelegate: (NavigationRequest request) {
-                  if (request.url.startsWith(
-                      'https://tourism-smart-transportation-api.azurewebsites.net')) {
+                  if (request.url.startsWith('https://example.com/hyper')) {
                     controller.paymentReturn();
                     return NavigationDecision.prevent;
                   }

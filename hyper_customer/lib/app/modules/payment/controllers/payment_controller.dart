@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -21,10 +22,58 @@ class PaymentController extends BaseController {
   var selectedPaymentMethod = 1;
   String? depositText;
 
+  double accountBalance = -1.0;
+  var hasAccountBalance = false.obs;
+
+  var accountBalanceIsLoading = false.obs;
+  var submitIsLoading = false.obs;
+
+  String get accountBlanceVND {
+    return Utils.vnd(accountBalance);
+  }
+
+  void _loadSetting() {
+    hasAccountBalance.value = SettingController.intance.hasAccountBalance;
+    accountBalance = SettingController.intance.accountBalance;
+  }
+
+  void _saveSetting() {
+    SettingController.intance.hasAccountBalance = true;
+    SettingController.intance.accountBalance = accountBalance;
+  }
+
+  Future<void> reload() async {
+    await _getAccountBalance();
+  }
+
+  Future<void> _getAccountBalance() async {
+    accountBalanceIsLoading.value = true;
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    if (customerId == '') return;
+    var accountBalanceService = _repository.getBalance(customerId);
+
+    await callDataService(
+      accountBalanceService,
+      onSuccess: (double response) {
+        accountBalance = response;
+      },
+      onError: (dioError) {
+        debugPrint(dioError.message);
+      },
+    );
+    hasAccountBalance.value = true;
+    _saveSetting();
+
+    accountBalanceIsLoading.value = false;
+    update();
+  }
+
   @override
   void onInit() {
     depositFocusNode.addListener(_onFocusChange);
     depositController.addListener(_onTextChange);
+    _loadSetting();
+    _getAccountBalance();
     super.onInit();
   }
 
@@ -54,6 +103,7 @@ class PaymentController extends BaseController {
         offset: depositController.text.length,
       ),
     );
+    formKey.currentState!.validate();
   }
 
   void changePaymentMethod(int value) {
@@ -61,12 +111,17 @@ class PaymentController extends BaseController {
     update();
   }
 
+  double getDouble(String value) {
+    return double.tryParse(value.replaceAll('.', '')) ?? 0;
+  }
+
   Future<void> submit() async {
     if (!formKey.currentState!.validate()) return;
     formKey.currentState!.save();
 
-    double depositValue =
-        double.tryParse(depositText!.replaceAll('.', '')) ?? 0;
+    submitIsLoading.value = true;
+
+    double depositValue = getDouble(depositText!);
 
     User? user = TokenManager.instance.user;
     if (user == null) {
@@ -91,6 +146,8 @@ class PaymentController extends BaseController {
         Utils.showToast('Kết nối thất bại');
       },
     );
+
+    submitIsLoading.value = false;
 
     if (result.isNotEmpty) {
       if (selectedPaymentMethod == 0) {

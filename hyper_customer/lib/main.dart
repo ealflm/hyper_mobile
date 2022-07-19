@@ -31,12 +31,6 @@ void main() {
   NetworkController.intance.init();
   TokenManager.instance.init();
 
-  final appLinks = AppLinks();
-
-  appLinks.uriLinkStream.listen((uri) {
-    Utils.showToast(uri.toString());
-  });
-
   Intl.defaultLocale = 'vi_VN';
 
   runApp(const MyApp());
