@@ -13,10 +13,13 @@ class HomeController extends BaseController {
 
   final HeaderState headerState = HeaderState();
   double accountBalance = -1.0;
-  var hasAccountBalance = false.obs;
 
   String get accountBlanceVND {
     return Utils.vnd(accountBalance);
+  }
+
+  bool get hasAccountBalance {
+    return accountBalance >= 0;
   }
 
   @override
@@ -28,12 +31,10 @@ class HomeController extends BaseController {
 
   void _loadSetting() {
     headerState.setWalletUiState(SettingController.intance.walletUiState);
-    hasAccountBalance.value = SettingController.intance.hasAccountBalance;
     accountBalance = SettingController.intance.accountBalance;
   }
 
   void _saveSetting() {
-    SettingController.intance.hasAccountBalance = true;
     SettingController.intance.accountBalance = accountBalance;
     SettingController.intance.saveAccountBalance(accountBalance);
   }
@@ -60,7 +61,6 @@ class HomeController extends BaseController {
         debugPrint(dioError.message);
       },
     );
-    hasAccountBalance.value = true;
     _saveSetting();
 
     update();

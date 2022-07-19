@@ -217,7 +217,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                 ),
               );
-              if (controller.hasAccountBalance.value) {
+              if (controller.hasAccountBalance) {
                 result = Text(
                   controller.accountBlanceVND,
                   style: subtitle1.copyWith(

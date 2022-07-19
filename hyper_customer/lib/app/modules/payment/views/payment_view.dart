@@ -311,7 +311,7 @@ class PaymentView extends GetView<PaymentController> {
                     ),
                   ),
                 );
-                if (controller.hasAccountBalance.value) {
+                if (controller.hasAccountBalance) {
                   result = Text(
                     controller.accountBlanceVND,
                     style: subtitle2.copyWith(

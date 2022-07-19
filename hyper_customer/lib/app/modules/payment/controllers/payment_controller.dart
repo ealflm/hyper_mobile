@@ -23,7 +23,9 @@ class PaymentController extends BaseController {
   String? depositText;
 
   double accountBalance = -1.0;
-  var hasAccountBalance = false.obs;
+  bool get hasAccountBalance {
+    return accountBalance >= 0;
+  }
 
   var accountBalanceIsLoading = false.obs;
   var submitIsLoading = false.obs;
@@ -33,12 +35,10 @@ class PaymentController extends BaseController {
   }
 
   void _loadSetting() {
-    hasAccountBalance.value = SettingController.intance.hasAccountBalance;
     accountBalance = SettingController.intance.accountBalance;
   }
 
   void _saveSetting() {
-    SettingController.intance.hasAccountBalance = true;
     SettingController.intance.accountBalance = accountBalance;
   }
 
@@ -61,7 +61,6 @@ class PaymentController extends BaseController {
         debugPrint(dioError.message);
       },
     );
-    hasAccountBalance.value = true;
     _saveSetting();
 
     accountBalanceIsLoading.value = false;
