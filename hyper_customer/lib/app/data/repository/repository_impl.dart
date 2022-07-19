@@ -40,7 +40,7 @@ class RepositoryImpl extends BaseRepository implements Repository {
   Future<String> deposit(double amount, int method, String customerId) {
     var endpoint = "${DioProvider.baseUrl}/deposit";
     var data = {
-      "amount": amount,
+      "amount": amount.toInt(),
       "method": method,
       "customerid": customerId,
     };
@@ -48,7 +48,9 @@ class RepositoryImpl extends BaseRepository implements Repository {
     var dioCall = dioTokenClient.post(endpoint, data: formData);
 
     try {
-      return callApi(dioCall).then((response) => response.data['body']['id']);
+      return callApi(dioCall).then((response) {
+        return response.data['body']['id'];
+      });
     } catch (e) {
       rethrow;
     }

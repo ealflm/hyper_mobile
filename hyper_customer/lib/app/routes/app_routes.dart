@@ -17,6 +17,7 @@ abstract class Routes {
   static const PAYPAL = _Paths.PAYPAL;
   static const PAYMENT_STATUS = _Paths.PAYMENT_STATUS;
   static const BUSING = _Paths.BUSING;
+  static const MOMO = _Paths.MOMO;
 }
 
 abstract class _Paths {
@@ -36,4 +37,5 @@ abstract class _Paths {
   static const PAYPAL = '/paypal';
   static const PAYMENT_STATUS = '/payment-status';
   static const BUSING = '/busing';
+  static const MOMO = '/momo';
 }

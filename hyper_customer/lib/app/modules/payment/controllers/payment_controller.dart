@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
-import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
@@ -67,18 +65,6 @@ class PaymentController extends BaseController {
     if (!formKey.currentState!.validate()) return;
     formKey.currentState!.save();
 
-    if (selectedPaymentMethod == 1) {
-      Get.snackbar(
-        'Chưa hỗ trợ',
-        'Tính năng đang trong quá trình phát triển',
-        backgroundColor: AppColors.snackbar,
-        colorText: AppColors.white,
-        snackPosition: SnackPosition.BOTTOM,
-        margin: EdgeInsets.only(bottom: 15.h, left: 10.w, right: 10.w),
-      );
-      return;
-    }
-
     double depositValue =
         double.tryParse(depositText!.replaceAll('.', '')) ?? 0;
 
@@ -94,23 +80,30 @@ class PaymentController extends BaseController {
       customerId,
     );
 
-    String id = '';
+    String result = '';
 
     await callDataService(
       depositService,
       onSuccess: (String response) {
-        id = response;
+        result = response;
       },
       onError: (DioError dioError) {
         Utils.showToast('Kết nối thất bại');
       },
     );
 
-    if (id.isNotEmpty) {
-      Get.toNamed(
-        Routes.PAYPAL,
-        arguments: {'id': id},
-      );
+    if (result.isNotEmpty) {
+      if (selectedPaymentMethod == 0) {
+        Get.toNamed(
+          Routes.PAYPAL,
+          arguments: {'id': result},
+        );
+      } else if (selectedPaymentMethod == 1) {
+        Get.toNamed(
+          Routes.MOMO,
+          arguments: {'initialUrl': result},
+        );
+      }
     }
   }
 }

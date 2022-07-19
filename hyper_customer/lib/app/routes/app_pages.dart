@@ -12,6 +12,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/main/bindings/main_binding.dart';
 import '../modules/main/views/main_view.dart';
+import '../modules/momo/bindings/momo_binding.dart';
+import '../modules/momo/views/momo_view.dart';
 import '../modules/notification/bindings/notification_binding.dart';
 import '../modules/notification/views/notification_view.dart';
 import '../modules/package/bindings/package_binding.dart';
@@ -129,6 +131,11 @@ class AppPages {
       page: () => const BusingView(),
       binding: BusingBinding(),
       transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.MOMO,
+      page: () => const MomoView(),
+      binding: MomoBinding(),
     ),
   ];
 }
