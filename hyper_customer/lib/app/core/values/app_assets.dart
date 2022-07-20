@@ -1,4 +1,6 @@
 abstract class AppAssets {
+  static const String hyperWhiteTextLogo =
+      'assets/svg/hyper_white_text_logo.svg';
   static const String hyperWhiteLogo = 'assets/svg/hyper_white_logo.svg';
   static const String hyperLogo = 'assets/svg/hyper_logo.svg';
   static const String splash = 'assets/mp4/fast_splash.mp4';

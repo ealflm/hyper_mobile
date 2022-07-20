@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../controllers/scan_controller.dart';
@@ -20,11 +21,12 @@ class ScanView extends GetView<ScanController> {
               key: controller.qrKey,
               onQRViewCreated: controller.onQRViewCreated,
               overlay: QrScannerOverlayShape(
-                borderColor: Colors.red,
-                borderRadius: 10,
-                borderLength: 30,
+                borderColor: Colors.white,
+                borderRadius: 1.r,
+                borderLength: 35.w,
                 borderWidth: 10,
                 cutOutSize: 200.w,
+                overlayColor: AppColors.black.withOpacity(1),
               ),
             ),
           ),
