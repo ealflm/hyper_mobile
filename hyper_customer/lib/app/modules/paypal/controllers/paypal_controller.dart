@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/model/payment_result.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -30,7 +31,8 @@ class PaypalController extends BaseController {
     super.onReady();
   }
 
-  Future<void> paymentReturn() async {
+  Future<void> paymentReturn(String url) async {
+    Uri uri = Uri.parse(url);
     var depositService = _repository.checkDeposit(id);
 
     bool result = false;
@@ -47,9 +49,19 @@ class PaypalController extends BaseController {
       },
     );
 
+    PaymentResult paymentResult = PaymentResult.fromString(
+      status: result ? '0' : '1',
+      uid: uri.queryParameters['uid'],
+      amount: uri.queryParameters['amount'],
+      createdDate: uri.queryParameters['create-date'],
+      source: 'paypal',
+    );
+
     Get.offAllNamed(
       Routes.PAYMENT_STATUS,
-      arguments: {'status': result},
+      arguments: {
+        'paymentResult': paymentResult,
+      },
     );
   }
 

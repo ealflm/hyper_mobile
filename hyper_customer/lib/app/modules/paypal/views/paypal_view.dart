@@ -31,7 +31,7 @@ class PaypalView extends GetView<PaypalController> {
                 initialUrl: controller.initialUrl,
                 navigationDelegate: (NavigationRequest request) {
                   if (request.url.startsWith('https://example.com/hyper')) {
-                    controller.paymentReturn();
+                    controller.paymentReturn(request.url);
                     return NavigationDecision.prevent;
                   }
                   return NavigationDecision.navigate;

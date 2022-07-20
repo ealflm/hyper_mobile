@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/model/payment_result.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -35,7 +37,14 @@ class MomoView extends GetView<MomoController> {
                     controller.goToUrl(request.url);
                     return NavigationDecision.prevent;
                   }
-                  debugPrint('Nam: ' + request.url);
+                  if (request.url.startsWith('hyper://customer.app')) {
+                    Get.toNamed(Routes.PAYMENT_STATUS, arguments: {
+                      'paymentResult': PaymentResult(
+                        status: false,
+                      ),
+                    });
+                    return NavigationDecision.prevent;
+                  }
                   return NavigationDecision.navigate;
                 },
               ),

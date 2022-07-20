@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
+import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
@@ -54,7 +56,9 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          controller.state ? _successful() : _failed(),
+                          controller.paymentResult.status
+                              ? _successful()
+                              : _failed(),
                           Column(
                             children: [
                               SizedBox(
@@ -156,7 +160,7 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
               height: 5.h,
             ),
             Text(
-              controller.amountVND,
+              controller.paymentResult.amountVND,
               style: h5.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
@@ -171,14 +175,14 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
           children: [
             _detailItem(
               'Thời gian thanh toán',
-              '-',
+              controller.paymentResult.createdDateVN,
             ),
             const Divider(
               color: AppColors.line,
             ),
             _detailItem(
               'Mã giao dịch',
-              controller.uid,
+              controller.paymentResult.uid,
             ),
             const Divider(
               color: AppColors.line,
@@ -186,6 +190,13 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
             _detailItem(
               'Dịch vụ',
               'Nạp tiền vào ví',
+            ),
+            const Divider(
+              color: AppColors.line,
+            ),
+            _detailSourceItem(
+              'Nguồn tiền',
+              controller.paymentResult.source,
             ),
           ],
         ),
@@ -208,6 +219,54 @@ class PaymentStatusView extends GetView<PaymentStatusController> {
           value,
           style: subtitle2.copyWith(color: AppColors.softBlack),
         ),
+      ],
+    );
+  }
+
+  Row _detailSourceItem(String key, int source) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          key,
+          style: subtitle2.copyWith(
+            fontWeight: FontWeights.regular,
+            color: AppColors.lightBlack,
+          ),
+        ),
+        source == 0
+            ? Row(
+                children: [
+                  Text(
+                    'PayPal',
+                    style: subtitle2.copyWith(color: AppColors.softBlack),
+                  ),
+                  SizedBox(
+                    width: 5.w,
+                  ),
+                  SvgPicture.asset(
+                    AppAssets.paypal,
+                    height: 20.h,
+                  ),
+                ],
+              )
+            : source == 1
+                ? Row(
+                    children: [
+                      Text(
+                        'MoMo',
+                        style: subtitle2.copyWith(color: AppColors.softBlack),
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      SvgPicture.asset(
+                        AppAssets.momo,
+                        height: 20.h,
+                      ),
+                    ],
+                  )
+                : Container(),
       ],
     );
   }

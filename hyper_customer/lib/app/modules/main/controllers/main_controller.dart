@@ -2,6 +2,7 @@ import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
+import 'package:hyper_customer/app/core/model/payment_result.dart';
 import 'package:hyper_customer/app/modules/account/views/account_view.dart';
 import 'package:hyper_customer/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_customer/app/modules/home/views/home_view.dart';
@@ -27,19 +28,18 @@ class MainController extends GetxController {
     final appLinks = AppLinks();
 
     appLinks.uriLinkStream.listen((uri) {
-      var result = false;
-      String? resultCode = uri.queryParameters['resultCode'];
-      if (resultCode == '0') {
-        result = true;
-      }
-      String? uid = uri.queryParameters['uid'];
-      double? amount = double.tryParse(uri.queryParameters['amount'] ?? '');
+      PaymentResult paymentResult = PaymentResult.fromString(
+        status: uri.queryParameters['resultCode'],
+        uid: uri.queryParameters['uid'],
+        amount: uri.queryParameters['amount'],
+        createdDate: uri.queryParameters['create-date'],
+        source: 'momo',
+      );
+
       Get.offAllNamed(
         Routes.PAYMENT_STATUS,
         arguments: {
-          'status': result,
-          'uid': uid,
-          'amount': amount,
+          'paymentResult': paymentResult,
         },
       );
     });

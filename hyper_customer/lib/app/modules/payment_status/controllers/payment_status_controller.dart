@@ -1,19 +1,13 @@
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/core/utils/utils.dart';
+import 'package:hyper_customer/app/core/model/payment_result.dart';
 
 class PaymentStatusController extends GetxController {
-  bool state = false;
-  String uid = '';
-  double? amount;
-
-  String get amountVND => Utils.vnd(amount);
+  PaymentResult paymentResult = PaymentResult();
 
   @override
   void onInit() {
     if (Get.arguments != null) {
-      state = Get.arguments['status'] ?? false;
-      uid = Get.arguments['uid'] ?? '';
-      amount = Get.arguments['amount'];
+      paymentResult = Get.arguments['paymentResult'];
     }
     super.onInit();
   }
