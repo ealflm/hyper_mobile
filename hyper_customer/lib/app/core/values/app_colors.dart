@@ -36,6 +36,7 @@ abstract class AppColors {
   static const Color description = Color(0xFF626365);
   static const Color floatLabel = Color(0xFF666666);
   static const Color snackbar = Color(0xFF333436);
+  static Color cameraOverlay = const Color(0xFF323232).withOpacity(0.5);
 
   static const Color softRed = Color(0xFFD73D64);
   static const Color hardBlue = Color(0xFF5B5DE9);

@@ -6,7 +6,6 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/modules/activity/controllers/activity_controller.dart';
 import 'package:hyper_customer/app/modules/activity/widgets/transaction_item.dart';
-import 'package:hyper_customer/app/modules/package/widget/package_card.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MovingView extends GetView<ActivityController> {
