@@ -2,9 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
-import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
-import 'package:hyper_customer/app/core/widgets/dialog.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -61,7 +60,7 @@ class LoginController extends BaseController {
           HyperDialog.show(
             title: 'Sai mã PIN',
             content: 'Mã PIN bạn vừa nhập chưa chính xác. Vui lòng thử lại',
-            buttonText: 'OK',
+            primaryButtonText: 'OK',
           );
         } else {
           Utils.showToast('Kết nối thất bại');

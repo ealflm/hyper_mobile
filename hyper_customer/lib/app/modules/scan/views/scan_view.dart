@@ -92,7 +92,9 @@ class ScanView extends GetView<ScanController> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    controller.toggleFlash();
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     primary: AppColors.cameraOverlay,
@@ -100,10 +102,14 @@ class ScanView extends GetView<ScanController> {
                   child: SizedBox(
                     height: 60.r,
                     width: 60.r,
-                    child: Icon(
-                      Icons.flash_on_outlined,
-                      size: 26.r,
-                      color: Colors.white,
+                    child: Obx(
+                      () => Icon(
+                        controller.isFlashOn.value
+                            ? Icons.flash_off_outlined
+                            : Icons.flash_on_outlined,
+                        size: 26.r,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
