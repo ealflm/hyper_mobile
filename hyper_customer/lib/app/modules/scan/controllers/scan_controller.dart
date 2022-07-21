@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class ScanController extends GetxController {
@@ -21,9 +22,15 @@ class ScanController extends GetxController {
       if (data!.startsWith('0')) {
         HyperDialog.show(
           title: 'Liên kết thẻ',
-          content: 'Bạn có chắc chắn muốn liên kết thẻ này hay không? $data',
+          content: 'Bạn có chắc chắn muốn liên kết thẻ này hay không?',
           primaryButtonText: 'Đồng ý',
           secondaryButtonText: 'Huỷ',
+          primaryOnPressed: () {
+            Get.offAllNamed(
+              Routes.SCAN_CARD,
+              arguments: {'code': data},
+            );
+          },
           secondaryOnPressed: () async {
             await qrController?.resumeCamera();
             Get.back();

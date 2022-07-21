@@ -8,4 +8,6 @@ abstract class Repository {
   Future<bool> checkDeposit(String id);
 
   Future<double> getBalance(String customerId);
+
+  Future<bool> cardLink(String customerId, String uid);
 }

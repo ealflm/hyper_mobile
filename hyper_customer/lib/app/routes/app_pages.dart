@@ -28,6 +28,8 @@ import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/scan/bindings/scan_binding.dart';
 import '../modules/scan/views/scan_view.dart';
+import '../modules/scan_card/bindings/scan_card_binding.dart';
+import '../modules/scan_card/views/scan_card_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/start/bindings/start_binding.dart';
@@ -136,6 +138,11 @@ class AppPages {
       name: _Paths.MOMO,
       page: () => const MomoView(),
       binding: MomoBinding(),
+    ),
+    GetPage(
+      name: _Paths.SCAN_CARD,
+      page: () => const ScanCardView(),
+      binding: ScanCardBinding(),
     ),
   ];
 }

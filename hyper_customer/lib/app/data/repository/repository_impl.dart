@@ -83,4 +83,22 @@ class RepositoryImpl extends BaseRepository implements Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<bool> cardLink(String customerId, String uid) {
+    var endpoint = "${DioProvider.baseUrl}/card-match";
+    var data = {
+      "customerid": customerId,
+      "uid": uid,
+    };
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return true;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
