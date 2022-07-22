@@ -7,4 +7,13 @@ abstract class AppAnimationAssets {
   static const String cuteDancingChickenCrop =
       'assets/lottiefiles/cute-dancing-chicken-crop.json';
   static const String avatarLoading = 'assets/lottiefiles/avatar-loading.json';
+
+  static const String connectLoading =
+      'assets/lottiefiles/connect-loading.json';
+
+  static const String cloudMeditation =
+      'assets/lottiefiles/cloud-meditation.json';
+
+  static const String liquidLoading = 'assets/lottiefiles/liquid-loading.json';
+  static const String earthLoading = 'assets/lottiefiles/earth-loading.json';
 }

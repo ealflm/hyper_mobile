@@ -37,7 +37,9 @@ class ScanCardController extends BaseController {
         Utils.showToast('Kết nối thất bại');
       },
     );
-    state = 2;
+    Future.delayed(
+      Duration(seconds: 1),
+    );
     update();
   }
 }

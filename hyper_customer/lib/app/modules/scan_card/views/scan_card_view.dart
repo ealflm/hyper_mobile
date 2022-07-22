@@ -40,7 +40,7 @@ class ScanCardView extends GetView<ScanCardController> {
                       child: Stack(
                         children: [
                           Center(
-                            child: Text('Kết quả giao dịch',
+                            child: Text('Liên kết thẻ',
                                 style: h6.copyWith(color: AppColors.white)),
                           ),
                         ],
@@ -81,7 +81,7 @@ class ScanCardView extends GetView<ScanCardController> {
                                   },
                                   style: ButtonStyles.secondary(),
                                   child: Text(
-                                    'Tiếp tục nạp tiền',
+                                    'Tiếp tục quét QR',
                                     style: buttonBold,
                                   ),
                                 ),
@@ -117,8 +117,11 @@ class ScanCardView extends GetView<ScanCardController> {
     );
   }
 
-  Container _loading() {
-    return Container(child: Text('Loading'));
+  Widget _loading() {
+    return Lottie.asset(
+      AppAnimationAssets.earthLoading,
+      width: 190.w,
+    );
   }
 
   Column _failed() {
@@ -128,20 +131,20 @@ class ScanCardView extends GetView<ScanCardController> {
           children: [
             Lottie.asset(
               AppAnimationAssets.error404,
-              height: 200.h,
+              width: 200.w,
             ),
             SizedBox(
               height: 10.h,
             ),
             Text(
-              'Giao dịch thất bại',
+              'Liên kết thẻ thất bại',
               style: h6.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
               ),
             ),
             Text(
-              'Đã có lỗi xảy ra trong quá trình giao dịch',
+              'Đã có lỗi xảy ra trong quá trình xử lí',
               style: subtitle1.copyWith(
                 color: AppColors.lightBlack,
               ),
@@ -153,137 +156,28 @@ class ScanCardView extends GetView<ScanCardController> {
   }
 
   Widget _successful() {
-    // return Column(
-    //   children: [
-    //     Column(
-    //       children: [
-    //         Lottie.asset(
-    //           AppAnimationAssets.successful,
-    //           repeat: false,
-    //           height: 138.h,
-    //         ),
-    //         SizedBox(
-    //           height: 10.h,
-    //         ),
-    //         Text(
-    //           'Giao dịch thành công',
-    //           style: subtitle1.copyWith(
-    //             fontWeight: FontWeights.medium,
-    //             color: AppColors.lightBlack,
-    //           ),
-    //         ),
-    //         SizedBox(
-    //           height: 5.h,
-    //         ),
-    //         Text(
-    //           controller.paymentResult.amountVND,
-    //           style: h5.copyWith(
-    //             fontWeight: FontWeights.medium,
-    //             color: AppColors.softBlack,
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //     SizedBox(
-    //       height: 20.h,
-    //     ),
-    //     Column(
-    //       children: [
-    //         _detailItem(
-    //           'Thời gian thanh toán',
-    //           controller.paymentResult.createdDateVN,
-    //         ),
-    //         const Divider(
-    //           color: AppColors.line,
-    //         ),
-    //         _detailItem(
-    //           'Mã giao dịch',
-    //           controller.paymentResult.uid,
-    //         ),
-    //         const Divider(
-    //           color: AppColors.line,
-    //         ),
-    //         _detailItem(
-    //           'Dịch vụ',
-    //           'Nạp tiền vào ví',
-    //         ),
-    //         const Divider(
-    //           color: AppColors.line,
-    //         ),
-    //         _detailSourceItem(
-    //           'Nguồn tiền',
-    //           controller.paymentResult.source,
-    //         ),
-    //       ],
-    //     ),
-    //   ],
-    // );
-    return Container(child: Text('Thành công'));
-  }
-
-  Row _detailItem(String key, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Text(
-          key,
-          style: subtitle2.copyWith(
-            fontWeight: FontWeights.regular,
-            color: AppColors.lightBlack,
-          ),
+        Column(
+          children: [
+            Lottie.asset(
+              AppAnimationAssets.successful,
+              repeat: false,
+              width: 190.w,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              'Liên kết thẻ thành công',
+              style: h6.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.softBlack,
+                fontSize: 18.sp,
+              ),
+            ),
+          ],
         ),
-        Text(
-          value,
-          style: subtitle2.copyWith(color: AppColors.softBlack),
-        ),
-      ],
-    );
-  }
-
-  Row _detailSourceItem(String key, int source) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          key,
-          style: subtitle2.copyWith(
-            fontWeight: FontWeights.regular,
-            color: AppColors.lightBlack,
-          ),
-        ),
-        source == 0
-            ? Row(
-                children: [
-                  Text(
-                    'PayPal',
-                    style: subtitle2.copyWith(color: AppColors.softBlack),
-                  ),
-                  SizedBox(
-                    width: 5.w,
-                  ),
-                  SvgPicture.asset(
-                    AppAssets.paypal,
-                    height: 20.h,
-                  ),
-                ],
-              )
-            : source == 1
-                ? Row(
-                    children: [
-                      Text(
-                        'MoMo',
-                        style: subtitle2.copyWith(color: AppColors.softBlack),
-                      ),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      SvgPicture.asset(
-                        AppAssets.momo,
-                        height: 20.h,
-                      ),
-                    ],
-                  )
-                : Container(),
       ],
     );
   }

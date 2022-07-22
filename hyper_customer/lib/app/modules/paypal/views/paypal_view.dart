@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:lottie/lottie.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -44,11 +45,22 @@ class PaypalView extends GetView<PaypalController> {
                           width: double.infinity,
                           height: double.infinity,
                           color: AppColors.white,
-                          child: Center(
-                            child: Lottie.asset(
-                              AppAnimationAssets.cuteDancingChicken,
-                              width: 200.w,
-                            ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Lottie.asset(
+                                AppAnimationAssets.cuteDancingChickenCrop,
+                                width: 140.w,
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              Text(
+                                'Đang tải...',
+                                style: subtitle1.copyWith(
+                                    color: AppColors.lightBlack),
+                              ),
+                            ],
                           ),
                         )
                       : Container(),
