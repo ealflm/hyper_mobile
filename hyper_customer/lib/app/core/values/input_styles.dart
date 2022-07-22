@@ -58,4 +58,36 @@ abstract class InputStyles {
       }),
     );
   }
+
+  static InputDecoration mapSearch(
+      {Widget? prefixIcon, String labelText = "", String hintText = ""}) {
+    return InputDecoration(
+      errorStyle: caption,
+      isDense: true,
+      contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(50.r),
+      ),
+      disabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent,
+        ),
+      ),
+      labelText: labelText,
+      hintText: hintText,
+      labelStyle: subtitle1.copyWith(
+        color: AppColors.description,
+      ),
+      hintStyle: subtitle1.copyWith(
+        color: AppColors.description,
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      prefixIcon: prefixIcon != null
+          ? Padding(
+              padding: EdgeInsets.only(left: 11.w),
+              child: prefixIcon,
+            )
+          : null,
+    );
+  }
 }

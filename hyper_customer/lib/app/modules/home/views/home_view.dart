@@ -151,7 +151,9 @@ class HomeView extends GetView<HomeController> {
               width: 18.w,
             ),
             ServiceContainer(
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed(Routes.RENTING);
+              },
               title: 'Thuê xe',
               backgroundAsset: AppAssets.renting,
               iconAsset: AppAssets.rentingIcon,

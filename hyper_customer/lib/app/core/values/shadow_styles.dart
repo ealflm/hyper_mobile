@@ -46,4 +46,13 @@ abstract class ShadowStyles {
       color: AppColors.black.withOpacity(0.05),
     ),
   ];
+
+  static List<BoxShadow> mapSearch = [
+    BoxShadow(
+      offset: const Offset(0, 2),
+      blurRadius: 2,
+      spreadRadius: 0,
+      color: AppColors.black.withOpacity(0.2),
+    ),
+  ];
 }

@@ -26,6 +26,8 @@ import '../modules/paypal/bindings/paypal_binding.dart';
 import '../modules/paypal/views/paypal_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/renting/bindings/renting_binding.dart';
+import '../modules/renting/views/renting_view.dart';
 import '../modules/scan/bindings/scan_binding.dart';
 import '../modules/scan/views/scan_view.dart';
 import '../modules/scan_card/bindings/scan_card_binding.dart';
@@ -143,6 +145,11 @@ class AppPages {
       name: _Paths.SCAN_CARD,
       page: () => const ScanCardView(),
       binding: ScanCardBinding(),
+    ),
+    GetPage(
+      name: _Paths.RENTING,
+      page: () => const RentingView(),
+      binding: RentingBinding(),
     ),
   ];
 }

@@ -19,6 +19,7 @@ abstract class Routes {
   static const BUSING = _Paths.BUSING;
   static const MOMO = _Paths.MOMO;
   static const SCAN_CARD = _Paths.SCAN_CARD;
+  static const RENTING = _Paths.RENTING;
 }
 
 abstract class _Paths {
@@ -40,4 +41,5 @@ abstract class _Paths {
   static const BUSING = '/busing';
   static const MOMO = '/momo';
   static const SCAN_CARD = '/scan-card';
+  static const RENTING = '/renting';
 }
