@@ -4,6 +4,7 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 
 abstract class HyperDialog {
+  static bool isOpen = false;
   static void show({
     String title = '',
     String content = '',
@@ -13,6 +14,7 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) {
+    isOpen = true;
     Get.dialog(
       AlertDialog(
         title: Text(
@@ -49,6 +51,10 @@ abstract class HyperDialog {
         ],
       ),
       barrierDismissible: barrierDismissible,
+    ).then(
+      (value) {
+        isOpen = false;
+      },
     );
   }
 }

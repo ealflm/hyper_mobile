@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
-import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';

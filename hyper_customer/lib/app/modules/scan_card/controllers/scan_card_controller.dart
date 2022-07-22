@@ -25,8 +25,6 @@ class ScanCardController extends BaseController {
 
     var cardLinkService = _repository.cardLink(customerId, code ?? '');
 
-    await Future.delayed(Duration(seconds: 2));
-
     await callDataService(
       cardLinkService,
       onSuccess: (bool response) {
@@ -38,7 +36,7 @@ class ScanCardController extends BaseController {
       },
     );
     Future.delayed(
-      Duration(seconds: 1),
+      const Duration(seconds: 1),
     );
     update();
   }
