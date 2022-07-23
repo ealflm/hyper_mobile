@@ -55,4 +55,13 @@ abstract class ShadowStyles {
       color: AppColors.black.withOpacity(0.2),
     ),
   ];
+
+  static List<BoxShadow> locationMarker = [
+    BoxShadow(
+      offset: const Offset(0, 0),
+      blurRadius: 4,
+      spreadRadius: 0,
+      color: AppColors.black.withOpacity(0.4),
+    ),
+  ];
 }

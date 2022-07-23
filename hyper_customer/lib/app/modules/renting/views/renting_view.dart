@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -30,27 +31,46 @@ class RentingView extends GetView<RentingController> {
                 center: LatLng(10.212884, 103.964889),
                 zoom: 10.8,
                 minZoom: 10.8,
-                swPanBoundary: LatLng(9.866505, 103.785063),
-                nePanBoundary: LatLng(10.508632, 104.112881),
+                // swPanBoundary: LatLng(9.866505, 103.785063),
+                // nePanBoundary: LatLng(10.508632, 104.112881),
                 slideOnBoundaries: true,
                 onMapCreated: controller.onMapCreated,
               ),
-              layers: [
-                TileLayerOptions(
-                  urlTemplate: controller.urlTemplate,
-                  additionalOptions: {
-                    'accessToken': controller.accessToken,
-                    'id': controller.mapId,
-                  },
-                ),
-                MarkerLayerOptions(markers: [
-                  Marker(
-                    width: 100.0,
-                    height: 100.0,
-                    point: LatLng(45.5231, -122.6765),
-                    builder: (ctx) => const Icon(Icons.location_on),
+              children: [
+                TileLayerWidget(
+                  options: TileLayerOptions(
+                    urlTemplate: controller.urlTemplate,
+                    additionalOptions: {
+                      'accessToken': controller.accessToken,
+                      'id': controller.mapId,
+                    },
                   ),
-                ]),
+                ),
+                LocationMarkerLayerWidget(
+                  options: LocationMarkerLayerOptions(
+                    showHeadingSector: false,
+                    marker: Container(
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: ShadowStyles.locationMarker,
+                      ),
+                      child: DefaultLocationMarker(
+                        child: Container(
+                          padding: EdgeInsets.only(bottom: 2.r),
+                          child: Center(
+                            child: Icon(
+                              Icons.navigation,
+                              color: Colors.white,
+                              size: 16.r,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    markerSize: Size(26.r, 26.r),
+                    markerDirection: MarkerDirection.heading,
+                  ),
+                ),
               ],
             ),
           ),

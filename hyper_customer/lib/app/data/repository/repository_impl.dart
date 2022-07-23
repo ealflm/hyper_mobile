@@ -90,6 +90,7 @@ class RepositoryImpl extends BaseRepository implements Repository {
     var data = {
       "customerid": customerId,
       "uid": uid,
+      "status": 2,
     };
     var dioCall = dioTokenClient.post(endpoint, data: data);
 
