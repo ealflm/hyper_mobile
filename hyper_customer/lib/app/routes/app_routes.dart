@@ -20,6 +20,7 @@ abstract class Routes {
   static const MOMO = _Paths.MOMO;
   static const SCAN_CARD = _Paths.SCAN_CARD;
   static const RENTING = _Paths.RENTING;
+  static const RENTING_SEARCH = _Paths.RENTING_SEARCH;
 }
 
 abstract class _Paths {
@@ -42,4 +43,5 @@ abstract class _Paths {
   static const MOMO = '/momo';
   static const SCAN_CARD = '/scan-card';
   static const RENTING = '/renting';
+  static const RENTING_SEARCH = '/renting/search';
 }

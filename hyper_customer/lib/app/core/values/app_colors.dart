@@ -30,6 +30,7 @@ abstract class AppColors {
   static const Color softBlack = Color(0xFF090327);
   static const Color lightBlack = Color(0xFF48445A);
   static const Color line = Color(0xFFF6F6F6);
+  static const Color softGray = Color(0xFFEAEAEA);
   static const Color otp = Color(0xFFEAEAEA);
   static const Color indicator = Color(0xFFD1D0D8);
   static const Color caption = Color(0xFFA9A9A9);

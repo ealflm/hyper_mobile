@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -6,6 +7,9 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
+
+// ignore: depend_on_referenced_packages
+import 'package:latlong2/latlong.dart';
 
 import '../controllers/renting_controller.dart';
 
@@ -19,6 +23,36 @@ class RentingView extends GetView<RentingController> {
         body: Stack(children: [
           Container(
             color: AppColors.white,
+            child: FlutterMap(
+              options: MapOptions(
+                interactiveFlags:
+                    InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+                center: LatLng(10.212884, 103.964889),
+                zoom: 10.8,
+                minZoom: 10.8,
+                swPanBoundary: LatLng(9.866505, 103.785063),
+                nePanBoundary: LatLng(10.508632, 104.112881),
+                slideOnBoundaries: true,
+                onMapCreated: controller.onMapCreated,
+              ),
+              layers: [
+                TileLayerOptions(
+                  urlTemplate: controller.urlTemplate,
+                  additionalOptions: {
+                    'accessToken': controller.accessToken,
+                    'id': controller.mapId,
+                  },
+                ),
+                MarkerLayerOptions(markers: [
+                  Marker(
+                    width: 100.0,
+                    height: 100.0,
+                    point: LatLng(45.5231, -122.6765),
+                    builder: (ctx) => const Icon(Icons.location_on),
+                  ),
+                ]),
+              ],
+            ),
           ),
           SafeArea(
             child: Container(
@@ -54,30 +88,35 @@ class RentingView extends GetView<RentingController> {
                     width: 10.w,
                   ),
                   Expanded(
-                    child: Container(
-                      height: 42.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50.r),
-                        color: AppColors.surface,
-                        boxShadow: ShadowStyles.mapSearch,
-                      ),
-                      child: TextFormField(
-                        enabled: false,
-                        decoration: InputStyles.mapSearch(
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 22.r,
-                            color: AppColors.lightBlack,
-                          ),
-                          hintText: 'Tìm kiếm trạm',
+                    child: InkWell(
+                      onTap: () {
+                        Get.toNamed('/renting/search');
+                      },
+                      child: Container(
+                        height: 42.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50.r),
+                          color: AppColors.surface,
+                          boxShadow: ShadowStyles.mapSearch,
                         ),
-                        validator: (value) {
-                          if (value.toString().isEmpty) {
-                            return 'Vui lòng nhập mã PIN để tiếp tục';
-                          }
-                          return null;
-                        },
-                        // onSaved: (value) => controller.password = value,
+                        child: TextFormField(
+                          enabled: false,
+                          decoration: InputStyles.mapSearch(
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: 22.r,
+                              color: AppColors.lightBlack,
+                            ),
+                            hintText: 'Tìm kiếm trạm',
+                          ),
+                          validator: (value) {
+                            if (value.toString().isEmpty) {
+                              return 'Vui lòng nhập mã PIN để tiếp tục';
+                            }
+                            return null;
+                          },
+                          // onSaved: (value) => controller.password = value,
+                        ),
                       ),
                     ),
                   ),

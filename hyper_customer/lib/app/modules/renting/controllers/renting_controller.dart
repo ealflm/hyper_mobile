@@ -1,23 +1,15 @@
+import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:hyper_customer/config/build_config.dart';
 
 class RentingController extends GetxController {
-  //TODO: Implement RentingController
+  String urlTemplate = BuildConfig.instance.config.mapUrlTemplate;
+  String accessToken = BuildConfig.instance.config.mapAccessToken;
+  String mapId = BuildConfig.instance.config.mapId;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
+  MapController? mapController;
+
+  void onMapCreated(MapController controller) {
+    mapController = controller;
   }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }

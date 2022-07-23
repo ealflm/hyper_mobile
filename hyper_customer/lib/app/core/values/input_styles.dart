@@ -84,7 +84,34 @@ abstract class InputStyles {
       floatingLabelBehavior: FloatingLabelBehavior.always,
       prefixIcon: prefixIcon != null
           ? Padding(
-              padding: EdgeInsets.only(left: 11.w),
+              padding: EdgeInsets.only(left: 6.w),
+              child: prefixIcon,
+            )
+          : null,
+    );
+  }
+
+  static InputDecoration mapSearchOutlined(
+      {Widget? prefixIcon, String labelText = "", String hintText = ""}) {
+    return InputDecoration(
+      errorStyle: caption,
+      isDense: true,
+      contentPadding: EdgeInsets.symmetric(horizontal: 20.w),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(50.r),
+      ),
+      labelText: labelText,
+      hintText: hintText,
+      labelStyle: subtitle1.copyWith(
+        color: AppColors.description,
+      ),
+      hintStyle: subtitle1.copyWith(
+        color: AppColors.description,
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      prefixIcon: prefixIcon != null
+          ? Padding(
+              padding: EdgeInsets.only(left: 6.w),
               child: prefixIcon,
             )
           : null,

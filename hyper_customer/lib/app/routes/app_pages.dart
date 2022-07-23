@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/modules/renting/views/renting_search_view.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
@@ -140,16 +141,25 @@ class AppPages {
       name: _Paths.MOMO,
       page: () => const MomoView(),
       binding: MomoBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.SCAN_CARD,
       page: () => const ScanCardView(),
       binding: ScanCardBinding(),
+      transition: Transition.noTransition,
     ),
     GetPage(
       name: _Paths.RENTING,
       page: () => const RentingView(),
       binding: RentingBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.RENTING_SEARCH,
+      page: () => const RentingSearchView(),
+      binding: RentingBinding(),
+      transition: Transition.noTransition,
     ),
   ];
 }
