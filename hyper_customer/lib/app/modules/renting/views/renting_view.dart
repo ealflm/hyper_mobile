@@ -6,12 +6,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
+import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
+import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 
-// ignore: depend_on_referenced_packages
 import 'package:latlong2/latlong.dart';
 
 import '../controllers/renting_controller.dart';
@@ -39,20 +41,91 @@ class RentingView extends GetView<RentingController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          goToCurrentLocation(),
-          Container(
-            padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
-            child: Container(
-              decoration: BoxDecorations.map(),
-              height: 100.h,
-            ),
+          _goToCurrentLocation(),
+          GetBuilder<RentingController>(
+            builder: (_) {
+              if (controller.isSelectedStation) {
+                return _rentStationDetail();
+              } else {
+                return Container();
+              }
+            },
           ),
         ],
       ),
     );
   }
 
-  Container goToCurrentLocation() {
+  Container _rentStationDetail() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
+      child: Container(
+        decoration: BoxDecorations.map(),
+        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              controller.selectedStation?.title ?? '',
+              style: subtitle1.copyWith(
+                fontSize: 18.sp,
+                color: AppColors.softBlack,
+              ),
+            ),
+            Text(
+              controller.selectedStation?.address ?? '',
+              style: body2.copyWith(
+                color: AppColors.description,
+              ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Obx(
+                  () => SizedBox(
+                    height: 36.h,
+                    width: 124.w,
+                    child: ElevatedButton(
+                      style: ButtonStyles.primarySmall(),
+                      onPressed: controller.isFindingRoute
+                          ? null
+                          : () {
+                              controller.findRoute();
+                            },
+                      child: HyperButton.child(
+                        status: controller.isFindingRoute,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.directions_outlined,
+                              size: 20.r,
+                            ),
+                            SizedBox(
+                              width: 6.w,
+                            ),
+                            Text(
+                              'Đường đi',
+                              style: buttonBold,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _goToCurrentLocation() {
     return Container(
       padding: EdgeInsets.only(bottom: 20.h, right: 20.w),
       child: Row(
@@ -60,7 +133,7 @@ class RentingView extends GetView<RentingController> {
         children: [
           ElevatedButton(
             onPressed: () {
-              Get.back();
+              controller.goToCurrentLocation();
             },
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),

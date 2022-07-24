@@ -17,7 +17,6 @@ import 'package:hyper_customer/config/build_config.dart';
 import 'package:lottie/lottie.dart' as lottie;
 import 'package:tiengviet/tiengviet.dart';
 
-// ignore: depend_on_referenced_packages
 import 'package:latlong2/latlong.dart';
 
 class RentingController extends BaseController
@@ -36,6 +35,8 @@ class RentingController extends BaseController
   Map<String, Items> rentStationsData = {};
 
   String? selectedStationId;
+  bool get isSelectedStation => selectedStationId != null;
+  Items? get selectedStation => rentStationsData[selectedStationId];
   bool isAnimated = false;
 
   double defaultZoomLevel = 10.8;
@@ -55,6 +56,11 @@ class RentingController extends BaseController
   void _goToCenter() async {
     await Future.delayed(const Duration(milliseconds: 500));
     _moveToPosition(currentLngLat, zoom: defaultZoomBigLevel);
+  }
+
+  void goToCurrentLocation() async {
+    await _loadCenter();
+    _moveToPosition(currentLngLat, zoom: mapController.zoom);
   }
 
   Future<void> _loadCenter() async {
@@ -268,5 +274,18 @@ class RentingController extends BaseController
     });
 
     controller.forward();
+  }
+
+  // FIND ROUTE
+  var isFindingRouteObs = false.obs;
+  bool get isFindingRoute => isFindingRouteObs.value;
+  set isFindingRoute(bool value) {
+    isFindingRouteObs.value = value;
+  }
+
+  void findRoute() async {
+    isFindingRoute = true;
+    await Future.delayed(Duration(seconds: 5));
+    isFindingRoute = false;
   }
 }

@@ -9,6 +9,7 @@ import '/app/network/exceptions/base_exception.dart';
 abstract class BaseRepository {
   Dio get dioClient => DioProvider.httpDio;
   Dio get dioTokenClient => DioProvider.dioWithHeaderToken;
+  Dio get dioMapbox => DioProvider.dioWithMapboxToken;
 
   Future<Response<T>> callApi<T>(Future<Response<T>> api) async {
     try {

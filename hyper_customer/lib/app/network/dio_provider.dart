@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/network/dio_debug.dart';
+import 'package:hyper_customer/app/network/dio_mapbox.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/config/build_config.dart';
 
@@ -28,6 +29,15 @@ class DioProvider {
 
   static Dio get dioWithHeaderToken {
     _addInterceptors();
+
+    return _instance!;
+  }
+
+  static Dio get dioWithMapboxToken {
+    _instance ??= httpDio;
+    _instance!.interceptors.clear();
+    _instance!.interceptors.add(DioMapBox());
+    _instance!.interceptors.add(DioDebug()); // For debug
 
     return _instance!;
   }
