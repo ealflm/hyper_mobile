@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
@@ -30,30 +31,53 @@ class RentingView extends GetView<RentingController> {
     );
   }
 
-  Container _bottom() {
+  Widget _bottom() {
     return Container(
       alignment: Alignment.bottomRight,
-      padding: EdgeInsets.only(bottom: 20.h, right: 20.w),
-      child: ElevatedButton(
-        onPressed: () {
-          Get.back();
-        },
-        style: ElevatedButton.styleFrom(
-          shape: const CircleBorder(),
-          primary: AppColors.white,
-          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          padding: const EdgeInsets.all(0),
-          minimumSize: Size(40.r, 40.r),
-        ),
-        child: SizedBox(
-          height: 40.r,
-          width: 40.r,
-          child: Icon(
-            Icons.gps_fixed,
-            size: 18.r,
-            color: AppColors.gray,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          goToCurrentLocation(),
+          Container(
+            padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
+            child: Container(
+              decoration: BoxDecorations.service(),
+              height: 100.h,
+            ),
           ),
-        ),
+        ],
+      ),
+    );
+  }
+
+  Container goToCurrentLocation() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 20.h, right: 20.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              Get.back();
+            },
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              primary: AppColors.white,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: const EdgeInsets.all(0),
+              minimumSize: Size(40.r, 40.r),
+            ),
+            child: SizedBox(
+              height: 40.r,
+              width: 40.r,
+              child: Icon(
+                Icons.gps_fixed,
+                size: 18.r,
+                color: AppColors.gray,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -154,6 +178,15 @@ class RentingView extends GetView<RentingController> {
               'accessToken': controller.accessToken,
               'id': controller.mapId,
             },
+          ),
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            debugPrint('Hello');
+          },
+          child: Container(
+            color: AppColors.softRed,
           ),
         ),
         PolylineLayerWidget(

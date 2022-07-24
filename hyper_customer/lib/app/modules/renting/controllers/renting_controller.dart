@@ -7,11 +7,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
+import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
 import 'package:hyper_customer/config/build_config.dart';
+import 'package:lottie/lottie.dart' as lottie;
 import 'package:tiengviet/tiengviet.dart';
 
 // ignore: depend_on_referenced_packages
@@ -30,6 +32,8 @@ class RentingController extends BaseController
 
   List<Widget> searchItems = [];
   List<Marker> markers = [];
+  Map<String, Items> rentStationsData = {};
+  String? selectedStationId;
 
   double defaultZoomLevel = 10.8;
   double defaultZoomBigLevel = 13.7;
@@ -55,6 +59,10 @@ class RentingController extends BaseController
     currentLngLat = LatLng(currentPosition.latitude, currentPosition.longitude);
   }
 
+  void unFocus() {
+    selectedStationId = null;
+  }
+
   void onPositionChanged(MapPosition position, bool hasGesture) {
     zoomLevel = position.zoom ?? defaultZoomLevel;
     debugPrint('Nam: $zoomLevel');
@@ -67,6 +75,10 @@ class RentingController extends BaseController
   void _moveToPosition(LatLng position, {double? zoom}) {
     var zoomLevel = zoom ?? mapController.zoom;
     _animatedMapMove(position, zoomLevel);
+  }
+
+  void _selectStatiton(String stationId) {
+    selectedStationId = stationId;
   }
 
   Future<void> _getRentStations() async {
@@ -83,28 +95,53 @@ class RentingController extends BaseController
     );
 
     markers.clear();
+    rentStationsData.clear();
     var items = rentStations?.body?.items ?? [];
     for (Items item in items) {
       double lat = item.latitude ?? 0;
       double lng = item.longitude ?? 0;
+
+      var itemId = item.id ?? '';
       var location = LatLng(lat, lng);
+
+      rentStationsData[itemId] = item;
+
       markers.add(
         Marker(
-          width: 40.r,
-          height: 40.r,
+          width: 100.r,
+          height: 100.r,
           point: location,
-          builder: (context) => GestureDetector(
-            behavior: HitTestBehavior.translucent,
-            onTap: () {
-              _moveToPosition(location);
-            },
-            child: Container(
-              padding: EdgeInsets.all(13.r),
-              child: SvgPicture.asset(
-                AppAssets.rentingMapIcon,
-              ),
-            ),
-          ),
+          builder: (context) => selectedStationId == itemId
+              ? Container(
+                  padding: EdgeInsets.only(bottom: 50.r),
+                  child: InkWell(
+                    onTap: () {
+                      _selectStatiton(itemId);
+                      _moveToPosition(location);
+                      update();
+                    },
+                    child: lottie.Lottie.asset(
+                      AppAnimationAssets.locationOn,
+                      repeat: false,
+                    ),
+                  ),
+                )
+              : Container(
+                  padding: EdgeInsets.all(30.r),
+                  child: InkWell(
+                    onTap: () {
+                      _selectStatiton(itemId);
+                      _moveToPosition(location);
+                      update();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10.r),
+                      child: SvgPicture.asset(
+                        AppAssets.rentingMapIcon,
+                      ),
+                    ),
+                  ),
+                ),
         ),
       );
     }

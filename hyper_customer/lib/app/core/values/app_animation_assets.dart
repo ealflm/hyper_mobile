@@ -16,4 +16,8 @@ abstract class AppAnimationAssets {
 
   static const String liquidLoading = 'assets/lottiefiles/liquid-loading.json';
   static const String earthLoading = 'assets/lottiefiles/earth-loading.json';
+
+  static const String locationOn = 'assets/lottiefiles/location-on.json';
+  static const String rentLocationOn =
+      'assets/lottiefiles/rent-location-on.json';
 }
