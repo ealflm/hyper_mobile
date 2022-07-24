@@ -47,17 +47,17 @@ class RentingController extends BaseController
   late Position currentPosition;
   late LatLng currentLngLat;
 
-  // Amimation
-  bool isAnimated = false;
-  late final AnimationController _locationOnController;
-
   @override
   void onInit() async {
-    _locationOnController = AnimationController(vsync: this);
     await _loadCenter();
     await _getRentStations();
     _goToCenter();
     super.onInit();
+  }
+
+  void clearSelectedMarker() {
+    selectedStationId = null;
+    update();
   }
 
   void _goToCenter() async {
@@ -81,10 +81,6 @@ class RentingController extends BaseController
 
   void _selectStatiton(String stationId) {
     selectedStationId = stationId;
-    isAnimated = true;
-    Future.delayed(const Duration(seconds: 1), () {
-      isAnimated = false;
-    });
   }
 
   void onPositionChanged(MapPosition position, bool hasGesture) {
@@ -161,11 +157,7 @@ class RentingController extends BaseController
                   child: lottie.Lottie.asset(
                     AppAnimationAssets.locationOn,
                     repeat: false,
-                    animate: isAnimated,
-                    controller: _locationOnController,
-                    onLoaded: (composition) {
-                      _locationOnController..duration = composition.duration;
-                    },
+                    animate: false,
                   ),
                 ),
               );
@@ -297,6 +289,12 @@ class RentingController extends BaseController
   List<LatLng> routePoints = [];
   bool get hasRoute => routePoints.isNotEmpty;
 
+  void _centerZoomFitBounds(LatLngBounds bounds) {
+    bounds.pad(0.3);
+    var centerZoom = mapController.centerZoomFitBounds(bounds);
+    _animatedMapMove(centerZoom.center, centerZoom.zoom);
+  }
+
   void findRoute() async {
     isFindingRoute = true;
 
@@ -321,6 +319,12 @@ class RentingController extends BaseController
         Utils.showToast('Kết nối thất bại');
       },
     );
+
+    LatLngBounds bounds = LatLngBounds();
+    for (LatLng point in routePoints) {
+      bounds.extend(point);
+    }
+    _centerZoomFitBounds(bounds);
 
     isFindingRoute = false;
     update();

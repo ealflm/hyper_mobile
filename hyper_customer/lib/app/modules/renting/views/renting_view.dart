@@ -255,6 +255,14 @@ class RentingView extends GetView<RentingController> {
             },
           ),
         ),
+        GestureDetector(
+          onTap: () {
+            controller.clearSelectedMarker();
+          },
+          child: Container(
+            color: AppColors.white.withOpacity(0),
+          ),
+        ),
         HyperStack(
           children: [
             GetBuilder<RentingController>(
