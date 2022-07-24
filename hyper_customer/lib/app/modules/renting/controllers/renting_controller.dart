@@ -2,11 +2,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
-import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
@@ -16,7 +17,8 @@ import 'package:tiengviet/tiengviet.dart';
 // ignore: depend_on_referenced_packages
 import 'package:latlong2/latlong.dart';
 
-class RentingController extends BaseController {
+class RentingController extends BaseController
+    with GetTickerProviderStateMixin {
   String urlTemplate = BuildConfig.instance.config.mapUrlTemplate;
   String accessToken = BuildConfig.instance.config.mapAccessToken;
   String mapId = BuildConfig.instance.config.mapId;
@@ -24,10 +26,13 @@ class RentingController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
   RentStations? rentStations;
 
-  MapController? mapController;
+  MapController mapController = MapController();
 
   List<Widget> searchItems = [];
   List<Marker> markers = [];
+
+  double defaultZoomLevel = 10.8;
+  double zoomLevel = 10.8;
 
   @override
   void onInit() async {
@@ -36,8 +41,13 @@ class RentingController extends BaseController {
     super.onInit();
   }
 
-  void onMapCreated(MapController controller) {
-    mapController = controller;
+  void onPositionChanged(MapPosition position, bool hasGesture) {
+    zoomLevel = position.zoom ?? defaultZoomLevel;
+  }
+
+  void _moveToPosition(LatLng position) {
+    var zoomLevel = mapController.zoom;
+    _animatedMapMove(position, zoomLevel);
   }
 
   Future<void> getRentStations() async {
@@ -56,23 +66,32 @@ class RentingController extends BaseController {
     markers.clear();
     var items = rentStations?.body?.items ?? [];
     for (Items item in items) {
+      double lat = item.latitude ?? 0;
+      double lng = item.longitude ?? 0;
+      var location = LatLng(lat, lng);
       markers.add(
         Marker(
-          width: 40.r,
-          height: 40.r,
-          point: LatLng(item.latitude ?? 0, item.longitude ?? 0),
+          width: 18.r,
+          height: 18.r,
+          point: location,
           builder: (context) => GestureDetector(
+            behavior: HitTestBehavior.translucent,
             onTap: () {
-              debugPrint('Location: ${item.latitude}, ${item.longitude}');
+              _moveToPosition(location);
             },
-            child: const Icon(
-              Icons.location_on,
-              color: AppColors.blue,
+            child: SizedBox(
+              width: 18.r,
+              height: 18.r,
+              child: SvgPicture.asset(
+                AppAssets.rentingMapIcon,
+              ),
             ),
           ),
         ),
       );
     }
+
+    update();
   }
 
   bool _contains(String? text, String? keyword) {
@@ -147,5 +166,39 @@ class RentingController extends BaseController {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
+  }
+
+  void _animatedMapMove(LatLng destLocation, double destZoom) {
+    // Create some tweens. These serve to split up the transition from one location to another.
+    // In our case, we want to split the transition be<tween> our current map center and the destination.
+    final latTween = Tween<double>(
+        begin: mapController.center.latitude, end: destLocation.latitude);
+    final lngTween = Tween<double>(
+        begin: mapController.center.longitude, end: destLocation.longitude);
+    final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
+
+    // Create a animation controller that has a duration and a TickerProvider.
+    var controller = AnimationController(
+        duration: const Duration(milliseconds: 500), vsync: this);
+    // The animation determines what path the animation will take. You can try different Curves values, although I found
+    // fastOutSlowIn to be my favorite.
+    Animation<double> animation =
+        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
+
+    controller.addListener(() {
+      mapController.move(
+          LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+          zoomTween.evaluate(animation));
+    });
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        controller.dispose();
+      } else if (status == AnimationStatus.dismissed) {
+        controller.dispose();
+      }
+    });
+
+    controller.forward();
   }
 }

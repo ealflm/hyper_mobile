@@ -20,4 +20,6 @@ abstract class AppAssets {
   static const String paypal = 'assets/svg/paypal.svg';
   static const String vnpay = 'assets/svg/vnpay.svg';
   static const String momo = 'assets/svg/momo.svg';
+
+  static const String rentingMapIcon = 'assets/svg/renting-map-icon.svg';
 }
