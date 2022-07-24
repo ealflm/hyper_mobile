@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
+import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_provider.dart';
 
@@ -98,6 +99,22 @@ class RepositoryImpl extends BaseRepository implements Repository {
       return callApi(dioCall).then((response) {
         return true;
       });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<RentStations> getRentStations() {
+    var endpoint = "${DioProvider.baseUrl}/rentStation/list";
+    var param = {
+      "status": 1,
+    };
+    var dioCall = dioTokenClient.get(endpoint, queryParameters: param);
+
+    try {
+      return callApi(dioCall)
+          .then((response) => RentStations.fromJson(response.data));
     } catch (e) {
       rethrow;
     }

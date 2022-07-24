@@ -1,0 +1,127 @@
+{
+  "statusCode": 200,
+  "message": "Thành công",
+  "body": {
+    "pageSize": 1,
+    "totalItems": 9,
+    "items": [
+      {
+        "id": "f938f306-0de4-454f-816e-d7c0ce9f7927",
+        "title": "Trạm thuê xe 23C",
+        "description": ".",
+        "address": "Hamlet 4, Vũng Bầu Beach Ward, Cửa Cạn",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 103.91563915953623,
+        "latitude": 10.307783953051398,
+        "createdDate": "2022-07-23T10:13:55.22",
+        "modifiedDate": "2022-07-23T10:13:55.22",
+        "status": 1
+      },
+      {
+        "id": "684bf153-6881-45ea-bb0e-8a884f59d99b",
+        "title": "Trạm thuê xe 51C",
+        "description": ".",
+        "address": "8XHF+22F, Dương Đông - Bãi Thơm, Bãi Thơm",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 103.96440300858166,
+        "latitude": 10.33058133998722,
+        "createdDate": "2022-07-23T10:14:59.73",
+        "modifiedDate": "2022-07-23T10:14:59.73",
+        "status": 1
+      },
+      {
+        "id": "a7e78f2d-c3be-4d3e-86f4-866705d6bc47",
+        "title": "Trạm thuê xe 38D",
+        "description": ".",
+        "address": "C229+XJP, Bãi Thơm, Phú Quốc",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 104.01907453442226,
+        "latitude": 10.402748714185648,
+        "createdDate": "2022-07-23T10:16:08.547",
+        "modifiedDate": "2022-07-23T10:16:08.547",
+        "status": 1
+      },
+      {
+        "id": "36cb815b-c059-44e5-850e-37abbacab402",
+        "title": "Trạm thuê xe 21B",
+        "description": ".",
+        "address": "52HP+746, TL47, Hàm Ninh, Phú Quốc",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 103.98145974399563,
+        "latitude": 10.293441074128197,
+        "createdDate": "2022-07-23T10:12:44.937",
+        "modifiedDate": "2022-07-23T10:16:18.5",
+        "status": 1
+      },
+      {
+        "id": "0e5c961a-4928-4054-b5eb-ccbca7976f73",
+        "title": "Trạm thuê xe 15A",
+        "description": ".",
+        "address": "TL47, Hàm Ninh, Phú Quốc",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 104.01988389638228,
+        "latitude": 10.069837992842963,
+        "createdDate": "2022-07-23T10:11:59.843",
+        "modifiedDate": "2022-07-23T10:16:38.907",
+        "status": 1
+      },
+      {
+        "id": "e4fe2b61-d6a9-45fd-9080-3649e1ccdaca",
+        "title": "Trạm thuê xe 4",
+        "description": ".",
+        "address": "3 Lê Thúc Nha, Ông Lang, Phú Quốc",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 104.00074025197631,
+        "latitude": 10.158236589757479,
+        "createdDate": "2022-07-23T10:10:47.403",
+        "modifiedDate": "2022-07-23T10:16:49",
+        "status": 1
+      },
+      {
+        "id": "0ecef7db-56ba-4408-858c-31f761b7f092",
+        "title": "Trạm thuê xe 2",
+        "description": ".",
+        "address": "29 Đường Hoàng Văn Thụ, Khu Phố 5, Phú Quốc",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 103.95430243884812,
+        "latitude": 10.256649925138177,
+        "createdDate": "2022-07-23T10:09:52.82",
+        "modifiedDate": "2022-07-23T10:16:55.473",
+        "status": 1
+      },
+      {
+        "id": "a38065df-d6eb-477a-8700-450f1e8f8330",
+        "title": "Trạm thuê xe 1",
+        "description": ".",
+        "address": "89, Suối Mây, Phú Quốc",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 103.97089853173844,
+        "latitude": 10.21701311312134,
+        "createdDate": "2022-07-23T10:09:16.71",
+        "modifiedDate": "2022-07-23T10:17:02.16",
+        "status": 1
+      },
+      {
+        "id": "1db15881-6912-4a32-a499-53f716c722ca",
+        "title": "Trạm thuê xe Gành Dầu",
+        "description": ".",
+        "address": "Gành Dầu, Phú Quốc",
+        "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+        "companyName": "SangDT - COOP Transport",
+        "longitude": 103.84212836973637,
+        "latitude": 10.368658655545616,
+        "createdDate": "2022-07-23T10:18:21.283",
+        "modifiedDate": "2022-07-23T10:18:21.283",
+        "status": 1
+      }
+    ]
+  }
+}

@@ -31,8 +31,8 @@ class RentingView extends GetView<RentingController> {
                 center: LatLng(10.212884, 103.964889),
                 zoom: 10.8,
                 minZoom: 10.8,
-                // swPanBoundary: LatLng(9.866505, 103.785063),
-                // nePanBoundary: LatLng(10.508632, 104.112881),
+                swPanBoundary: LatLng(9.866505, 103.785063),
+                nePanBoundary: LatLng(10.508632, 104.112881),
                 slideOnBoundaries: true,
                 onMapCreated: controller.onMapCreated,
               ),
@@ -44,6 +44,24 @@ class RentingView extends GetView<RentingController> {
                       'accessToken': controller.accessToken,
                       'id': controller.mapId,
                     },
+                  ),
+                ),
+                PolylineLayerWidget(
+                  options: PolylineLayerOptions(
+                    polylineCulling: false,
+                    polylines: [
+                      Polyline(
+                        strokeWidth: 4.r,
+                        color: AppColors.blue,
+                        borderStrokeWidth: 3.r,
+                        borderColor: AppColors.darkBlue,
+                        points: [
+                          LatLng(10.285064, 103.979791),
+                          LatLng(10.275678, 103.976132),
+                          LatLng(10.264363, 103.973910),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
                 LocationMarkerLayerWidget(
@@ -69,6 +87,11 @@ class RentingView extends GetView<RentingController> {
                     ),
                     markerSize: Size(26.r, 26.r),
                     markerDirection: MarkerDirection.heading,
+                  ),
+                ),
+                MarkerLayerWidget(
+                  options: MarkerLayerOptions(
+                    markers: controller.markers,
                   ),
                 ),
               ],
