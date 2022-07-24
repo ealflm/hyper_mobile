@@ -9,6 +9,7 @@ import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
+import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
@@ -33,7 +34,9 @@ class RentingController extends BaseController
   List<Widget> searchItems = [];
   List<Marker> markers = [];
   Map<String, Items> rentStationsData = {};
+
   String? selectedStationId;
+  bool isAnimated = false;
 
   double defaultZoomLevel = 10.8;
   double defaultZoomBigLevel = 13.7;
@@ -63,6 +66,14 @@ class RentingController extends BaseController
     selectedStationId = null;
   }
 
+  void _selectStatiton(String stationId) {
+    selectedStationId = stationId;
+    isAnimated = true;
+    Future.delayed(const Duration(seconds: 1), () {
+      isAnimated = false;
+    });
+  }
+
   void onPositionChanged(MapPosition position, bool hasGesture) {
     zoomLevel = position.zoom ?? defaultZoomLevel;
     debugPrint('Nam: $zoomLevel');
@@ -75,10 +86,6 @@ class RentingController extends BaseController
   void _moveToPosition(LatLng position, {double? zoom}) {
     var zoomLevel = zoom ?? mapController.zoom;
     _animatedMapMove(position, zoomLevel);
-  }
-
-  void _selectStatiton(String stationId) {
-    selectedStationId = stationId;
   }
 
   Future<void> _getRentStations() async {
@@ -111,37 +118,43 @@ class RentingController extends BaseController
           width: 100.r,
           height: 100.r,
           point: location,
-          builder: (context) => selectedStationId == itemId
-              ? Container(
-                  padding: EdgeInsets.only(bottom: 50.r),
-                  child: InkWell(
-                    onTap: () {
-                      _selectStatiton(itemId);
-                      _moveToPosition(location);
-                      update();
-                    },
-                    child: lottie.Lottie.asset(
-                      AppAnimationAssets.locationOn,
-                      repeat: false,
-                    ),
-                  ),
-                )
-              : Container(
-                  padding: EdgeInsets.all(30.r),
-                  child: InkWell(
-                    onTap: () {
-                      _selectStatiton(itemId);
-                      _moveToPosition(location);
-                      update();
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(10.r),
-                      child: SvgPicture.asset(
-                        AppAssets.rentingMapIcon,
-                      ),
-                    ),
+          builder: (context) {
+            Widget result = Container(
+              padding: EdgeInsets.all(30.r),
+              child: Listener(
+                onPointerDown: (_) {
+                  _selectStatiton(itemId);
+                  _moveToPosition(location);
+                  update();
+                },
+                child: Container(
+                  color: AppColors.white.withOpacity(0),
+                  padding: EdgeInsets.all(10.r),
+                  child: SvgPicture.asset(
+                    AppAssets.rentingMapIcon,
                   ),
                 ),
+              ),
+            );
+            if (selectedStationId == itemId) {
+              result = Container(
+                padding: EdgeInsets.only(bottom: 50.r),
+                child: Listener(
+                  onPointerDown: (_) {
+                    _selectStatiton(itemId);
+                    _moveToPosition(location);
+                    update();
+                  },
+                  child: lottie.Lottie.asset(
+                    AppAnimationAssets.locationOn,
+                    repeat: false,
+                    animate: isAnimated,
+                  ),
+                ),
+              );
+            }
+            return result;
+          },
         ),
       );
     }

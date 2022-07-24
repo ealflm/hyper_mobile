@@ -47,7 +47,7 @@ abstract class ShadowStyles {
     ),
   ];
 
-  static List<BoxShadow> mapSearch = [
+  static List<BoxShadow> map = [
     BoxShadow(
       offset: const Offset(0, 2),
       blurRadius: 2,

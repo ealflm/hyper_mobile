@@ -8,6 +8,7 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 
 // ignore: depend_on_referenced_packages
@@ -17,6 +18,7 @@ import '../controllers/renting_controller.dart';
 
 class RentingView extends GetView<RentingController> {
   const RentingView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StatusBar(
@@ -41,7 +43,7 @@ class RentingView extends GetView<RentingController> {
           Container(
             padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
             child: Container(
-              decoration: BoxDecorations.service(),
+              decoration: BoxDecorations.map(),
               height: 100.h,
             ),
           ),
@@ -126,7 +128,7 @@ class RentingView extends GetView<RentingController> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50.r),
                     color: AppColors.surface,
-                    boxShadow: ShadowStyles.mapSearch,
+                    boxShadow: ShadowStyles.map,
                   ),
                   child: TextFormField(
                     enabled: false,
@@ -180,41 +182,36 @@ class RentingView extends GetView<RentingController> {
             },
           ),
         ),
-        GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            debugPrint('Hello');
-          },
-          child: Container(
-            color: AppColors.softRed,
-          ),
-        ),
-        PolylineLayerWidget(
-          options: PolylineLayerOptions(
-            polylineCulling: false,
-            polylines: [
-              Polyline(
-                strokeWidth: 4.r,
-                color: AppColors.blue,
-                borderStrokeWidth: 3.r,
-                borderColor: AppColors.darkBlue,
-                points: [
-                  LatLng(10.285064, 103.979791),
-                  LatLng(10.275678, 103.976132),
-                  LatLng(10.264363, 103.973910),
+        HyperStack(
+          children: [
+            PolylineLayerWidget(
+              options: PolylineLayerOptions(
+                polylineCulling: false,
+                polylines: [
+                  Polyline(
+                    strokeWidth: 4.r,
+                    color: AppColors.blue,
+                    borderStrokeWidth: 3.r,
+                    borderColor: AppColors.darkBlue,
+                    points: [
+                      LatLng(10.285064, 103.979791),
+                      LatLng(10.275678, 103.976132),
+                      LatLng(10.264363, 103.973910),
+                    ],
+                  ),
                 ],
               ),
-            ],
-          ),
-        ),
-        GetBuilder<RentingController>(
-          builder: (_) {
-            return MarkerLayerWidget(
-              options: MarkerLayerOptions(
-                markers: controller.markers,
-              ),
-            );
-          },
+            ),
+            GetBuilder<RentingController>(
+              builder: (_) {
+                return MarkerLayerWidget(
+                  options: MarkerLayerOptions(
+                    markers: controller.markers,
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         IgnorePointer(
           child: LocationMarkerLayerWidget(
@@ -226,18 +223,13 @@ class RentingView extends GetView<RentingController> {
                   boxShadow: ShadowStyles.locationMarker,
                 ),
                 child: DefaultLocationMarker(
-                  child: InkWell(
-                    onTap: () {
-                      debugPrint('Location: Nam');
-                    },
-                    child: Container(
-                      padding: EdgeInsets.only(bottom: 2.r),
-                      child: Center(
-                        child: Icon(
-                          Icons.navigation,
-                          color: Colors.white,
-                          size: 16.r,
-                        ),
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 2.r),
+                    child: Center(
+                      child: Icon(
+                        Icons.navigation,
+                        color: Colors.white,
+                        size: 16.r,
                       ),
                     ),
                   ),

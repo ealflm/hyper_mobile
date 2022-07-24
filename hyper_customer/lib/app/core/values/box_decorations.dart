@@ -33,6 +33,14 @@ abstract class BoxDecorations {
     );
   }
 
+  static BoxDecoration map() {
+    return BoxDecoration(
+      color: AppColors.white,
+      borderRadius: BorderRadius.circular(9.r),
+      boxShadow: ShadowStyles.map,
+    );
+  }
+
   static BoxDecoration paymentChip() {
     return BoxDecoration(
       border: Border.all(
