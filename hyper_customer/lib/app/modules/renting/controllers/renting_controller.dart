@@ -7,7 +7,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
-import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
@@ -15,7 +14,6 @@ import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
 import 'package:hyper_customer/config/build_config.dart';
-import 'package:lottie/lottie.dart' as lottie;
 import 'package:tiengviet/tiengviet.dart';
 
 import 'package:latlong2/latlong.dart';
@@ -124,12 +122,12 @@ class RentingController extends BaseController
 
       markers.add(
         Marker(
-          width: 100.r,
-          height: 100.r,
+          width: 80.r,
+          height: 80.r,
           point: location,
           builder: (context) {
             Widget result = Container(
-              padding: EdgeInsets.all(30.r),
+              padding: EdgeInsets.all(20.r),
               child: Listener(
                 onPointerDown: (_) {
                   _selectStatiton(itemId);
@@ -147,17 +145,15 @@ class RentingController extends BaseController
             );
             if (selectedStationId == itemId) {
               result = Container(
-                padding: EdgeInsets.only(bottom: 50.r),
+                padding: EdgeInsets.only(bottom: 40.r),
                 child: Listener(
                   onPointerDown: (_) {
                     _selectStatiton(itemId);
                     _moveToPosition(location);
                     update();
                   },
-                  child: lottie.Lottie.asset(
-                    AppAnimationAssets.locationOn,
-                    repeat: false,
-                    animate: false,
+                  child: SvgPicture.asset(
+                    AppAssets.locationOnIcon,
                   ),
                 ),
               );

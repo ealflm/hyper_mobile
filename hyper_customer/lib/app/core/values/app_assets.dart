@@ -22,4 +22,5 @@ abstract class AppAssets {
   static const String momo = 'assets/svg/momo.svg';
 
   static const String rentingMapIcon = 'assets/svg/renting-map-icon.svg';
+  static const String locationOnIcon = 'assets/svg/location-on-icon.svg';
 }
