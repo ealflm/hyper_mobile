@@ -257,23 +257,25 @@ class RentingView extends GetView<RentingController> {
         ),
         HyperStack(
           children: [
-            PolylineLayerWidget(
-              options: PolylineLayerOptions(
-                polylineCulling: false,
-                polylines: [
-                  Polyline(
-                    strokeWidth: 4.r,
-                    color: AppColors.blue,
-                    borderStrokeWidth: 3.r,
-                    borderColor: AppColors.darkBlue,
-                    points: [
-                      LatLng(10.285064, 103.979791),
-                      LatLng(10.275678, 103.976132),
-                      LatLng(10.264363, 103.973910),
-                    ],
-                  ),
-                ],
-              ),
+            GetBuilder<RentingController>(
+              builder: (_) {
+                return controller.hasRoute
+                    ? PolylineLayerWidget(
+                        options: PolylineLayerOptions(
+                          polylineCulling: false,
+                          polylines: [
+                            Polyline(
+                              strokeWidth: 4.r,
+                              color: AppColors.blue,
+                              borderStrokeWidth: 3.r,
+                              borderColor: AppColors.darkBlue,
+                              points: controller.routePoints,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container();
+              },
             ),
             GetBuilder<RentingController>(
               builder: (_) {

@@ -11,6 +11,7 @@ import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
+import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
 import 'package:hyper_customer/config/build_config.dart';
@@ -26,6 +27,8 @@ class RentingController extends BaseController
   String mapId = BuildConfig.instance.config.mapId;
 
   final Repository _repository = Get.find(tag: (Repository).toString());
+  final MapboxRepository _mapboxRepository =
+      Get.find(tag: (MapboxRepository).toString());
   RentStations? rentStations;
 
   MapController mapController = MapController();
@@ -37,7 +40,6 @@ class RentingController extends BaseController
   String? selectedStationId;
   bool get isSelectedStation => selectedStationId != null;
   Items? get selectedStation => rentStationsData[selectedStationId];
-  bool isAnimated = false;
 
   double defaultZoomLevel = 10.8;
   double defaultZoomBigLevel = 13.7;
@@ -45,8 +47,13 @@ class RentingController extends BaseController
   late Position currentPosition;
   late LatLng currentLngLat;
 
+  // Amimation
+  bool isAnimated = false;
+  late final AnimationController _locationOnController;
+
   @override
   void onInit() async {
+    _locationOnController = AnimationController(vsync: this);
     await _loadCenter();
     await _getRentStations();
     _goToCenter();
@@ -155,6 +162,10 @@ class RentingController extends BaseController
                     AppAnimationAssets.locationOn,
                     repeat: false,
                     animate: isAnimated,
+                    controller: _locationOnController,
+                    onLoaded: (composition) {
+                      _locationOnController..duration = composition.duration;
+                    },
                   ),
                 ),
               );
@@ -283,9 +294,35 @@ class RentingController extends BaseController
     isFindingRouteObs.value = value;
   }
 
+  List<LatLng> routePoints = [];
+  bool get hasRoute => routePoints.isNotEmpty;
+
   void findRoute() async {
     isFindingRoute = true;
-    await Future.delayed(Duration(seconds: 5));
+
+    if (!isSelectedStation) return;
+
+    routePoints.clear();
+
+    await _loadCenter();
+    LatLng from = currentLngLat;
+    LatLng to = LatLng(
+      selectedStation?.latitude ?? 0,
+      selectedStation?.longitude ?? 0,
+    );
+    var loginService = _mapboxRepository.findRoute(from, to);
+
+    await callDataService(
+      loginService,
+      onSuccess: (List<LatLng> response) {
+        routePoints = response;
+      },
+      onError: (DioError dioError) {
+        Utils.showToast('Kết nối thất bại');
+      },
+    );
+
     isFindingRoute = false;
+    update();
   }
 }

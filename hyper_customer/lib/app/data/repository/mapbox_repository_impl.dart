@@ -4,15 +4,15 @@ import 'package:latlong2/latlong.dart';
 
 class MapboxRepositoryImpl extends BaseRepository implements MapboxRepository {
   @override
-  Future<String> findRoute(LatLng from, LatLng to,
+  Future<List<LatLng>> findRoute(LatLng from, LatLng to,
       {String routingProfile = 'driving'}) {
     var fromTo =
-        '${from.latitude},${from.longitude};${to.latitude},${to.longitude}';
+        '${from.longitude},${from.latitude};${to.longitude},${to.latitude}';
 
     var endpoint =
         "https://api.mapbox.com/directions/v5/mapbox/$routingProfile/$fromTo";
     var param = {
-      "annotations": "distance%2Cduration%2Cspeed%2Ccongestion",
+      "annotations": "distance,duration,speed,congestion",
       "overview": "full",
       "geometries": "geojson",
       "alternatives": "true",
@@ -21,7 +21,14 @@ class MapboxRepositoryImpl extends BaseRepository implements MapboxRepository {
     var dioCall = dioMapbox.get(endpoint, queryParameters: param);
 
     try {
-      return callApi(dioCall).then((response) => response.data);
+      return callApi(dioCall).then((response) {
+        var list = response.data['routes'][0]['geometry']['coordinates'];
+        List<LatLng> result = [];
+        for (List item in list) {
+          result.add(LatLng(item[1], item[0]));
+        }
+        return result;
+      });
     } catch (e) {
       rethrow;
     }
