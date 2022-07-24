@@ -4,16 +4,16 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 
 class SearchItem extends StatelessWidget {
-  SearchItem({
+  const SearchItem({
     Key? key,
     this.title = '',
     this.description = '',
     required this.onPressed,
   }) : super(key: key);
 
-  String title;
-  String description;
-  Function()? onPressed;
+  final String title;
+  final String description;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {

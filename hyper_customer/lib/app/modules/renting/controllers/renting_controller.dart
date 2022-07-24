@@ -32,25 +32,44 @@ class RentingController extends BaseController
   List<Marker> markers = [];
 
   double defaultZoomLevel = 10.8;
+  double defaultZoomBigLevel = 13.7;
   double zoomLevel = 10.8;
+  late Position currentPosition;
+  late LatLng currentLngLat;
 
   @override
   void onInit() async {
-    await determinePosition();
-    await getRentStations();
+    await _loadCenter();
+    await _getRentStations();
+    _goToCenter();
     super.onInit();
+  }
+
+  void _goToCenter() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    _moveToPosition(currentLngLat, zoom: defaultZoomBigLevel);
+  }
+
+  Future<void> _loadCenter() async {
+    currentPosition = await determinePosition();
+    currentLngLat = LatLng(currentPosition.latitude, currentPosition.longitude);
   }
 
   void onPositionChanged(MapPosition position, bool hasGesture) {
     zoomLevel = position.zoom ?? defaultZoomLevel;
+    debugPrint('Nam: $zoomLevel');
   }
 
-  void _moveToPosition(LatLng position) {
-    var zoomLevel = mapController.zoom;
+  void onMapCreated(MapController controller) {
+    // TODO
+  }
+
+  void _moveToPosition(LatLng position, {double? zoom}) {
+    var zoomLevel = zoom ?? mapController.zoom;
     _animatedMapMove(position, zoomLevel);
   }
 
-  Future<void> getRentStations() async {
+  Future<void> _getRentStations() async {
     var rentStationsService = _repository.getRentStations();
 
     await callDataService(
@@ -71,17 +90,16 @@ class RentingController extends BaseController
       var location = LatLng(lat, lng);
       markers.add(
         Marker(
-          width: 18.r,
-          height: 18.r,
+          width: 40.r,
+          height: 40.r,
           point: location,
           builder: (context) => GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
               _moveToPosition(location);
             },
-            child: SizedBox(
-              width: 18.r,
-              height: 18.r,
+            child: Container(
+              padding: EdgeInsets.all(13.r),
               child: SvgPicture.asset(
                 AppAssets.rentingMapIcon,
               ),

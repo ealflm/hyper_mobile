@@ -144,6 +144,7 @@ class RentingView extends GetView<RentingController> {
         nePanBoundary: LatLng(10.508632, 104.112881),
         slideOnBoundaries: true,
         onPositionChanged: controller.onPositionChanged,
+        onMapCreated: controller.onMapCreated,
       ),
       children: [
         TileLayerWidget(
