@@ -14,6 +14,7 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
+import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:hyper_customer/config/build_config.dart';
 
@@ -29,11 +30,11 @@ class RentingView extends GetView<RentingController> {
       child: Scaffold(
         body: Stack(children: [
           _map(),
-          GetBuilder<RentingController>(
-            builder: (_) {
-              return controller.isNavigationMode.value
+          Obx(
+            () {
+              return controller.rentingState.value == RentingState.navigation
                   ? _navigation()
-                  : controller.hasRoute
+                  : controller.rentingState.value == RentingState.route
                       ? _route()
                       : _search();
             },
@@ -65,12 +66,12 @@ class RentingView extends GetView<RentingController> {
         mainAxisSize: MainAxisSize.min,
         children: [
           _goToCurrentLocation(),
-          GetBuilder<RentingController>(
-            builder: (_) {
-              if (controller.hasRoute) {
+          Obx(
+            () {
+              if (controller.rentingState.value == RentingState.route) {
                 return _rentStationStartDetail();
               }
-              if (controller.isSelectedStation) {
+              if (controller.rentingState.value == RentingState.select) {
                 return _rentStationDetail();
               } else {
                 return Container();
@@ -111,32 +112,30 @@ class RentingView extends GetView<RentingController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Obx(
-                  () => SizedBox(
-                    height: 36.h,
-                    width: 124.w,
-                    child: ElevatedButton(
-                      style: ButtonStyles.primarySmall(),
-                      onPressed: () {
-                        controller.goToNavigation();
-                      },
-                      child: HyperButton.child(
-                        status: false,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.navigation_outlined,
-                              size: 20.r,
-                            ),
-                            SizedBox(
-                              width: 6.w,
-                            ),
-                            Text(
-                              'Bắt đầu',
-                              style: buttonBold,
-                            ),
-                          ],
-                        ),
+                SizedBox(
+                  height: 36.h,
+                  width: 124.w,
+                  child: ElevatedButton(
+                    style: ButtonStyles.primarySmall(),
+                    onPressed: () {
+                      controller.goToNavigation();
+                    },
+                    child: HyperButton.child(
+                      status: false,
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.navigation_outlined,
+                            size: 20.r,
+                          ),
+                          SizedBox(
+                            width: 6.w,
+                          ),
+                          Text(
+                            'Bắt đầu',
+                            style: buttonBold,
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -511,9 +510,10 @@ class RentingView extends GetView<RentingController> {
         ),
         HyperStack(
           children: [
-            GetBuilder<RentingController>(
-              builder: (_) {
-                return controller.hasRoute
+            Obx(
+              () {
+                return controller.rentingState.value == RentingState.route ||
+                        controller.rentingState.value == RentingState.navigation
                     ? PolylineLayerWidget(
                         options: PolylineLayerOptions(
                           polylineCulling: false,

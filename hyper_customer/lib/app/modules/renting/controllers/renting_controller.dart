@@ -13,6 +13,7 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
 
 import 'package:latlong2/latlong.dart';
 
@@ -38,8 +39,9 @@ class RentingController extends BaseController
   LatLngBounds? currentBounds;
 
   String? selectedStationId;
-  bool get isSelectedStation => selectedStationId != null;
   Items? get selectedStation => rentStationsData[selectedStationId];
+
+  var rentingState = RentingState.normal.obs;
 
   // Region Init
   @override
@@ -57,7 +59,7 @@ class RentingController extends BaseController
   }
   // End Region
 
-  // Region Fetch
+  // Region Fetch Rent Stations
   Future<void> _fetchRentStations() async {
     var rentStationsService = _repository.getRentStations();
 
@@ -134,13 +136,10 @@ class RentingController extends BaseController
 
   // Region Fetch Route
   List<LatLng> routePoints = [];
-  bool get hasRoute => routePoints.isNotEmpty;
   var isFindingRoute = false.obs;
 
   void findRoute() async {
     isFindingRoute.value = true;
-
-    if (!isSelectedStation) return;
 
     routePoints.clear();
 
@@ -170,7 +169,7 @@ class RentingController extends BaseController
     _centerZoomFitBounds(currentBounds!);
 
     isFindingRoute.value = false;
-    update();
+    rentingState.value = RentingState.route;
   }
 
   void clearRoute() {
@@ -193,9 +192,9 @@ class RentingController extends BaseController
     _moveToPosition(currentLocation, zoom: zoom ?? zoomInLevel);
   }
 
-  void goToCurrentLocation() async {
+  void goToCurrentLocation({double? zoom}) async {
     await _getCurrentLocation();
-    _moveToPosition(currentLocation, zoom: mapController.zoom);
+    _moveToPosition(currentLocation, zoom: zoom ?? mapController.zoom);
   }
 
   void _moveToPosition(LatLng position, {double? zoom}) {
@@ -205,18 +204,16 @@ class RentingController extends BaseController
   // End Region
 
   // Region Navigation
-  var isNavigationMode = false.obs;
-
   void goToNavigation() async {
-    isNavigationMode.value = true;
+    rentingState.value = RentingState.navigation;
     // urlTemplate.value = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
     await _getCurrentLocation();
-    _goToCurrentLocationWithZoomDelay(zoom: 17);
+    goToCurrentLocation(zoom: 17);
     update();
   }
 
   void goBackFromNavigation() {
-    isNavigationMode.value = false;
+    rentingState.value = RentingState.route;
     // urlTemplate.value = BuildConfig.instance.config.mapboxUrlTemplate;
     _centerZoomFitBounds(currentBounds!);
     update();
@@ -229,15 +226,17 @@ class RentingController extends BaseController
   // End Region
 
   void _selectStatiton(String stationId) {
+    rentingState.value = RentingState.select;
     selectedStationId = stationId;
   }
 
   void clearSelectedStation() {
+    rentingState.value = RentingState.normal;
     selectedStationId = null;
-    update();
   }
 
   void unFocus() {
+    rentingState.value = RentingState.normal;
     selectedStationId = null;
   }
 
