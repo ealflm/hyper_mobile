@@ -8,13 +8,14 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
+import 'package:hyper_customer/app/core/values/map_values.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
-
-import 'package:latlong2/latlong.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
+import 'package:hyper_customer/config/build_config.dart';
 
 import '../controllers/renting_controller.dart';
 
@@ -44,17 +45,15 @@ class RentingView extends GetView<RentingController> {
   }
 
   Widget _navigation() {
-    return Container(
-      child: SafeArea(
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            shape: CircleBorder(),
-          ),
-          onPressed: () {
-            controller.goBackFromNavigationPage();
-          },
-          child: Icon(Icons.arrow_back_ios_new),
+    return SafeArea(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
         ),
+        onPressed: () {
+          controller.goBackFromNavigation();
+        },
+        child: const Icon(Icons.arrow_back_ios_new),
       ),
     );
   }
@@ -119,7 +118,7 @@ class RentingView extends GetView<RentingController> {
                     child: ElevatedButton(
                       style: ButtonStyles.primarySmall(),
                       onPressed: () {
-                        controller.goToNavigationPage();
+                        controller.goToNavigation();
                       },
                       child: HyperButton.child(
                         status: false,
@@ -185,13 +184,13 @@ class RentingView extends GetView<RentingController> {
                     width: 124.w,
                     child: ElevatedButton(
                       style: ButtonStyles.primarySmall(),
-                      onPressed: controller.isFindingRoute
+                      onPressed: controller.isFindingRoute.value
                           ? null
                           : () {
                               controller.findRoute();
                             },
                       child: HyperButton.child(
-                        status: controller.isFindingRoute,
+                        status: controller.isFindingRoute.value,
                         child: Row(
                           children: [
                             Icon(
@@ -452,7 +451,7 @@ class RentingView extends GetView<RentingController> {
             Expanded(
               child: InkWell(
                 onTap: () {
-                  Get.toNamed('/renting/search');
+                  Get.toNamed(Routes.RENTING_SEARCH);
                 },
                 child: Container(
                   height: 42.h,
@@ -491,33 +490,20 @@ class RentingView extends GetView<RentingController> {
   FlutterMap _map() {
     return FlutterMap(
       mapController: controller.mapController,
-      options: MapOptions(
-        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
-        center: LatLng(10.212884, 103.964889),
-        zoom: 10.8,
-        minZoom: 10.8,
-        maxZoom: 18.4,
-        swPanBoundary: LatLng(9.866505, 103.785063),
-        nePanBoundary: LatLng(10.508632, 104.112881),
-        slideOnBoundaries: true,
-        onPositionChanged: controller.onPositionChanged,
-        onMapCreated: controller.onMapCreated,
-      ),
+      options: MapValues.options,
       children: [
-        Obx(
-          () => TileLayerWidget(
-            options: TileLayerOptions(
-              urlTemplate: controller.urlTemplate.value,
-              additionalOptions: {
-                'accessToken': controller.accessToken,
-                'id': controller.mapId,
-              },
-            ),
+        TileLayerWidget(
+          options: TileLayerOptions(
+            urlTemplate: BuildConfig.instance.mapConfig.mapboxUrlTemplate,
+            additionalOptions: {
+              'accessToken': BuildConfig.instance.mapConfig.mapboxAccessToken,
+              'id': BuildConfig.instance.mapConfig.mapboxId,
+            },
           ),
         ),
         GestureDetector(
           onTap: () {
-            controller.clearSelectedMarker();
+            controller.clearSelectedStation();
           },
           child: Container(
             color: AppColors.white.withOpacity(0),

@@ -9,20 +9,25 @@ import '../controllers/main_controller.dart';
 class MainBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<MainController>(
-      () => MainController(),
+    Get.put(
+      MainController(),
+      permanent: true,
     );
-    Get.lazyPut<HomeController>(
-      () => HomeController(),
+    Get.put(
+      HomeController(),
+      permanent: true,
     );
-    Get.lazyPut<PackageController>(
-      () => PackageController(),
+    Get.put(
+      PackageController(),
+      permanent: true,
     );
-    Get.lazyPut<ActivityController>(
-      () => ActivityController(),
+    Get.put(
+      ActivityController(),
+      permanent: true,
     );
-    Get.lazyPut<AccountController>(
-      () => AccountController(),
+    Get.put(
+      AccountController(),
+      permanent: true,
     );
   }
 }

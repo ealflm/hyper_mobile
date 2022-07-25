@@ -6,10 +6,9 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
+import 'package:hyper_customer/app/modules/renting/controllers/renting_search_controller.dart';
 
-import '../controllers/renting_controller.dart';
-
-class RentingSearchView extends GetView<RentingController> {
+class RentingSearchView extends GetView<RentingSearchController> {
   const RentingSearchView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class RentingSearchView extends GetView<RentingController> {
               SizedBox(
                 height: 10.h,
               ),
-              GetBuilder<RentingController>(
+              GetBuilder<RentingSearchController>(
                 builder: (_) {
                   return Column(
                     children: controller.searchItems,

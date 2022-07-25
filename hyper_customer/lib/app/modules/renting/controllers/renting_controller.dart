@@ -3,101 +3,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/utils/animated_map_utils.dart';
+import 'package:hyper_customer/app/core/utils/map_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
-import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
-import 'package:hyper_customer/config/build_config.dart';
-import 'package:tiengviet/tiengviet.dart';
 
 import 'package:latlong2/latlong.dart';
 
 class RentingController extends BaseController
     with GetTickerProviderStateMixin {
-  var urlTemplate = BuildConfig.instance.config.mapboxUrlTemplate.obs;
-  String accessToken = BuildConfig.instance.config.mapboxAccessToken;
-  String mapId = BuildConfig.instance.config.mapboxId;
+  double zoomLevel = 10.8;
+  double zoomInLevel = 13.7;
 
   final Repository _repository = Get.find(tag: (Repository).toString());
   final MapboxRepository _mapboxRepository =
       Get.find(tag: (MapboxRepository).toString());
-  RentStations? rentStations;
 
+  RentStations? rentStations;
   MapController mapController = MapController();
 
   List<Widget> searchItems = [];
   List<Marker> markers = [];
   Map<String, Items> rentStationsData = {};
 
+  late AnimatedMap _animatedMap;
+
+  late LatLng currentLocation;
+  LatLngBounds? currentBounds;
+
   String? selectedStationId;
   bool get isSelectedStation => selectedStationId != null;
   Items? get selectedStation => rentStationsData[selectedStationId];
 
-  double defaultZoomLevel = 10.8;
-  double defaultZoomBigLevel = 13.7;
-  double zoomLevel = 10.8;
-  late Position currentPosition;
-  late LatLng currentLngLat;
-
-  LatLngBounds? currentBounds;
-
+  // Region Init
   @override
   void onInit() async {
-    await _loadCenter();
-    await _getRentStations();
-    _goToCenter();
+    init();
     super.onInit();
   }
 
-  void clearSelectedMarker() {
-    selectedStationId = null;
-    update();
-  }
+  Future<void> init() async {
+    _animatedMap = AnimatedMap(controller: mapController, vsync: this);
 
-  void _goToCenter({double? zoom}) async {
-    await Future.delayed(const Duration(milliseconds: 500));
-    _moveToPosition(currentLngLat, zoom: zoom ?? defaultZoomBigLevel);
+    await _getCurrentLocation();
+    await _fetchRentStations();
+    _goToCurrentLocationWithZoomDelay();
   }
+  // End Region
 
-  Future<void> _loadCenter() async {
-    currentPosition = await determinePosition();
-    currentLngLat = LatLng(currentPosition.latitude, currentPosition.longitude);
-  }
-
-  void goToCurrentLocation() async {
-    await _loadCenter();
-    _moveToPosition(currentLngLat, zoom: mapController.zoom);
-  }
-
-  void unFocus() {
-    selectedStationId = null;
-  }
-
-  void _selectStatiton(String stationId) {
-    selectedStationId = stationId;
-  }
-
-  void onPositionChanged(MapPosition position, bool hasGesture) {
-    zoomLevel = position.zoom ?? defaultZoomLevel;
-    debugPrint('Nam: $zoomLevel');
-  }
-
-  void onMapCreated(MapController controller) {
-    // TODO
-  }
-
-  void _moveToPosition(LatLng position, {double? zoom}) {
-    var zoomLevel = zoom ?? mapController.zoom;
-    _animatedMapMove(position, zoomLevel);
-  }
-
-  Future<void> _getRentStations() async {
+  // Region Fetch
+  Future<void> _fetchRentStations() async {
     var rentStationsService = _repository.getRentStations();
 
     await callDataService(
@@ -169,144 +130,22 @@ class RentingController extends BaseController
     update();
   }
 
-  bool _contains(String? text, String? keyword) {
-    if (text == null || keyword == null) {
-      return false;
-    }
-    var unSignText = TiengViet.parse(text.toLowerCase().trim());
-    var unSignKeyword = TiengViet.parse(keyword.toLowerCase().trim());
-    return unSignText.contains(unSignKeyword);
-  }
+  // End Region
 
-  void clearSearchItems() {
-    searchItems.clear();
-  }
-
-  void onSearchChanged(String query) {
-    if (query.isEmpty) {
-      searchItems.clear();
-      update();
-      return;
-    }
-    if (rentStations != null) {
-      searchItems.clear();
-      var items = rentStations?.body?.items ?? [];
-      for (Items item in items) {
-        if (_contains(item.title, query) || _contains(item.address, query)) {
-          var searchItem = SearchItem(
-            title: item.title ?? '',
-            description: item.address ?? '',
-            onPressed: () {},
-          );
-          searchItems.add(searchItem);
-        }
-      }
-    }
-
-    update();
-  }
-
-  Future<Position> determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
-  }
-
-  void _animatedMapMove(LatLng destLocation, double destZoom) {
-    // Create some tweens. These serve to split up the transition from one location to another.
-    // In our case, we want to split the transition be<tween> our current map center and the destination.
-    final latTween = Tween<double>(
-        begin: mapController.center.latitude, end: destLocation.latitude);
-    final lngTween = Tween<double>(
-        begin: mapController.center.longitude, end: destLocation.longitude);
-    final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
-
-    // Create a animation controller that has a duration and a TickerProvider.
-    var controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: this);
-    // The animation determines what path the animation will take. You can try different Curves values, although I found
-    // fastOutSlowIn to be my favorite.
-    Animation<double> animation =
-        CurvedAnimation(parent: controller, curve: Curves.fastOutSlowIn);
-
-    controller.addListener(() {
-      mapController.move(
-          LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
-          zoomTween.evaluate(animation));
-    });
-
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.dispose();
-      } else if (status == AnimationStatus.dismissed) {
-        controller.dispose();
-      }
-    });
-
-    controller.forward();
-  }
-
-  // FIND ROUTE
-  var isFindingRouteObs = false.obs;
-  bool get isFindingRoute => isFindingRouteObs.value;
-  set isFindingRoute(bool value) {
-    isFindingRouteObs.value = value;
-  }
-
+  // Region Fetch Route
   List<LatLng> routePoints = [];
   bool get hasRoute => routePoints.isNotEmpty;
-
-  void _centerZoomFitBounds(LatLngBounds bounds) {
-    var centerZoom = mapController.centerZoomFitBounds(bounds);
-    _animatedMapMove(centerZoom.center, centerZoom.zoom);
-  }
-
-  void clearRoute() {
-    routePoints.clear();
-    goToSelectedStation();
-    update();
-  }
+  var isFindingRoute = false.obs;
 
   void findRoute() async {
-    isFindingRoute = true;
+    isFindingRoute.value = true;
 
     if (!isSelectedStation) return;
 
     routePoints.clear();
 
-    await _loadCenter();
-    LatLng from = currentLngLat;
+    await _getCurrentLocation();
+    LatLng from = currentLocation;
     LatLng to = LatLng(
       selectedStation?.latitude ?? 0,
       selectedStation?.longitude ?? 0,
@@ -330,8 +169,76 @@ class RentingController extends BaseController
     currentBounds?.pad(0.48);
     _centerZoomFitBounds(currentBounds!);
 
-    isFindingRoute = false;
+    isFindingRoute.value = false;
     update();
+  }
+
+  void clearRoute() {
+    routePoints.clear();
+    goToSelectedStation();
+    update();
+  }
+  // End Region
+
+  // Region Get Current Location
+
+  Future<void> _getCurrentLocation() async {
+    var currentPosition = await MapUtils.determinePosition();
+    currentLocation =
+        LatLng(currentPosition.latitude, currentPosition.longitude);
+  }
+
+  void _goToCurrentLocationWithZoomDelay({double? zoom}) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    _moveToPosition(currentLocation, zoom: zoom ?? zoomInLevel);
+  }
+
+  void goToCurrentLocation() async {
+    await _getCurrentLocation();
+    _moveToPosition(currentLocation, zoom: mapController.zoom);
+  }
+
+  void _moveToPosition(LatLng position, {double? zoom}) {
+    var zoomLevel = zoom ?? mapController.zoom;
+    _animatedMap.move(position, zoomLevel);
+  }
+  // End Region
+
+  // Region Navigation
+  var isNavigationMode = false.obs;
+
+  void goToNavigation() async {
+    isNavigationMode.value = true;
+    // urlTemplate.value = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
+    await _getCurrentLocation();
+    _goToCurrentLocationWithZoomDelay(zoom: 17);
+    update();
+  }
+
+  void goBackFromNavigation() {
+    isNavigationMode.value = false;
+    // urlTemplate.value = BuildConfig.instance.config.mapboxUrlTemplate;
+    _centerZoomFitBounds(currentBounds!);
+    update();
+  }
+
+  void _centerZoomFitBounds(LatLngBounds bounds) {
+    var centerZoom = mapController.centerZoomFitBounds(bounds);
+    _animatedMap.move(centerZoom.center, centerZoom.zoom);
+  }
+  // End Region
+
+  void _selectStatiton(String stationId) {
+    selectedStationId = stationId;
+  }
+
+  void clearSelectedStation() {
+    selectedStationId = null;
+    update();
+  }
+
+  void unFocus() {
+    selectedStationId = null;
   }
 
   void goToSelectedStation() {
@@ -342,24 +249,5 @@ class RentingController extends BaseController
 
     var location = LatLng(lat, lng);
     _moveToPosition(location);
-  }
-
-  // GO TO NAVIGATION PAGE
-  var isNavigationMode = false.obs;
-  double navigationZoomLevel = 17;
-
-  void goToNavigationPage() async {
-    isNavigationMode.value = true;
-    urlTemplate.value = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
-    await _loadCenter();
-    _goToCenter(zoom: navigationZoomLevel);
-    update();
-  }
-
-  void goBackFromNavigationPage() {
-    isNavigationMode.value = false;
-    urlTemplate.value = BuildConfig.instance.config.mapboxUrlTemplate;
-    _centerZoomFitBounds(currentBounds!);
-    update();
   }
 }

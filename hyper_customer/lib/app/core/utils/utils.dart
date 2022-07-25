@@ -13,7 +13,6 @@ abstract class Utils {
     );
   }
 
-  // static NumberFormat numberFormat = NumberFormat.decimalPattern('en_US');
   static NumberFormat numberFormat = NumberFormat();
 
   static String? vnd(double? value) {
