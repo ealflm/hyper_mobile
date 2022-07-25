@@ -21,9 +21,9 @@ import 'package:latlong2/latlong.dart';
 
 class RentingController extends BaseController
     with GetTickerProviderStateMixin {
-  String urlTemplate = BuildConfig.instance.config.mapUrlTemplate;
-  String accessToken = BuildConfig.instance.config.mapAccessToken;
-  String mapId = BuildConfig.instance.config.mapId;
+  String urlTemplate = BuildConfig.instance.config.mapboxUrlTemplate;
+  String accessToken = BuildConfig.instance.config.mapboxAccessToken;
+  String mapId = BuildConfig.instance.config.mapboxId;
 
   final Repository _repository = Get.find(tag: (Repository).toString());
   final MapboxRepository _mapboxRepository =
@@ -287,7 +287,7 @@ class RentingController extends BaseController
   bool get hasRoute => routePoints.isNotEmpty;
 
   void _centerZoomFitBounds(LatLngBounds bounds) {
-    bounds.pad(0.4);
+    bounds.pad(0.48);
     var centerZoom = mapController.centerZoomFitBounds(bounds);
     _animatedMapMove(centerZoom.center, centerZoom.zoom);
   }

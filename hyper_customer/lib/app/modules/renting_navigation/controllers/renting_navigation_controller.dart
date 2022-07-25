@@ -5,9 +5,9 @@ import 'package:hyper_customer/config/build_config.dart';
 import 'package:latlong2/latlong.dart';
 
 class RentingNavigationController extends GetxController {
-  String urlTemplate = BuildConfig.instance.config.mapUrlTemplate;
-  String accessToken = BuildConfig.instance.config.mapAccessToken;
-  String mapId = BuildConfig.instance.config.mapId;
+  String urlTemplate = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
+  String accessToken = BuildConfig.instance.config.mapboxAccessToken;
+  String mapId = BuildConfig.instance.config.mapboxId;
 
   MapController mapController = MapController();
 

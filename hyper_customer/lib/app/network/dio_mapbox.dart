@@ -5,7 +5,7 @@ class DioMapBox extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     options.queryParameters['access_token'] =
-        BuildConfig.instance.config.mapAccessToken;
+        BuildConfig.instance.config.mapboxAccessToken;
     super.onRequest(options, handler);
   }
 }

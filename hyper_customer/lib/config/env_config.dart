@@ -1,13 +1,15 @@
 class EnvConfig {
   final String baseUrl;
-  final String mapUrlTemplate;
-  final String mapAccessToken;
-  final String mapId;
+  final String mapboxUrlTemplate;
+  final String mapboxNavigationUrlTemplate;
+  final String mapboxAccessToken;
+  final String mapboxId;
 
   EnvConfig({
     required this.baseUrl,
-    required this.mapUrlTemplate,
-    required this.mapAccessToken,
-    required this.mapId,
+    this.mapboxUrlTemplate = '',
+    this.mapboxNavigationUrlTemplate = '',
+    this.mapboxAccessToken = '',
+    this.mapboxId = '',
   });
 }
