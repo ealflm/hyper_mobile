@@ -21,7 +21,6 @@ abstract class Routes {
   static const SCAN_CARD = _Paths.SCAN_CARD;
   static const RENTING = _Paths.RENTING;
   static const RENTING_SEARCH = _Paths.RENTING_SEARCH;
-  static const RENTING_NAVIGATION = _Paths.RENTING_NAVIGATION;
 }
 
 abstract class _Paths {
@@ -45,5 +44,4 @@ abstract class _Paths {
   static const SCAN_CARD = '/scan-card';
   static const RENTING = '/renting';
   static const RENTING_SEARCH = '/renting/search';
-  static const RENTING_NAVIGATION = '/renting-navigation';
 }

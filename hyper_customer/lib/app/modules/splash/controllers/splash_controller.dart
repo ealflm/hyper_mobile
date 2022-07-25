@@ -29,9 +29,9 @@ class SplashController extends GetxController {
   }
 
   Future<void> _initializedPlayer() async {
-    videoPlayerController = VideoPlayerController.asset(AppAssets.splash);
+    videoPlayerController = VideoPlayerController.asset(AppAssets.splash)
+      ..setVolume(0.0);
     videoPlayerController.initialize().then((_) => (update()));
-    videoPlayerController.setVolume(0);
     videoPlayerController.play();
   }
 

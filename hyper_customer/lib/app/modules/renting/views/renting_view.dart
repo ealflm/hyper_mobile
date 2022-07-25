@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
-import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
@@ -31,11 +30,31 @@ class RentingView extends GetView<RentingController> {
           _map(),
           GetBuilder<RentingController>(
             builder: (_) {
-              return controller.hasRoute ? _navigation() : _search();
+              return controller.isNavigationMode.value
+                  ? _navigation()
+                  : controller.hasRoute
+                      ? _route()
+                      : _search();
             },
           ),
           _bottom(),
         ]),
+      ),
+    );
+  }
+
+  Widget _navigation() {
+    return Container(
+      child: SafeArea(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            shape: CircleBorder(),
+          ),
+          onPressed: () {
+            controller.goBackFromNavigationPage();
+          },
+          child: Icon(Icons.arrow_back_ios_new),
+        ),
       ),
     );
   }
@@ -232,7 +251,7 @@ class RentingView extends GetView<RentingController> {
     );
   }
 
-  Widget _navigation() {
+  Widget _route() {
     return Container(
       decoration: BoxDecorations.map(),
       padding: EdgeInsets.only(
@@ -485,13 +504,15 @@ class RentingView extends GetView<RentingController> {
         onMapCreated: controller.onMapCreated,
       ),
       children: [
-        TileLayerWidget(
-          options: TileLayerOptions(
-            urlTemplate: controller.urlTemplate,
-            additionalOptions: {
-              'accessToken': controller.accessToken,
-              'id': controller.mapId,
-            },
+        Obx(
+          () => TileLayerWidget(
+            options: TileLayerOptions(
+              urlTemplate: controller.urlTemplate.value,
+              additionalOptions: {
+                'accessToken': controller.accessToken,
+                'id': controller.mapId,
+              },
+            ),
           ),
         ),
         GestureDetector(

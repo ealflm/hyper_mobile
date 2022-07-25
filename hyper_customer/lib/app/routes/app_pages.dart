@@ -29,8 +29,6 @@ import '../modules/register/views/register_view.dart';
 import '../modules/renting/bindings/renting_binding.dart';
 import '../modules/renting/views/renting_search_view.dart';
 import '../modules/renting/views/renting_view.dart';
-import '../modules/renting_navigation/bindings/renting_navigation_binding.dart';
-import '../modules/renting_navigation/views/renting_navigation_view.dart';
 import '../modules/scan/bindings/scan_binding.dart';
 import '../modules/scan/views/scan_view.dart';
 import '../modules/scan_card/bindings/scan_card_binding.dart';
@@ -162,11 +160,6 @@ class AppPages {
       page: () => const RentingSearchView(),
       binding: RentingBinding(),
       transition: Transition.noTransition,
-    ),
-    GetPage(
-      name: _Paths.RENTING_NAVIGATION,
-      page: () => const RentingNavigationView(),
-      binding: RentingNavigationBinding(),
     ),
   ];
 }

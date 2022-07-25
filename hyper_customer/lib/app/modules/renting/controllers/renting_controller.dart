@@ -13,7 +13,6 @@ import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:hyper_customer/config/build_config.dart';
 import 'package:tiengviet/tiengviet.dart';
 
@@ -21,7 +20,7 @@ import 'package:latlong2/latlong.dart';
 
 class RentingController extends BaseController
     with GetTickerProviderStateMixin {
-  String urlTemplate = BuildConfig.instance.config.mapboxUrlTemplate;
+  var urlTemplate = BuildConfig.instance.config.mapboxUrlTemplate.obs;
   String accessToken = BuildConfig.instance.config.mapboxAccessToken;
   String mapId = BuildConfig.instance.config.mapboxId;
 
@@ -46,6 +45,8 @@ class RentingController extends BaseController
   late Position currentPosition;
   late LatLng currentLngLat;
 
+  LatLngBounds? currentBounds;
+
   @override
   void onInit() async {
     await _loadCenter();
@@ -59,19 +60,19 @@ class RentingController extends BaseController
     update();
   }
 
-  void _goToCenter() async {
+  void _goToCenter({double? zoom}) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    _moveToPosition(currentLngLat, zoom: defaultZoomBigLevel);
-  }
-
-  void goToCurrentLocation() async {
-    await _loadCenter();
-    _moveToPosition(currentLngLat, zoom: mapController.zoom);
+    _moveToPosition(currentLngLat, zoom: zoom ?? defaultZoomBigLevel);
   }
 
   Future<void> _loadCenter() async {
     currentPosition = await determinePosition();
     currentLngLat = LatLng(currentPosition.latitude, currentPosition.longitude);
+  }
+
+  void goToCurrentLocation() async {
+    await _loadCenter();
+    _moveToPosition(currentLngLat, zoom: mapController.zoom);
   }
 
   void unFocus() {
@@ -287,7 +288,6 @@ class RentingController extends BaseController
   bool get hasRoute => routePoints.isNotEmpty;
 
   void _centerZoomFitBounds(LatLngBounds bounds) {
-    bounds.pad(0.48);
     var centerZoom = mapController.centerZoomFitBounds(bounds);
     _animatedMapMove(centerZoom.center, centerZoom.zoom);
   }
@@ -323,11 +323,12 @@ class RentingController extends BaseController
       },
     );
 
-    LatLngBounds bounds = LatLngBounds();
+    currentBounds = LatLngBounds();
     for (LatLng point in routePoints) {
-      bounds.extend(point);
+      currentBounds?.extend(point);
     }
-    _centerZoomFitBounds(bounds);
+    currentBounds?.pad(0.48);
+    _centerZoomFitBounds(currentBounds!);
 
     isFindingRoute = false;
     update();
@@ -344,10 +345,21 @@ class RentingController extends BaseController
   }
 
   // GO TO NAVIGATION PAGE
-  void goToNavigationPage() {
-    Get.toNamed(Routes.RENTING_NAVIGATION, arguments: {
-      'routePoints': routePoints,
-      'markers': markers,
-    });
+  var isNavigationMode = false.obs;
+  double navigationZoomLevel = 17;
+
+  void goToNavigationPage() async {
+    isNavigationMode.value = true;
+    urlTemplate.value = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
+    await _loadCenter();
+    _goToCenter(zoom: navigationZoomLevel);
+    update();
+  }
+
+  void goBackFromNavigationPage() {
+    isNavigationMode.value = false;
+    urlTemplate.value = BuildConfig.instance.config.mapboxUrlTemplate;
+    _centerZoomFitBounds(currentBounds!);
+    update();
   }
 }
