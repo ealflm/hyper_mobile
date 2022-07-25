@@ -23,4 +23,6 @@ abstract class AppAssets {
 
   static const String rentingMapIcon = 'assets/svg/renting-map-icon.svg';
   static const String locationOnIcon = 'assets/svg/location-on-icon.svg';
+  static const String locationOnPurpleIcon =
+      'assets/svg/location-on-purple-icon.svg';
 }

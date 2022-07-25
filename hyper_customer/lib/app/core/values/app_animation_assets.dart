@@ -20,4 +20,8 @@ abstract class AppAnimationAssets {
   static const String locationOn = 'assets/lottiefiles/location-on.json';
   static const String rentLocationOn =
       'assets/lottiefiles/rent-location-on.json';
+
+  static const String scanPulse = 'assets/lottiefiles/scan-pulse.json';
+  static const String scanPulsePurple =
+      'assets/lottiefiles/scan-pulse-purple.json';
 }

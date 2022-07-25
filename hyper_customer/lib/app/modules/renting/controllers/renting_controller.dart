@@ -21,6 +21,7 @@ class RentingController extends BaseController
     with GetTickerProviderStateMixin {
   double zoomLevel = 10.8;
   double zoomInLevel = 13.7;
+  double navigationZoomLevel = 17;
 
   final Repository _repository = Get.find(tag: (Repository).toString());
   final MapboxRepository _mapboxRepository =
@@ -74,6 +75,10 @@ class RentingController extends BaseController
       },
     );
 
+    _updateMarker();
+  }
+
+  void _updateMarker() {
     markers.clear();
 
     rentStationsData.clear();
@@ -119,9 +124,11 @@ class RentingController extends BaseController
                     _moveToPosition(location);
                     update();
                   },
-                  child: SvgPicture.asset(
-                    AppAssets.locationOnIcon,
-                  ),
+                  child: rentingState.value == RentingState.navigation
+                      ? SvgPicture.asset(AppAssets.locationOnPurpleIcon)
+                      : SvgPicture.asset(
+                          AppAssets.locationOnIcon,
+                        ),
                 ),
               );
             }
@@ -130,6 +137,7 @@ class RentingController extends BaseController
         ),
       );
     }
+
     update();
   }
 
@@ -194,9 +202,17 @@ class RentingController extends BaseController
     _moveToPosition(currentLocation, zoom: zoom ?? zoomInLevel);
   }
 
-  void goToCurrentLocation({double? zoom}) async {
+  void _goToCurrentLocation({double? zoom}) async {
     await _getCurrentLocation();
     _moveToPosition(currentLocation, zoom: zoom ?? mapController.zoom);
+  }
+
+  void goToCurrentLocation() {
+    if (rentingState.value == RentingState.navigation) {
+      _goToCurrentLocation(zoom: navigationZoomLevel);
+    } else {
+      _goToCurrentLocation();
+    }
   }
 
   void _moveToPosition(LatLng position, {double? zoom}) {
@@ -210,7 +226,7 @@ class RentingController extends BaseController
     _changeRentingState(RentingState.navigation);
     // urlTemplate.value = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
     await _getCurrentLocation();
-    goToCurrentLocation(zoom: 17);
+    _goToCurrentLocation(zoom: navigationZoomLevel);
     update();
   }
 
@@ -249,6 +265,7 @@ class RentingController extends BaseController
   }
 
   void _changeRentingState(RentingState state) {
+    _updateMarker();
     rentingState.value = state;
   }
 }

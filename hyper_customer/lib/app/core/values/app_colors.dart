@@ -55,4 +55,7 @@ abstract class AppColors {
 
   static const Color shimmerBaseColor = Color(0xFFEDEDED);
   static const Color shimmerHighlightColor = Color(0xFFD1D1D1);
+
+  static const Color purpleStart = Color(0xFF8435DA);
+  static const Color purpleEnd = Color(0xFF4927EB);
 }
