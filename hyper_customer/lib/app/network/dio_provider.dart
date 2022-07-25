@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/network/dio_debug.dart';
+import 'package:hyper_customer/app/network/dio_goong.dart';
 import 'package:hyper_customer/app/network/dio_mapbox.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/config/build_config.dart';
@@ -37,6 +38,15 @@ class DioProvider {
     _instance ??= httpDio;
     _instance!.interceptors.clear();
     _instance!.interceptors.add(DioMapBox());
+    _instance!.interceptors.add(DioDebug()); // For debug
+
+    return _instance!;
+  }
+
+  static Dio get dioWithGoongAPIKey {
+    _instance ??= httpDio;
+    _instance!.interceptors.clear();
+    _instance!.interceptors.add(DioGoong());
     _instance!.interceptors.add(DioDebug()); // For debug
 
     return _instance!;

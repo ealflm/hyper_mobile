@@ -81,7 +81,7 @@ class Bottom extends GetWidget<RentingController> {
                       onPressed: controller.isFindingRoute.value
                           ? null
                           : () {
-                              controller.findRoute();
+                              controller.fetchGoongRoute();
                             },
                       child: HyperButton.child(
                         status: controller.isFindingRoute.value,

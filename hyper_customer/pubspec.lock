@@ -618,6 +618,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  polyline_do:
+    dependency: "direct main"
+    description:
+      name: polyline_do
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.0"
   positioned_tap_detector_2:
     dependency: transitive
     description:

@@ -109,128 +109,135 @@ class Top extends GetWidget<RentingController> {
   }
 
   Widget _route() {
-    return Container(
-      decoration: BoxDecorations.map(),
-      padding: EdgeInsets.only(
-        left: 10.w,
-        right: 10.w,
-        top: 5.h,
-      ),
-      child: SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    controller.clearRoute();
-                  },
-                  style: TextButton.styleFrom(
-                    primary: AppColors.blue,
-                    shape: const CircleBorder(),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: const EdgeInsets.all(0),
-                    minimumSize: Size(40.r, 40.r),
-                  ),
-                  child: SizedBox(
-                    height: 40.r,
-                    width: 40.r,
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      size: 18.r,
-                      color: AppColors.gray,
+    return SafeArea(
+      child: Container(
+        padding: EdgeInsets.only(
+          top: 10.h,
+          left: 10.w,
+          right: 10.w,
+        ),
+        child: Container(
+          decoration: BoxDecorations.map(),
+          padding: EdgeInsets.only(
+            left: 10.w,
+            right: 10.w,
+            top: 5.h,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      controller.clearRoute();
+                    },
+                    style: TextButton.styleFrom(
+                      primary: AppColors.blue,
+                      shape: const CircleBorder(),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: const EdgeInsets.all(0),
+                      minimumSize: Size(40.r, 40.r),
+                    ),
+                    child: SizedBox(
+                      height: 40.r,
+                      width: 40.r,
+                      child: Icon(
+                        Icons.arrow_back_ios_new,
+                        size: 18.r,
+                        color: AppColors.gray,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  width: 3.w,
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 11.5.h),
-                  height: 85.h,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _startIcon(),
-                      _dotIcon(),
-                      _dotIcon(),
-                      _dotIcon(),
-                      _endIcon(),
-                    ],
+                  SizedBox(
+                    width: 3.w,
                   ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.only(top: 3.5.h),
-                    child: Row(
+                  Container(
+                    padding: EdgeInsets.only(top: 11.5.h),
+                    height: 85.h,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: 10.w,
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextFormField(
-                                enabled: false,
-                                cursorColor: AppColors.blue,
-                                style: subtitle1.copyWith(
-                                  color: AppColors.lightBlack,
-                                ),
-                                initialValue: 'Vị trí của bạn',
-                                decoration: InputStyles.map(
-                                  hintText: 'Chọn điểm đi',
-                                  labelText: 'Điểm đi',
-                                ),
-                              ),
-                              TextFormField(
-                                enabled: false,
-                                cursorColor: AppColors.blue,
-                                style: subtitle1.copyWith(
-                                  color: AppColors.lightBlack,
-                                ),
-                                initialValue:
-                                    controller.selectedStation?.title ?? '',
-                                decoration: InputStyles.map(
-                                  hintText: 'Chọn điểm đến',
-                                  labelText: 'Điểm đến',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 5.w),
-                        ElevatedButton(
-                          onPressed: null,
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            primary: AppColors.blue,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            padding: const EdgeInsets.all(0),
-                            minimumSize: Size(40.r, 40.r),
-                          ),
-                          child: SizedBox(
-                            height: 40.r,
-                            width: 40.r,
-                            child: Icon(
-                              Icons.swap_vert,
-                              size: 23.r,
-                              color: AppColors.white,
-                            ),
-                          ),
-                        ),
+                        _startIcon(),
+                        _dotIcon(),
+                        _dotIcon(),
+                        _dotIcon(),
+                        _endIcon(),
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 10.h,
-            ),
-          ],
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 3.5.h),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                TextFormField(
+                                  enabled: false,
+                                  cursorColor: AppColors.blue,
+                                  style: subtitle1.copyWith(
+                                    color: AppColors.lightBlack,
+                                  ),
+                                  initialValue: 'Vị trí của bạn',
+                                  decoration: InputStyles.map(
+                                    hintText: 'Chọn điểm đi',
+                                    labelText: 'Điểm đi',
+                                  ),
+                                ),
+                                TextFormField(
+                                  enabled: false,
+                                  cursorColor: AppColors.blue,
+                                  style: subtitle1.copyWith(
+                                    color: AppColors.lightBlack,
+                                  ),
+                                  initialValue:
+                                      controller.selectedStation?.title ?? '',
+                                  decoration: InputStyles.map(
+                                    hintText: 'Chọn điểm đến',
+                                    labelText: 'Điểm đến',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 5.w),
+                          ElevatedButton(
+                            onPressed: null,
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              primary: AppColors.blue,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              padding: const EdgeInsets.all(0),
+                              minimumSize: Size(40.r, 40.r),
+                            ),
+                            child: SizedBox(
+                              height: 40.r,
+                              width: 40.r,
+                              child: Icon(
+                                Icons.swap_vert,
+                                size: 23.r,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+            ],
+          ),
         ),
       ),
     );

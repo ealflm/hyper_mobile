@@ -7,13 +7,17 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/animated_map_utils.dart';
 import 'package:hyper_customer/app/core/utils/map_utils.dart';
+import 'package:hyper_customer/app/core/utils/polylatlng_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
+import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
+import 'package:polyline_do/polyline_do.dart' as poly;
 
 import 'package:latlong2/latlong.dart';
 
@@ -26,6 +30,8 @@ class RentingController extends BaseController
   final Repository _repository = Get.find(tag: (Repository).toString());
   final MapboxRepository _mapboxRepository =
       Get.find(tag: (MapboxRepository).toString());
+  final GoongRepository _goongRepository =
+      Get.find(tag: (GoongRepository).toString());
 
   RentStations? rentStations;
   MapController mapController = MapController();
@@ -145,9 +151,10 @@ class RentingController extends BaseController
 
   // Region Fetch Route
   List<LatLng> routePoints = [];
+  Directions? directions;
   var isFindingRoute = false.obs;
 
-  void findRoute() async {
+  void fetchRoute() async {
     isFindingRoute.value = true;
 
     routePoints.clear();
@@ -174,7 +181,46 @@ class RentingController extends BaseController
     for (LatLng point in routePoints) {
       currentBounds?.extend(point);
     }
-    currentBounds?.pad(0.48);
+    currentBounds?.pad(0.52);
+    _centerZoomFitBounds(currentBounds!);
+
+    isFindingRoute.value = false;
+    _changeRentingState(RentingState.route);
+  }
+
+  void fetchGoongRoute() async {
+    isFindingRoute.value = true;
+
+    routePoints.clear();
+
+    await _getCurrentLocation();
+    LatLng from = currentLocation;
+    LatLng to = LatLng(
+      selectedStation?.latitude ?? 0,
+      selectedStation?.longitude ?? 0,
+    );
+    var loginService = _goongRepository.findRoute(from, to);
+
+    await callDataService(
+      loginService,
+      onSuccess: (Directions response) {
+        directions = response;
+
+        String overviewPolyline =
+            directions?.routes?[0].overviewPolyline?.points ?? '';
+
+        routePoints = PolyLatLng.decode(overviewPolyline);
+      },
+      onError: (DioError dioError) {
+        Utils.showToast('Kết nối thất bại');
+      },
+    );
+
+    currentBounds = LatLngBounds();
+    for (LatLng point in routePoints) {
+      currentBounds?.extend(point);
+    }
+    currentBounds?.pad(0.52);
     _centerZoomFitBounds(currentBounds!);
 
     isFindingRoute.value = false;

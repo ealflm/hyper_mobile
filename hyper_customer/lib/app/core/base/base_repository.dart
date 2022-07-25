@@ -10,6 +10,7 @@ abstract class BaseRepository {
   Dio get dioClient => DioProvider.httpDio;
   Dio get dioTokenClient => DioProvider.dioWithHeaderToken;
   Dio get dioMapbox => DioProvider.dioWithMapboxToken;
+  Dio get dioGoong => DioProvider.dioWithGoongAPIKey;
 
   Future<Response<T>> callApi<T>(Future<Response<T>> api) async {
     try {
