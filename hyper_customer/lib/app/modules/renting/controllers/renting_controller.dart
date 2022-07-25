@@ -30,8 +30,9 @@ class RentingController extends BaseController
   MapController mapController = MapController();
 
   List<Widget> searchItems = [];
-  List<Marker> markers = [];
   Map<String, Items> rentStationsData = {};
+
+  List<Marker> markers = [];
 
   late AnimatedMap _animatedMap;
 
@@ -74,6 +75,7 @@ class RentingController extends BaseController
     );
 
     markers.clear();
+
     rentStationsData.clear();
     var items = rentStations?.body?.items ?? [];
     for (Items item in items) {
@@ -128,7 +130,6 @@ class RentingController extends BaseController
         ),
       );
     }
-
     update();
   }
 
@@ -169,12 +170,13 @@ class RentingController extends BaseController
     _centerZoomFitBounds(currentBounds!);
 
     isFindingRoute.value = false;
-    rentingState.value = RentingState.route;
+    _changeRentingState(RentingState.route);
   }
 
   void clearRoute() {
+    _changeRentingState(RentingState.select);
     routePoints.clear();
-    goToSelectedStation();
+    moveToSelectedStation();
     update();
   }
   // End Region
@@ -205,7 +207,7 @@ class RentingController extends BaseController
 
   // Region Navigation
   void goToNavigation() async {
-    rentingState.value = RentingState.navigation;
+    _changeRentingState(RentingState.navigation);
     // urlTemplate.value = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
     await _getCurrentLocation();
     goToCurrentLocation(zoom: 17);
@@ -213,7 +215,7 @@ class RentingController extends BaseController
   }
 
   void goBackFromNavigation() {
-    rentingState.value = RentingState.route;
+    _changeRentingState(RentingState.route);
     // urlTemplate.value = BuildConfig.instance.config.mapboxUrlTemplate;
     _centerZoomFitBounds(currentBounds!);
     update();
@@ -226,21 +228,17 @@ class RentingController extends BaseController
   // End Region
 
   void _selectStatiton(String stationId) {
-    rentingState.value = RentingState.select;
+    _changeRentingState(RentingState.select);
     selectedStationId = stationId;
   }
 
-  void clearSelectedStation() {
-    rentingState.value = RentingState.normal;
+  void unfocus() {
+    _changeRentingState(RentingState.normal);
     selectedStationId = null;
+    update();
   }
 
-  void unFocus() {
-    rentingState.value = RentingState.normal;
-    selectedStationId = null;
-  }
-
-  void goToSelectedStation() {
+  void moveToSelectedStation() {
     if (selectedStation == null) return;
 
     double lat = selectedStation?.latitude ?? 0;
@@ -248,5 +246,9 @@ class RentingController extends BaseController
 
     var location = LatLng(lat, lng);
     _moveToPosition(location);
+  }
+
+  void _changeRentingState(RentingState state) {
+    rentingState.value = state;
   }
 }
