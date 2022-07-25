@@ -99,13 +99,11 @@ class RentingView extends GetView<RentingController> {
                     width: 124.w,
                     child: ElevatedButton(
                       style: ButtonStyles.primarySmall(),
-                      onPressed: controller.isFindingRoute
-                          ? null
-                          : () {
-                              //TODO
-                            },
+                      onPressed: () {
+                        controller.goToNavigationPage();
+                      },
                       child: HyperButton.child(
-                        status: controller.isFindingRoute,
+                        status: false,
                         child: Row(
                           children: [
                             Icon(

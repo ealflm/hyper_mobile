@@ -13,6 +13,7 @@ import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/search_item.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:hyper_customer/config/build_config.dart';
 import 'package:tiengviet/tiengviet.dart';
 
@@ -128,8 +129,8 @@ class RentingController extends BaseController
           builder: (context) {
             Widget result = Container(
               padding: EdgeInsets.all(20.r),
-              child: Listener(
-                onPointerDown: (_) {
+              child: GestureDetector(
+                onTap: () {
                   _selectStatiton(itemId);
                   _moveToPosition(location);
                   update();
@@ -146,8 +147,8 @@ class RentingController extends BaseController
             if (selectedStationId == itemId) {
               result = Container(
                 padding: EdgeInsets.only(bottom: 40.r),
-                child: Listener(
-                  onPointerDown: (_) {
+                child: GestureDetector(
+                  onTap: () {
                     _selectStatiton(itemId);
                     _moveToPosition(location);
                     update();
@@ -340,5 +341,13 @@ class RentingController extends BaseController
 
     var location = LatLng(lat, lng);
     _moveToPosition(location);
+  }
+
+  // GO TO NAVIGATION PAGE
+  void goToNavigationPage() {
+    Get.toNamed(Routes.RENTING_NAVIGATION, arguments: {
+      'routePoints': routePoints,
+      'markers': markers,
+    });
   }
 }
