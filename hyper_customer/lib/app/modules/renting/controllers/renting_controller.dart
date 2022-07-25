@@ -286,9 +286,15 @@ class RentingController extends BaseController
   bool get hasRoute => routePoints.isNotEmpty;
 
   void _centerZoomFitBounds(LatLngBounds bounds) {
-    bounds.pad(0.3);
+    bounds.pad(0.4);
     var centerZoom = mapController.centerZoomFitBounds(bounds);
     _animatedMapMove(centerZoom.center, centerZoom.zoom);
+  }
+
+  void clearRoute() {
+    routePoints.clear();
+    goToSelectedStation();
+    update();
   }
 
   void findRoute() async {
@@ -324,5 +330,15 @@ class RentingController extends BaseController
 
     isFindingRoute = false;
     update();
+  }
+
+  void goToSelectedStation() {
+    if (selectedStation == null) return;
+
+    double lat = selectedStation?.latitude ?? 0;
+    double lng = selectedStation?.longitude ?? 0;
+
+    var location = LatLng(lat, lng);
+    _moveToPosition(location);
   }
 }

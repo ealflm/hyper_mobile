@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 
 abstract class InputStyles {
@@ -115,6 +116,34 @@ abstract class InputStyles {
               child: prefixIcon,
             )
           : null,
+    );
+  }
+
+  static InputDecoration map(
+      {Widget? prefixIcon, String labelText = "", String hintText = ""}) {
+    return InputDecoration(
+      labelText: labelText,
+      hintText: hintText,
+      prefixIcon: prefixIcon != null
+          ? Padding(
+              padding: EdgeInsets.only(left: 6.w),
+              child: prefixIcon,
+            )
+          : null,
+      focusedBorder: const UnderlineInputBorder(
+        borderSide: BorderSide(
+          color: AppColors.blue,
+          width: 2,
+        ),
+      ),
+      floatingLabelBehavior: FloatingLabelBehavior.always,
+      labelStyle: subtitle1.copyWith(
+        color: AppColors.description,
+        fontWeight: FontWeights.medium,
+      ),
+      hintStyle: subtitle1.copyWith(
+        color: AppColors.description,
+      ),
     );
   }
 }

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
+import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
@@ -28,7 +29,11 @@ class RentingView extends GetView<RentingController> {
       child: Scaffold(
         body: Stack(children: [
           _map(),
-          _search(),
+          GetBuilder<RentingController>(
+            builder: (_) {
+              return controller.hasRoute ? _navigation() : _search();
+            },
+          ),
           _bottom(),
         ]),
       ),
@@ -44,6 +49,9 @@ class RentingView extends GetView<RentingController> {
           _goToCurrentLocation(),
           GetBuilder<RentingController>(
             builder: (_) {
+              if (controller.hasRoute) {
+                return _rentStationStartDetail();
+              }
               if (controller.isSelectedStation) {
                 return _rentStationDetail();
               } else {
@@ -52,6 +60,75 @@ class RentingView extends GetView<RentingController> {
             },
           ),
         ],
+      ),
+    );
+  }
+
+  Container _rentStationStartDetail() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
+      child: Container(
+        decoration: BoxDecorations.map(),
+        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
+        width: double.infinity,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              controller.selectedStation?.title ?? '',
+              style: subtitle1.copyWith(
+                fontSize: 18.sp,
+                color: AppColors.softBlack,
+              ),
+            ),
+            Text(
+              controller.selectedStation?.address ?? '',
+              style: body2.copyWith(
+                color: AppColors.description,
+              ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Obx(
+                  () => SizedBox(
+                    height: 36.h,
+                    width: 124.w,
+                    child: ElevatedButton(
+                      style: ButtonStyles.primarySmall(),
+                      onPressed: controller.isFindingRoute
+                          ? null
+                          : () {
+                              //TODO
+                            },
+                      child: HyperButton.child(
+                        status: controller.isFindingRoute,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.navigation_outlined,
+                              size: 20.r,
+                            ),
+                            SizedBox(
+                              width: 6.w,
+                            ),
+                            Text(
+                              'Bắt đầu',
+                              style: buttonBold,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -153,6 +230,170 @@ class RentingView extends GetView<RentingController> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _navigation() {
+    return Container(
+      decoration: BoxDecorations.map(),
+      padding: EdgeInsets.only(
+        left: 10.w,
+        right: 10.w,
+      ),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    controller.clearRoute();
+                  },
+                  style: TextButton.styleFrom(
+                    primary: AppColors.blue,
+                    shape: const CircleBorder(),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    padding: const EdgeInsets.all(0),
+                    minimumSize: Size(40.r, 40.r),
+                  ),
+                  child: SizedBox(
+                    height: 40.r,
+                    width: 40.r,
+                    child: Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 18.r,
+                      color: AppColors.gray,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 3.w,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 11.5.h),
+                  height: 85.h,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _startIcon(),
+                      _dotIcon(),
+                      _dotIcon(),
+                      _dotIcon(),
+                      _endIcon(),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(top: 3.5.h),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 10.w,
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFormField(
+                                enabled: false,
+                                cursorColor: AppColors.blue,
+                                style: subtitle1.copyWith(
+                                  color: AppColors.lightBlack,
+                                ),
+                                initialValue: 'Vị trí của bạn',
+                                decoration: InputStyles.map(
+                                  hintText: 'Chọn điểm đi',
+                                  labelText: 'Điểm đi',
+                                ),
+                              ),
+                              TextFormField(
+                                enabled: false,
+                                cursorColor: AppColors.blue,
+                                style: subtitle1.copyWith(
+                                  color: AppColors.lightBlack,
+                                ),
+                                initialValue:
+                                    controller.selectedStation?.title ?? '',
+                                decoration: InputStyles.map(
+                                  hintText: 'Chọn điểm đến',
+                                  labelText: 'Điểm đến',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 5.w),
+                        ElevatedButton(
+                          onPressed: null,
+                          style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            primary: AppColors.blue,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            padding: const EdgeInsets.all(0),
+                            minimumSize: Size(40.r, 40.r),
+                          ),
+                          child: SizedBox(
+                            height: 40.r,
+                            width: 40.r,
+                            child: Icon(
+                              Icons.swap_vert,
+                              size: 23.r,
+                              color: AppColors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container _startIcon() {
+    return Container(
+      width: 18.r,
+      height: 18.r,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        border: Border.all(width: 6, color: AppColors.blue),
+      ),
+    );
+  }
+
+  Container _dotIcon() {
+    return Container(
+      width: 3.r,
+      height: 3.r,
+      decoration: BoxDecoration(
+        color: AppColors.indicator,
+        borderRadius: BorderRadius.circular(100),
+      ),
+    );
+  }
+
+  Container _endIcon() {
+    return Container(
+      width: 18.r,
+      height: 18.r,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(100),
+        color: AppColors.blue,
+        border: Border.all(
+          width: 6,
+          color: AppColors.fadeBlue,
+        ),
       ),
     );
   }
