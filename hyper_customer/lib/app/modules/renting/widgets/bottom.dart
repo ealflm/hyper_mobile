@@ -50,6 +50,12 @@ class Bottom extends GetWidget<RentingController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
+          ElevatedButton(
+            onPressed: () {
+              controller.resumeStream();
+            },
+            child: Text('Resume'),
+          ),
           Obx(
             () {
               return !controller.isFlowingMode.value

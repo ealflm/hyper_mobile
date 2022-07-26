@@ -23,6 +23,7 @@ import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
 
 import 'package:latlong2/latlong.dart';
+import 'package:maps_toolkit/maps_toolkit.dart' as mt;
 
 class RentingController extends BaseController
     with GetTickerProviderStateMixin {
@@ -70,7 +71,6 @@ class RentingController extends BaseController
 
     _locationListener();
     positionStream.pause();
-    _background();
   }
   // End Region
 
@@ -287,9 +287,9 @@ class RentingController extends BaseController
   bool isAnimatedToPage = false;
 
   void goToNavigation() async {
-    positionStream.resume();
     _changeRentingState(RentingState.navigation);
     await _getCurrentLocation();
+    positionStream.resume();
     _goToCurrentLocation(zoom: navigationZoomLevel);
     update();
   }
@@ -404,22 +404,52 @@ class RentingController extends BaseController
         print(position == null
             ? 'Unknown'
             : '${position.latitude.toString()}, ${position.longitude.toString()}');
+
         if (rentingState.value == RentingState.navigation &&
             isFlowingMode.value) {
           await _getCurrentLocation();
           _goToCurrentLocation(zoom: navigationZoomLevel);
+
+          _getSelectedLegIndex(position?.latitude, position?.longitude);
         }
       },
     );
   }
 
-  void _background() async {
-    await Stream.periodic(const Duration(seconds: 5))
-        .takeWhile((_) => !false)
-        .forEach((_) async {
-      var currentPosition = await MapUtils.determinePosition();
-      debugPrint(
-          'Nam good: ${currentPosition.latitude}, ${currentPosition.longitude}');
-    });
+  _getSelectedLegIndex(double? lat, double? lng) {
+    List<Steps>? steps = legs?.steps;
+    int length = steps?.length ?? 0;
+
+    mt.LatLng currentLocation = mt.LatLng(lat ?? 0, lng ?? 0);
+    double minDistance = double.infinity;
+
+    if (steps == null || lat == null || lng == null) return;
+
+    int result = length - 1;
+    for (int i = length - 1; i >= 0; i--) {
+      var step = steps[i];
+      mt.LatLng start =
+          mt.LatLng(step.startLocation?.lat ?? 0, step.startLocation?.lng ?? 0);
+      mt.LatLng end =
+          mt.LatLng(step.startLocation?.lat ?? 0, step.startLocation?.lng ?? 0);
+
+      var startDistance =
+          mt.SphericalUtil.computeDistanceBetween(currentLocation, start);
+      var endDistance =
+          mt.SphericalUtil.computeDistanceBetween(currentLocation, end);
+
+      if (startDistance < minDistance || endDistance < minDistance) {
+        var min = startDistance < endDistance ? startDistance : endDistance;
+        minDistance = min.toDouble();
+        result = i;
+      }
+    }
+
+    selectedLegIndex.value = result;
+    debugPrint('Nam: $result');
+  }
+
+  void resumeStream() {
+    positionStream.resume();
   }
 }
