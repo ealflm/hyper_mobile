@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
@@ -99,6 +98,27 @@ class HyperMap extends GetWidget<RentingController> {
                   default:
                     return Container();
                 }
+              },
+            ),
+            Obx(
+              () {
+                return controller.legPolyLine.value.isNotEmpty
+                    ? PolylineLayerWidget(
+                        options: PolylineLayerOptions(
+                          polylineCulling: true,
+                          saveLayers: true,
+                          polylines: [
+                            Polyline(
+                              strokeWidth: 4.r,
+                              color: AppColors.blue,
+                              borderStrokeWidth: 3.r,
+                              borderColor: AppColors.darkBlue,
+                              points: controller.legPolyLine.value,
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container();
               },
             ),
             GetBuilder<RentingController>(

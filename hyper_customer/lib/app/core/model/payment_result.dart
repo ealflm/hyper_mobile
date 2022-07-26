@@ -1,3 +1,4 @@
+import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 
 class PaymentResult {
@@ -14,7 +15,8 @@ class PaymentResult {
   get source => _source;
 
   String get amountVND => Utils.vnd(amount) ?? '-';
-  String get createdDateVN => Utils.dateTimeToString(_createdDate) ?? '-';
+  String get createdDateVN =>
+      DateTimeUtils.dateTimeToString(_createdDate) ?? '-';
 
   PaymentResult({
     status = false,

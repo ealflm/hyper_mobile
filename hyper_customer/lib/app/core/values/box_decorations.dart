@@ -33,9 +33,9 @@ abstract class BoxDecorations {
     );
   }
 
-  static BoxDecoration map() {
+  static BoxDecoration map({Color? color}) {
     return BoxDecoration(
-      color: AppColors.white,
+      color: color ?? AppColors.white,
       borderRadius: BorderRadius.circular(9.r),
       boxShadow: ShadowStyles.map,
     );

@@ -25,11 +25,4 @@ abstract class Utils {
         ? null
         : DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
   }
-
-  static String? dateTimeToString(DateTime? dateTime) {
-    initializeDateFormatting();
-    return dateTime == null
-        ? null
-        : DateFormat('HH:mm - dd/MM/yyyy').format(dateTime);
-  }
 }

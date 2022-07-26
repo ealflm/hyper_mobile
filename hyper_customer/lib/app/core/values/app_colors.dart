@@ -58,4 +58,6 @@ abstract class AppColors {
 
   static const Color purpleStart = Color(0xFF8435DA);
   static const Color purpleEnd = Color(0xFF4927EB);
+
+  static const Color navigationGray = Color(0xFF9C9FA6);
 }

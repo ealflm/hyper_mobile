@@ -17,7 +17,6 @@ import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
-import 'package:polyline_do/polyline_do.dart' as poly;
 
 import 'package:latlong2/latlong.dart';
 
@@ -177,16 +176,14 @@ class RentingController extends BaseController
       },
     );
 
-    currentBounds = LatLngBounds();
-    for (LatLng point in routePoints) {
-      currentBounds?.extend(point);
-    }
-    currentBounds?.pad(0.52);
-    _centerZoomFitBounds(currentBounds!);
+    centerZoomFitBounds();
 
     isFindingRoute.value = false;
     _changeRentingState(RentingState.route);
   }
+
+  Legs? legs;
+  var selectedLegIndex = 0.obs;
 
   void fetchGoongRoute() async {
     isFindingRoute.value = true;
@@ -209,6 +206,8 @@ class RentingController extends BaseController
         String overviewPolyline =
             directions?.routes?[0].overviewPolyline?.points ?? '';
 
+        legs = directions?.routes?[0].legs?[0];
+
         routePoints = PolyLatLng.decode(overviewPolyline);
       },
       onError: (DioError dioError) {
@@ -216,15 +215,19 @@ class RentingController extends BaseController
       },
     );
 
+    centerZoomFitBounds();
+
+    isFindingRoute.value = false;
+    _changeRentingState(RentingState.route);
+  }
+
+  void centerZoomFitBounds() {
     currentBounds = LatLngBounds();
     for (LatLng point in routePoints) {
       currentBounds?.extend(point);
     }
     currentBounds?.pad(0.52);
     _centerZoomFitBounds(currentBounds!);
-
-    isFindingRoute.value = false;
-    _changeRentingState(RentingState.route);
   }
 
   void clearRoute() {
@@ -268,17 +271,65 @@ class RentingController extends BaseController
   // End Region
 
   // Region Navigation
+  PageController pageController = PageController();
+  int currentLegIndex = 0;
+  var isFlowingMode = true.obs;
+
+  Rx<List<LatLng>> legPolyLine = Rx<List<LatLng>>([]);
+  bool isAnimatedToPage = false;
+
   void goToNavigation() async {
     _changeRentingState(RentingState.navigation);
-    // urlTemplate.value = BuildConfig.instance.config.mapboxNavigationUrlTemplate;
     await _getCurrentLocation();
     _goToCurrentLocation(zoom: navigationZoomLevel);
     update();
   }
 
+  void goToCurrentLeg() async {
+    await _getCurrentLocation();
+    _goToCurrentLocation(zoom: navigationZoomLevel);
+    isFlowingMode.value = true;
+    legPolyLine([]);
+
+    isAnimatedToPage = true;
+    await pageController.animateToPage(
+      currentLegIndex,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    isAnimatedToPage = false;
+
+    update();
+  }
+
+  void _centerZoomFitLegBounds() {
+    LatLngBounds bounds = LatLngBounds();
+    for (LatLng point in legPolyLine.value) {
+      bounds.extend(point);
+    }
+    bounds.pad(0.52);
+    _centerZoomFitBounds(bounds);
+  }
+
+  void _loadCurrentLegPolyline(int index) {
+    String polylineCode = legs?.steps?[index].polyline?.points ?? '';
+    legPolyLine(PolyLatLng.decode(polylineCode));
+    _centerZoomFitLegBounds();
+  }
+
+  void onPageChanged(int index) {
+    if (isAnimatedToPage) {
+      return;
+    }
+
+    _loadCurrentLegPolyline(index);
+    isFlowingMode.value = false;
+
+    update();
+  }
+
   void goBackFromNavigation() {
     _changeRentingState(RentingState.route);
-    // urlTemplate.value = BuildConfig.instance.config.mapboxUrlTemplate;
     _centerZoomFitBounds(currentBounds!);
     update();
   }

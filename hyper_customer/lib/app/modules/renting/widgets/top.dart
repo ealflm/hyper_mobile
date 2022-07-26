@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
+import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/data/models/directions_model.dart' as dir;
 import 'package:hyper_customer/app/modules/renting/controllers/renting_controller.dart';
 import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
@@ -244,15 +246,129 @@ class Top extends GetWidget<RentingController> {
   }
 
   Widget _navigation() {
-    return SafeArea(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: const CircleBorder(),
-        ),
-        onPressed: () {
-          controller.goBackFromNavigation();
+    return SizedBox(
+      height: 150.h,
+      child: PageView.builder(
+        onPageChanged: controller.onPageChanged,
+        controller: controller.pageController,
+        itemCount: controller.legs?.steps?.length ?? 0,
+        itemBuilder: (context, index) {
+          dir.Steps? item = controller.legs?.steps?[index];
+          if (item == null) {
+            return Container();
+          }
+          return _navigationItem(item, index);
         },
-        child: const Icon(Icons.arrow_back_ios_new),
+      ),
+    );
+  }
+
+  IconData _getIcon(String type) {
+    switch (type) {
+      case 'start':
+        return Icons.straight;
+      case 'end':
+        return Icons.location_on;
+      case 'left':
+        return Icons.turn_left;
+      case 'slight left':
+        return Icons.turn_slight_left;
+      case 'sharp left':
+        return Icons.turn_sharp_left;
+      case 'right':
+        return Icons.turn_right;
+      case 'slight right':
+        return Icons.turn_slight_right;
+      case 'sharp right':
+        return Icons.turn_sharp_right;
+      case 'uturn':
+        return Icons.u_turn_left;
+      default:
+        if (type.contains('roundabout') && type.contains('right')) {
+          return Icons.roundabout_right;
+        }
+        if (type.contains('roundabout') && type.contains('right')) {
+          return Icons.roundabout_left;
+        }
+        if (type.contains('uturn') && type.contains('right')) {
+          return Icons.u_turn_right;
+        }
+        if (type.contains('uturn') && type.contains('left')) {
+          return Icons.u_turn_left;
+        }
+        return Icons.straight;
+    }
+  }
+
+  SafeArea _navigationItem(dir.Steps item, int index) {
+    var itemCount = controller.legs?.steps?.length ?? 0;
+    return SafeArea(
+      child: Wrap(
+        children: [
+          Container(
+            padding: EdgeInsets.only(
+              top: 10.h,
+              left: 10.w,
+              right: 10.w,
+            ),
+            child: Container(
+              decoration: BoxDecorations.map(
+                color: controller.selectedLegIndex.value == index
+                    ? AppColors.primary600
+                    : AppColors.navigationGray,
+              ),
+              padding: EdgeInsets.all(10.r),
+              width: double.infinity,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(
+                    _getIcon(item.maneuver ?? ''),
+                    color: AppColors.white,
+                    size: 50.r,
+                  ),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          '${item.htmlInstructions}',
+                          style: h6.copyWith(
+                            color: AppColors.white,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        index != itemCount - 1
+                            ? Text(
+                                '${item.distance?.text}',
+                                style: h6.copyWith(
+                                  fontWeight: FontWeights.regular,
+                                  color: AppColors.white,
+                                ),
+                              )
+                            : Text(
+                                '${controller.selectedStation?.title}',
+                                style: h6.copyWith(
+                                  fontWeight: FontWeights.regular,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
