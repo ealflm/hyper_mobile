@@ -13,23 +13,21 @@ import 'package:hyper_customer/app/core/utils/polylatlng_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
-import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/constants/renting_constant.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
-import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
+import 'package:hyper_customer/app/modules/renting/models/map_mode.dart';
 
 import 'package:latlong2/latlong.dart';
 
 class RentingController extends BaseController
-    with GetTickerProviderStateMixin {
+    with GetTickerProviderStateMixin, WidgetsBindingObserver {
   // Region Repository
   final Repository _repository = Get.find(tag: (Repository).toString());
-  final MapboxRepository _mapboxRepository =
-      Get.find(tag: (MapboxRepository).toString());
   final GoongRepository _goongRepository =
       Get.find(tag: (GoongRepository).toString());
   // End Region
@@ -42,20 +40,32 @@ class RentingController extends BaseController
   // End Region
 
   LatLngBounds? currentBounds;
-
   RentStations? rentStations;
-  List<Widget> searchItems = [];
 
   String? selectedStationId;
   Items? get selectedStation => rentStationMap[selectedStationId];
-
-  var rentingState = RentingState.normal.obs;
 
   // Region Init
   @override
   void onInit() async {
     init();
+    WidgetsBinding.instance.addObserver(this);
     super.onInit();
+  }
+
+  @override
+  onClose() {
+    super.onClose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    debugPrint('Current State = $state');
+    if (state == AppLifecycleState.resumed && HyperDialog.isOpen) {
+      Get.back();
+    }
   }
 
   Future<void> init() async {
@@ -71,6 +81,56 @@ class RentingController extends BaseController
     await _fetchRentStations();
     _goToCurrentLocationWithZoomDelay();
   }
+  // End Region
+
+  // Region State
+  var mapMode = MapMode.normal.obs;
+
+  void _changeMapMode(MapMode state) {
+    _updateMarker();
+    mapMode.value = state;
+  }
+  // End Region
+
+  // Region Moving
+
+  void _goToCurrentLocationWithZoomDelay({double? zoom}) async {
+    await _mapLocationController.loadLocation();
+    var currentLocation = _mapLocationController.location;
+
+    await Future.delayed(const Duration(milliseconds: 500));
+    _rentingMapController.moveToPosition(currentLocation!,
+        zoom: zoom ?? RentingConstant.focusZoomLevel);
+  }
+
+  void _goToCurrentLocation({double? zoom}) async {
+    await _mapLocationController.loadLocation();
+    var currentLocation = _mapLocationController.location;
+
+    await _mapLocationController.loadLocation();
+
+    _rentingMapController.moveToPosition(currentLocation!,
+        zoom: zoom ?? mapController.zoom);
+  }
+
+  void goToCurrentLocation() {
+    if (mapMode.value == MapMode.navigation) {
+      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+    } else {
+      _goToCurrentLocation();
+    }
+  }
+
+  void moveToSelectedStation() {
+    if (selectedStation == null) return;
+
+    double lat = selectedStation?.latitude ?? 0;
+    double lng = selectedStation?.longitude ?? 0;
+
+    var location = LatLng(lat, lng);
+    _rentingMapController.moveToPosition(location);
+  }
+
   // End Region
 
   // Region Fetch Rent Stations
@@ -126,7 +186,7 @@ class RentingController extends BaseController
               child: GestureDetector(
                 onTap: () {
                   _selectStatiton(itemId);
-                  _moveToPosition(location);
+                  _rentingMapController.moveToPosition(location);
                   update();
                 },
                 child: Container(
@@ -144,10 +204,10 @@ class RentingController extends BaseController
                 child: GestureDetector(
                   onTap: () {
                     _selectStatiton(itemId);
-                    _moveToPosition(location);
+                    _rentingMapController.moveToPosition(location);
                     update();
                   },
-                  child: rentingState.value == RentingState.navigation
+                  child: mapMode.value == MapMode.navigation
                       ? SvgPicture.asset(AppAssets.locationOnPurpleIcon)
                       : SvgPicture.asset(
                           AppAssets.locationOnIcon,
@@ -163,12 +223,25 @@ class RentingController extends BaseController
     update();
   }
 
+  void _selectStatiton(String stationId) {
+    _changeMapMode(MapMode.select);
+    selectedStationId = stationId;
+  }
+
+  void unfocus() {
+    _changeMapMode(MapMode.normal);
+    selectedStationId = null;
+    update();
+  }
+
   // End Region
 
   // Region Fetch Route
-  List<LatLng> routePoints = [];
   Directions? directions;
+
+  List<LatLng> routePoints = [];
   var isFindingRoute = false.obs;
+
   Legs? legs;
   var selectedLegIndex = 0.obs;
 
@@ -207,7 +280,7 @@ class RentingController extends BaseController
     centerZoomFitBounds();
 
     isFindingRoute.value = false;
-    _changeRentingState(RentingState.route);
+    _changeMapMode(MapMode.route);
   }
 
   void centerZoomFitBounds() {
@@ -216,61 +289,26 @@ class RentingController extends BaseController
       currentBounds?.extend(point);
     }
     currentBounds?.pad(0.52);
-    _centerZoomFitBounds(currentBounds!);
+    _rentingMapController.centerZoomFitBounds(currentBounds!);
   }
 
   void clearRoute() {
-    _changeRentingState(RentingState.select);
+    _changeMapMode(MapMode.select);
     routePoints.clear();
     moveToSelectedStation();
-    update();
-  }
-  // End Region
-
-  // Region Get Current Location
-
-  void _goToCurrentLocationWithZoomDelay({double? zoom}) async {
-    await _mapLocationController.loadLocation();
-    var currentLocation = _mapLocationController.location;
-
-    await Future.delayed(const Duration(milliseconds: 500));
-    _moveToPosition(currentLocation!,
-        zoom: zoom ?? RentingConstant.focusZoomLevel);
-  }
-
-  void _goToCurrentLocation({double? zoom}) async {
-    await _mapLocationController.loadLocation();
-    var currentLocation = _mapLocationController.location;
-
-    await _mapLocationController.loadLocation();
-
-    _moveToPosition(currentLocation!, zoom: zoom ?? mapController.zoom);
-  }
-
-  void goToCurrentLocation() {
-    if (rentingState.value == RentingState.navigation) {
-      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
-    } else {
-      _goToCurrentLocation();
-    }
-  }
-
-  void _moveToPosition(LatLng position, {double? zoom}) {
-    var zoomLevel = zoom ?? mapController.zoom;
-    _animatedMapController.move(position, zoomLevel);
   }
   // End Region
 
   // Region Navigation
   PageController pageController = PageController();
+  Rx<List<LatLng>> legPolyLine = Rx<List<LatLng>>([]);
+
   int currentLegIndex = 0;
   var isFlowingMode = true.obs;
-
-  Rx<List<LatLng>> legPolyLine = Rx<List<LatLng>>([]);
   bool isAnimatedToPage = false;
 
-  void goToNavigation() async {
-    _changeRentingState(RentingState.navigation);
+  void fromRouteModeToNavigationMode() async {
+    _changeMapMode(MapMode.navigation);
 
     await _mapLocationController.loadLocation();
 
@@ -298,21 +336,6 @@ class RentingController extends BaseController
     update();
   }
 
-  void _centerZoomFitLegBounds() {
-    LatLngBounds bounds = LatLngBounds();
-    for (LatLng point in legPolyLine.value) {
-      bounds.extend(point);
-    }
-    bounds.pad(0.52);
-    _centerZoomFitBounds(bounds);
-  }
-
-  void _loadCurrentLegPolyline(int index) {
-    String polylineCode = legs?.steps?[index].polyline?.points ?? '';
-    legPolyLine(PolyLatLng.decode(polylineCode));
-    _centerZoomFitLegBounds();
-  }
-
   void onPageChanged(int index) {
     if (isAnimatedToPage) {
       return;
@@ -324,44 +347,25 @@ class RentingController extends BaseController
     update();
   }
 
-  void goBackFromNavigation() {
-    _changeRentingState(RentingState.route);
-    _centerZoomFitBounds(currentBounds!);
+  void _loadCurrentLegPolyline(int index) {
+    String polylineCode = legs?.steps?[index].polyline?.points ?? '';
+    legPolyLine(PolyLatLng.decode(polylineCode));
+    _centerZoomFitLegBounds();
+  }
+
+  void _centerZoomFitLegBounds() {
+    LatLngBounds bounds = LatLngBounds();
+    for (LatLng point in legPolyLine.value) {
+      bounds.extend(point);
+    }
+    bounds.pad(0.52);
+    _rentingMapController.centerZoomFitBounds(bounds);
+  }
+
+  void fromNavigationModeToRouteMode() {
+    _changeMapMode(MapMode.route);
+    _rentingMapController.centerZoomFitBounds(currentBounds!);
     update();
   }
-
-  void _centerZoomFitBounds(LatLngBounds bounds) {
-    var centerZoom = mapController.centerZoomFitBounds(bounds);
-    _animatedMapController.move(centerZoom.center, centerZoom.zoom);
-  }
   // End Region
-
-  // Region Station Selector
-  void _selectStatiton(String stationId) {
-    _changeRentingState(RentingState.select);
-    selectedStationId = stationId;
-  }
-
-  void unfocus() {
-    _changeRentingState(RentingState.normal);
-    selectedStationId = null;
-    update();
-  }
-
-  void moveToSelectedStation() {
-    if (selectedStation == null) return;
-
-    double lat = selectedStation?.latitude ?? 0;
-    double lng = selectedStation?.longitude ?? 0;
-
-    var location = LatLng(lat, lng);
-    _moveToPosition(location);
-  }
-
-  void _changeRentingState(RentingState state) {
-    _updateMarker();
-    rentingState.value = state;
-  }
-  // End Region
-
 }

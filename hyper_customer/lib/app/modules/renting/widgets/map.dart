@@ -9,7 +9,7 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/map_values.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
-import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
+import 'package:hyper_customer/app/modules/renting/models/map_mode.dart';
 import 'package:hyper_customer/config/build_config.dart';
 import 'package:lottie/lottie.dart';
 
@@ -29,8 +29,7 @@ class HyperMap extends GetWidget<RentingController> {
         Obx(
           () => TileLayerWidget(
             options: TileLayerOptions(
-              urlTemplate: controller.rentingState.value ==
-                      RentingState.navigation
+              urlTemplate: controller.mapMode.value == MapMode.navigation
                   ? BuildConfig.instance.mapConfig.mapboxNavigationUrlTemplate
                   : BuildConfig.instance.mapConfig.mapboxUrlTemplate,
               additionalOptions: {
@@ -52,12 +51,12 @@ class HyperMap extends GetWidget<RentingController> {
           children: [
             Obx(
               () {
-                switch (controller.rentingState.value) {
-                  case RentingState.normal:
+                switch (controller.mapMode.value) {
+                  case MapMode.normal:
                     return Container();
-                  case RentingState.select:
+                  case MapMode.select:
                     return Container();
-                  case RentingState.route:
+                  case MapMode.route:
                     return PolylineLayerWidget(
                       options: PolylineLayerOptions(
                         polylineCulling: true,
@@ -73,7 +72,7 @@ class HyperMap extends GetWidget<RentingController> {
                         ],
                       ),
                     );
-                  case RentingState.navigation:
+                  case MapMode.navigation:
                     return PolylineLayerWidget(
                       options: PolylineLayerOptions(
                         polylineCulling: true,
@@ -141,8 +140,8 @@ class HyperMap extends GetWidget<RentingController> {
               markerDirection: MarkerDirection.heading,
               marker: Obx(
                 () {
-                  switch (controller.rentingState.value) {
-                    case RentingState.navigation:
+                  switch (controller.mapMode.value) {
+                    case MapMode.navigation:
                       return Stack(
                         children: [
                           Lottie.asset(AppAnimationAssets.scanPulsePurple),

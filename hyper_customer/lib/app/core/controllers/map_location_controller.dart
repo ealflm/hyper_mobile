@@ -12,6 +12,12 @@ class MapLocationController {
     await loadLocation();
   }
 
+  Future<bool> checkPermission() async {
+    permission = await Geolocator.checkPermission();
+    return permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always;
+  }
+
   Future<bool> loadLocation() async {
     try {
       location = await _getCurrentLocation();

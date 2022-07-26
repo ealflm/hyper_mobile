@@ -1,4 +1,4 @@
-enum RentingState {
+enum MapMode {
   normal,
   select,
   route,

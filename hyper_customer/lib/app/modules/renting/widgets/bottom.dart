@@ -9,7 +9,7 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_controller.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/zoom_button_controller.dart';
-import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
+import 'package:hyper_customer/app/modules/renting/models/map_mode.dart';
 
 class Bottom extends GetWidget<RentingController> {
   const Bottom({
@@ -25,14 +25,14 @@ class Bottom extends GetWidget<RentingController> {
         children: [
           Obx(
             () {
-              switch (controller.rentingState.value) {
-                case RentingState.normal:
-                  return Container();
-                case RentingState.select:
+              switch (controller.mapMode.value) {
+                case MapMode.normal:
+                  return _normal();
+                case MapMode.select:
                   return _detail();
-                case RentingState.route:
+                case MapMode.route:
                   return _routeDetail();
-                case RentingState.navigation:
+                case MapMode.navigation:
                   return _navigation();
                 default:
                   return Container();
@@ -100,7 +100,7 @@ class Bottom extends GetWidget<RentingController> {
               children: [
                 TextButton(
                   onPressed: () {
-                    controller.goBackFromNavigation();
+                    controller.fromNavigationModeToRouteMode();
                   },
                   style: TextButton.styleFrom(
                     side: BorderSide(
@@ -176,6 +176,14 @@ class Bottom extends GetWidget<RentingController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _normal() {
+    return Column(
+      children: [
+        _goToCurrentLocation(),
+      ],
     );
   }
 
@@ -291,7 +299,7 @@ class Bottom extends GetWidget<RentingController> {
                       child: ElevatedButton(
                         style: ButtonStyles.primarySmall(),
                         onPressed: () {
-                          controller.goToNavigation();
+                          controller.fromRouteModeToNavigationMode();
                         },
                         child: HyperButton.child(
                           status: false,

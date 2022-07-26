@@ -9,7 +9,7 @@ import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/data/models/directions_model.dart' as dir;
 import 'package:hyper_customer/app/modules/renting/controllers/renting_controller.dart';
-import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
+import 'package:hyper_customer/app/modules/renting/models/map_mode.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class Top extends GetWidget<RentingController> {
@@ -21,14 +21,14 @@ class Top extends GetWidget<RentingController> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        switch (controller.rentingState.value) {
-          case RentingState.normal:
+        switch (controller.mapMode.value) {
+          case MapMode.normal:
             return _search();
-          case RentingState.select:
+          case MapMode.select:
             return _search();
-          case RentingState.route:
+          case MapMode.route:
             return _route();
-          case RentingState.navigation:
+          case MapMode.navigation:
             return _navigation();
           default:
             return Container();
