@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:latlong2/latlong.dart';
 
-class AnimatedMap {
+class AnimatedMapController {
   late MapController controller;
   late TickerProvider vsync;
 
-  AnimatedMap({
+  AnimatedMapController({
     required this.controller,
     required this.vsync,
   });

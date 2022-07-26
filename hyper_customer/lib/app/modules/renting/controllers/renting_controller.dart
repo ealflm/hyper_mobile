@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
-import 'package:hyper_customer/app/core/utils/animated_map_utils.dart';
-import 'package:hyper_customer/app/core/utils/map_utils.dart';
+import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
+import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
 import 'package:hyper_customer/app/core/utils/polylatlng_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
@@ -19,38 +18,36 @@ import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/renting/constants/renting_constant.dart';
+import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
 import 'package:hyper_customer/app/modules/renting/models/renting_state.dart';
 
 import 'package:latlong2/latlong.dart';
-import 'package:maps_toolkit/maps_toolkit.dart' as mt;
 
 class RentingController extends BaseController
     with GetTickerProviderStateMixin {
-  double zoomLevel = 10.8;
-  double zoomInLevel = 13.7;
-  double navigationZoomLevel = 17;
-
+  // Region Repository
   final Repository _repository = Get.find(tag: (Repository).toString());
   final MapboxRepository _mapboxRepository =
       Get.find(tag: (MapboxRepository).toString());
   final GoongRepository _goongRepository =
       Get.find(tag: (GoongRepository).toString());
+  // End Region
 
-  RentStations? rentStations;
+  // Region Controller
   MapController mapController = MapController();
+  late AnimatedMapController _animatedMapController;
+  late MapLocationController _mapLocationController;
+  late RentingMapController _rentingMapController;
+  // End Region
 
-  List<Widget> searchItems = [];
-  Map<String, Items> rentStationsData = {};
-
-  List<Marker> markers = [];
-
-  AnimatedMap? _animatedMap;
-
-  LatLng? currentLocation;
   LatLngBounds? currentBounds;
 
+  RentStations? rentStations;
+  List<Widget> searchItems = [];
+
   String? selectedStationId;
-  Items? get selectedStation => rentStationsData[selectedStationId];
+  Items? get selectedStation => rentStationMap[selectedStationId];
 
   var rentingState = RentingState.normal.obs;
 
@@ -62,18 +59,24 @@ class RentingController extends BaseController
   }
 
   Future<void> init() async {
-    _animatedMap = AnimatedMap(controller: mapController, vsync: this);
+    _animatedMapController =
+        AnimatedMapController(controller: mapController, vsync: this);
 
-    await _getCurrentLocation();
+    _mapLocationController = MapLocationController();
+    _mapLocationController.init();
+
+    _rentingMapController =
+        RentingMapController(mapController, _animatedMapController);
+
     await _fetchRentStations();
     _goToCurrentLocationWithZoomDelay();
-
-    _locationListener();
-    positionStream?.pause();
   }
   // End Region
 
   // Region Fetch Rent Stations
+  List<Marker> markers = [];
+  Map<String, Items> rentStationMap = {};
+
   Future<void> _fetchRentStations() async {
     var rentStationsService = _repository.getRentStations();
 
@@ -88,12 +91,22 @@ class RentingController extends BaseController
     );
 
     _updateMarker();
+    _updateRentStationMap();
+  }
+
+  void _updateRentStationMap() {
+    rentStationMap.clear();
+    var items = rentStations?.body?.items ?? [];
+    for (Items item in items) {
+      var itemId = item.id ?? '';
+      rentStationMap[itemId] = item;
+    }
   }
 
   void _updateMarker() {
     markers.clear();
+    rentStationMap.clear();
 
-    rentStationsData.clear();
     var items = rentStations?.body?.items ?? [];
     for (Items item in items) {
       double lat = item.latitude ?? 0;
@@ -101,8 +114,6 @@ class RentingController extends BaseController
 
       var itemId = item.id ?? '';
       var location = LatLng(lat, lng);
-
-      rentStationsData[itemId] = item;
 
       markers.add(
         Marker(
@@ -149,7 +160,6 @@ class RentingController extends BaseController
         ),
       );
     }
-
     update();
   }
 
@@ -159,47 +169,17 @@ class RentingController extends BaseController
   List<LatLng> routePoints = [];
   Directions? directions;
   var isFindingRoute = false.obs;
-
-  void fetchRoute() async {
-    if (currentLocation == null) return;
-    isFindingRoute.value = true;
-
-    routePoints.clear();
-
-    await _getCurrentLocation();
-    LatLng from = currentLocation!;
-    LatLng to = LatLng(
-      selectedStation?.latitude ?? 0,
-      selectedStation?.longitude ?? 0,
-    );
-    var loginService = _mapboxRepository.findRoute(from, to);
-
-    await callDataService(
-      loginService,
-      onSuccess: (List<LatLng> response) {
-        routePoints = response;
-      },
-      onError: (DioError dioError) {
-        Utils.showToast('Kết nối thất bại');
-      },
-    );
-
-    centerZoomFitBounds();
-
-    isFindingRoute.value = false;
-    _changeRentingState(RentingState.route);
-  }
-
   Legs? legs;
   var selectedLegIndex = 0.obs;
 
   void fetchGoongRoute() async {
-    if (currentLocation == null) return;
     isFindingRoute.value = true;
 
     routePoints.clear();
 
-    await _getCurrentLocation();
+    await _mapLocationController.loadLocation();
+    var currentLocation = _mapLocationController.location;
+
     LatLng from = currentLocation!;
     LatLng to = LatLng(
       selectedStation?.latitude ?? 0,
@@ -249,42 +229,35 @@ class RentingController extends BaseController
 
   // Region Get Current Location
 
-  Future<void> _getCurrentLocation() async {
-    Position currentPosition;
-    try {
-      currentPosition = await MapUtils.determinePosition();
-    } catch (e) {
-      return;
-    }
-
-    currentLocation =
-        LatLng(currentPosition.latitude, currentPosition.longitude);
-  }
-
   void _goToCurrentLocationWithZoomDelay({double? zoom}) async {
-    if (currentLocation == null) return;
+    await _mapLocationController.loadLocation();
+    var currentLocation = _mapLocationController.location;
+
     await Future.delayed(const Duration(milliseconds: 500));
-    _moveToPosition(currentLocation!, zoom: zoom ?? zoomInLevel);
+    _moveToPosition(currentLocation!,
+        zoom: zoom ?? RentingConstant.focusZoomLevel);
   }
 
   void _goToCurrentLocation({double? zoom}) async {
-    if (currentLocation == null) return;
-    await _getCurrentLocation();
+    await _mapLocationController.loadLocation();
+    var currentLocation = _mapLocationController.location;
+
+    await _mapLocationController.loadLocation();
+
     _moveToPosition(currentLocation!, zoom: zoom ?? mapController.zoom);
   }
 
   void goToCurrentLocation() {
     if (rentingState.value == RentingState.navigation) {
-      _goToCurrentLocation(zoom: navigationZoomLevel);
+      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
     } else {
       _goToCurrentLocation();
     }
   }
 
   void _moveToPosition(LatLng position, {double? zoom}) {
-    if (_animatedMap == null) return;
     var zoomLevel = zoom ?? mapController.zoom;
-    _animatedMap!.move(position, zoomLevel);
+    _animatedMapController.move(position, zoomLevel);
   }
   // End Region
 
@@ -298,18 +271,19 @@ class RentingController extends BaseController
 
   void goToNavigation() async {
     _changeRentingState(RentingState.navigation);
-    await _getCurrentLocation();
-    positionStream?.resume();
-    _goToCurrentLocation(zoom: navigationZoomLevel);
+
+    await _mapLocationController.loadLocation();
+
+    _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
     update();
   }
 
   void goToCurrentLeg() async {
-    await _getCurrentLocation();
-    _goToCurrentLocation(zoom: navigationZoomLevel);
+    await _mapLocationController.loadLocation();
+
+    _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
 
     isFlowingMode.value = true;
-    positionStream?.resume();
 
     legPolyLine([]);
 
@@ -346,7 +320,6 @@ class RentingController extends BaseController
 
     _loadCurrentLegPolyline(index);
     isFlowingMode.value = false;
-    positionStream?.pause();
 
     update();
   }
@@ -358,9 +331,8 @@ class RentingController extends BaseController
   }
 
   void _centerZoomFitBounds(LatLngBounds bounds) {
-    if (_animatedMap == null) return;
     var centerZoom = mapController.centerZoomFitBounds(bounds);
-    _animatedMap!.move(centerZoom.center, centerZoom.zoom);
+    _animatedMapController.move(centerZoom.center, centerZoom.zoom);
   }
   // End Region
 
@@ -392,75 +364,4 @@ class RentingController extends BaseController
   }
   // End Region
 
-  StreamSubscription<Position>? positionStream;
-  LocationSettings? locationSettings;
-
-  void _locationListener() {
-    locationSettings = AndroidSettings(
-      accuracy: LocationAccuracy.high,
-      forceLocationManager: true,
-      //(Optional) Set foreground notification config to keep the app alive
-      //when going to the background
-      foregroundNotificationConfig: const ForegroundNotificationConfig(
-        notificationText:
-            "Example app will continue to receive your location even when you aren't using it",
-        notificationTitle: "Running in Background",
-        enableWakeLock: true,
-      ),
-    );
-
-    positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
-      (Position? position) async {
-        print(position == null
-            ? 'Unknown'
-            : '${position.latitude.toString()}, ${position.longitude.toString()}');
-
-        if (rentingState.value == RentingState.navigation &&
-            isFlowingMode.value) {
-          await _getCurrentLocation();
-          _goToCurrentLocation(zoom: navigationZoomLevel);
-
-          _getSelectedLegIndex(position?.latitude, position?.longitude);
-        }
-      },
-    );
-  }
-
-  _getSelectedLegIndex(double? lat, double? lng) {
-    List<Steps>? steps = legs?.steps;
-    int length = steps?.length ?? 0;
-
-    mt.LatLng currentLocation = mt.LatLng(lat ?? 0, lng ?? 0);
-    double minDistance = double.infinity;
-
-    if (steps == null || lat == null || lng == null) return;
-
-    int result = length - 1;
-    for (int i = length - 1; i >= 0; i--) {
-      var step = steps[i];
-      mt.LatLng start =
-          mt.LatLng(step.startLocation?.lat ?? 0, step.startLocation?.lng ?? 0);
-      mt.LatLng end =
-          mt.LatLng(step.startLocation?.lat ?? 0, step.startLocation?.lng ?? 0);
-
-      var startDistance =
-          mt.SphericalUtil.computeDistanceBetween(currentLocation, start);
-      var endDistance =
-          mt.SphericalUtil.computeDistanceBetween(currentLocation, end);
-
-      if (startDistance < minDistance || endDistance < minDistance) {
-        var min = startDistance < endDistance ? startDistance : endDistance;
-        minDistance = min.toDouble();
-        result = i;
-      }
-    }
-
-    selectedLegIndex.value = result;
-    debugPrint('Nam: $result');
-  }
-
-  void resumeStream() {
-    positionStream?.resume();
-  }
 }
