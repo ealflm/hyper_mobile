@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,9 +44,9 @@ class RentingController extends BaseController
 
   List<Marker> markers = [];
 
-  late AnimatedMap _animatedMap;
+  AnimatedMap? _animatedMap;
 
-  late LatLng currentLocation;
+  LatLng? currentLocation;
   LatLngBounds? currentBounds;
 
   String? selectedStationId;
@@ -70,7 +69,7 @@ class RentingController extends BaseController
     _goToCurrentLocationWithZoomDelay();
 
     _locationListener();
-    positionStream.pause();
+    positionStream?.pause();
   }
   // End Region
 
@@ -162,12 +161,13 @@ class RentingController extends BaseController
   var isFindingRoute = false.obs;
 
   void fetchRoute() async {
+    if (currentLocation == null) return;
     isFindingRoute.value = true;
 
     routePoints.clear();
 
     await _getCurrentLocation();
-    LatLng from = currentLocation;
+    LatLng from = currentLocation!;
     LatLng to = LatLng(
       selectedStation?.latitude ?? 0,
       selectedStation?.longitude ?? 0,
@@ -194,12 +194,13 @@ class RentingController extends BaseController
   var selectedLegIndex = 0.obs;
 
   void fetchGoongRoute() async {
+    if (currentLocation == null) return;
     isFindingRoute.value = true;
 
     routePoints.clear();
 
     await _getCurrentLocation();
-    LatLng from = currentLocation;
+    LatLng from = currentLocation!;
     LatLng to = LatLng(
       selectedStation?.latitude ?? 0,
       selectedStation?.longitude ?? 0,
@@ -249,19 +250,27 @@ class RentingController extends BaseController
   // Region Get Current Location
 
   Future<void> _getCurrentLocation() async {
-    var currentPosition = await MapUtils.determinePosition();
+    Position currentPosition;
+    try {
+      currentPosition = await MapUtils.determinePosition();
+    } catch (e) {
+      return;
+    }
+
     currentLocation =
         LatLng(currentPosition.latitude, currentPosition.longitude);
   }
 
   void _goToCurrentLocationWithZoomDelay({double? zoom}) async {
+    if (currentLocation == null) return;
     await Future.delayed(const Duration(milliseconds: 500));
-    _moveToPosition(currentLocation, zoom: zoom ?? zoomInLevel);
+    _moveToPosition(currentLocation!, zoom: zoom ?? zoomInLevel);
   }
 
   void _goToCurrentLocation({double? zoom}) async {
+    if (currentLocation == null) return;
     await _getCurrentLocation();
-    _moveToPosition(currentLocation, zoom: zoom ?? mapController.zoom);
+    _moveToPosition(currentLocation!, zoom: zoom ?? mapController.zoom);
   }
 
   void goToCurrentLocation() {
@@ -273,8 +282,9 @@ class RentingController extends BaseController
   }
 
   void _moveToPosition(LatLng position, {double? zoom}) {
+    if (_animatedMap == null) return;
     var zoomLevel = zoom ?? mapController.zoom;
-    _animatedMap.move(position, zoomLevel);
+    _animatedMap!.move(position, zoomLevel);
   }
   // End Region
 
@@ -289,7 +299,7 @@ class RentingController extends BaseController
   void goToNavigation() async {
     _changeRentingState(RentingState.navigation);
     await _getCurrentLocation();
-    positionStream.resume();
+    positionStream?.resume();
     _goToCurrentLocation(zoom: navigationZoomLevel);
     update();
   }
@@ -299,7 +309,7 @@ class RentingController extends BaseController
     _goToCurrentLocation(zoom: navigationZoomLevel);
 
     isFlowingMode.value = true;
-    positionStream.resume();
+    positionStream?.resume();
 
     legPolyLine([]);
 
@@ -336,7 +346,7 @@ class RentingController extends BaseController
 
     _loadCurrentLegPolyline(index);
     isFlowingMode.value = false;
-    positionStream.pause();
+    positionStream?.pause();
 
     update();
   }
@@ -348,8 +358,9 @@ class RentingController extends BaseController
   }
 
   void _centerZoomFitBounds(LatLngBounds bounds) {
+    if (_animatedMap == null) return;
     var centerZoom = mapController.centerZoomFitBounds(bounds);
-    _animatedMap.move(centerZoom.center, centerZoom.zoom);
+    _animatedMap!.move(centerZoom.center, centerZoom.zoom);
   }
   // End Region
 
@@ -381,11 +392,11 @@ class RentingController extends BaseController
   }
   // End Region
 
-  late StreamSubscription<Position> positionStream;
-  late LocationSettings locationSettings;
+  StreamSubscription<Position>? positionStream;
+  LocationSettings? locationSettings;
 
   void _locationListener() {
-    LocationSettings locationSettings = AndroidSettings(
+    locationSettings = AndroidSettings(
       accuracy: LocationAccuracy.high,
       forceLocationManager: true,
       //(Optional) Set foreground notification config to keep the app alive
@@ -450,6 +461,6 @@ class RentingController extends BaseController
   }
 
   void resumeStream() {
-    positionStream.resume();
+    positionStream?.resume();
   }
 }

@@ -1,20 +1,22 @@
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 
 abstract class MapUtils {
   static Future<Position> determinePosition() async {
-    bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    try {
+      return await Geolocator.getCurrentPosition();
+    } catch (e) {
+      print(e);
     }
 
     permission = await Geolocator.checkPermission();
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -23,18 +25,58 @@ abstract class MapUtils {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        await HyperDialog.show(
+          barrierDismissible: false,
+          title: 'Thông báo',
+          content:
+              'Vui lòng bật quyền truy cập vị trí của bạn để tiếp tục sử dụng dịch vụ',
+          primaryButtonText: 'Bật định vị',
+          secondaryButtonText: 'Trở về trang chủ',
+          primaryOnPressed: () async {
+            await Geolocator.requestPermission();
+            try {
+              var result = await Geolocator.getCurrentPosition();
+              Get.back();
+              return result;
+            } catch (e) {
+              print(e);
+            }
+          },
+          secondaryOnPressed: () {
+            Get.back();
+            Get.offAllNamed(Routes.MAIN);
+          },
+        );
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
+    await _deniedForeverDialog();
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+    return Future.error('Unknown error');
+  }
+
+  static Future<void> _deniedForeverDialog() async {
+    await HyperDialog.show(
+      barrierDismissible: false,
+      title: 'Thông báo',
+      content:
+          'Bạn đã từ chối cho ứng dụng sử dụng vị trí của bạn. Vui lòng bật lại trong cài đặt.',
+      primaryButtonText: 'Mở cài đặt',
+      secondaryButtonText: 'Trở về trang chủ',
+      primaryOnPressed: () async {
+        await Geolocator.openAppSettings();
+        try {
+          var result = await Geolocator.getCurrentPosition();
+          Get.back();
+          return result;
+        } catch (e) {
+          print(e);
+        }
+      },
+      secondaryOnPressed: () {
+        Get.back();
+        Get.offAllNamed(Routes.MAIN);
+      },
+    );
   }
 }

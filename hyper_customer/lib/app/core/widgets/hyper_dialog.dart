@@ -5,7 +5,7 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 
 abstract class HyperDialog {
   static bool isOpen = false;
-  static void show({
+  static Future<void> show({
     String title = '',
     String content = '',
     String primaryButtonText = '',
@@ -13,9 +13,9 @@ abstract class HyperDialog {
     bool barrierDismissible = true,
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
-  }) {
+  }) async {
     isOpen = true;
-    Get.dialog(
+    await Get.dialog(
       AlertDialog(
         title: Text(
           title,
