@@ -135,6 +135,7 @@ class HyperMap extends GetWidget<RentingController> {
         IgnorePointer(
           child: LocationMarkerLayerWidget(
             options: LocationMarkerLayerOptions(
+              moveAnimationDuration: const Duration(milliseconds: 800),
               showHeadingSector: false,
               markerSize: Size(60.r, 60.r),
               markerDirection: MarkerDirection.heading,

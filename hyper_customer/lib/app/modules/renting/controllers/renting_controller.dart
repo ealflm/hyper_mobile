@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/animated_map_utils.dart';
@@ -63,6 +67,10 @@ class RentingController extends BaseController
     await _getCurrentLocation();
     await _fetchRentStations();
     _goToCurrentLocationWithZoomDelay();
+
+    _locationListener();
+    positionStream.pause();
+    _background();
   }
   // End Region
 
@@ -279,6 +287,7 @@ class RentingController extends BaseController
   bool isAnimatedToPage = false;
 
   void goToNavigation() async {
+    positionStream.resume();
     _changeRentingState(RentingState.navigation);
     await _getCurrentLocation();
     _goToCurrentLocation(zoom: navigationZoomLevel);
@@ -288,7 +297,10 @@ class RentingController extends BaseController
   void goToCurrentLeg() async {
     await _getCurrentLocation();
     _goToCurrentLocation(zoom: navigationZoomLevel);
+
     isFlowingMode.value = true;
+    positionStream.resume();
+
     legPolyLine([]);
 
     isAnimatedToPage = true;
@@ -324,6 +336,7 @@ class RentingController extends BaseController
 
     _loadCurrentLegPolyline(index);
     isFlowingMode.value = false;
+    positionStream.pause();
 
     update();
   }
@@ -340,6 +353,7 @@ class RentingController extends BaseController
   }
   // End Region
 
+  // Region Station Selector
   void _selectStatiton(String stationId) {
     _changeRentingState(RentingState.select);
     selectedStationId = stationId;
@@ -364,5 +378,48 @@ class RentingController extends BaseController
   void _changeRentingState(RentingState state) {
     _updateMarker();
     rentingState.value = state;
+  }
+  // End Region
+
+  late StreamSubscription<Position> positionStream;
+  late LocationSettings locationSettings;
+
+  void _locationListener() {
+    LocationSettings locationSettings = AndroidSettings(
+      accuracy: LocationAccuracy.high,
+      forceLocationManager: true,
+      //(Optional) Set foreground notification config to keep the app alive
+      //when going to the background
+      foregroundNotificationConfig: const ForegroundNotificationConfig(
+        notificationText:
+            "Example app will continue to receive your location even when you aren't using it",
+        notificationTitle: "Running in Background",
+        enableWakeLock: true,
+      ),
+    );
+
+    positionStream =
+        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+      (Position? position) async {
+        print(position == null
+            ? 'Unknown'
+            : '${position.latitude.toString()}, ${position.longitude.toString()}');
+        if (rentingState.value == RentingState.navigation &&
+            isFlowingMode.value) {
+          await _getCurrentLocation();
+          _goToCurrentLocation(zoom: navigationZoomLevel);
+        }
+      },
+    );
+  }
+
+  void _background() async {
+    await Stream.periodic(const Duration(seconds: 5))
+        .takeWhile((_) => !false)
+        .forEach((_) async {
+      var currentPosition = await MapUtils.determinePosition();
+      debugPrint(
+          'Nam good: ${currentPosition.latitude}, ${currentPosition.longitude}');
+    });
   }
 }

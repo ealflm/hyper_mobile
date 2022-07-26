@@ -283,6 +283,8 @@ class Top extends GetWidget<RentingController> {
         return Icons.turn_sharp_right;
       case 'uturn':
         return Icons.u_turn_left;
+      case 'location on':
+        return Icons.location_on_outlined;
       default:
         if (type.contains('roundabout') && type.contains('right')) {
           return Icons.roundabout_right;
@@ -301,7 +303,8 @@ class Top extends GetWidget<RentingController> {
   }
 
   SafeArea _navigationItem(dir.Steps item, int index) {
-    var itemCount = controller.legs?.steps?.length ?? 0;
+    int itemCount = controller.legs?.steps?.length ?? 0;
+    bool isLastItem = index == itemCount - 1;
     return SafeArea(
       child: Wrap(
         children: [
@@ -323,7 +326,7 @@ class Top extends GetWidget<RentingController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
-                    _getIcon(item.maneuver ?? ''),
+                    _getIcon(isLastItem ? 'location on' : item.maneuver ?? ''),
                     color: AppColors.white,
                     size: 50.r,
                   ),
@@ -346,7 +349,7 @@ class Top extends GetWidget<RentingController> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        index != itemCount - 1
+                        !isLastItem
                             ? Text(
                                 '${item.distance?.text}',
                                 style: h6.copyWith(

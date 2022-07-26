@@ -52,7 +52,7 @@ class Bottom extends GetWidget<RentingController> {
         children: [
           Obx(
             () {
-              return controller.isFlowingMode.value
+              return !controller.isFlowingMode.value
                   ? Column(
                       children: [
                         SizedBox(
