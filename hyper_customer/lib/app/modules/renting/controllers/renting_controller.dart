@@ -27,8 +27,7 @@ import 'package:hyper_customer/app/routes/app_pages.dart' as app;
 
 import 'package:latlong2/latlong.dart';
 
-class RentingController extends BaseController
-    with GetTickerProviderStateMixin, WidgetsBindingObserver {
+class RentingController extends BaseController with WidgetsBindingObserver {
   // Region Repository
   final Repository _repository = Get.find(tag: (Repository).toString());
   final GoongRepository _goongRepository =
@@ -37,7 +36,6 @@ class RentingController extends BaseController
 
   // Region Controller
   late MapController mapController = MapController();
-  late AnimatedMapController _animatedMapController;
   late MapLocationController _mapLocationController;
   late RentingMapController _rentingMapController;
   late RentingPositionStream _positionStream;
@@ -69,14 +67,12 @@ class RentingController extends BaseController
   Future<void> init() async {
     mapController = MapController();
 
-    _animatedMapController =
-        AnimatedMapController(controller: mapController, vsync: this);
-
     _mapLocationController = MapLocationController();
     await _mapLocationController.init();
 
-    _rentingMapController =
-        RentingMapController(mapController, _animatedMapController);
+    AnimatedMapController.init(controller: mapController);
+
+    _rentingMapController = RentingMapController(mapController);
 
     _positionStream =
         RentingPositionStream(onPositionChanged: _onPositionChanged);
@@ -288,7 +284,8 @@ class RentingController extends BaseController
         routePoints = MapPolylineUtils.decode(overviewPolyline);
       },
       onError: (DioError dioError) {
-        Utils.showToast('Kết nối thất bại');
+        isFindingRoute.value = false;
+        Utils.showToast('Không tìm thấy đường đi phù hợp');
       },
     );
 
@@ -403,6 +400,7 @@ class RentingController extends BaseController
       debugPrint('Current location to destination: $distance m');
 
       if (distance <= 10) {
+        _positionStream.close();
         Get.offAllNamed(app.Routes.RENTING_DESTINATION_ARRIVED);
       }
     }

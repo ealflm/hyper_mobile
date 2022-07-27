@@ -3,32 +3,41 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:latlong2/latlong.dart';
 
-class AnimatedMapController extends GetxController {
-  late MapController controller;
-  late TickerProvider vsync;
+class AnimatedMapController extends GetxController
+    with GetTickerProviderStateMixin {
+  static final AnimatedMapController _instance =
+      AnimatedMapController._internal();
+  static AnimatedMapController get instance => _instance;
+  AnimatedMapController._internal();
 
-  AnimatedMapController({
-    required this.controller,
-    required this.vsync,
-  });
+  static MapController _controller = MapController();
+
+  static void init({required MapController controller}) {
+    _controller = controller;
+  }
 
   move(LatLng destLocation, double destZoom) {
     final latTween = Tween<double>(
-        begin: controller.center.latitude, end: destLocation.latitude);
+        begin: _controller.center.latitude, end: destLocation.latitude);
     final lngTween = Tween<double>(
-        begin: controller.center.longitude, end: destLocation.longitude);
-    final zoomTween = Tween<double>(begin: controller.zoom, end: destZoom);
+        begin: _controller.center.longitude, end: destLocation.longitude);
+    final zoomTween = Tween<double>(begin: _controller.zoom, end: destZoom);
 
     var animationController = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: vsync);
+        duration: const Duration(milliseconds: 500), vsync: this);
 
     Animation<double> animation = CurvedAnimation(
         parent: animationController, curve: Curves.fastOutSlowIn);
 
     animationController.addListener(() {
-      controller.move(
-          LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
-          zoomTween.evaluate(animation));
+      try {
+        _controller.move(
+            LatLng(latTween.evaluate(animation), lngTween.evaluate(animation)),
+            zoomTween.evaluate(animation));
+      } catch (e) {
+        animationController.dispose();
+        return;
+      }
     });
 
     animation.addStatusListener((status) {
