@@ -32,7 +32,9 @@ class MapLocationController {
         }
       }
 
-      await _deniedForeverDialog();
+      if (permission == LocationPermission.deniedForever) {
+        await _deniedForeverDialog();
+      }
 
       return Future.error('Unknown error');
     }

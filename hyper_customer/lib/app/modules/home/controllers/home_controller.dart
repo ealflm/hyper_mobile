@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
-import 'package:hyper_customer/app/core/utils/utils.dart';
+import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/home/model/header_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
@@ -14,7 +14,7 @@ class HomeController extends BaseController {
   final HeaderState headerState = HeaderState();
   double accountBalance = -1.0;
 
-  String get accountBlanceVND => Utils.vnd(accountBalance) ?? '_';
+  String get accountBlanceVND => NumberUtils.vnd(accountBalance) ?? '_';
 
   bool get hasAccountBalance {
     return accountBalance >= 0;

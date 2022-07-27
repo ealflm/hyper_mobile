@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/modules/renting/views/destination_arrived_view.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
@@ -158,6 +159,11 @@ class AppPages {
       name: _Paths.RENTING_SEARCH,
       page: () => const RentingSearchView(),
       binding: RentingBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.RENTING_DESTINATION_ARRIVED,
+      page: () => const DestinationArrivedView(),
       transition: Transition.noTransition,
     ),
   ];

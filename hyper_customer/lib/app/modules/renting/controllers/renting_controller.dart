@@ -9,7 +9,8 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
 import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
-import 'package:hyper_customer/app/core/utils/polylatlng_utils.dart';
+import 'package:hyper_customer/app/core/utils/map_polyline_utils.dart';
+import 'package:hyper_customer/app/core/utils/map_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -20,7 +21,9 @@ import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/constants/renting_constant.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
+import 'package:hyper_customer/app/modules/renting/controllers/renting_position_stream.dart';
 import 'package:hyper_customer/app/modules/renting/models/map_mode.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart' as app;
 
 import 'package:latlong2/latlong.dart';
 
@@ -33,17 +36,12 @@ class RentingController extends BaseController
   // End Region
 
   // Region Controller
-  MapController mapController = MapController();
+  late MapController mapController = MapController();
   late AnimatedMapController _animatedMapController;
   late MapLocationController _mapLocationController;
   late RentingMapController _rentingMapController;
+  late RentingPositionStream _positionStream;
   // End Region
-
-  LatLngBounds? currentBounds;
-  RentStations? rentStations;
-
-  String? selectedStationId;
-  Items? get selectedStation => rentStationMap[selectedStationId];
 
   // Region Init
   @override
@@ -55,8 +53,8 @@ class RentingController extends BaseController
 
   @override
   onClose() {
-    super.onClose();
     WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
   }
 
   @override
@@ -69,14 +67,19 @@ class RentingController extends BaseController
   }
 
   Future<void> init() async {
+    mapController = MapController();
+
     _animatedMapController =
         AnimatedMapController(controller: mapController, vsync: this);
 
     _mapLocationController = MapLocationController();
-    _mapLocationController.init();
+    await _mapLocationController.init();
 
     _rentingMapController =
         RentingMapController(mapController, _animatedMapController);
+
+    _positionStream =
+        RentingPositionStream(onPositionChanged: _onPositionChanged);
 
     await _fetchRentStations();
     _goToCurrentLocationWithZoomDelay();
@@ -87,6 +90,12 @@ class RentingController extends BaseController
   var mapMode = MapMode.normal.obs;
 
   void _changeMapMode(MapMode state) {
+    if (state == MapMode.navigation) {
+      resumePositionStream();
+    } else {
+      pausePositionStream();
+      legPolyLine([]);
+    }
     _updateMarker();
     mapMode.value = state;
   }
@@ -134,6 +143,12 @@ class RentingController extends BaseController
   // End Region
 
   // Region Fetch Rent Stations
+  String? _selectedStationId;
+
+  Items? get selectedStation => rentStationMap[_selectedStationId];
+
+  RentStations? rentStations;
+
   List<Marker> markers = [];
   Map<String, Items> rentStationMap = {};
 
@@ -150,8 +165,8 @@ class RentingController extends BaseController
       },
     );
 
-    _updateMarker();
     _updateRentStationMap();
+    _updateMarker();
   }
 
   void _updateRentStationMap() {
@@ -165,7 +180,6 @@ class RentingController extends BaseController
 
   void _updateMarker() {
     markers.clear();
-    rentStationMap.clear();
 
     var items = rentStations?.body?.items ?? [];
     for (Items item in items) {
@@ -198,7 +212,7 @@ class RentingController extends BaseController
                 ),
               ),
             );
-            if (selectedStationId == itemId) {
+            if (_selectedStationId == itemId) {
               result = Container(
                 padding: EdgeInsets.only(bottom: 40.r),
                 child: GestureDetector(
@@ -225,12 +239,12 @@ class RentingController extends BaseController
 
   void _selectStatiton(String stationId) {
     _changeMapMode(MapMode.select);
-    selectedStationId = stationId;
+    _selectedStationId = stationId;
   }
 
   void unfocus() {
     _changeMapMode(MapMode.normal);
-    selectedStationId = null;
+    _selectedStationId = null;
     update();
   }
 
@@ -241,6 +255,7 @@ class RentingController extends BaseController
 
   List<LatLng> routePoints = [];
   var isFindingRoute = false.obs;
+  LatLngBounds? currentBounds;
 
   Legs? legs;
   var selectedLegIndex = 0.obs;
@@ -270,7 +285,7 @@ class RentingController extends BaseController
 
         legs = directions?.routes?[0].legs?[0];
 
-        routePoints = PolyLatLng.decode(overviewPolyline);
+        routePoints = MapPolylineUtils.decode(overviewPolyline);
       },
       onError: (DioError dioError) {
         Utils.showToast('Kết nối thất bại');
@@ -317,6 +332,8 @@ class RentingController extends BaseController
   }
 
   void goToCurrentLeg() async {
+    resumePositionStream();
+
     await _mapLocationController.loadLocation();
 
     _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
@@ -341,6 +358,8 @@ class RentingController extends BaseController
       return;
     }
 
+    pausePositionStream();
+
     _loadCurrentLegPolyline(index);
     isFlowingMode.value = false;
 
@@ -349,7 +368,7 @@ class RentingController extends BaseController
 
   void _loadCurrentLegPolyline(int index) {
     String polylineCode = legs?.steps?[index].polyline?.points ?? '';
-    legPolyLine(PolyLatLng.decode(polylineCode));
+    legPolyLine(MapPolylineUtils.decode(polylineCode));
     _centerZoomFitLegBounds();
   }
 
@@ -366,6 +385,35 @@ class RentingController extends BaseController
     _changeMapMode(MapMode.route);
     _rentingMapController.centerZoomFitBounds(currentBounds!);
     update();
+  }
+  // End Region
+
+  // Region Position Stream
+  void _onPositionChanged() async {
+    if (mapMode.value == MapMode.navigation && isFlowingMode.value) {
+      await _mapLocationController.loadLocation();
+      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+
+      LatLng currentLocation = _mapLocationController.location!;
+      LatLng destination = LatLng(
+        selectedStation?.latitude ?? 0,
+        selectedStation?.longitude ?? 0,
+      );
+      double distance = MapUtils.distance(currentLocation, destination);
+      debugPrint('Current location to destination: $distance m');
+
+      if (distance <= 10) {
+        Get.offAllNamed(app.Routes.RENTING_DESTINATION_ARRIVED);
+      }
+    }
+  }
+
+  void pausePositionStream() {
+    _positionStream.pausePositionStream();
+  }
+
+  void resumePositionStream() {
+    _positionStream.resumePositionStream();
   }
   // End Region
 }

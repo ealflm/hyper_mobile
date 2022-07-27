@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
+import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -30,7 +31,7 @@ class PaymentController extends BaseController {
   var accountBalanceIsLoading = false.obs;
   var submitIsLoading = false.obs;
 
-  String get accountBlanceVND => Utils.vnd(accountBalance) ?? '';
+  String get accountBlanceVND => NumberUtils.vnd(accountBalance) ?? '';
 
   void _loadSetting() {
     accountBalance = SettingController.intance.accountBalance;

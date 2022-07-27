@@ -1,5 +1,5 @@
 import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
-import 'package:hyper_customer/app/core/utils/utils.dart';
+import 'package:hyper_customer/app/core/utils/number_utils.dart';
 
 class ScanCardResult {
   bool _status = false;
@@ -14,7 +14,7 @@ class ScanCardResult {
   get createdDate => _createdDate ?? '-';
   get source => _source;
 
-  String get amountVND => Utils.vnd(amount) ?? '-';
+  String get amountVND => NumberUtils.vnd(amount) ?? '-';
   String get createdDateVN =>
       DateTimeUtils.dateTimeToString(_createdDate) ?? '-';
 
@@ -42,7 +42,7 @@ class ScanCardResult {
     _status = status == '0';
     _uid = uid;
     _amount = double.tryParse(amount ?? '');
-    _createdDate = Utils.parseDateTime(int.tryParse(createdDate ?? ''));
+    _createdDate = DateTimeUtils.parseDateTime(int.tryParse(createdDate ?? ''));
     _source = source == 'momo'
         ? 1
         : source == 'paypal'

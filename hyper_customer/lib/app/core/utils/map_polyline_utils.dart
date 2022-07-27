@@ -1,7 +1,7 @@
 import 'package:latlong2/latlong.dart';
 import 'package:polyline_do/polyline_do.dart';
 
-class PolyLatLng {
+class MapPolylineUtils {
   static List<LatLng> decode(String encodedString) {
     List<LatLng> result = [];
     var polyline = Polyline.Decode(encodedString: encodedString, precision: 5);

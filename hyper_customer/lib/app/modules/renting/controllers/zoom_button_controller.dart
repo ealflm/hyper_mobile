@@ -16,6 +16,8 @@ class ZoomButtonController extends GetxController {
   }
 
   void click() {
+    _rentingController.pausePositionStream();
+    _rentingController.isFlowingMode.value = false;
     if (state.value == ZoomButtonState.zoomIn) {
       zoomOut();
     } else {

@@ -4,43 +4,48 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
 class RentingPositionStream {
-  StreamSubscription<Position>? positionStream;
-  LocationSettings? locationSettings;
+  StreamSubscription<Position>? _positionStream;
+  LocationSettings? _locationSettings;
+  late Function() _onPositionChanged;
 
-  RentingPositionStream() {
+  RentingPositionStream({required Function() onPositionChanged}) {
+    debugPrint('Map postion stream: init');
+    _onPositionChanged = onPositionChanged;
     _init();
+    pausePositionStream();
   }
 
   void _init() {
-    locationSettings = AndroidSettings(
-      accuracy: LocationAccuracy.high,
-      forceLocationManager: true,
-      //(Optional) Set foreground notification config to keep the app alive
-      //when going to the background
-      foregroundNotificationConfig: const ForegroundNotificationConfig(
-        notificationText:
-            "Example app will continue to receive your location even when you aren't using it",
-        notificationTitle: "Running in Background",
-        enableWakeLock: true,
-      ),
-    );
+    _locationSettings = AndroidSettings();
 
-    positionStream =
-        Geolocator.getPositionStream(locationSettings: locationSettings).listen(
+    _positionStream =
+        Geolocator.getPositionStream(locationSettings: _locationSettings)
+            .listen(
       (Position? position) async {
         debugPrint(position == null
-            ? 'Unknown'
-            : '${position.latitude.toString()}, ${position.longitude.toString()}');
+            ? 'Map postion stream: unknown'
+            : 'Map postion stream: ${position.latitude.toString()}, ${position.longitude.toString()}');
 
-        // if (rentingState.value == RentingState.navigation &&
-        //     isFlowingMode.value) {
-        //   await _mapLocationController.loadLocation();
-
-        //   _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
-
-        //   _getSelectedLegIndex(position?.latitude, position?.longitude);
-        // }
+        await _onPositionChanged();
       },
     );
+  }
+
+  void pausePositionStream() {
+    debugPrint('Map postion stream: pause');
+    if (!(_positionStream?.isPaused ?? true)) {
+      _positionStream?.pause();
+    }
+  }
+
+  void resumePositionStream() {
+    debugPrint('Map postion stream: resume');
+    if (_positionStream?.isPaused ?? true) {
+      _positionStream?.resume();
+    }
+  }
+
+  void close() {
+    _positionStream?.cancel();
   }
 }

@@ -15,4 +15,10 @@ class DateTimeUtils {
         ? null
         : DateFormat('HH:mm - dd/MM/yyyy').format(dateTime);
   }
+
+  static DateTime? parseDateTime(int? timestamp) {
+    return timestamp == null
+        ? null
+        : DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  }
 }
