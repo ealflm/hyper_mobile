@@ -399,7 +399,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
       double distance = MapUtils.distance(currentLocation, destination);
       debugPrint('Current location to destination: $distance m');
 
-      if (distance <= 10) {
+      if (distance <= 50) {
         _positionStream.close();
         Get.offAllNamed(app.Routes.RENTING_DESTINATION_ARRIVED);
       }
