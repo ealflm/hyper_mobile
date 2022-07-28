@@ -1,0 +1,14 @@
+{
+  "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+  "priceOfRentingServiceId": "6d5df319-4b9f-49ea-9bb3-455fc90a741c",
+  "publishYearName": "2010 - 2012",
+  "categoryName": "Xe hạng B",
+  "minTime": 1,
+  "maxTime": 6,
+  "pricePerHour": 20000,
+  "pricePerDay": 80000,
+  "vehicleName": "Exciter 135",
+  "licensePlates": "51A2-33333",
+  "color": "Đỏ",
+  "status": 1
+}

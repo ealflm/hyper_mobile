@@ -1,5 +1,6 @@
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
+import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
 
 abstract class Repository {
   Future<String> verify(String phoneNumber);
@@ -13,4 +14,6 @@ abstract class Repository {
   Future<bool> cardLink(String customerId, String uid);
 
   Future<RentStations> getRentStations();
+
+  Future<VehicleRental> getVehicleRental(String id);
 }

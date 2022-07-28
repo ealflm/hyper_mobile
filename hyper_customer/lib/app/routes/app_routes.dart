@@ -22,6 +22,7 @@ abstract class Routes {
   static const RENTING = _Paths.RENTING;
   static const RENTING_SEARCH = _Paths.RENTING_SEARCH;
   static const RENTING_DESTINATION_ARRIVED = _Paths.RENTING_DESTINATION_ARRIVED;
+  static const RENTING_FORM = _Paths.RENTING_FORM;
 }
 
 abstract class _Paths {
@@ -46,4 +47,5 @@ abstract class _Paths {
   static const RENTING = '/renting';
   static const RENTING_SEARCH = '/renting/search';
   static const RENTING_DESTINATION_ARRIVED = '/renting/destination-arrived';
+  static const RENTING_FORM = '/renting-form';
 }

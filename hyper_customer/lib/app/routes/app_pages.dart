@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/modules/renting/views/destination_arrived_view.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
@@ -28,8 +27,11 @@ import '../modules/paypal/views/paypal_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/renting/bindings/renting_binding.dart';
+import '../modules/renting/views/destination_arrived_view.dart';
 import '../modules/renting/views/renting_search_view.dart';
 import '../modules/renting/views/renting_view.dart';
+import '../modules/renting_form/bindings/renting_form_binding.dart';
+import '../modules/renting_form/views/renting_form_view.dart';
 import '../modules/scan/bindings/scan_binding.dart';
 import '../modules/scan/views/scan_view.dart';
 import '../modules/scan_card/bindings/scan_card_binding.dart';
@@ -164,6 +166,12 @@ class AppPages {
     GetPage(
       name: _Paths.RENTING_DESTINATION_ARRIVED,
       page: () => const DestinationArrivedView(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.RENTING_FORM,
+      page: () => const RentingFormView(),
+      binding: RentingFormBinding(),
       transition: Transition.noTransition,
     ),
   ];
