@@ -6,18 +6,20 @@ class ZoomButtonController extends GetxController {
   var state = ZoomButtonState.zoomIn.obs;
 
   void zoomIn() {
+    _rentingController.isOverviewMode = false;
     state.value = ZoomButtonState.zoomIn;
     _rentingController.goToCurrentLocation();
   }
 
   void zoomOut() {
+    _rentingController.isOverviewMode = true;
     state.value = ZoomButtonState.zoomOut;
     _rentingController.centerZoomFitBounds();
   }
 
   void click() {
-    _rentingController.pausePositionStream();
-    _rentingController.isFlowingMode.value = false;
+    // _rentingController.pausePositionStream();
+    // _rentingController.isFlowingMode.value = false;
     if (state.value == ZoomButtonState.zoomIn) {
       zoomOut();
     } else {

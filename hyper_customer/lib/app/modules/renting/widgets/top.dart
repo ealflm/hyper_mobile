@@ -316,7 +316,7 @@ class Top extends GetWidget<RentingController> {
             ),
             child: Container(
               decoration: BoxDecorations.map(
-                color: controller.selectedLegIndex.value == index
+                color: controller.currentLegIndex == index
                     ? AppColors.primary600
                     : AppColors.navigationGray,
               ),

@@ -13,6 +13,7 @@ import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/renting_form/controllers/renting_form_controller.dart';
 import 'package:hyper_customer/app/modules/renting_form/models/view_state.dart';
+import 'package:hyper_customer/app/modules/renting_form/widgets/payment_detail.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -76,18 +77,18 @@ class RentingFormView extends GetView<RentingFormController> {
                         children: [
                           Obx(
                             () {
-                              return Column(
-                                children: [
-                                  if (controller.state.value ==
-                                      ViewState.loading)
-                                    _loading()
-                                  else if (controller.state.value ==
-                                      ViewState.successful)
-                                    _successful()
-                                  else
-                                    _failed(),
-                                ],
-                              );
+                              switch (controller.state.value) {
+                                case ViewState.loading:
+                                  return _loading();
+                                case ViewState.successful:
+                                  return _successful();
+                                case ViewState.failed:
+                                  return _failed();
+                                case ViewState.paymentSuccessful:
+                                  return _paymentSuccessful();
+                                case ViewState.paymentFailed:
+                                  return _paymentFailed();
+                              }
                             },
                           ),
                           Obx(
@@ -95,6 +96,7 @@ class RentingFormView extends GetView<RentingFormController> {
                               children: [
                                 if (controller.getTab() == 0)
                                   _button(
+                                    'Tiếp tục',
                                     () {
                                       controller.changeTab(1);
                                     },
@@ -112,6 +114,7 @@ class RentingFormView extends GetView<RentingFormController> {
                                       ),
                                       Expanded(
                                         child: _button(
+                                          'Tiếp tục',
                                           () {
                                             controller.changeTab(2);
                                           },
@@ -132,8 +135,9 @@ class RentingFormView extends GetView<RentingFormController> {
                                       ),
                                       Expanded(
                                         child: _button(
+                                          'Thanh toán',
                                           () {
-                                            // MOVE ON
+                                            controller.createOrder();
                                           },
                                         ),
                                       ),
@@ -153,6 +157,14 @@ class RentingFormView extends GetView<RentingFormController> {
         ),
       ),
     );
+  }
+
+  Widget _paymentSuccessful() {
+    return Container(child: Text('Thanh toán thành công'));
+  }
+
+  Widget _paymentFailed() {
+    return Container(child: Text('Thanh toán thất bại'));
   }
 
   ElevatedButton _circleButton(Function() onPressed) {
@@ -177,14 +189,14 @@ class RentingFormView extends GetView<RentingFormController> {
     );
   }
 
-  Widget _button(Function()? onPressed) {
+  Widget _button(String title, Function()? onPressed) {
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: onPressed,
         style: ButtonStyles.primary(),
         child: Text(
-          'Tiếp tục',
+          title,
           style: buttonBold,
         ),
       ),
@@ -233,7 +245,7 @@ class RentingFormView extends GetView<RentingFormController> {
     List<Widget> tabs = [
       _first(),
       _second(),
-      _third(),
+      const PaymentDetail(),
     ];
     return Obx(
       () => Column(
@@ -254,14 +266,6 @@ class RentingFormView extends GetView<RentingFormController> {
           tabs[controller.getTab()],
         ],
       ),
-    );
-  }
-
-  Column _third() {
-    return Column(
-      children: [
-        Text('Tab 3'),
-      ],
     );
   }
 
@@ -383,14 +387,17 @@ class RentingFormView extends GetView<RentingFormController> {
       children: [
         Text(
           key,
-          style: subtitle2.copyWith(
+          style: subtitle1.copyWith(
             fontWeight: FontWeights.regular,
             color: AppColors.lightBlack,
           ),
         ),
         Text(
           value,
-          style: subtitle2.copyWith(color: AppColors.softBlack),
+          style: subtitle1.copyWith(
+            color: AppColors.softBlack,
+            fontWeight: FontWeights.medium,
+          ),
         ),
       ],
     );

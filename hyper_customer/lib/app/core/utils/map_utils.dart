@@ -7,4 +7,12 @@ class MapUtils {
     LatLng b = LatLng(to.latitude, to.longitude);
     return SphericalUtil.computeDistanceBetween(a, b).toDouble();
   }
+
+  static bool isInRoute(ll.LatLng point, List<ll.LatLng> points) {
+    LatLng p = LatLng(point.latitude, point.longitude);
+    List<LatLng> ps =
+        points.map((ll.LatLng p) => LatLng(p.latitude, p.longitude)).toList();
+
+    return PolygonUtil.isLocationOnPath(p, ps, true, tolerance: 100);
+  }
 }

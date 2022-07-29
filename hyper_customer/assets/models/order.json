@@ -1,0 +1,18 @@
+{
+  "customerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "serviceTypeId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "discountId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "partnerId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "orderDetailsInfos": [
+    {
+      "packageId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "priceOfBusServiceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "priceOfBookingServiceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "priceOfRentingServiceId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "price": 0,
+      "quantity": 0,
+      "content": "string"
+    }
+  ],
+  "totalPrice": 0
+}

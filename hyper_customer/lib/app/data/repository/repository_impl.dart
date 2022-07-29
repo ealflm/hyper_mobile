@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
+import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -133,6 +134,21 @@ class RepositoryImpl extends BaseRepository implements Repository {
     try {
       return callApi(dioCall).then((response) {
         return VehicleRental.fromJson(response.data['body']);
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> createOrder(Order order) {
+    var endpoint = "${DioProvider.baseUrl}/order";
+    var data = order.toJson();
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return true;
       });
     } catch (e) {
       rethrow;

@@ -61,7 +61,7 @@ class Bottom extends GetWidget<RentingController> {
                           child: ElevatedButton(
                             style: ButtonStyles.primarySmall(),
                             onPressed: () {
-                              controller.goToCurrentLeg();
+                              controller.goToCurrentLegCenter();
                             },
                             child: HyperButton.child(
                               status: false,

@@ -11,7 +11,7 @@ class GoongRepositoryImpl extends BaseRepository implements GoongRepository {
     var param = {
       "origin": "${from.latitude},${from.longitude}",
       "destination": "${to.latitude},${to.longitude}",
-      "vehicle": "car",
+      "vehicle": "bike",
     };
     var dioCall = dioGoong.get(endpoint, queryParameters: param);
 

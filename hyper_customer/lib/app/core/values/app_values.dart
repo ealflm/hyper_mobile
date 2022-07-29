@@ -5,4 +5,6 @@ abstract class AppValues {
   static const String RentingQRPrefix = '[RTQR]';
 
   static double bottomAppBarHeight = 60.h;
+
+  static double recallFee = 90000;
 }

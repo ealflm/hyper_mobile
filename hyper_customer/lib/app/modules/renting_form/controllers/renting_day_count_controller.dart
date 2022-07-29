@@ -23,7 +23,12 @@ class RentingDayCountController extends BaseController {
     price = _rentingFormController.vehicleRental?.pricePerDay?.toDouble() ?? 0;
     _total.value = price;
     textInputController = TextEditingController(text: '1');
+    setDayNum();
     super.onInit();
+  }
+
+  void setDayNum() {
+    _rentingFormController.setDayNum(dayNum.value);
   }
 
   var dayNum = 1.obs;
@@ -48,6 +53,7 @@ class RentingDayCountController extends BaseController {
     }
     dayNum.value++;
     textInputController.text = dayNum.value.toString();
+    setDayNum();
     update();
   }
 
@@ -59,6 +65,7 @@ class RentingDayCountController extends BaseController {
     }
     dayNum.value--;
     textInputController.text = dayNum.value.toString();
+    setDayNum();
     update();
   }
 
@@ -69,6 +76,7 @@ class RentingDayCountController extends BaseController {
       isShowHint.value = true;
       textInputController.text = '1';
       dayNum.value = 1;
+      setDayNum();
       update();
       return;
     }
@@ -77,10 +85,12 @@ class RentingDayCountController extends BaseController {
       isShowHint.value = true;
       textInputController.text = '14';
       dayNum.value = 14;
+      setDayNum();
       update();
       return;
     }
 
     dayNum.value = num;
+    setDayNum();
   }
 }

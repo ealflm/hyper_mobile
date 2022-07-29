@@ -36,8 +36,8 @@ class ServiceContainer extends StatelessWidget {
               ),
             ],
           ),
-          width: 95.w,
-          height: 95.w,
+          width: 95.r,
+          height: 95.r,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5.r),
             child: SvgPicture.asset(
@@ -47,15 +47,15 @@ class ServiceContainer extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 95.w,
-          height: 95.w,
+          width: 95.r,
+          height: 95.r,
           child: Column(
             children: [
               Expanded(
                 child: Center(
                   child: SizedBox(
-                    width: 40.w,
-                    height: 40.w,
+                    width: 40.r,
+                    height: 40.r,
                     child: SvgPicture.asset(
                       iconAsset,
                       fit: BoxFit.cover,
@@ -84,8 +84,8 @@ class ServiceContainer extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.r),
               ),
-              width: 95.w,
-              height: 95.w,
+              width: 95.r,
+              height: 95.r,
             ),
           ),
         ),

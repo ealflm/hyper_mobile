@@ -2,11 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/values/app_values.dart';
+import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/renting_form/controllers/renting_day_count_controller.dart';
 import 'package:hyper_customer/app/modules/renting_form/models/view_state.dart';
 import 'package:hyper_customer/app/modules/renting_form/widgets/renting_by_day.dart';
 import 'package:hyper_customer/app/modules/renting_form/widgets/renting_by_hour.dart';
+import 'package:hyper_customer/app/network/dio_token_manager.dart';
 
 class RentingFormController extends BaseController
     with GetSingleTickerProviderStateMixin {
@@ -15,6 +19,9 @@ class RentingFormController extends BaseController
   var state = ViewState.loading.obs;
 
   VehicleRental? vehicleRental;
+
+  int dayNum = 0;
+  int hourNum = 0;
 
   @override
   void onInit() {
@@ -25,6 +32,8 @@ class RentingFormController extends BaseController
     modeController = TabController(length: 2, vsync: this);
     super.onInit();
   }
+
+  // Region Get vehicle rental
 
   _fetchVehicleRental() async {
     var cardLinkService = _repository.getVehicleRental(code ?? '');
@@ -40,6 +49,54 @@ class RentingFormController extends BaseController
       },
     );
   }
+
+  // End Region
+
+  // Region Create order
+
+  createOrder() async {
+    state.value = ViewState.loading;
+
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    if (customerId == '') return;
+
+    List<OrderDetailsInfos> orderDetailsInfos = [
+      OrderDetailsInfos(
+        priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
+        content: 'Thuê xe theo ngày',
+        quantity: dayNum,
+        price: vehicleRental?.pricePerDay ?? 0,
+      ),
+      OrderDetailsInfos(
+        priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
+        content: 'Phí thu hồi xe',
+        quantity: 1,
+        price: AppValues.recallFee.toInt(),
+      ),
+    ];
+
+    Order order = Order(
+      customerId: customerId,
+      serviceTypeId: vehicleRental?.serviceTypeId,
+      discountId: null,
+      partnerId: vehicleRental?.partnerId,
+      orderDetailsInfos: orderDetailsInfos,
+      totalPrice: getTotalPriceByDay().toInt(),
+    );
+    var orderService = _repository.createOrder(order);
+
+    await callDataService(
+      orderService,
+      onSuccess: (bool response) {
+        state.value = ViewState.paymentSuccessful;
+      },
+      onError: (DioError dioError) {
+        state.value = ViewState.paymentFailed;
+      },
+    );
+  }
+
+  // End region
 
   // Region Progress tab
   var tabIndex = 0.obs;
@@ -75,5 +132,21 @@ class RentingFormController extends BaseController
     const RentingByHour(),
   ];
 
+  // End Region
+
+  // Region Get value
+  void setDayNum(int value) {
+    dayNum = value;
+  }
+
+  void setHourNum(int value) {
+    hourNum = value;
+  }
+
+  double getTotalPriceByDay() {
+    double price = vehicleRental?.pricePerDay?.toDouble() ?? 0;
+    double result = dayNum * price + AppValues.recallFee;
+    return result;
+  }
   // End Region
 }

@@ -254,7 +254,6 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   LatLngBounds? currentBounds;
 
   Legs? legs;
-  var selectedLegIndex = 0.obs;
 
   void fetchGoongRoute() async {
     isFindingRoute.value = true;
@@ -318,6 +317,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   int currentLegIndex = 0;
   var isFlowingMode = true.obs;
   bool isAnimatedToPage = false;
+  bool isOverviewMode = false;
 
   void fromRouteModeToNavigationMode() async {
     _changeMapMode(MapMode.navigation);
@@ -332,6 +332,32 @@ class RentingController extends BaseController with WidgetsBindingObserver {
     resumePositionStream();
 
     await _mapLocationController.loadLocation();
+
+    if (!isOverviewMode) {
+      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+    }
+
+    isFlowingMode.value = true;
+
+    legPolyLine([]);
+
+    isAnimatedToPage = true;
+    await pageController.animateToPage(
+      currentLegIndex,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+    );
+    isAnimatedToPage = false;
+
+    update();
+  }
+
+  void goToCurrentLegCenter() async {
+    resumePositionStream();
+
+    await _mapLocationController.loadLocation();
+
+    isOverviewMode = false;
 
     _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
 
@@ -389,7 +415,9 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   void _onPositionChanged() async {
     if (mapMode.value == MapMode.navigation && isFlowingMode.value) {
       await _mapLocationController.loadLocation();
-      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+      if (!isOverviewMode) {
+        _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+      }
 
       LatLng currentLocation = _mapLocationController.location!;
       LatLng destination = LatLng(
@@ -399,9 +427,24 @@ class RentingController extends BaseController with WidgetsBindingObserver {
       double distance = MapUtils.distance(currentLocation, destination);
       debugPrint('Current location to destination: $distance m');
 
+      List<Steps> steps = legs?.steps ?? [];
+
+      for (int i = 0; i < steps.length; i++) {
+        String polylineCode = legs?.steps?[i].polyline?.points ?? '';
+        List<LatLng> points = MapPolylineUtils.decode(polylineCode);
+        if (MapUtils.isInRoute(currentLocation, points)) {
+          currentLegIndex = i;
+          debugPrint('Nam: Set current leg index: $currentLegIndex');
+        }
+      }
+
+      goToCurrentLeg();
+
       if (distance <= 50) {
+        await Future.delayed(const Duration(seconds: 2));
         _positionStream.close();
         Get.offAllNamed(app.Routes.RENTING_DESTINATION_ARRIVED);
+        debugPrint('Nam: Arrived');
       }
     }
   }

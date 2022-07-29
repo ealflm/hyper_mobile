@@ -1,6 +1,7 @@
 class VehicleRental {
   String? partnerId;
   String? priceOfRentingServiceId;
+  String? serviceTypeId;
   String? publishYearName;
   String? categoryName;
   int? minTime;
@@ -15,6 +16,7 @@ class VehicleRental {
   VehicleRental(
       {this.partnerId,
       this.priceOfRentingServiceId,
+      this.serviceTypeId,
       this.publishYearName,
       this.categoryName,
       this.minTime,
@@ -29,6 +31,7 @@ class VehicleRental {
   VehicleRental.fromJson(Map<String, dynamic> json) {
     partnerId = json['partnerId'];
     priceOfRentingServiceId = json['priceOfRentingServiceId'];
+    serviceTypeId = json['serviceTypeId'];
     publishYearName = json['publishYearName'];
     categoryName = json['categoryName'];
     minTime = json['minTime'];
@@ -45,6 +48,7 @@ class VehicleRental {
     final data = <String, dynamic>{};
     data['partnerId'] = partnerId;
     data['priceOfRentingServiceId'] = priceOfRentingServiceId;
+    data['serviceTypeId'] = serviceTypeId;
     data['publishYearName'] = publishYearName;
     data['categoryName'] = categoryName;
     data['minTime'] = minTime;

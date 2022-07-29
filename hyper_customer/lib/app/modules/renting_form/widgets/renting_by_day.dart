@@ -130,22 +130,33 @@ class RentingByDay extends GetWidget<RentingDayCountController> {
             SizedBox(
               height: 20.h,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Tổng',
-                  style: subtitle1.copyWith(
-                    fontWeight: FontWeights.regular,
-                    color: AppColors.lightBlack,
-                  ),
-                ),
-                Text(
-                  controller.total,
-                  style: h6.copyWith(color: AppColors.softBlack),
-                ),
-              ],
-            )
+            // Row(
+            //   children: [
+            //     Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text(
+            //           'Thành tiền',
+            //           style: subtitle1.copyWith(
+            //             fontWeight: FontWeights.regular,
+            //             color: AppColors.lightBlack,
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           height: 10.h,
+            //         ),
+            //         Text(
+            //           controller.total,
+            //           style: subtitle1.copyWith(
+            //             color: AppColors.softBlack,
+            //             fontWeight: FontWeights.medium,
+            //             fontSize: 18.sp,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ],
+            // )
           ],
         );
       },
@@ -167,6 +178,7 @@ class RentingByDay extends GetWidget<RentingDayCountController> {
           value,
           style: subtitle1.copyWith(
             color: AppColors.softBlack,
+            fontWeight: FontWeights.medium,
           ),
         ),
       ],
