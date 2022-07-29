@@ -14,7 +14,7 @@ class HomeController extends BaseController {
   final HeaderState headerState = HeaderState();
   double accountBalance = -1.0;
 
-  String get accountBlanceVND => NumberUtils.vnd(accountBalance) ?? '_';
+  String get accountBlanceVND => NumberUtils.vnd(accountBalance);
 
   bool get hasAccountBalance {
     return accountBalance >= 0;

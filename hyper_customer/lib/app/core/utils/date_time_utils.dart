@@ -9,10 +9,10 @@ class DateTimeUtils {
     return DateFormat('HH:mm').format(addSecond);
   }
 
-  static String? dateTimeToString(DateTime? dateTime) {
+  static String dateTimeToString(DateTime? dateTime) {
     initializeDateFormatting();
     return dateTime == null
-        ? null
+        ? '-'
         : DateFormat('HH:mm - dd/MM/yyyy').format(dateTime);
   }
 

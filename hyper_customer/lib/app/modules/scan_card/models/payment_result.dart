@@ -14,9 +14,8 @@ class ScanCardResult {
   get createdDate => _createdDate ?? '-';
   get source => _source;
 
-  String get amountVND => NumberUtils.vnd(amount) ?? '-';
-  String get createdDateVN =>
-      DateTimeUtils.dateTimeToString(_createdDate) ?? '-';
+  String get amountVND => NumberUtils.vnd(amount);
+  String get createdDateVN => DateTimeUtils.dateTimeToString(_createdDate);
 
   ScanCardResult({
     status = false,

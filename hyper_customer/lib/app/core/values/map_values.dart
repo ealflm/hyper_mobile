@@ -8,8 +8,8 @@ class MapValues {
     zoom: 10.8,
     minZoom: 10.8,
     maxZoom: 18.4,
-    swPanBoundary: LatLng(9.866505, 103.785063),
-    nePanBoundary: LatLng(10.508632, 104.112881),
+    // swPanBoundary: LatLng(9.866505, 103.785063),
+    // nePanBoundary: LatLng(10.508632, 104.112881),
     slideOnBoundaries: true,
   );
 }

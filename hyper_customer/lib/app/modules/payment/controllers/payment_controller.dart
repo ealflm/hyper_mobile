@@ -31,7 +31,7 @@ class PaymentController extends BaseController {
   var accountBalanceIsLoading = false.obs;
   var submitIsLoading = false.obs;
 
-  String get accountBlanceVND => NumberUtils.vnd(accountBalance) ?? '';
+  String get accountBlanceVND => NumberUtils.vnd(accountBalance);
 
   void _loadSetting() {
     accountBalance = SettingController.intance.accountBalance;

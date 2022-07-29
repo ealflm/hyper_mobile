@@ -13,7 +13,6 @@ import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/renting_form/controllers/renting_form_controller.dart';
 import 'package:hyper_customer/app/modules/renting_form/models/view_state.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -40,6 +39,24 @@ class RentingFormView extends GetView<RentingFormController> {
                       child: Stack(
                         children: [
                           Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  style: ButtonStyles.textCircle(),
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_new,
+                                    size: 18,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Center(
                             child: Text('Thuê xe',
                                 style: h6.copyWith(color: AppColors.white)),
                           ),
@@ -57,13 +74,14 @@ class RentingFormView extends GetView<RentingFormController> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GetBuilder<RentingFormController>(
-                            builder: (_) {
+                          Obx(
+                            () {
                               return Column(
                                 children: [
-                                  if (controller.state == ViewState.loading)
+                                  if (controller.state.value ==
+                                      ViewState.loading)
                                     _loading()
-                                  else if (controller.state ==
+                                  else if (controller.state.value ==
                                       ViewState.successful)
                                     _successful()
                                   else
@@ -72,22 +90,57 @@ class RentingFormView extends GetView<RentingFormController> {
                               );
                             },
                           ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Get.offAllNamed(Routes.MAIN);
-                                  },
-                                  style: ButtonStyles.primary(),
-                                  child: Text(
-                                    'Tiếp tục',
-                                    style: buttonBold,
+                          Obx(
+                            () => Column(
+                              children: [
+                                if (controller.getTab() == 0)
+                                  _button(
+                                    () {
+                                      controller.changeTab(1);
+                                    },
+                                  )
+                                else if (controller.getTab() == 1)
+                                  Row(
+                                    children: [
+                                      _circleButton(
+                                        () {
+                                          controller.changeTab(0);
+                                        },
+                                      ),
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
+                                      Expanded(
+                                        child: _button(
+                                          () {
+                                            controller.changeTab(2);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                else if (controller.getTab() == 2)
+                                  Row(
+                                    children: [
+                                      _circleButton(
+                                        () {
+                                          controller.changeTab(1);
+                                        },
+                                      ),
+                                      SizedBox(
+                                        width: 10.w,
+                                      ),
+                                      Expanded(
+                                        child: _button(
+                                          () {
+                                            // MOVE ON
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
                           )
                         ],
                       ),
@@ -97,6 +150,42 @@ class RentingFormView extends GetView<RentingFormController> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  ElevatedButton _circleButton(Function() onPressed) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        shape: const CircleBorder(),
+        primary: AppColors.white,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+        padding: const EdgeInsets.all(0),
+        minimumSize: Size(50.r, 50.r),
+      ),
+      child: SizedBox(
+        height: 50.r,
+        width: 50.r,
+        child: Icon(
+          Icons.arrow_back_ios_new,
+          size: 18.r,
+          color: AppColors.lightBlack,
+        ),
+      ),
+    );
+  }
+
+  Widget _button(Function()? onPressed) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ButtonStyles.primary(),
+        child: Text(
+          'Tiếp tục',
+          style: buttonBold,
         ),
       ),
     );
@@ -142,62 +231,122 @@ class RentingFormView extends GetView<RentingFormController> {
 
   Widget _successful() {
     List<Widget> tabs = [
-      Column(
+      _first(),
+      _second(),
+      _third(),
+    ];
+    return Obx(
+      () => Column(
         children: [
-          // Lottie.asset(
-          //   AppAnimationAssets.successful,
-          //   repeat: false,
-          //   height: 138.h,
-          // ),
-          Text(
-            '${controller.vehicleRental?.vehicleName}',
-            style: h5.copyWith(
-              fontWeight: FontWeights.medium,
-              color: AppColors.softBlack,
-            ),
+          LinearPercentIndicator(
+            padding: EdgeInsets.all(0.r),
+            animation: true,
+            lineHeight: 5.h,
+            animationDuration: 0,
+            percent: (controller.getTab() + 1) / 3,
+            barRadius: Radius.circular(50.r),
+            progressColor: AppColors.primary400,
+            backgroundColor: AppColors.otp,
           ),
           SizedBox(
-            height: 5.h,
+            height: 30.h,
           ),
-          Text(
-            '${NumberUtils.vnd(controller.vehicleRental?.pricePerHour?.toDouble())}/giờ',
-            style: h6.copyWith(
-              fontWeight: FontWeights.regular,
-              color: AppColors.softBlack,
-            ),
-          ),
-          SizedBox(
-            height: 5.h,
-          ),
-          Text(
-            '${NumberUtils.vnd(controller.vehicleRental?.pricePerDay?.toDouble())}/ngày',
-            style: subtitle1.copyWith(
-              fontWeight: FontWeights.regular,
-              color: AppColors.lightBlack,
-            ),
-          ),
+          tabs[controller.getTab()],
         ],
       ),
-    ];
+    );
+  }
+
+  Column _third() {
     return Column(
       children: [
-        Column(
-          children: [
-            LinearPercentIndicator(
-              padding: EdgeInsets.all(0.r),
-              animation: true,
-              lineHeight: 5.h,
-              animationDuration: 0,
-              percent: 1 / 3,
-              barRadius: Radius.circular(50.r),
-              progressColor: AppColors.primary400,
-              backgroundColor: AppColors.otp,
+        Text('Tab 3'),
+      ],
+    );
+  }
+
+  Column _second() {
+    return Column(
+      children: [
+        Container(
+          height: 32.h,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.grey.shade200,
+            borderRadius: BorderRadius.circular(50.r),
+          ),
+          child: TabBar(
+            controller: controller.modeController,
+            onTap: (index) {
+              controller.changeMode(index);
+            },
+            indicator: BoxDecoration(
+              borderRadius: BorderRadius.circular(50.r),
+              color: AppColors.primary400,
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(0, 2),
+                  blurRadius: 4,
+                  color: AppColors.primary500.withOpacity(0.4),
+                ),
+              ],
             ),
-            SizedBox(
-              height: 50.h,
-            ),
-            tabs[controller.tabIndex.value],
-          ],
+            labelColor: Colors.white,
+            unselectedLabelColor: AppColors.description,
+            tabs: controller.modes,
+          ),
+        ),
+        SizedBox(
+          height: 30.h,
+        ),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
+          child: Column(
+            children: [
+              Obx(
+                () => controller.modesWidget[controller.modeIndex.value],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _first() {
+    return Column(
+      children: [
+        // Lottie.asset(
+        //   AppAnimationAssets.successful,
+        //   repeat: false,
+        //   height: 138.h,
+        // ),
+        Text(
+          '${controller.vehicleRental?.vehicleName}',
+          style: h5.copyWith(
+            fontWeight: FontWeights.medium,
+            color: AppColors.softBlack,
+          ),
+        ),
+        SizedBox(
+          height: 5.h,
+        ),
+        Text(
+          '${NumberUtils.vnd(controller.vehicleRental?.pricePerHour?.toDouble())}/giờ',
+          style: h6.copyWith(
+            fontWeight: FontWeights.regular,
+            color: AppColors.softBlack,
+          ),
+        ),
+        SizedBox(
+          height: 5.h,
+        ),
+        Text(
+          '${NumberUtils.vnd(controller.vehicleRental?.pricePerDay?.toDouble())}/ngày',
+          style: subtitle1.copyWith(
+            fontWeight: FontWeights.regular,
+            color: AppColors.lightBlack,
+          ),
         ),
         SizedBox(
           height: 20.h,
