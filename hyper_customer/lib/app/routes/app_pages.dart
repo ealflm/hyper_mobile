@@ -1,6 +1,4 @@
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/modules/busing/views/busing_search_end_view.dart';
-import 'package:hyper_customer/app/modules/busing/views/busing_search_start_view.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
@@ -26,6 +24,8 @@ import '../modules/payment_status/bindings/payment_status_binding.dart';
 import '../modules/payment_status/views/payment_status_view.dart';
 import '../modules/paypal/bindings/paypal_binding.dart';
 import '../modules/paypal/views/paypal_view.dart';
+import '../modules/place_search/bindings/place_search_binding.dart';
+import '../modules/place_search/views/place_search_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/renting/bindings/renting_binding.dart';
@@ -177,15 +177,9 @@ class AppPages {
       transition: Transition.noTransition,
     ),
     GetPage(
-      name: _Paths.BUSING_SEARCH_START,
-      page: () => const BusingSearchStartView(),
-      binding: BusingBinding(),
-      transition: Transition.noTransition,
-    ),
-    GetPage(
-      name: _Paths.BUSING_SEARCH_END,
-      page: () => const BusingSearchEndView(),
-      binding: BusingBinding(),
+      name: _Paths.PLACE_SEARCH,
+      page: () => const PlaceSearchView(),
+      binding: PlaceSearchBinding(),
       transition: Transition.noTransition,
     ),
   ];

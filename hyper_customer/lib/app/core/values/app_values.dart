@@ -7,4 +7,6 @@ abstract class AppValues {
   static double bottomAppBarHeight = 60.h;
 
   static double recallFee = 90000;
+
+  static String myLocation = 'Vị trí của bạn';
 }

@@ -9,10 +9,9 @@ import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
-import 'package:hyper_customer/app/modules/busing/controllers/busing_search_route_controller.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
+import 'package:hyper_customer/app/modules/busing/controllers/busing_controller.dart';
 
-class SearchRoute extends GetView<BusingSearchRouteController> {
+class SearchRoute extends GetWidget<BusingController> {
   const SearchRoute({
     Key? key,
   }) : super(key: key);
@@ -138,20 +137,14 @@ class SearchRoute extends GetView<BusingSearchRouteController> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             _textField(
-                              onPressed: () {
-                                controller.initStart();
-                                Get.toNamed(Routes.BUSING_SEARCH_START);
-                              },
+                              onPressed: controller.startTextFieldOnPressed,
                               labelText: 'Điểm đi',
                               hintText: 'Chọn điểm đi',
                               textController:
                                   controller.startTextEditingController,
                             ),
                             _textField(
-                              onPressed: () {
-                                controller.initEnd();
-                                Get.toNamed(Routes.BUSING_SEARCH_END);
-                              },
+                              onPressed: controller.endTextFieldOnPressed,
                               labelText: 'Điểm đến',
                               hintText: 'Chọn điểm đến',
                               textController:

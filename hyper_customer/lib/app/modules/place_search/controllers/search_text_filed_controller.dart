@@ -22,6 +22,7 @@ class SearchTextFieldController extends GetxController {
     focusNode.removeListener(_onFocusChange);
     focusNode.dispose();
     editingController.removeListener(_onTextChange);
+    editingController.dispose();
     super.onClose();
   }
 
