@@ -92,8 +92,13 @@ abstract class InputStyles {
     );
   }
 
-  static InputDecoration mapSearchOutlined(
-      {Widget? prefixIcon, String labelText = "", String hintText = ""}) {
+  static InputDecoration mapSearchOutlined({
+    Widget? prefixIcon,
+    String labelText = "",
+    String hintText = "",
+    bool state = false,
+    Function()? suffixAction,
+  }) {
     return InputDecoration(
       errorStyle: caption,
       isDense: true,
@@ -114,6 +119,21 @@ abstract class InputStyles {
           ? Padding(
               padding: EdgeInsets.only(left: 6.w),
               child: prefixIcon,
+            )
+          : null,
+      suffixIcon: state
+          ? TextButton(
+              style: ElevatedButton.styleFrom(
+                shape: const CircleBorder(),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                padding: const EdgeInsets.all(0),
+                minimumSize: Size(40.r, 40.r),
+              ),
+              onPressed: suffixAction,
+              child: const Icon(
+                Icons.cancel_outlined,
+                color: AppColors.softBlack,
+              ),
             )
           : null,
     );

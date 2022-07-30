@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/modules/busing/views/busing_search_end_view.dart';
+import 'package:hyper_customer/app/modules/busing/views/busing_search_start_view.dart';
 
 import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
@@ -172,6 +174,18 @@ class AppPages {
       name: _Paths.RENTING_FORM,
       page: () => const RentingFormView(),
       binding: RentingFormBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BUSING_SEARCH_START,
+      page: () => const BusingSearchStartView(),
+      binding: BusingBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BUSING_SEARCH_END,
+      page: () => const BusingSearchEndView(),
+      binding: BusingBinding(),
       transition: Transition.noTransition,
     ),
   ];

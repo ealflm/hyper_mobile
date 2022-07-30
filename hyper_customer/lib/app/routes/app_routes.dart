@@ -23,6 +23,8 @@ abstract class Routes {
   static const RENTING_SEARCH = _Paths.RENTING_SEARCH;
   static const RENTING_DESTINATION_ARRIVED = _Paths.RENTING_DESTINATION_ARRIVED;
   static const RENTING_FORM = _Paths.RENTING_FORM;
+  static const BUSING_SEARCH_START = _Paths.BUSING_SEARCH_START;
+  static const BUSING_SEARCH_END = _Paths.BUSING_SEARCH_END;
 }
 
 abstract class _Paths {
@@ -48,4 +50,6 @@ abstract class _Paths {
   static const RENTING_SEARCH = '/renting/search';
   static const RENTING_DESTINATION_ARRIVED = '/renting/destination-arrived';
   static const RENTING_FORM = '/renting-form';
+  static const BUSING_SEARCH_START = '/busing/search-start';
+  static const BUSING_SEARCH_END = '/busing/search-end';
 }

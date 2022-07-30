@@ -15,6 +15,7 @@ class PaymentController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
 
   final depositController = TextEditingController();
+
   final depositFocusNode = FocusNode();
   var depositHasFocus = false;
   var isEmpty = true;
