@@ -8,6 +8,7 @@ class HyperShape {
       width: 18.r,
       height: 18.r,
       decoration: BoxDecoration(
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(100),
         border: Border.all(width: 6, color: AppColors.blue),
       ),

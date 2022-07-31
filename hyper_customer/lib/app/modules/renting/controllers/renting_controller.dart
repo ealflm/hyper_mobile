@@ -67,12 +67,12 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   Future<void> init() async {
     mapController = MapController();
 
-    _mapLocationController = MapLocationController();
-    await _mapLocationController.init();
-
     AnimatedMapController.init(controller: mapController);
 
     _mapMoveController = MapMoveController(mapController);
+
+    _mapLocationController = MapLocationController();
+    await _mapLocationController.init();
 
     _positionStream =
         RentingPositionStream(onPositionChanged: _onPositionChanged);

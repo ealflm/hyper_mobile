@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/modules/busing/controllers/busing_controller.dart';
+import 'package:hyper_customer/app/modules/busing/widgets/bottom.dart';
+import 'package:hyper_customer/app/modules/busing/widgets/hyper_map.dart';
 import 'package:hyper_customer/app/modules/busing/widgets/search_route.dart';
 
 class BusingView extends GetView<BusingController> {
@@ -13,12 +15,18 @@ class BusingView extends GetView<BusingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _appBar(),
-        body: Column(
-          children: const [
-            SearchRoute(),
-          ],
-        ));
+      appBar: _appBar(),
+      body: Stack(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 180.h),
+            child: const HyperMap(),
+          ),
+          const SearchRoute(),
+          const Bottom(),
+        ],
+      ),
+    );
   }
 
   AppBar _appBar() {

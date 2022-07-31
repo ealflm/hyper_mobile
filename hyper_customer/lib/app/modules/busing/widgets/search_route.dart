@@ -7,7 +7,6 @@ import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
-import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
 import 'package:hyper_customer/app/modules/busing/controllers/busing_controller.dart';
 
@@ -37,11 +36,7 @@ class SearchRoute extends GetWidget<BusingController> {
         children: [
           _searchInput(),
           SizedBox(
-            height: 10.h,
-          ),
-          _maxTrips(),
-          SizedBox(
-            height: 10.h,
+            height: 15.h,
           ),
           _action(),
         ],
@@ -50,30 +45,16 @@ class SearchRoute extends GetWidget<BusingController> {
   }
 
   Widget _action() {
-    return
-        //  Obx(
-        // () =>
-        SizedBox(
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         style: ButtonStyles.primaryMedium(),
         onPressed: () {},
-        // onPressed: controller.isLoading
-        //     ? null
-        //     : () {
-        //         FocusManager.instance.primaryFocus?.unfocus();
-        //         controller.submit();
-        //       },
-        child: HyperButton.child(
-          // status: controller.isLoading,
-          status: true,
-          child: Text(
-            'Tìm ngay',
-            style: buttonBold,
-          ),
+        child: Text(
+          'Tìm ngay',
+          style: buttonBold,
         ),
       ),
-      // ),
     );
   }
 
@@ -81,12 +62,17 @@ class SearchRoute extends GetWidget<BusingController> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Text(
             'Số chuyến tối đa',
-            style: subtitle2.copyWith(color: AppColors.softBlack),
+            style: subtitle2.copyWith(
+              color: AppColors.lightBlack,
+            ),
+          ),
+          SizedBox(
+            width: 10.w,
           ),
           Row(
             children: [

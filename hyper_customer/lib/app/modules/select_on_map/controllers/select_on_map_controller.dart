@@ -31,10 +31,11 @@ class SelectOnMapController extends BaseController {
   void init() async {
     AnimatedMapController.init(controller: mapController);
 
+    _mapMoveController = MapMoveController(mapController);
+
     _mapLocationController = MapLocationController();
     await _mapLocationController.init();
 
-    _mapMoveController = MapMoveController(mapController);
     _delayCenterMarker();
     _goToCurrentLocationWithZoomDelay();
   }

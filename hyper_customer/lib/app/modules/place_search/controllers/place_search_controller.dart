@@ -7,11 +7,12 @@ import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
+import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/models/place_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/modules/place_search/widgets/search_item.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart' as app;
 import 'package:latlong2/latlong.dart';
 
 class PlaceSearchController extends BaseController {
@@ -31,6 +32,7 @@ class PlaceSearchController extends BaseController {
   MapLocationController locationController = MapLocationController();
 
   var allowMyLocation = true.obs;
+  PlaceDetail? anchorPlace;
 
   @override
   onInit() {
@@ -39,6 +41,8 @@ class PlaceSearchController extends BaseController {
     var arg = Get.arguments;
     initialText = arg['initialText'];
     allowMyLocation.value = arg['allowMyLocation'] ?? true;
+    anchorPlace = arg['anchorPlace'];
+
     if (initialText != null) {
       editingController.text = initialText!;
       onSearchChanged(initialText!);
@@ -107,12 +111,15 @@ class PlaceSearchController extends BaseController {
       },
     );
 
+    var canGo = await checkAnchor(selectedPlace);
+    if (!canGo) return;
+
     if (selectedPlace != null) {
       Get.back(result: selectedPlace);
     }
   }
 
-  void selectMyLocation() {
+  void selectMyLocation() async {
     PlaceDetail? selectedPlace;
     LatLng? myLocation = locationController.location;
     if (myLocation != null) {
@@ -128,16 +135,60 @@ class PlaceSearchController extends BaseController {
         ),
       );
 
+      var canGo = await checkAnchor(selectedPlace);
+      if (!canGo) return;
+
       Get.back(result: selectedPlace);
     }
   }
 
   void selectOnMap() async {
     PlaceDetail? selectedPlace;
-    var data = await Get.toNamed(Routes.SELECT_ON_MAP);
+    var data = await Get.toNamed(app.Routes.SELECT_ON_MAP);
     if (data != null) {
       selectedPlace = data;
+
+      var canGo = await checkAnchor(selectedPlace);
+      if (!canGo) return;
+
       Get.back(result: selectedPlace);
     }
+  }
+
+  Future<bool> checkAnchor(PlaceDetail? selectedPlace) async {
+    if (anchorPlace != null) {
+      var start = LatLng(
+        anchorPlace?.geometry?.location?.lat ?? 0,
+        anchorPlace?.geometry?.location?.lng ?? 0,
+      );
+      var end = LatLng(
+        selectedPlace?.geometry?.location?.lat ?? 0,
+        selectedPlace?.geometry?.location?.lng ?? 0,
+      );
+
+      var directionService = _repository.findRoute(start, end);
+
+      Directions? directions;
+
+      await callDataService(
+        directionService,
+        onSuccess: (Directions response) {
+          directions = response;
+        },
+        onError: (DioError dioError) {
+          // Utils.showToast('Kết nối thất bại');
+        },
+      );
+
+      if (directions == null) return false;
+
+      int distance = directions?.routes?[0].legs?[0].distance?.value ?? 0;
+
+      if (distance <= 1000) {
+        Utils.showToast('Khoản cách giữa điểm đi và điểm đến phải lớn hơn 1km');
+        return false;
+      }
+    }
+    return true;
   }
 }
