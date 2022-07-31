@@ -4,6 +4,7 @@ class BusDirection {
   BusDirection({this.steps});
 
   BusDirection.fromJson(List<dynamic> json) {
+    json = json.reversed.toList();
     steps = <Steps>[];
     for (var v in json) {
       steps?.add(Steps.fromJson(v));

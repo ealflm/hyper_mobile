@@ -22,10 +22,46 @@ class BusingView extends GetView<BusingController> {
             padding: EdgeInsets.only(top: 180.h),
             child: const HyperMap(),
           ),
-          const SearchRoute(),
           const Bottom(),
+          Container(
+            color: AppColors.background,
+            child: Column(
+              children: [
+                const SearchRoute(),
+                _searchResult(),
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+  Widget _searchResult() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 10.h,
+        ),
+        Text(
+          'Cách di chuyển phù hợp',
+          style: body2.copyWith(
+            color: AppColors.description,
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        Obx(
+          () {
+            return controller.searchItemList.value.isNotEmpty
+                ? Column(
+                    children: controller.searchItemList.value,
+                  )
+                : Container();
+          },
+        ),
+      ],
     );
   }
 

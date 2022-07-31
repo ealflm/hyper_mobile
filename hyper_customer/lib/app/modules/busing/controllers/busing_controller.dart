@@ -9,6 +9,7 @@ import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/busing/widgets/search_item.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
@@ -182,7 +183,8 @@ class BusingController extends BaseController {
     );
   }
 
-  List<BusDirection> busDirections = [];
+  List<BusDirection> busDirectionList = [];
+  Rx<List<SearchItem>> searchItemList = Rx<List<SearchItem>>([]);
 
   void fetchBusDirection() async {
     if (startPlaceLocation == null && endPlaceLocation == null) {
@@ -194,9 +196,34 @@ class BusingController extends BaseController {
     await callDataService(
       busDirectionService,
       onSuccess: (List<BusDirection> response) {
-        busDirections = response;
+        busDirectionList = response;
       },
       onError: (DioError dioError) {},
     );
+
+    List<SearchItem> result = [];
+
+    for (BusDirection item in busDirectionList) {
+      int stationNumber = 0;
+      List<Steps> steps = item.steps ?? [];
+
+      for (Steps step in steps) {
+        if (step.name != 'Đi bộ') {
+          stationNumber++;
+        }
+      }
+
+      String firstStationName = steps[0].stationList?[1].title ?? '';
+
+      SearchItem searchItem = SearchItem(
+        stationNumber: stationNumber,
+        firstStationName: firstStationName,
+        price: 100000,
+        onPressed: () {},
+      );
+      result.add(searchItem);
+    }
+
+    searchItemList(result);
   }
 }
