@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:get/get.dart';
@@ -5,12 +6,16 @@ import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
 import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
+import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
+import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 
 class BusingController extends BaseController {
+  final Repository _repository = Get.find(tag: (Repository).toString());
+
   MapController mapController = MapController();
   late MapLocationController _mapLocationController;
   late MapMoveController _mapMoveController;
@@ -20,6 +25,22 @@ class BusingController extends BaseController {
 
   TextEditingController endTextEditingController = TextEditingController();
   Rx<PlaceDetail> endPlace = Rx<PlaceDetail>(PlaceDetail());
+
+  LatLng? get startPlaceLocation {
+    if (startPlace.value.placeId == null) return null;
+    return LatLng(
+      startPlace.value.geometry?.location?.lat ?? 0,
+      startPlace.value.geometry?.location?.lng ?? 0,
+    );
+  }
+
+  LatLng? get endPlaceLocation {
+    if (endPlace.value.placeId == null) return null;
+    return LatLng(
+      endPlace.value.geometry?.location?.lat ?? 0,
+      endPlace.value.geometry?.location?.lng ?? 0,
+    );
+  }
 
   @override
   void onInit() {
@@ -158,6 +179,24 @@ class BusingController extends BaseController {
     _mapMoveController.moveToPosition(
       currentLocation!,
       zoom: zoom ?? AppValues.focusZoomLevel,
+    );
+  }
+
+  List<BusDirection> busDirections = [];
+
+  void fetchBusDirection() async {
+    if (startPlaceLocation == null && endPlaceLocation == null) {
+      return;
+    }
+    var busDirectionService =
+        _repository.getBusDirection(startPlaceLocation!, endPlaceLocation!);
+
+    await callDataService(
+      busDirectionService,
+      onSuccess: (List<BusDirection> response) {
+        busDirections = response;
+      },
+      onError: (DioError dioError) {},
     );
   }
 }

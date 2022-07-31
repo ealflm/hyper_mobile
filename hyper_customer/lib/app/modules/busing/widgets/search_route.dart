@@ -49,7 +49,7 @@ class SearchRoute extends GetWidget<BusingController> {
       width: double.infinity,
       child: ElevatedButton(
         style: ButtonStyles.primaryMedium(),
-        onPressed: () {},
+        onPressed: controller.fetchBusDirection,
         child: Text(
           'Tìm ngay',
           style: buttonBold,

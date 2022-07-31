@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
+import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_provider.dart';
+import 'package:latlong2/latlong.dart';
 
 class RepositoryImpl extends BaseRepository implements Repository {
   @override
@@ -150,6 +153,34 @@ class RepositoryImpl extends BaseRepository implements Repository {
       return callApi(dioCall).then((response) {
         return true;
       });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<BusDirection>> getBusDirection(LatLng start, LatLng end) {
+    var endpoint = "${DioProvider.baseUrl}/bus-trip";
+    var data = {
+      "startLongitude": start.longitude,
+      "startLatitude": start.latitude,
+      "endLongitude": end.longitude,
+      "endLatitude": end.latitude,
+    };
+
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          List<dynamic> data = response.data['body'];
+          List<BusDirection> result = <BusDirection>[];
+          for (var item in data) {
+            result.add(BusDirection.fromJson(item));
+          }
+          return result;
+        },
+      );
     } catch (e) {
       rethrow;
     }
