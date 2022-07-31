@@ -86,7 +86,7 @@ class Bottom extends GetWidget<SelectOnMapController> {
                                 child: ElevatedButton(
                                   style: ButtonStyles.primarySmall(),
                                   onPressed: () {
-                                    controller.fetchPlaceDetail();
+                                    controller.submit();
                                   },
                                   child: Text(
                                     'Xác nhận',

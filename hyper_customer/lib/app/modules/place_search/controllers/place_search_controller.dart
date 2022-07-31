@@ -134,6 +134,10 @@ class PlaceSearchController extends BaseController {
 
   void selectOnMap() async {
     PlaceDetail? selectedPlace;
-    await Get.toNamed(Routes.SELECT_ON_MAP);
+    var data = await Get.toNamed(Routes.SELECT_ON_MAP);
+    if (data != null) {
+      selectedPlace = data;
+      Get.back(result: selectedPlace);
+    }
   }
 }

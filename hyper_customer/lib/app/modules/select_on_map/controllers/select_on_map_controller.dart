@@ -147,4 +147,14 @@ class SelectOnMapController extends BaseController {
   }
 
   // End Region
+
+  // Region
+
+  void submit() {
+    if (placeDetail.value.placeId == null) return;
+    Get.back(result: placeDetail.value);
+  }
+
+  // End Region
+
 }
