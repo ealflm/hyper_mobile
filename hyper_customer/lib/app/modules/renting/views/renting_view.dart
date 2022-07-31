@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/bottom.dart';
-import 'package:hyper_customer/app/modules/renting/widgets/map.dart';
+import 'package:hyper_customer/app/modules/renting/widgets/hyper_map.dart';
 import 'package:hyper_customer/app/modules/renting/widgets/top.dart';
 
 import '../controllers/renting_controller.dart';

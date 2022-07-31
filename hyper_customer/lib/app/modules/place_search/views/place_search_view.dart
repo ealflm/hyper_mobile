@@ -41,7 +41,7 @@ class PlaceSearchView extends GetView<PlaceSearchController> {
                 icon: Icons.location_pin,
                 title: 'Chọn trên bản đồ',
                 onPressed: () {
-                  // Get.toNamed('/busing/search/location');
+                  controller.selectOnMap();
                 },
               ),
               SizedBox(

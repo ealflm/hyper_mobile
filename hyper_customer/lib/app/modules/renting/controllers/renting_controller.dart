@@ -14,12 +14,12 @@ import 'package:hyper_customer/app/core/utils/map_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
-import 'package:hyper_customer/app/modules/renting/constants/renting_constant.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_position_stream.dart';
 import 'package:hyper_customer/app/modules/renting/models/map_mode.dart';
@@ -37,7 +37,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   // Region Controller
   late MapController mapController = MapController();
   late MapLocationController _mapLocationController;
-  late RentingMapController _rentingMapController;
+  late MapMoveController _mapMoveController;
   late RentingPositionStream _positionStream;
   // End Region
 
@@ -72,7 +72,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
 
     AnimatedMapController.init(controller: mapController);
 
-    _rentingMapController = RentingMapController(mapController);
+    _mapMoveController = MapMoveController(mapController);
 
     _positionStream =
         RentingPositionStream(onPositionChanged: _onPositionChanged);
@@ -104,8 +104,10 @@ class RentingController extends BaseController with WidgetsBindingObserver {
     var currentLocation = _mapLocationController.location;
 
     await Future.delayed(const Duration(milliseconds: 500));
-    _rentingMapController.moveToPosition(currentLocation!,
-        zoom: zoom ?? RentingConstant.focusZoomLevel);
+    _mapMoveController.moveToPosition(
+      currentLocation!,
+      zoom: zoom ?? AppValues.focusZoomLevel,
+    );
   }
 
   void _goToCurrentLocation({double? zoom}) async {
@@ -114,13 +116,15 @@ class RentingController extends BaseController with WidgetsBindingObserver {
 
     await _mapLocationController.loadLocation();
 
-    _rentingMapController.moveToPosition(currentLocation!,
-        zoom: zoom ?? mapController.zoom);
+    _mapMoveController.moveToPosition(
+      currentLocation!,
+      zoom: zoom ?? mapController.zoom,
+    );
   }
 
   void goToCurrentLocation() {
     if (mapMode.value == MapMode.navigation) {
-      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+      _goToCurrentLocation(zoom: AppValues.navigationModeZoomLevel);
     } else {
       _goToCurrentLocation();
     }
@@ -133,7 +137,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
     double lng = selectedStation?.longitude ?? 0;
 
     var location = LatLng(lat, lng);
-    _rentingMapController.moveToPosition(location);
+    _mapMoveController.moveToPosition(location);
   }
 
   // End Region
@@ -196,7 +200,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
               child: GestureDetector(
                 onTap: () {
                   _selectStatiton(itemId);
-                  _rentingMapController.moveToPosition(location);
+                  _mapMoveController.moveToPosition(location);
                   update();
                 },
                 child: Container(
@@ -214,7 +218,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
                 child: GestureDetector(
                   onTap: () {
                     _selectStatiton(itemId);
-                    _rentingMapController.moveToPosition(location);
+                    _mapMoveController.moveToPosition(location);
                     update();
                   },
                   child: mapMode.value == MapMode.navigation
@@ -300,7 +304,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
       currentBounds?.extend(point);
     }
     currentBounds?.pad(0.52);
-    _rentingMapController.centerZoomFitBounds(currentBounds!);
+    _mapMoveController.centerZoomFitBounds(currentBounds!);
   }
 
   void clearRoute() {
@@ -324,7 +328,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
 
     await _mapLocationController.loadLocation();
 
-    _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+    _goToCurrentLocation(zoom: AppValues.navigationModeZoomLevel);
     update();
   }
 
@@ -334,7 +338,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
     await _mapLocationController.loadLocation();
 
     if (!isOverviewMode) {
-      _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+      _goToCurrentLocation(zoom: AppValues.navigationModeZoomLevel);
     }
 
     isFlowingMode.value = true;
@@ -359,7 +363,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
 
     isOverviewMode = false;
 
-    _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+    _goToCurrentLocation(zoom: AppValues.navigationModeZoomLevel);
 
     isFlowingMode.value = true;
 
@@ -401,12 +405,12 @@ class RentingController extends BaseController with WidgetsBindingObserver {
       bounds.extend(point);
     }
     bounds.pad(0.52);
-    _rentingMapController.centerZoomFitBounds(bounds);
+    _mapMoveController.centerZoomFitBounds(bounds);
   }
 
   void fromNavigationModeToRouteMode() {
     _changeMapMode(MapMode.route);
-    _rentingMapController.centerZoomFitBounds(currentBounds!);
+    _mapMoveController.centerZoomFitBounds(currentBounds!);
     update();
   }
   // End Region
@@ -416,7 +420,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
     if (mapMode.value == MapMode.navigation && isFlowingMode.value) {
       await _mapLocationController.loadLocation();
       if (!isOverviewMode) {
-        _goToCurrentLocation(zoom: RentingConstant.navigationModeZoomLevel);
+        _goToCurrentLocation(zoom: AppValues.navigationModeZoomLevel);
       }
 
       LatLng currentLocation = _mapLocationController.location!;

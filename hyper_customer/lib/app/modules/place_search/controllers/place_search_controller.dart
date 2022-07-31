@@ -11,6 +11,7 @@ import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/models/place_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/modules/place_search/widgets/search_item.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 
 class PlaceSearchController extends BaseController {
@@ -72,7 +73,8 @@ class PlaceSearchController extends BaseController {
     List<Widget> result = [];
 
     for (Predictions item in predictions) {
-      if (item.compound?.district == 'Phú Quốc') {
+      if (item.compound?.district == 'Phú Quốc' ||
+          (item.description ?? '').contains('Phú Quốc')) {
         result.add(
           SearchItem(
             title: item.structuredFormatting?.mainText ?? '-',
@@ -128,5 +130,10 @@ class PlaceSearchController extends BaseController {
 
       Get.back(result: selectedPlace);
     }
+  }
+
+  void selectOnMap() async {
+    PlaceDetail? selectedPlace;
+    await Get.toNamed(Routes.SELECT_ON_MAP);
   }
 }

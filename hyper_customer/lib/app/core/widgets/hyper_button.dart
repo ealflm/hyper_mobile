@@ -4,11 +4,12 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 
 abstract class HyperButton {
-  static Widget? child({required bool status, Widget? child}) {
-    return status ? _loading() : child;
+  static Widget? child(
+      {required bool status, Widget? child, String loadingText = 'Tiếp tục'}) {
+    return status ? _loading(loadingText) : child;
   }
 
-  static Widget _loading() {
+  static Widget _loading(String loadingText) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -24,7 +25,7 @@ abstract class HyperButton {
           width: 8.w,
         ),
         Text(
-          'Tiếp tục',
+          loadingText,
           style: button.copyWith(color: AppColors.description),
         ),
       ],

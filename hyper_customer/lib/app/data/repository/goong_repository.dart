@@ -7,4 +7,5 @@ abstract class GoongRepository {
   Future<Directions> findRoute(LatLng from, LatLng to);
   Future<Place> search(String query);
   Future<PlaceDetail> getPlaceDetail(String id);
+  Future<String> getPlaceId(LatLng location);
 }

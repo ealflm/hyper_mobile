@@ -24,6 +24,7 @@ abstract class Routes {
   static const RENTING_DESTINATION_ARRIVED = _Paths.RENTING_DESTINATION_ARRIVED;
   static const RENTING_FORM = _Paths.RENTING_FORM;
   static const PLACE_SEARCH = _Paths.PLACE_SEARCH;
+  static const SELECT_ON_MAP = _Paths.SELECT_ON_MAP;
 }
 
 abstract class _Paths {
@@ -50,4 +51,5 @@ abstract class _Paths {
   static const RENTING_DESTINATION_ARRIVED = '/renting/destination-arrived';
   static const RENTING_FORM = '/renting-form';
   static const PLACE_SEARCH = '/place-search';
+  static const SELECT_ON_MAP = '/select-on-map';
 }

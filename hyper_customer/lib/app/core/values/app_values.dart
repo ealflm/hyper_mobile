@@ -9,4 +9,8 @@ abstract class AppValues {
   static double recallFee = 90000;
 
   static String myLocation = 'Vị trí của bạn';
+
+  static const double overviewZoomLevel = 10.8;
+  static const double focusZoomLevel = 13.7;
+  static const double navigationModeZoomLevel = 17;
 }

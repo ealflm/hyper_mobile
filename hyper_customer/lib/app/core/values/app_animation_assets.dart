@@ -27,4 +27,6 @@ abstract class AppAnimationAssets {
 
   static const String rentingArrived =
       'assets/lottiefiles/renting-arrived.json';
+
+  static const String dot = 'assets/lottiefiles/dot.json';
 }

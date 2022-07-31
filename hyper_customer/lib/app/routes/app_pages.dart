@@ -38,6 +38,8 @@ import '../modules/scan/bindings/scan_binding.dart';
 import '../modules/scan/views/scan_view.dart';
 import '../modules/scan_card/bindings/scan_card_binding.dart';
 import '../modules/scan_card/views/scan_card_view.dart';
+import '../modules/select_on_map/bindings/select_on_map_binding.dart';
+import '../modules/select_on_map/views/select_on_map_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/start/bindings/start_binding.dart';
@@ -181,6 +183,11 @@ class AppPages {
       page: () => const PlaceSearchView(),
       binding: PlaceSearchBinding(),
       transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.SELECT_ON_MAP,
+      page: () => const SelectOnMapView(),
+      binding: SelectOnMapBinding(),
     ),
   ];
 }

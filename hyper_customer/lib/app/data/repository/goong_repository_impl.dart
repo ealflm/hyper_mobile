@@ -72,4 +72,21 @@ class GoongRepositoryImpl extends BaseRepository implements GoongRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<String> getPlaceId(LatLng location) {
+    var endpoint = "https://rsapi.goong.io/Geocode";
+    var param = {
+      "latlng": "${location.latitude},${location.longitude}",
+    };
+    var dioCall = dioGoong.get(endpoint, queryParameters: param);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return response.data['results'][0]['place_id'];
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
