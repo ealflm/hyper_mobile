@@ -23,13 +23,15 @@ class BusingView extends GetView<BusingController> {
             child: const HyperMap(),
           ),
           const Bottom(),
-          Container(
-            color: AppColors.background,
-            child: Column(
-              children: [
-                const SearchRoute(),
-                _searchResult(),
-              ],
+          Obx(
+            () => Container(
+              color: controller.searchMode.value ? AppColors.background : null,
+              child: Column(
+                children: [
+                  const SearchRoute(),
+                  if (controller.searchMode.value) _searchResult()
+                ],
+              ),
             ),
           ),
         ],
@@ -43,11 +45,22 @@ class BusingView extends GetView<BusingController> {
         SizedBox(
           height: 10.h,
         ),
-        Text(
-          'Cách di chuyển phù hợp',
-          style: body2.copyWith(
-            color: AppColors.description,
-          ),
+        Obx(
+          () {
+            return controller.searchItemList.value.isNotEmpty
+                ? Text(
+                    'Cách di chuyển phù hợp',
+                    style: body2.copyWith(
+                      color: AppColors.description,
+                    ),
+                  )
+                : Text(
+                    'Không có đường đi phù hợp',
+                    style: body2.copyWith(
+                      color: AppColors.description,
+                    ),
+                  );
+          },
         ),
         SizedBox(
           height: 10.h,

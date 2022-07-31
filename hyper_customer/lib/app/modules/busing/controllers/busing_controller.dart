@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
 import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
+import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
@@ -43,6 +44,9 @@ class BusingController extends BaseController {
     );
   }
 
+  var searchMode = false.obs;
+  var isLoadingPage = false.obs;
+
   @override
   void onInit() {
     init();
@@ -76,6 +80,7 @@ class BusingController extends BaseController {
         const Duration(milliseconds: 300),
       );
       centerZoomFitBounds();
+      searchMode.value = false;
     }
   }
 
@@ -96,6 +101,7 @@ class BusingController extends BaseController {
         const Duration(milliseconds: 300),
       );
       centerZoomFitBounds();
+      searchMode.value = false;
     }
   }
 
@@ -108,6 +114,7 @@ class BusingController extends BaseController {
     endTextEditingController.text = endPlace.value.formattedAddress ?? '';
     startTextEditingController.text = startPlace.value.formattedAddress ?? '';
     centerZoomFitBounds();
+    searchMode.value = false;
   }
 
   void centerZoomFitBounds() {
@@ -187,7 +194,10 @@ class BusingController extends BaseController {
   Rx<List<SearchItem>> searchItemList = Rx<List<SearchItem>>([]);
 
   void fetchBusDirection() async {
+    isLoadingPage.value = true;
     if (startPlaceLocation == null && endPlaceLocation == null) {
+      Utils.showToast('Vui lòng chọn điểm đi và điểm đến');
+      isLoadingPage.value = false;
       return;
     }
     var busDirectionService =
@@ -219,11 +229,20 @@ class BusingController extends BaseController {
         stationNumber: stationNumber,
         firstStationName: firstStationName,
         price: 100000,
-        onPressed: () {},
+        onPressed: () {
+          Get.toNamed(
+            Routes.BUS_DIRECTION,
+            arguments: {
+              'busDirection': item,
+            },
+          );
+        },
       );
       result.add(searchItem);
     }
 
     searchItemList(result);
+    isLoadingPage.value = false;
+    searchMode.value = true;
   }
 }

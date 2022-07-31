@@ -37,10 +37,12 @@ class Steps {
     totalStation = json['totalStation'];
     distance = double.parse(json['distance'].toString());
     if (json['stationList'] != null) {
+      List<dynamic> list = json['stationList'];
+      List<dynamic> data = list.reversed.toList();
       stationList = <StationList>[];
-      json['stationList'].forEach((v) {
+      for (var v in data) {
         stationList?.add(StationList.fromJson(v));
-      });
+      }
     }
     status = json['status'];
   }

@@ -4,6 +4,8 @@ import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
 import '../modules/activity/bindings/activity_binding.dart';
 import '../modules/activity/views/activity_view.dart';
+import '../modules/bus_direction/bindings/bus_direction_binding.dart';
+import '../modules/bus_direction/views/bus_direction_view.dart';
 import '../modules/busing/bindings/busing_binding.dart';
 import '../modules/busing/views/busing_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -188,6 +190,13 @@ class AppPages {
       name: _Paths.SELECT_ON_MAP,
       page: () => const SelectOnMapView(),
       binding: SelectOnMapBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BUS_DIRECTION,
+      page: () => const BusDirectionView(),
+      binding: BusDirectionBinding(),
+      transition: Transition.noTransition,
     ),
   ];
 }

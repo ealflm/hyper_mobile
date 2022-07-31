@@ -1,0 +1,174 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/app_values.dart';
+import 'package:hyper_customer/app/core/values/box_decorations.dart';
+import 'package:hyper_customer/app/core/values/button_styles.dart';
+import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
+import 'package:hyper_customer/app/modules/bus_direction/controllers/bus_direction_controller.dart';
+import 'package:hyper_customer/app/modules/bus_direction/widgets/bus_item.dart';
+import 'package:hyper_customer/app/modules/bus_direction/widgets/walk_item.dart';
+
+class Bottom extends GetWidget<BusDirectionController> {
+  const Bottom({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.bottomRight,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _goToCurrentLocation(),
+          _detail(),
+        ],
+      ),
+    );
+  }
+
+  Widget _detail() {
+    return Obx(
+      () => ConstrainedBox(
+        constraints: BoxConstraints(
+          minHeight: AppValues.busDirectionMinHeight,
+          maxHeight: controller.isExpanded.value
+              ? AppValues.busDirectionMaxHeight
+              : AppValues.busDirectionMinHeight,
+        ),
+        child: Container(
+          decoration: BoxDecorations.top(),
+          width: double.infinity,
+          padding: EdgeInsets.only(
+            top: 18.h,
+          ),
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 15.w, right: 18.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: controller.toggleExpand,
+                      style: TextButton.styleFrom(
+                        shape: const CircleBorder(),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        padding: const EdgeInsets.all(0),
+                        minimumSize: Size(40.r, 40.r),
+                      ),
+                      child: SizedBox(
+                        height: 40.r,
+                        width: 40.r,
+                        child: Icon(
+                          controller.isExpanded.value
+                              ? Icons.keyboard_arrow_down
+                              : Icons.keyboard_arrow_up,
+                          color: AppColors.gray,
+                          size: 26.r,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 36.h,
+                      width: 124.w,
+                      child: ElevatedButton(
+                        style: ButtonStyles.primarySmall(),
+                        onPressed: () {
+                          // controller.fromRouteModeToNavigationMode();
+                        },
+                        child: HyperButton.child(
+                          status: false,
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.navigation_outlined,
+                                size: 20.r,
+                              ),
+                              SizedBox(
+                                width: 6.w,
+                              ),
+                              Text(
+                                'Bắt đầu',
+                                style: buttonBold,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 18.w),
+                child: Divider(
+                  color: AppColors.line,
+                  height: 1.h,
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const WalkItem(),
+                      const BusItem(),
+                      const WalkItem(),
+                      const WalkItem(),
+                      const BusItem(),
+                      const BusItem(),
+                      const WalkItem(),
+                      const BusItem(),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Container _goToCurrentLocation() {
+    return Container(
+      padding: EdgeInsets.only(bottom: 20.h, right: 20.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ElevatedButton(
+            onPressed: () {
+              controller.goToCurrentLocation();
+            },
+            style: ElevatedButton.styleFrom(
+              shape: const CircleBorder(),
+              primary: AppColors.white,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              padding: const EdgeInsets.all(0),
+              minimumSize: Size(40.r, 40.r),
+            ),
+            child: SizedBox(
+              height: 40.r,
+              width: 40.r,
+              child: Icon(
+                Icons.gps_fixed,
+                size: 18.r,
+                color: AppColors.gray,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

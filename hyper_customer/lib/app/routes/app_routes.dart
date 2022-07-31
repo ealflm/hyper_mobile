@@ -25,6 +25,7 @@ abstract class Routes {
   static const RENTING_FORM = _Paths.RENTING_FORM;
   static const PLACE_SEARCH = _Paths.PLACE_SEARCH;
   static const SELECT_ON_MAP = _Paths.SELECT_ON_MAP;
+  static const BUS_DIRECTION = _Paths.BUS_DIRECTION;
 }
 
 abstract class _Paths {
@@ -52,4 +53,5 @@ abstract class _Paths {
   static const RENTING_FORM = '/renting-form';
   static const PLACE_SEARCH = '/place-search';
   static const SELECT_ON_MAP = '/select-on-map';
+  static const BUS_DIRECTION = '/bus-direction';
 }
