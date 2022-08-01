@@ -190,9 +190,9 @@ class BusDirectionController extends BaseController {
           options: PolylineLayerOptions(
             polylines: [
               Polyline(
-                strokeWidth: 4.r,
+                strokeWidth: 3.r,
                 color: AppColors.indicator,
-                borderStrokeWidth: 3.r,
+                borderStrokeWidth: 2.r,
                 borderColor: AppColors.caption,
                 isDotted: true,
                 points: item.latLngList ?? [],
@@ -205,9 +205,9 @@ class BusDirectionController extends BaseController {
           options: PolylineLayerOptions(
             polylines: [
               Polyline(
-                strokeWidth: 4.r,
+                strokeWidth: 3.r,
                 color: AppColors.indicator,
-                borderStrokeWidth: 3.r,
+                borderStrokeWidth: 2.r,
                 borderColor: AppColors.caption,
                 points: item.latLngList ?? [],
               ),
