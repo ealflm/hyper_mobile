@@ -23,7 +23,7 @@ class HyperMap extends GetWidget<BusingController> {
     return HyperStack(
       children: [
         FlutterMap(
-          mapController: controller.mapController,
+          mapController: controller.mapController.controller,
           options: MapValues.busingOptions,
           children: [
             TileLayerWidget(

@@ -30,7 +30,7 @@ class HyperMap extends GetWidget<BusDirectionController> {
         child: HyperStack(
           children: [
             FlutterMap(
-              mapController: controller.mapController,
+              mapController: controller.mapController.controller,
               options: MapValues.options,
               children: [
                 TileLayerWidget(

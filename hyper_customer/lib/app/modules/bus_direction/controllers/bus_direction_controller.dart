@@ -4,25 +4,20 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
-import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
-import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
+import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
-import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/modules/bus_direction/widgets/bus_item.dart';
 import 'package:hyper_customer/app/modules/bus_direction/widgets/walk_item.dart';
-import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
 import 'package:latlong2/latlong.dart';
 
 class BusDirectionController extends BaseController {
   final MapboxRepository _repository =
       Get.find(tag: (MapboxRepository).toString());
 
-  MapController mapController = MapController();
-  late MapLocationController _mapLocationController;
-  late MapMoveController _mapMoveController;
+  HyperMapController mapController = HyperMapController();
 
   BusDirection? busDirection;
   PlaceDetail? endPlace;
@@ -39,18 +34,14 @@ class BusDirectionController extends BaseController {
 
   @override
   void onInit() {
-    busDirection = Get.arguments['busDirection'];
-    endPlace = Get.arguments['endPlace'];
     init();
-    loadBusDirection();
     super.onInit();
   }
 
   void init() async {
-    AnimatedMapController.init(controller: mapController);
-    _mapMoveController = MapMoveController(mapController);
-    _mapLocationController = MapLocationController();
-    await _mapLocationController.init();
+    busDirection = Get.arguments['busDirection'];
+    endPlace = Get.arguments['endPlace'];
+    loadBusDirection();
   }
 
   void loadBusDirection() async {
@@ -91,7 +82,7 @@ class BusDirectionController extends BaseController {
     }
 
     bounds.pad(0.1);
-    _mapMoveController.centerZoomFitBounds(bounds);
+    mapController.centerZoomFitBounds(bounds);
   }
 
   void _loadDirections() {
@@ -184,7 +175,7 @@ class BusDirectionController extends BaseController {
     }
 
     bounds.pad(0.1);
-    _mapMoveController.centerZoomFitBounds(bounds);
+    mapController.centerZoomFitBounds(bounds);
   }
 
   Future<void> _loadPolylines() async {
@@ -230,15 +221,7 @@ class BusDirectionController extends BaseController {
   }
 
   void goToCurrentLocation({double? zoom}) async {
-    await _mapLocationController.loadLocation();
-    var currentLocation = _mapLocationController.location;
-
-    await _mapLocationController.loadLocation();
-
-    _mapMoveController.moveToPosition(
-      currentLocation!,
-      zoom: zoom ?? AppValues.focusZoomLevel,
-    );
+    mapController.moveToCurrentLocation();
   }
 
   void toggleExpand() async {

@@ -3,24 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
-import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
-import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
+import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/busing/widgets/search_item.dart';
-import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 
 class BusingController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
 
-  MapController mapController = MapController();
-  late MapLocationController _mapLocationController;
-  late MapMoveController _mapMoveController;
+  HyperMapController mapController = HyperMapController();
 
   TextEditingController startTextEditingController = TextEditingController();
   Rx<PlaceDetail> startPlace = Rx<PlaceDetail>(PlaceDetail());
@@ -46,19 +42,6 @@ class BusingController extends BaseController {
 
   var searchMode = false.obs;
   var isLoadingPage = false.obs;
-
-  @override
-  void onInit() {
-    init();
-    super.onInit();
-  }
-
-  void init() async {
-    AnimatedMapController.init(controller: mapController);
-    _mapMoveController = MapMoveController(mapController);
-    _mapLocationController = MapLocationController();
-    await _mapLocationController.init();
-  }
 
   bool get canSwap {
     return startPlace.value.placeId != null && endPlace.value.placeId != null;
@@ -122,7 +105,6 @@ class BusingController extends BaseController {
       return;
     }
 
-    AnimatedMapController.init(controller: mapController);
     var bounds = LatLngBounds();
 
     if (startPlace.value.placeId != null && endPlace.value.placeId == null) {
@@ -155,7 +137,7 @@ class BusingController extends BaseController {
 
     bounds.pad(0.52);
 
-    _mapMoveController.centerZoomFitBounds(bounds);
+    mapController.centerZoomFitBounds(bounds);
   }
 
   void focusOnStartPlace() {
@@ -164,8 +146,7 @@ class BusingController extends BaseController {
       startPlace.value.geometry?.location?.lng ?? 0,
     );
 
-    _mapMoveController.moveToPosition(startlocation,
-        zoom: AppValues.focusZoomLevel);
+    mapController.moveToPosition(startlocation, zoom: AppValues.focusZoomLevel);
   }
 
   void focusOnEndPlace() {
@@ -174,20 +155,11 @@ class BusingController extends BaseController {
       endPlace.value.geometry?.location?.lng ?? 0,
     );
 
-    _mapMoveController.moveToPosition(startlocation,
-        zoom: AppValues.focusZoomLevel);
+    mapController.moveToPosition(startlocation, zoom: AppValues.focusZoomLevel);
   }
 
   void goToCurrentLocation({double? zoom}) async {
-    await _mapLocationController.loadLocation();
-    var currentLocation = _mapLocationController.location;
-
-    await _mapLocationController.loadLocation();
-
-    _mapMoveController.moveToPosition(
-      currentLocation!,
-      zoom: zoom ?? AppValues.focusZoomLevel,
-    );
+    mapController.moveToCurrentLocation();
   }
 
   List<BusDirection> busDirectionList = [];
