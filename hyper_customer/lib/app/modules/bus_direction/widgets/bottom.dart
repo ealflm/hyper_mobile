@@ -8,8 +8,6 @@ import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/modules/bus_direction/controllers/bus_direction_controller.dart';
-import 'package:hyper_customer/app/modules/bus_direction/widgets/bus_item.dart';
-import 'package:hyper_customer/app/modules/bus_direction/widgets/walk_item.dart';
 
 class Bottom extends GetWidget<BusDirectionController> {
   const Bottom({
@@ -43,7 +41,7 @@ class Bottom extends GetWidget<BusDirectionController> {
           decoration: BoxDecorations.top(),
           width: double.infinity,
           padding: EdgeInsets.only(
-            top: 18.h,
+            top: 9.h,
           ),
           child: Column(
             children: [
@@ -118,14 +116,18 @@ class Bottom extends GetWidget<BusDirectionController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const WalkItem(),
-                      const BusItem(),
-                      const WalkItem(),
-                      const WalkItem(),
-                      const BusItem(),
-                      const BusItem(),
-                      const WalkItem(),
-                      const BusItem(),
+                      Column(
+                        children: controller.directions.value,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Center(
+                        child: Text(
+                          'Kết thúc hành trình',
+                          style: body2.copyWith(color: AppColors.description),
+                        ),
+                      ),
                       SizedBox(
                         height: 10.h,
                       ),
@@ -146,26 +148,54 @@ class Bottom extends GetWidget<BusDirectionController> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
-            onPressed: () {
-              controller.goToCurrentLocation();
-            },
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              primary: AppColors.white,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              padding: const EdgeInsets.all(0),
-              minimumSize: Size(40.r, 40.r),
-            ),
-            child: SizedBox(
-              height: 40.r,
-              width: 40.r,
-              child: Icon(
-                Icons.gps_fixed,
-                size: 18.r,
-                color: AppColors.gray,
+          Column(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  controller.centerZoomFullBounds();
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  primary: AppColors.white,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: const EdgeInsets.all(0),
+                  minimumSize: Size(40.r, 40.r),
+                ),
+                child: SizedBox(
+                  height: 40.r,
+                  width: 40.r,
+                  child: Icon(
+                    Icons.open_in_full,
+                    size: 18.r,
+                    color: AppColors.gray,
+                  ),
+                ),
               ),
-            ),
+              SizedBox(
+                height: 10.h,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  controller.goToCurrentLocation();
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(),
+                  primary: AppColors.white,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  padding: const EdgeInsets.all(0),
+                  minimumSize: Size(40.r, 40.r),
+                ),
+                child: SizedBox(
+                  height: 40.r,
+                  width: 40.r,
+                  child: Icon(
+                    Icons.gps_fixed,
+                    size: 18.r,
+                    color: AppColors.gray,
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),

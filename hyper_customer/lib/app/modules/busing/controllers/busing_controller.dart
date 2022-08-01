@@ -234,6 +234,7 @@ class BusingController extends BaseController {
             Routes.BUS_DIRECTION,
             arguments: {
               'busDirection': item,
+              'endPlace': endPlace.value,
             },
           );
         },

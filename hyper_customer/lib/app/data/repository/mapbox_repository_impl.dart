@@ -4,13 +4,18 @@ import 'package:latlong2/latlong.dart';
 
 class MapboxRepositoryImpl extends BaseRepository implements MapboxRepository {
   @override
-  Future<List<LatLng>> findRoute(LatLng from, LatLng to,
-      {String routingProfile = 'driving'}) {
-    var fromTo =
-        '${from.longitude},${from.latitude};${to.longitude},${to.latitude}';
+  Future<List<LatLng>> findRoute(
+    List<LatLng> points, {
+    String routingProfile = 'driving',
+  }) {
+    String route = '';
+    for (var item in points) {
+      route += '${item.longitude},${item.latitude};';
+    }
+    route = route.substring(0, route.length - 1);
 
     var endpoint =
-        "https://api.mapbox.com/directions/v5/mapbox/$routingProfile/$fromTo";
+        "https://api.mapbox.com/directions/v5/mapbox/$routingProfile/$route";
     var param = {
       "annotations": "distance,duration,speed,congestion",
       "overview": "full",

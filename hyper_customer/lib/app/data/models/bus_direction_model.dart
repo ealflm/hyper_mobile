@@ -1,3 +1,6 @@
+import 'package:hyper_customer/app/data/models/directions_model.dart';
+import 'package:latlong2/latlong.dart';
+
 class BusDirection {
   List<Steps>? steps;
 
@@ -13,12 +16,14 @@ class BusDirection {
 }
 
 class Steps {
+  int? index;
   String? id;
   String? partnerId;
   String? name;
   int? totalStation;
   double? distance;
   List<StationList>? stationList;
+  List<LatLng>? latLngList;
   int? status;
 
   Steps(
