@@ -1,21 +1,20 @@
-import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
-import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
-import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
+import 'package:hyper_customer/app/core/controllers/bus_station_controller.dart';
+import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
+import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
-import 'package:hyper_customer/app/modules/renting/controllers/renting_map_controller.dart';
 import 'package:latlong2/latlong.dart';
 
 class SelectOnMapController extends BaseController {
   final GoongRepository _goongRepository =
       Get.find(tag: (GoongRepository).toString());
 
-  MapController mapController = MapController();
-  late MapLocationController _mapLocationController;
-  late MapMoveController _mapMoveController;
+  HyperMapController mapController = HyperMapController();
+
+  late BusStationController busStationController;
 
   var isShowCenterMarker = false.obs;
   var isWaiting = true.obs;
@@ -29,12 +28,7 @@ class SelectOnMapController extends BaseController {
   }
 
   void init() async {
-    AnimatedMapController.init(controller: mapController);
-
-    _mapMoveController = MapMoveController(mapController);
-
-    _mapLocationController = MapLocationController();
-    await _mapLocationController.init();
+    busStationController = BusStationController(mapController);
 
     _delayCenterMarker();
     _goToCurrentLocationWithZoomDelay();
@@ -48,18 +42,31 @@ class SelectOnMapController extends BaseController {
     isWaiting.value = false;
   }
 
+  void _onPressedBusStationMarker() {
+    BusStation? busStation = busStationController.selectedBusStation();
+    if (busStation == null) return;
+    PlaceDetail place = PlaceDetail(
+      placeId: busStation.id,
+      name: busStation.title,
+      formattedAddress: '${busStation.title}, ${busStation.address}',
+      geometry: Geometry(
+        location: Location(
+          lat: busStation.location?.latitude,
+          lng: busStation.location?.longitude,
+        ),
+      ),
+    );
+    placeDetail(place);
+  }
+
   // End Region
 
   // Region Go to
 
   void _goToCurrentLocationWithZoomDelay({double? zoom}) async {
-    await _mapLocationController.loadLocation();
-    var currentLocation = _mapLocationController.location;
-
     await Future.delayed(const Duration(milliseconds: 500));
 
-    _mapMoveController.moveToPosition(currentLocation!,
-        zoom: zoom ?? AppValues.focusZoomLevel);
+    mapController.moveToCurrentLocation(zoom: zoom ?? AppValues.focusZoomLevel);
   }
 
   void goToCurrentLocation() async {
@@ -69,15 +76,7 @@ class SelectOnMapController extends BaseController {
   }
 
   void _goToCurrentLocation({double? zoom}) async {
-    await _mapLocationController.loadLocation();
-    var currentLocation = _mapLocationController.location;
-
-    await _mapLocationController.loadLocation();
-
-    _mapMoveController.moveToPosition(
-      currentLocation!,
-      zoom: zoom ?? mapController.zoom,
-    );
+    mapController.moveToCurrentLocation(zoom: zoom ?? AppValues.focusZoomLevel);
   }
 
   void _moveToSelectedPlace() {
@@ -87,7 +86,7 @@ class SelectOnMapController extends BaseController {
     double lng = placeDetail.value.geometry?.location?.lng ?? 0;
 
     var location = LatLng(lat, lng);
-    _mapMoveController.moveToPosition(location);
+    mapController.moveToPosition(location);
   }
 
   // End Region
@@ -100,7 +99,7 @@ class SelectOnMapController extends BaseController {
   Future<void> fetchPlaceDetail() async {
     isLoadingPlaceDetail.value = true;
 
-    LatLng? currentLocation = mapController.center;
+    LatLng? currentLocation = mapController.controller.center;
 
     var placeIdService = _goongRepository.getPlaceId(currentLocation);
     String? placeId;

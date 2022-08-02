@@ -15,6 +15,7 @@ import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
 import 'package:hyper_customer/app/modules/bus_direction/controllers/bus_direction_controller.dart';
 import 'package:hyper_customer/config/build_config.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:lottie/lottie.dart' hide Marker;
 
 class HyperMap extends GetWidget<BusDirectionController> {
@@ -33,7 +34,16 @@ class HyperMap extends GetWidget<BusDirectionController> {
           children: [
             FlutterMap(
               mapController: controller.mapController.controller,
-              options: MapValues.options,
+              options: MapOptions(
+                interactiveFlags:
+                    InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+                center: LatLng(10.212884, 103.964889),
+                zoom: 10.5,
+                minZoom: 10.5,
+                maxZoom: 18.4,
+                slideOnBoundaries: true,
+                onPositionChanged: controller.mapController.onPositionChanged,
+              ),
               children: [
                 TileLayerWidget(
                   options: TileLayerOptions(
@@ -59,44 +69,63 @@ class HyperMap extends GetWidget<BusDirectionController> {
                       : Container(),
                 ),
                 Obx(
-                  () => controller.startMarker.value != null
-                      ? MarkerLayerWidget(
-                          options: MarkerLayerOptions(
-                            markers: [
-                              Marker(
-                                point: controller.startMarker.value!,
-                                width: 18.r,
-                                height: 18.r,
-                                builder: (context) => HyperShape.startCircle(),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(),
+                  () {
+                    return controller.busStationController.busStationMarkers
+                                .value.isNotEmpty &&
+                            controller.mapController.isShowBusStationMarker()
+                        ? MarkerLayerWidget(
+                            options: MarkerLayerOptions(
+                              markers: controller
+                                  .busStationController.busStationMarkers.value,
+                            ),
+                          )
+                        : Container();
+                  },
                 ),
-                Obx(
-                  () => controller.endMarker.value != null
-                      ? MarkerLayerWidget(
-                          options: MarkerLayerOptions(
-                            markers: [
-                              Marker(
-                                point: controller.endMarker.value!,
-                                width: 60.r,
-                                height: 60.r,
-                                builder: (context) {
-                                  return Container(
-                                    padding: EdgeInsets.only(
-                                      bottom: 28.r,
-                                    ),
-                                    child: SvgPicture.asset(
-                                        AppAssets.locationOnIcon),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(),
+                IgnorePointer(
+                  child: Obx(
+                    () => controller.startMarker.value != null
+                        ? MarkerLayerWidget(
+                            options: MarkerLayerOptions(
+                              markers: [
+                                Marker(
+                                  point: controller.startMarker.value!,
+                                  width: 18.r,
+                                  height: 18.r,
+                                  builder: (context) =>
+                                      HyperShape.startCircle(),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
+                  ),
+                ),
+                IgnorePointer(
+                  child: Obx(
+                    () => controller.endMarker.value != null
+                        ? MarkerLayerWidget(
+                            options: MarkerLayerOptions(
+                              markers: [
+                                Marker(
+                                  point: controller.endMarker.value!,
+                                  width: 60.r,
+                                  height: 60.r,
+                                  builder: (context) {
+                                    return Container(
+                                      padding: EdgeInsets.only(
+                                        bottom: 28.r,
+                                      ),
+                                      child: SvgPicture.asset(
+                                          AppAssets.locationOnIcon),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(),
+                  ),
                 ),
                 IgnorePointer(
                   child: LocationMarkerLayerWidget(

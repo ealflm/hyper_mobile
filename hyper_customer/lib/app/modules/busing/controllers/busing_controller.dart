@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/controllers/bus_station_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
@@ -17,6 +18,8 @@ class BusingController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
 
   HyperMapController mapController = HyperMapController();
+
+  late BusStationController busStationController;
 
   TextEditingController startTextEditingController = TextEditingController();
   Rx<PlaceDetail> startPlace = Rx<PlaceDetail>(PlaceDetail());
@@ -45,6 +48,12 @@ class BusingController extends BaseController {
 
   bool get canSwap {
     return startPlace.value.placeId != null && endPlace.value.placeId != null;
+  }
+
+  @override
+  void onInit() {
+    busStationController = BusStationController(mapController);
+    super.onInit();
   }
 
   void startTextFieldOnPressed() async {

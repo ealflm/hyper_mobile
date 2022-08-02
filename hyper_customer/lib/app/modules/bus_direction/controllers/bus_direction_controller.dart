@@ -4,6 +4,7 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/controllers/bus_station_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
@@ -18,6 +19,7 @@ class BusDirectionController extends BaseController {
       Get.find(tag: (MapboxRepository).toString());
 
   HyperMapController mapController = HyperMapController();
+  late BusStationController busStationController;
 
   BusDirection? busDirection;
   PlaceDetail? endPlace;
@@ -42,6 +44,7 @@ class BusDirectionController extends BaseController {
     busDirection = Get.arguments['busDirection'];
     endPlace = Get.arguments['endPlace'];
     loadBusDirection();
+    busStationController = BusStationController(mapController);
   }
 
   void loadBusDirection() async {

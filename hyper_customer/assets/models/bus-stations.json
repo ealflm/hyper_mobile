@@ -1,0 +1,166 @@
+{
+  "bus-station": [
+    {
+      "id": "655dc151-d082-46ce-8c9b-65da85189be7",
+      "title": "Trạm Ba Suối Mây",
+      "description": "Trạm Ba Suối Mây",
+      "address": "Ngã Ba Suối Mây, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.97120266757565,
+      "latitude": 10.178515429712618,
+      "status": 1
+    },
+    {
+      "id": "be2371bb-abb1-42a5-aade-e02c8cf5a1c8",
+      "title": "Trạm Bến Phà Phú Quốc",
+      "description": "Trạm Bến Phà Phú Quốc",
+      "address": "Mặt Trời Phú Quốc, 159 Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+      "longitude": 104.01734045497193,
+      "latitude": 10.02201636525696,
+      "status": 1
+    },
+    {
+      "id": "1219eedc-d694-4f6f-b14b-2db6d5e7acfd",
+      "title": "Trạm Cầu Cửa Lấp",
+      "description": "Cầu Cửa Lấp",
+      "address": "Bún Quậy Thanh Hùng 1, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.97118070153647,
+      "latitude": 10.171968379716418,
+      "status": 1
+    },
+    {
+      "id": "1c9ee220-1793-4fc7-a5fc-4b6d13aae2e2",
+      "title": "Trạm Di tích Nhà tù Phú Quốc",
+      "description": "Trạm Di tích Nhà tù Phú Quốc",
+      "address": "Lê Thiện Hotel, 475 Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+      "longitude": 104.0178340152317,
+      "latitude": 10.045077139043983,
+      "status": 1
+    },
+    {
+      "id": "b03de06b-3aa1-4c95-8ccb-26f710432b47",
+      "title": "Trạm Hạnh Ngọc Phú Quốc Resort",
+      "description": "Trạm Hạnh Ngọc Phú Quốc Resort",
+      "address": "Hạnh Ngọc Phú Quốc Resort, Trần Hưng Đạo, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.9675825911043,
+      "latitude": 10.191658936327244,
+      "status": 1
+    },
+    {
+      "id": "992da05c-6330-40f4-8159-280c0781d23d",
+      "title": "Trạm InterContinental Phú Quốc",
+      "description": "InterContinental Phú Quốc",
+      "address": "InterContinental Phú Quốc, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.99352471355667,
+      "latitude": 10.118004990993413,
+      "status": 1
+    },
+    {
+      "id": "32c028bd-0201-478a-8fca-7f37dac4d64a",
+      "title": "Trạm JW Marriot Phu Quốc",
+      "description": "Trạm JW Marriot Phu Quốc",
+      "address": "New World Phú Quốc Resort, An Thới, Phú Quốc, Kiên Giang",
+      "longitude": 104.02589429082849,
+      "latitude": 10.035650108575268,
+      "status": 1
+    },
+    {
+      "id": "5cf6aaff-9c7a-4b05-a30e-052695a7cd4f",
+      "title": "Trạm Kephas",
+      "description": "Trạm Kephas",
+      "address": "Cơ sở Nhôm Kính Lâm Viên, Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+      "longitude": 104.01749967553422,
+      "latitude": 10.061600594667908,
+      "status": 1
+    },
+    {
+      "id": "180d56f5-5896-4a5c-bbcf-269b1039b7c2",
+      "title": "Trạm Mạnh Hoàng Quân Phú Quốc",
+      "description": "Trạm Mạnh Hoàng Quân Phú Quốc",
+      "address": "Mạnh Hoàng Quân Phú Quốc, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 104.00671199999755,
+      "latitude": 10.074482262360632,
+      "status": 1
+    },
+    {
+      "id": "59d4fd71-dd0d-44e7-bdbc-d7d065e660cc",
+      "title": "Trạm Motifs",
+      "description": "Trạm Motifs",
+      "address": "Motifs, Ấp Đường Bào, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.97892825710392,
+      "latitude": 10.151248677214838,
+      "status": 1
+    },
+    {
+      "id": "8c6ff5d9-0349-4b55-968c-da9d815a902b",
+      "title": "Trạm Ngọc Trai Phú Quốc",
+      "description": "Trạm Ngọc Trai Phú Quốc",
+      "address": "ĐT 975, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.9868914301519,
+      "latitude": 10.13820552505085,
+      "status": 1
+    },
+    {
+      "id": "0bfffbe6-b074-455e-a7ec-ec18d37d217b",
+      "title": "Trạm Nguyên Coffee",
+      "description": "Trạm Nguyên Coffee",
+      "address": "Công ty TNHH Xây dựng Khang Thuận, Tổ 5, Ấp Suối Mây, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.98546001923683,
+      "latitude": 10.179407642069663,
+      "status": 1
+    },
+    {
+      "id": "a984a468-939a-4ad3-820d-d260002c5dc4",
+      "title": "Trạm Nguyễn Văn Cừ",
+      "description": "Trạm Nguyễn Văn Cừ",
+      "address": "Coffee - Bida May Lanh Hồng Hoa, Ấp Đường Bào, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 104.0041821558566,
+      "latitude": 10.13982771174797,
+      "status": 1
+    },
+    {
+      "id": "a30ba6ef-9604-46d2-bbeb-c54e42d64e09",
+      "title": "Trạm Phú An Khang",
+      "description": "Trạm Phú An Khang",
+      "address": "Coffee Baratie, 377 Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+      "longitude": 104.01757803652538,
+      "latitude": 10.035502887933177,
+      "status": 1
+    },
+    {
+      "id": "86697b91-bfbc-45ad-9f55-c3fd47ef64b8",
+      "title": "Trạm Sân Bây",
+      "description": "Trạm Sân Bây",
+      "address": "Trạm xăng dầu Tường Vy, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 104.00423809157098,
+      "latitude": 10.159498445737498,
+      "status": 1
+    },
+    {
+      "id": "1421e3cc-e2eb-4291-a7a6-b156c8825159",
+      "title": "Trạm Sân Bay 2",
+      "description": "Trạm Sân Bay 2",
+      "address": "Bãi đậu xe máy, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.9922707897606,
+      "latitude": 10.161512559016117,
+      "status": 1
+    },
+    {
+      "id": "ceaf7364-2936-4c1b-be17-27d6dd8bf97d",
+      "title": "Trạm Sân bay 3",
+      "description": "Trạm Sân bay 3",
+      "address": "Trạm Sân Bay 3, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 103.9797587479548,
+      "latitude": 10.167612076703321,
+      "status": 1
+    },
+    {
+      "id": "15279129-d3c2-44d3-b65c-e6619f59d18f",
+      "title": "Trạm Thanh Sơn",
+      "description": "Trạm Thanh Sơn",
+      "address": "Thanh Sơn, Dương Tơ, Phú Quốc, Kiên Giang",
+      "longitude": 104.01513436640141,
+      "latitude": 10.097949697980923,
+      "status": 1
+    }
+  ]
+}

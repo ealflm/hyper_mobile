@@ -1,4 +1,5 @@
 import 'package:flutter_map/flutter_map.dart';
+import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/animated_map_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_position_stream.dart';
 import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
@@ -54,5 +55,16 @@ class HyperMapController {
 
   void closePostionStream() {
     _positionStream?.close();
+  }
+
+  Rx<MapPosition?> postion = Rx<MapPosition?>(null);
+
+  bool isShowBusStationMarker() {
+    var zoom = postion.value?.zoom ?? 18.4;
+    return zoom >= AppValues.showBusStationMarkerZoomLevel;
+  }
+
+  void onPositionChanged(MapPosition mapPosition, bool hasGesture) {
+    postion.value = mapPosition;
   }
 }

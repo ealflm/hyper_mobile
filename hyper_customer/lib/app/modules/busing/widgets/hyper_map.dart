@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
-import 'package:hyper_customer/app/core/values/map_values.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
@@ -24,7 +23,15 @@ class HyperMap extends GetWidget<BusingController> {
       children: [
         FlutterMap(
           mapController: controller.mapController.controller,
-          options: MapValues.busingOptions,
+          options: MapOptions(
+            interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+            center: LatLng(10.212884, 103.964889),
+            zoom: 10.5,
+            minZoom: 10.5,
+            maxZoom: 18.4,
+            slideOnBoundaries: true,
+            onPositionChanged: controller.mapController.onPositionChanged,
+          ),
           children: [
             TileLayerWidget(
               options: TileLayerOptions(
@@ -74,6 +81,20 @@ class HyperMap extends GetWidget<BusingController> {
                 } else {
                   return Container();
                 }
+              },
+            ),
+            Obx(
+              () {
+                return controller.busStationController.busStationMarkers.value
+                            .isNotEmpty &&
+                        controller.mapController.isShowBusStationMarker()
+                    ? MarkerLayerWidget(
+                        options: MarkerLayerOptions(
+                          markers: controller
+                              .busStationController.busStationMarkers.value,
+                        ),
+                      )
+                    : Container();
               },
             ),
             Obx(

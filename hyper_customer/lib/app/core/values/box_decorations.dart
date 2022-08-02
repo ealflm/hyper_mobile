@@ -51,6 +51,14 @@ abstract class BoxDecorations {
     );
   }
 
+  static BoxDecoration mapLabel() {
+    return BoxDecoration(
+      color: AppColors.white,
+      borderRadius: BorderRadius.circular(8.r),
+      boxShadow: ShadowStyles.map,
+    );
+  }
+
   static BoxDecoration paymentRadio() {
     return BoxDecoration(
       color: AppColors.primary300.withOpacity(0.05),
