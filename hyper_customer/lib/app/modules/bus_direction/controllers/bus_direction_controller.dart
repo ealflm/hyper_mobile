@@ -81,7 +81,7 @@ class BusDirectionController extends BaseController {
       }
     }
 
-    bounds.pad(0.1);
+    bounds.pad(0.3);
     mapController.centerZoomFitBounds(bounds);
   }
 
@@ -130,7 +130,14 @@ class BusDirectionController extends BaseController {
               polylines: [
                 Polyline(
                   strokeWidth: 4.r,
-                  color: AppColors.blue,
+                  // color: AppColors.blue,
+                  gradientColors: [
+                    AppColors.purpleStart,
+                    AppColors.purpleStart,
+                    AppColors.purpleStart,
+                    AppColors.purpleStart,
+                    AppColors.purpleEnd,
+                  ],
                   borderStrokeWidth: 3.r,
                   borderColor: AppColors.white,
                   isDotted: true,
@@ -145,7 +152,14 @@ class BusDirectionController extends BaseController {
               polylines: [
                 Polyline(
                   strokeWidth: 4.r,
-                  color: AppColors.blue,
+                  // color: AppColors.blue,
+                  gradientColors: [
+                    AppColors.purpleStart,
+                    AppColors.purpleStart,
+                    AppColors.purpleStart,
+                    AppColors.purpleStart,
+                    AppColors.purpleEnd,
+                  ],
                   borderStrokeWidth: 3.r,
                   borderColor: AppColors.white,
                   points: item.latLngList ?? [],
@@ -174,7 +188,7 @@ class BusDirectionController extends BaseController {
       }
     }
 
-    bounds.pad(0.1);
+    bounds.pad(0.2);
     mapController.centerZoomFitBounds(bounds);
   }
 
@@ -191,9 +205,9 @@ class BusDirectionController extends BaseController {
             polylines: [
               Polyline(
                 strokeWidth: 3.r,
-                color: AppColors.indicator,
+                color: AppColors.caption,
                 borderStrokeWidth: 2.r,
-                borderColor: AppColors.caption,
+                borderColor: AppColors.gray,
                 isDotted: true,
                 points: item.latLngList ?? [],
               ),
@@ -206,9 +220,9 @@ class BusDirectionController extends BaseController {
             polylines: [
               Polyline(
                 strokeWidth: 3.r,
-                color: AppColors.indicator,
+                color: AppColors.caption,
                 borderStrokeWidth: 2.r,
-                borderColor: AppColors.caption,
+                borderColor: AppColors.gray,
                 points: item.latLngList ?? [],
               ),
             ],

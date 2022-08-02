@@ -29,7 +29,8 @@ class BusingView extends GetView<BusingController> {
               child: Column(
                 children: [
                   const SearchRoute(),
-                  if (controller.searchMode.value) _searchResult()
+                  if (controller.searchMode.value)
+                    Expanded(child: _searchResult())
                 ],
               ),
             ),
@@ -68,8 +69,10 @@ class BusingView extends GetView<BusingController> {
         Obx(
           () {
             return controller.searchItemList.value.isNotEmpty
-                ? Column(
-                    children: controller.searchItemList.value,
+                ? SingleChildScrollView(
+                    child: Column(
+                      children: controller.searchItemList.value,
+                    ),
                   )
                 : Container();
           },

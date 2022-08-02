@@ -8,6 +8,7 @@ import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/modules/bus_direction/controllers/bus_direction_controller.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class Bottom extends GetWidget<BusDirectionController> {
   const Bottom({
@@ -76,21 +77,22 @@ class Bottom extends GetWidget<BusDirectionController> {
                       child: ElevatedButton(
                         style: ButtonStyles.primarySmall(),
                         onPressed: () {
-                          // controller.fromRouteModeToNavigationMode();
+                          Get.toNamed(Routes.SCAN);
                         },
                         child: HyperButton.child(
                           status: false,
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                Icons.navigation_outlined,
+                                Icons.qr_code_scanner,
                                 size: 20.r,
                               ),
                               SizedBox(
                                 width: 6.w,
                               ),
                               Text(
-                                'Bắt đầu',
+                                'Quét QR',
                                 style: buttonBold,
                               ),
                             ],

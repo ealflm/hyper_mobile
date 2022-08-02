@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/parser.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
+import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/map_values.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
@@ -14,6 +15,7 @@ import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
 import 'package:hyper_customer/app/modules/bus_direction/controllers/bus_direction_controller.dart';
 import 'package:hyper_customer/config/build_config.dart';
+import 'package:lottie/lottie.dart' hide Marker;
 
 class HyperMap extends GetWidget<BusDirectionController> {
   const HyperMap({
@@ -35,8 +37,8 @@ class HyperMap extends GetWidget<BusDirectionController> {
               children: [
                 TileLayerWidget(
                   options: TileLayerOptions(
-                    urlTemplate:
-                        BuildConfig.instance.mapConfig.mapboxUrlTemplate,
+                    urlTemplate: BuildConfig
+                        .instance.mapConfig.mapboxNavigationUrlTemplate,
                     additionalOptions: {
                       'accessToken':
                           BuildConfig.instance.mapConfig.mapboxAccessToken,
@@ -105,6 +107,7 @@ class HyperMap extends GetWidget<BusDirectionController> {
                       markerDirection: MarkerDirection.heading,
                       marker: Stack(
                         children: [
+                          Lottie.asset(AppAnimationAssets.scanPulsePurple),
                           Center(
                             child: Container(
                               decoration: BoxDecoration(
@@ -114,6 +117,7 @@ class HyperMap extends GetWidget<BusDirectionController> {
                               height: 26.r,
                               width: 26.r,
                               child: DefaultLocationMarker(
+                                color: AppColors.purpleStart,
                                 child: Container(
                                   padding: EdgeInsets.only(bottom: 2.r),
                                   child: Center(

@@ -31,7 +31,7 @@ void main() {
     mapboxAccessToken:
         'pk.eyJ1IjoibmFtZHBzZTE0MDgzNCIsImEiOiJjbDZhM2MzOW4xOWFuM2tud3Ezd3dzejk5In0.HVgi6OB6u0WBPlg-F-shag',
     mapboxId: 'mapbox.mapbox-streets-v8',
-    goongAPIKey: 'rcdAkcm2n61y4nuJlU22alJ5x9QRzqOmi08S3x8U',
+    goongAPIKey: 'VrHuk2uSmnVFQSTLlDp7i06kLJhwa43UaIfHmKfF',
   );
 
   BuildConfig(
