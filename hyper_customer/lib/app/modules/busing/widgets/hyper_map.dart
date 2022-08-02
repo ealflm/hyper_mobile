@@ -43,6 +43,14 @@ class HyperMap extends GetWidget<BusingController> {
                 },
               ),
             ),
+            GestureDetector(
+              onTap: () {
+                controller.busStationController.clearBusStation();
+              },
+              child: Container(
+                color: AppColors.white.withOpacity(0),
+              ),
+            ),
             Obx(
               () {
                 if (controller.startPlace.value.placeId != null &&

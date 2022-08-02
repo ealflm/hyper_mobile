@@ -27,4 +27,6 @@ abstract class AppAssets {
       'assets/svg/location-on-purple-icon.svg';
 
   static const String lightBulb = 'assets/svg/fa-lightbulb.svg';
+
+  static const String busIcon = 'assets/svg/bus_icon.svg';
 }

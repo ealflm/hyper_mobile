@@ -42,8 +42,14 @@ class BusStationController extends BaseController {
     _updateBusStation();
   }
 
-  void _selectBusStation(String? id) {
+  void selectBusStation(String? id) {
     _selectedBusStationId = id;
+    _updateBusStation();
+  }
+
+  void clearBusStation() {
+    _selectedBusStationId = '';
+    _updateBusStation();
   }
 
   BusStation? selectedBusStation() {
@@ -71,8 +77,7 @@ class BusStationController extends BaseController {
                     padding: EdgeInsets.all(20.r),
                     child: GestureDetector(
                       onTap: () {
-                        _selectBusStation(item.id);
-                        _updateBusStation();
+                        selectBusStation(item.id);
                         if (onPressed != null) {
                           onPressed!();
                         }
@@ -81,7 +86,7 @@ class BusStationController extends BaseController {
                         color: AppColors.white.withOpacity(0),
                         padding: EdgeInsets.all(10.r),
                         child: SvgPicture.asset(
-                          AppAssets.rentingMapIcon,
+                          AppAssets.busIcon,
                         ),
                       ),
                     ),
@@ -90,7 +95,7 @@ class BusStationController extends BaseController {
               )
             : Marker(
                 width: 200.r,
-                height: 85.r,
+                height: 90.r,
                 point: item.location!,
                 builder: (context) {
                   return IgnorePointer(
@@ -116,7 +121,7 @@ class BusStationController extends BaseController {
                           height: 10.h,
                         ),
                         SvgPicture.asset(
-                          AppAssets.rentingMapIcon,
+                          AppAssets.busIcon,
                           height: 25.r,
                           width: 25.r,
                         ),

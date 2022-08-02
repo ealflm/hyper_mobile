@@ -44,7 +44,11 @@ class BusDirectionController extends BaseController {
     busDirection = Get.arguments['busDirection'];
     endPlace = Get.arguments['endPlace'];
     loadBusDirection();
+    _loadDestinationMarker();
     busStationController = BusStationController(mapController);
+    List<Steps> steps = busDirection?.steps ?? [];
+    if (steps.isEmpty) return;
+    busStationController.selectBusStation(steps[0].stationList?.last.id);
   }
 
   void loadBusDirection() async {
@@ -66,11 +70,21 @@ class BusDirectionController extends BaseController {
     }
   }
 
-  void _changeIndex(int index) {
+  void _changeIndex(int index, Steps item) {
     currentIndex.value = index;
     _loadDirections();
     _loadSelectedPolylines();
     centerZoomSelectedBounds();
+    busStationController.selectBusStation(item.stationList?.last.id);
+  }
+
+  void _loadDestinationMarker() {
+    if (endPlace == null) return;
+    LatLng location = LatLng(
+      endPlace?.geometry?.location?.lat ?? 0,
+      endPlace?.geometry?.location?.lng ?? 0,
+    );
+    endMarker(location);
   }
 
   void centerZoomFullBounds() {
@@ -99,7 +113,7 @@ class BusDirectionController extends BaseController {
           distance: item.distance?.toInt() ?? 0,
           isSelected: item.index == currentIndex.value,
           onPressed: () {
-            _changeIndex(item.index ?? 0);
+            _changeIndex(item.index ?? 0, item);
           },
         );
         result.add(walkItem);
@@ -110,7 +124,7 @@ class BusDirectionController extends BaseController {
           distance: item.distance?.toInt() ?? 0,
           isSelected: item.index == currentIndex.value,
           onPressed: () {
-            _changeIndex(item.index ?? 0);
+            _changeIndex(item.index ?? 0, item);
           },
         );
         result.add(busItem);
@@ -172,7 +186,7 @@ class BusDirectionController extends BaseController {
           );
         }
         startMarker(item.latLngList?.first);
-        endMarker(item.latLngList?.last);
+        // endMarker(item.latLngList?.last);
       }
     }
     selectedPolylines(result);

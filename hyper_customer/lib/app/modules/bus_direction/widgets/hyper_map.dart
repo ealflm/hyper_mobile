@@ -68,6 +68,14 @@ class HyperMap extends GetWidget<BusDirectionController> {
                       ? controller.selectedPolylines.value ?? Container()
                       : Container(),
                 ),
+                GestureDetector(
+                  onTap: () {
+                    controller.busStationController.clearBusStation();
+                  },
+                  child: Container(
+                    color: AppColors.white.withOpacity(0),
+                  ),
+                ),
                 Obx(
                   () {
                     return controller.busStationController.busStationMarkers
