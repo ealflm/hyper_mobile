@@ -11,6 +11,7 @@ abstract class Repository {
   Future<Auth> login(String phoneNumber, String password);
 
   Future<String> deposit(double amount, int method, String customerId);
+
   Future<bool> checkDeposit(String id);
 
   Future<double> getBalance(String customerId);
@@ -26,4 +27,10 @@ abstract class Repository {
   Future<List<BusDirection>> getBusDirection(LatLng start, LatLng end);
 
   Future<BusStations> getBusStation();
+
+  Future<bool> busPayment({
+    required String customerId,
+    required String uid,
+    required LatLng location,
+  });
 }

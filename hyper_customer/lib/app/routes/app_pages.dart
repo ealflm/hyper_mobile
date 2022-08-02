@@ -6,6 +6,8 @@ import '../modules/activity/bindings/activity_binding.dart';
 import '../modules/activity/views/activity_view.dart';
 import '../modules/bus_direction/bindings/bus_direction_binding.dart';
 import '../modules/bus_direction/views/bus_direction_view.dart';
+import '../modules/bus_payment/bindings/bus_payment_binding.dart';
+import '../modules/bus_payment/views/bus_payment_view.dart';
 import '../modules/busing/bindings/busing_binding.dart';
 import '../modules/busing/views/busing_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -196,6 +198,12 @@ class AppPages {
       name: _Paths.BUS_DIRECTION,
       page: () => const BusDirectionView(),
       binding: BusDirectionBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BUS_PAYMENT,
+      page: () => const BusPaymentView(),
+      binding: BusPaymentBinding(),
       transition: Transition.noTransition,
     ),
   ];

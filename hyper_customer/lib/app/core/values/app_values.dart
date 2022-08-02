@@ -1,8 +1,9 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 abstract class AppValues {
-  static const String CardLinkQRPrefix = '[CLQR]';
-  static const String RentingQRPrefix = '[RTQR]';
+  static const String cardLinkQRPrefix = '[CLQR]';
+  static const String rentingQRPrefix = '[RTQR]';
+  static const String busQRPrefix = '[BSQR]';
 
   static double bottomAppBarHeight = 60.h;
 

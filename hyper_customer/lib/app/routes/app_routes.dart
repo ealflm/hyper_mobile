@@ -26,6 +26,7 @@ abstract class Routes {
   static const PLACE_SEARCH = _Paths.PLACE_SEARCH;
   static const SELECT_ON_MAP = _Paths.SELECT_ON_MAP;
   static const BUS_DIRECTION = _Paths.BUS_DIRECTION;
+  static const BUS_PAYMENT = _Paths.BUS_PAYMENT;
 }
 
 abstract class _Paths {
@@ -54,4 +55,5 @@ abstract class _Paths {
   static const PLACE_SEARCH = '/place-search';
   static const SELECT_ON_MAP = '/select-on-map';
   static const BUS_DIRECTION = '/bus-direction';
+  static const BUS_PAYMENT = '/bus-payment';
 }

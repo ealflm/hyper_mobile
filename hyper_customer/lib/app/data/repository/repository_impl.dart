@@ -202,4 +202,29 @@ class RepositoryImpl extends BaseRepository implements Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<bool> busPayment({
+    required String customerId,
+    required String uid,
+    required LatLng location,
+  }) {
+    var endpoint = "${DioProvider.baseUrl}/bus-trip-pay-mobile";
+    var data = {
+      "customerId": customerId,
+      "uid": uid,
+      "latitude": location.latitude,
+      "longitude": location.longitude,
+    };
+    var formData = FormData.fromMap(data);
+    var dioCall = dioTokenClient.post(endpoint, data: formData);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return true;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

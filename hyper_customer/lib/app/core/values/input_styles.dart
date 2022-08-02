@@ -23,6 +23,10 @@ abstract class InputStyles {
               child: prefixIcon,
             )
           : null,
+      counterStyle: const TextStyle(
+        height: double.minPositive,
+      ),
+      counterText: "",
     );
   }
 

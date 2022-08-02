@@ -76,9 +76,7 @@ class Bottom extends GetWidget<BusDirectionController> {
                       width: 124.w,
                       child: ElevatedButton(
                         style: ButtonStyles.primarySmall(),
-                        onPressed: () {
-                          Get.toNamed(Routes.SCAN);
-                        },
+                        onPressed: controller.getToScanView,
                         child: HyperButton.child(
                           status: false,
                           child: Row(

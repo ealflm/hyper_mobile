@@ -110,9 +110,13 @@ class LoginView extends GetView<LoginController> {
                                       prefixIcon: const Icon(Icons.key),
                                       hintText: "Nhập mã PIN",
                                     ),
+                                    maxLength: 6,
                                     validator: (value) {
                                       if (value.toString().isEmpty) {
                                         return 'Vui lòng nhập mã PIN để tiếp tục';
+                                      }
+                                      if (value.toString().length != 6) {
+                                        return 'Vui lòng nhập 6 chữ số';
                                       }
                                       return null;
                                     },

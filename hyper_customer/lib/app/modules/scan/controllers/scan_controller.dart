@@ -11,10 +11,14 @@ class ScanController extends GetxController {
   Barcode? result;
   QRViewController? qrController;
   var isFlashOn = false.obs;
+  bool isFromBusing = false;
 
   @override
   void onInit() {
     HyperDialog.isOpen = false;
+    if (Get.arguments != null) {
+      isFromBusing = Get.arguments['isFromBusing'] ?? false;
+    }
     super.onInit();
   }
 
@@ -28,8 +32,8 @@ class ScanController extends GetxController {
 
       HapticFeedback.lightImpact();
 
-      if (data!.startsWith(AppValues.CardLinkQRPrefix)) {
-        var code = data.substring(AppValues.CardLinkQRPrefix.length);
+      if (data!.startsWith(AppValues.cardLinkQRPrefix)) {
+        var code = data.substring(AppValues.cardLinkQRPrefix.length);
         HyperDialog.show(
           title: 'Liên kết thẻ',
           content: 'Bạn có chắc chắn muốn liên kết thẻ này hay không?',
@@ -46,13 +50,27 @@ class ScanController extends GetxController {
             Get.back();
           },
         );
-      } else if (data.startsWith(AppValues.RentingQRPrefix)) {
-        var code = data.substring(AppValues.RentingQRPrefix.length);
+      } else if (data.startsWith(AppValues.rentingQRPrefix)) {
+        var code = data.substring(AppValues.rentingQRPrefix.length);
         qrController?.pauseCamera();
         await Get.toNamed(
           Routes.RENTING_FORM,
           arguments: {'code': code},
         );
+        await qrController?.resumeCamera();
+      } else if (data.startsWith(AppValues.busQRPrefix)) {
+        var code = data.substring(AppValues.rentingQRPrefix.length);
+        qrController?.pauseCamera();
+        if (isFromBusing) {
+          Get.back(
+            result: {'code': code},
+          );
+        } else {
+          await Get.toNamed(
+            Routes.BUS_PAYMENT,
+            arguments: {'code': code},
+          );
+        }
         await qrController?.resumeCamera();
       } else {
         HyperDialog.show(
