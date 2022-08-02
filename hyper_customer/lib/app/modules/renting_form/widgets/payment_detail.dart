@@ -74,10 +74,15 @@ class PaymentDetail extends GetView<RentingFormController> {
         SizedBox(
           height: 20.h,
         ),
-        _detailItem(
-          'Thuê xe theo ngày',
-          '${controller.dayNum} x ${NumberUtils.vnd(controller.vehicleRental?.pricePerDay?.toDouble())}',
-        ),
+        controller.modeIndex.value == 0
+            ? _detailItem(
+                'Thuê xe theo ngày',
+                '${controller.dayNum} x ${NumberUtils.vnd(controller.vehicleRental?.pricePerDay?.toDouble())}',
+              )
+            : _detailItem(
+                'Thuê xe theo giờ',
+                '${controller.hourNum} x ${NumberUtils.vnd(controller.vehicleRental?.pricePerHour?.toDouble())}',
+              ),
         SizedBox(
           height: 5.h,
         ),
@@ -108,7 +113,7 @@ class PaymentDetail extends GetView<RentingFormController> {
                   height: 10.h,
                 ),
                 Text(
-                  NumberUtils.vnd(controller.getTotalPriceByDay()),
+                  NumberUtils.vnd(controller.getTotalPrice()),
                   style: subtitle1.copyWith(
                     color: AppColors.softBlack,
                     fontWeight: FontWeights.medium,

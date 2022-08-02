@@ -59,20 +59,39 @@ class RentingFormController extends BaseController
     String customerId = TokenManager.instance.user?.customerId ?? '';
     if (customerId == '') return;
 
-    List<OrderDetailsInfos> orderDetailsInfos = [
-      OrderDetailsInfos(
-        priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
-        content: 'Thuê xe theo ngày',
-        quantity: dayNum,
-        price: vehicleRental?.pricePerDay ?? 0,
-      ),
-      OrderDetailsInfos(
-        priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
-        content: 'Phí thu hồi xe',
-        quantity: 1,
-        price: AppValues.recallFee.toInt(),
-      ),
-    ];
+    List<OrderDetailsInfos> orderDetailsInfos;
+
+    if (modeController.index == 0) {
+      orderDetailsInfos = [
+        OrderDetailsInfos(
+          priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
+          content: 'Thuê xe theo ngày',
+          quantity: dayNum,
+          price: vehicleRental?.pricePerDay ?? 0,
+        ),
+        OrderDetailsInfos(
+          priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
+          content: 'Phí thu hồi xe',
+          quantity: 1,
+          price: AppValues.recallFee.toInt(),
+        ),
+      ];
+    } else {
+      orderDetailsInfos = [
+        OrderDetailsInfos(
+          priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
+          content: 'Thuê xe theo giờ',
+          quantity: hourNum,
+          price: vehicleRental?.pricePerHour ?? 0,
+        ),
+        OrderDetailsInfos(
+          priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
+          content: 'Phí thu hồi xe',
+          quantity: 1,
+          price: AppValues.recallFee.toInt(),
+        ),
+      ];
+    }
 
     Order order = Order(
       customerId: customerId,
@@ -80,7 +99,7 @@ class RentingFormController extends BaseController
       discountId: null,
       partnerId: vehicleRental?.partnerId,
       orderDetailsInfos: orderDetailsInfos,
-      totalPrice: getTotalPriceByDay().toInt(),
+      totalPrice: getTotalPrice().toInt(),
     );
     var orderService = _repository.createOrder(order);
 
@@ -142,10 +161,17 @@ class RentingFormController extends BaseController
     hourNum = value;
   }
 
-  double getTotalPriceByDay() {
-    double price = vehicleRental?.pricePerDay?.toDouble() ?? 0;
-    double result = dayNum * price + AppValues.recallFee;
-    return result;
+  double getTotalPrice() {
+    if (modeIndex.value == 0) {
+      double price = vehicleRental?.pricePerDay?.toDouble() ?? 0;
+      double result = dayNum * price + AppValues.recallFee;
+      return result;
+    } else {
+      double price = vehicleRental?.pricePerHour?.toDouble() ?? 0;
+      double result = hourNum * price + AppValues.recallFee;
+      return result;
+    }
   }
+
   // End Region
 }

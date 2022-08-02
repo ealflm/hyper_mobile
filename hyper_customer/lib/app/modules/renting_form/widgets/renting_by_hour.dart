@@ -42,7 +42,7 @@ class RentingByHour extends GetWidget<RentingHourCountController> {
                       ),
                       Expanded(
                         child: Text(
-                          'Số giờ thuê quy định nằm trong khoảng từ ${controller.hourMin} đến ${controller.hourMax} ngày',
+                          'Số giờ thuê quy định nằm trong khoảng từ 1 đến 6 tiếng',
                           style: body2.copyWith(
                             color: AppColors.description,
                           ),
@@ -69,20 +69,31 @@ class RentingByHour extends GetWidget<RentingHourCountController> {
                   children: [
                     _circleButton(
                       () {
-                        controller.decreaseDay();
+                        controller.decreaseHour();
                       },
                       icon: Icons.remove,
                     ),
                     SizedBox(
                       width: 25.w,
                     ),
-                    Obx(
-                      () => Text(
-                        '${controller.hourNum.value}',
+                    SizedBox(
+                      width: 30.w,
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          counterStyle: TextStyle(
+                            height: double.minPositive,
+                          ),
+                          counterText: "",
+                        ),
+                        textAlign: TextAlign.center,
                         style: h6.copyWith(
-                          color: AppColors.softBlack,
+                          color: AppColors.black,
                           fontWeight: FontWeights.regular,
                         ),
+                        keyboardType: TextInputType.number,
+                        maxLength: 2,
+                        controller: controller.textInputController,
+                        onChanged: controller.onInputChange,
                       ),
                     ),
                     SizedBox(
@@ -90,7 +101,7 @@ class RentingByHour extends GetWidget<RentingHourCountController> {
                     ),
                     _circleButton(
                       () {
-                        controller.increaseDay();
+                        controller.increaseHour();
                       },
                       icon: Icons.add,
                     ),
@@ -104,14 +115,14 @@ class RentingByHour extends GetWidget<RentingHourCountController> {
             ),
             _dateDetailItem(
               'Thời gian thuê',
-              controller.dateStartByDay(),
+              controller.dateStartByHour(),
             ),
             const Divider(
               color: AppColors.line,
             ),
             _dateDetailItem(
               'Thời gian trả',
-              controller.dateEndByDay(),
+              controller.dateEndByHour(),
             ),
             const Divider(
               color: AppColors.line,
@@ -119,22 +130,33 @@ class RentingByHour extends GetWidget<RentingHourCountController> {
             SizedBox(
               height: 20.h,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Tổng',
-                  style: subtitle1.copyWith(
-                    fontWeight: FontWeights.regular,
-                    color: AppColors.lightBlack,
-                  ),
-                ),
-                Text(
-                  controller.total,
-                  style: h6.copyWith(color: AppColors.softBlack),
-                ),
-              ],
-            )
+            // Row(
+            //   children: [
+            //     Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text(
+            //           'Thành tiền',
+            //           style: subtitle1.copyWith(
+            //             fontWeight: FontWeights.regular,
+            //             color: AppColors.lightBlack,
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           height: 10.h,
+            //         ),
+            //         Text(
+            //           controller.total,
+            //           style: subtitle1.copyWith(
+            //             color: AppColors.softBlack,
+            //             fontWeight: FontWeights.medium,
+            //             fontSize: 18.sp,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ],
+            // )
           ],
         );
       },
@@ -156,6 +178,7 @@ class RentingByHour extends GetWidget<RentingHourCountController> {
           value,
           style: subtitle1.copyWith(
             color: AppColors.softBlack,
+            fontWeight: FontWeights.medium,
           ),
         ),
       ],

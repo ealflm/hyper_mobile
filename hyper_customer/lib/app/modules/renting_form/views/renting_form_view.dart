@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -14,6 +15,7 @@ import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/renting_form/controllers/renting_form_controller.dart';
 import 'package:hyper_customer/app/modules/renting_form/models/view_state.dart';
 import 'package:hyper_customer/app/modules/renting_form/widgets/payment_detail.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -142,6 +144,22 @@ class RentingFormView extends GetView<RentingFormController> {
                                         ),
                                       ),
                                     ],
+                                  )
+                                else if (controller.state.value ==
+                                        ViewState.paymentSuccessful ||
+                                    controller.state.value ==
+                                        ViewState.paymentFailed)
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: _button(
+                                          'Màn hình chính',
+                                          () {
+                                            Get.toNamed(Routes.MAIN);
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                               ],
                             ),
@@ -160,11 +178,116 @@ class RentingFormView extends GetView<RentingFormController> {
   }
 
   Widget _paymentSuccessful() {
-    return Container(child: Text('Thanh toán thành công'));
+    return Column(
+      children: [
+        Column(
+          children: [
+            Lottie.asset(
+              AppAnimationAssets.successful,
+              repeat: false,
+              height: 138.h,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              'Giao dịch thành công',
+              style: subtitle1.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.lightBlack,
+              ),
+            ),
+            SizedBox(
+              height: 5.h,
+            ),
+            Text(
+              NumberUtils.vnd(controller.getTotalPrice()),
+              style: h5.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.softBlack,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 20.h,
+        ),
+        Column(
+          children: [
+            _detailItem(
+              'Thời gian thanh toán',
+              DateTimeUtils.dateTimeToString(DateTime.now()),
+            ),
+            const Divider(
+              color: AppColors.line,
+            ),
+            _detailItem(
+              'Dịch vụ',
+              controller.modeIndex.value == 0
+                  ? 'Thuê xe theo ngày'
+                  : 'Thuê xe theo giờ',
+            ),
+            const Divider(
+              color: AppColors.line,
+            ),
+            controller.modeIndex.value == 0
+                ? _detailItem(
+                    'Số ngày thuê',
+                    '${controller.dayNum}',
+                  )
+                : _detailItem(
+                    'Số giờ thuê',
+                    '${controller.hourNum}',
+                  ),
+            const Divider(
+              color: AppColors.line,
+            ),
+            _detailItem(
+              'Phương tiện',
+              controller.vehicleRental?.vehicleName ?? '-',
+            ),
+            const Divider(
+              color: AppColors.line,
+            ),
+            _detailItem(
+              'Số hiệu',
+              controller.vehicleRental?.licensePlates ?? '-',
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   Widget _paymentFailed() {
-    return Container(child: Text('Thanh toán thất bại'));
+    return Column(
+      children: [
+        Column(
+          children: [
+            Lottie.asset(
+              AppAnimationAssets.error404,
+              width: 200.w,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              'Kết nối thất bại',
+              style: h6.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.softBlack,
+              ),
+            ),
+            Text(
+              'Đã có lỗi xảy ra trong quá trình xử lí',
+              style: subtitle1.copyWith(
+                color: AppColors.lightBlack,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 
   ElevatedButton _circleButton(Function() onPressed) {
