@@ -13,14 +13,20 @@ class RentingView extends GetView<RentingController> {
 
   @override
   Widget build(BuildContext context) {
-    return StatusBar(
-      brightness: Brightness.dark,
-      child: Scaffold(
-        body: Stack(children: const [
-          HyperMap(),
-          Top(),
-          Bottom(),
-        ]),
+    return WillPopScope(
+      onWillPop: () async {
+        controller.backButtonPressed();
+        return true;
+      },
+      child: StatusBar(
+        brightness: Brightness.dark,
+        child: Scaffold(
+          body: Stack(children: const [
+            HyperMap(),
+            Top(),
+            Bottom(),
+          ]),
+        ),
       ),
     );
   }

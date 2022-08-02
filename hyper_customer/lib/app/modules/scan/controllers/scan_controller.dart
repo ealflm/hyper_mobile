@@ -34,6 +34,7 @@ class ScanController extends GetxController {
 
       if (data!.startsWith(AppValues.cardLinkQRPrefix)) {
         var code = data.substring(AppValues.cardLinkQRPrefix.length);
+        qrController?.pauseCamera();
         HyperDialog.show(
           title: 'Liên kết thẻ',
           content: 'Bạn có chắc chắn muốn liên kết thẻ này hay không?',
@@ -61,17 +62,30 @@ class ScanController extends GetxController {
       } else if (data.startsWith(AppValues.busQRPrefix)) {
         var code = data.substring(AppValues.rentingQRPrefix.length);
         qrController?.pauseCamera();
-        if (isFromBusing) {
-          Get.back(
-            result: {'code': code},
-          );
-        } else {
-          await Get.toNamed(
-            Routes.BUS_PAYMENT,
-            arguments: {'code': code},
-          );
-        }
-        await qrController?.resumeCamera();
+
+        HyperDialog.show(
+          title: 'Thanh toán vé xe buýt',
+          content: 'Bạn có chắc chắn muốn thanh toán vé xe buýt này không?',
+          primaryButtonText: 'Đồng ý',
+          secondaryButtonText: 'Huỷ',
+          primaryOnPressed: () async {
+            if (isFromBusing) {
+              Get.back(
+                result: {'code': code},
+              );
+            } else {
+              await Get.toNamed(
+                Routes.BUS_PAYMENT,
+                arguments: {'code': code},
+              );
+            }
+            await qrController?.resumeCamera();
+          },
+          secondaryOnPressed: () async {
+            await qrController?.resumeCamera();
+            Get.back();
+          },
+        );
       } else {
         HyperDialog.show(
           title: 'Không hỗ trợ',

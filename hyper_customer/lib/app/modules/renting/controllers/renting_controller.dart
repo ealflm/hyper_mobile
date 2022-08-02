@@ -460,5 +460,9 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   void resumePositionStream() {
     _positionStream.resumePositionStream();
   }
+
+  void backButtonPressed() {
+    _positionStream.close();
+  }
   // End Region
 }
