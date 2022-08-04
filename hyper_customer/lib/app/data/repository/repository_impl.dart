@@ -227,4 +227,42 @@ class RepositoryImpl extends BaseRepository implements Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<String> sendOtp(String phoneNumber) {
+    var endpoint = "${DioProvider.baseUrl}/otp/send-otp";
+    var data = {
+      "phoneNumber": phoneNumber,
+    };
+    var formData = FormData.fromMap(data);
+    var dioCall = dioClient.post(endpoint, data: formData);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return response.data['body']['requestId'];
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> verifyOtp(String phoneNumber, String otp, String requestId) {
+    var endpoint = "${DioProvider.baseUrl}/otp/verify-otp";
+    var data = {
+      "phone": phoneNumber,
+      "otpCode": otp,
+      "requestId": requestId,
+    };
+    var formData = FormData.fromMap(data);
+    var dioCall = dioClient.post(endpoint, data: formData);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return true;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

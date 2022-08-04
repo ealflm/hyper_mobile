@@ -32,6 +32,8 @@ import '../modules/place_search/bindings/place_search_binding.dart';
 import '../modules/place_search/views/place_search_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/register_otp/bindings/register_otp_binding.dart';
+import '../modules/register_otp/views/register_otp_view.dart';
 import '../modules/renting/bindings/renting_binding.dart';
 import '../modules/renting/views/destination_arrived_view.dart';
 import '../modules/renting/views/renting_search_view.dart';
@@ -204,6 +206,12 @@ class AppPages {
       name: _Paths.BUS_PAYMENT,
       page: () => const BusPaymentView(),
       binding: BusPaymentBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.REGISTER_OTP,
+      page: () => const RegisterOtpView(),
+      binding: RegisterOtpBinding(),
       transition: Transition.noTransition,
     ),
   ];

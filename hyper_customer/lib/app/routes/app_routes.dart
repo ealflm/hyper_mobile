@@ -27,6 +27,7 @@ abstract class Routes {
   static const SELECT_ON_MAP = _Paths.SELECT_ON_MAP;
   static const BUS_DIRECTION = _Paths.BUS_DIRECTION;
   static const BUS_PAYMENT = _Paths.BUS_PAYMENT;
+  static const REGISTER_OTP = _Paths.REGISTER_OTP;
 }
 
 abstract class _Paths {
@@ -56,4 +57,5 @@ abstract class _Paths {
   static const SELECT_ON_MAP = '/select-on-map';
   static const BUS_DIRECTION = '/bus-direction';
   static const BUS_PAYMENT = '/bus-payment';
+  static const REGISTER_OTP = '/register-otp';
 }

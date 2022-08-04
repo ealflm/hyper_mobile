@@ -33,4 +33,8 @@ abstract class Repository {
     required String uid,
     required LatLng location,
   });
+
+  Future<String> sendOtp(String phoneNumber);
+
+  Future<bool> verifyOtp(String phoneNumber, String otp, String requestId);
 }

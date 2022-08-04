@@ -82,11 +82,16 @@ class LoginView extends GetView<LoginController> {
                                     controller.fullName.isEmpty
                                         ? 'Xin chào'
                                         : 'Xin chào, ${controller.fullName}',
-                                    style: h6.copyWith(fontSize: 18.sp),
+                                    style: h6.copyWith(
+                                      fontSize: 18.sp,
+                                      color: AppColors.softBlack,
+                                    ),
                                   ),
                                   Text(
                                     controller.phoneNumber.value,
-                                    style: body1,
+                                    style: body1.copyWith(
+                                      color: AppColors.lightBlack,
+                                    ),
                                   ),
                                 ],
                               ),
