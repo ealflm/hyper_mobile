@@ -70,6 +70,9 @@ class ScanController extends GetxController {
           secondaryButtonText: 'Huỷ',
           primaryOnPressed: () async {
             if (isFromBusing) {
+              if (HyperDialog.isOpen) {
+                Get.back();
+              }
               Get.back(
                 result: {'code': code},
               );

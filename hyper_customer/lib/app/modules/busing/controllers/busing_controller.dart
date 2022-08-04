@@ -176,7 +176,7 @@ class BusingController extends BaseController {
 
   void fetchBusDirection() async {
     isLoadingPage.value = true;
-    if (startPlaceLocation == null && endPlaceLocation == null) {
+    if (startPlaceLocation == null || endPlaceLocation == null) {
       Utils.showToast('Vui lòng chọn điểm đi và điểm đến');
       isLoadingPage.value = false;
       return;
