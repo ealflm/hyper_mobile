@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
-import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/register/model/citizen_indentity_card.dart';
 import 'package:hyper_customer/app/modules/register/model/view_state.dart';
@@ -38,9 +37,13 @@ class RegisterController extends BaseController
     super.onReady();
   }
 
+  var pageLoading = false.obs;
+
   Future<void> submit() async {
     if (!formKey.currentState!.validate()) return;
     formKey.currentState!.save();
+
+    pageLoading.value = true;
 
     if (phoneNumber.value.isEmpty ||
         password == null ||
@@ -65,6 +68,10 @@ class RegisterController extends BaseController
         Utils.showToast('Kết nối thất bại');
       },
     );
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    pageLoading.value = false;
 
     if (result) {
       state.value = ViewState.registerSuccess;
@@ -104,29 +111,18 @@ class RegisterController extends BaseController
 
       if (data!.startsWith('0') && '|'.allMatches(data).length == 6) {
         qrController?.pauseCamera();
-        HyperDialog.show(
-          title: 'Quét QR Code',
-          content: 'Bạn có chắc chắn muốn sử dụng CCCD này hay không',
-          primaryButtonText: 'Đồng ý',
-          secondaryButtonText: 'Huỷ',
-          primaryOnPressed: () async {
-            userInfos = data;
-            toModel(userInfos);
-            Get.back();
-            state.value = ViewState.scanSuccess;
-            await Future.delayed(
-              const Duration(
-                seconds: 2,
-              ),
-            );
-            state.value = ViewState.normal;
-            changeStep(3);
-          },
-          secondaryOnPressed: () async {
-            await qrController?.resumeCamera();
-            Get.back();
-          },
+
+        userInfos = data;
+        toModel(userInfos);
+        Get.back();
+        state.value = ViewState.scanSuccess;
+        await Future.delayed(
+          const Duration(
+            seconds: 2,
+          ),
         );
+        state.value = ViewState.normal;
+        changeStep(3);
       } else {
         HyperDialog.show(
           title: 'Không hỗ trợ',

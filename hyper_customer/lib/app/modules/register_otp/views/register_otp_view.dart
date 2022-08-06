@@ -92,10 +92,12 @@ class RegisterOtpView extends GetView<RegisterOtpController> {
                                     color: AppColors.softBlack,
                                   ),
                                 ),
-                                Text(
-                                  'Mã xác thực 4 số được gửi đến 0369085835',
-                                  style: body2.copyWith(
-                                    color: AppColors.lightBlack,
+                                Obx(
+                                  () => Text(
+                                    'Mã xác thực 4 số được gửi đến ${controller.phoneNumber.value}',
+                                    style: body2.copyWith(
+                                      color: AppColors.lightBlack,
+                                    ),
                                   ),
                                 ),
                               ],

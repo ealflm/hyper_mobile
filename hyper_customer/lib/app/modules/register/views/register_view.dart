@@ -97,6 +97,7 @@ class RegisterView extends GetView<RegisterController> {
                             Routes.LOGIN,
                             arguments: {
                               'phoneNumber': controller.phoneNumber.value,
+                              'registerPassword': controller.password,
                             },
                           );
                         },

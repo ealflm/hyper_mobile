@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
 import 'package:hyper_customer/app/core/model/payment_result.dart';
+import 'package:hyper_customer/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_customer/app/modules/account/views/account_view.dart';
 import 'package:hyper_customer/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_customer/app/modules/home/controllers/home_controller.dart';
@@ -13,6 +14,8 @@ import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
+  late AccountController _accountController;
+
   var currentTab = 0.obs;
   final List<Widget> _screens = [
     const HomeView(),
@@ -26,12 +29,7 @@ class MainController extends GetxController {
 
   @override
   void onInit() async {
-    Get.put(
-      HomeController(),
-      permanent: true,
-    );
-    _homeController = Get.find<HomeController>();
-    _homeController.init();
+    initController();
 
     await SettingController.intance.init();
 
@@ -55,6 +53,22 @@ class MainController extends GetxController {
     });
 
     super.onInit();
+  }
+
+  void initController() {
+    Get.put(
+      HomeController(),
+      permanent: true,
+    );
+    _homeController = Get.find<HomeController>();
+    _homeController.init();
+
+    Get.put(
+      AccountController(),
+      permanent: true,
+    );
+    _accountController = Get.find<AccountController>();
+    _accountController.init();
   }
 
   void changeTab(int index) {

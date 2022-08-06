@@ -11,7 +11,6 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -137,7 +136,7 @@ class LoginView extends GetView<LoginController> {
                                       width: double.infinity,
                                       child: ElevatedButton(
                                         style: ButtonStyles.primary(),
-                                        onPressed: controller.isLoading
+                                        onPressed: controller.pageLoading.value
                                             ? null
                                             : () {
                                                 FocusManager
@@ -146,7 +145,7 @@ class LoginView extends GetView<LoginController> {
                                                 controller.submit();
                                               },
                                         child: HyperButton.child(
-                                          status: controller.isLoading,
+                                          status: controller.pageLoading.value,
                                           child: Text(
                                             'Đăng nhập',
                                             style: buttonBold,
@@ -168,26 +167,30 @@ class LoginView extends GetView<LoginController> {
                                   SizedBox(
                                     height: 15.h,
                                   ),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      debugPrint('Fingerprint pressed');
-                                      Get.offAllNamed(Routes.REGISTER);
-                                    },
-                                    style: ButtonStyles.fingerPrint(),
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Container(
-                                          width: 55.w,
-                                          height: 55.w,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                          ),
-                                        ),
-                                        const Icon(Icons.fingerprint,
-                                            color: AppColors.white, size: 44),
-                                      ],
-                                    ),
+                                  Obx(
+                                    () => controller.hasFingerprint.value
+                                        ? ElevatedButton(
+                                            onPressed:
+                                                controller.loginWithFingerprint,
+                                            style: ButtonStyles.fingerPrint(),
+                                            child: Stack(
+                                              alignment: Alignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 55.w,
+                                                  height: 55.w,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                ),
+                                                const Icon(Icons.fingerprint,
+                                                    color: AppColors.white,
+                                                    size: 44),
+                                              ],
+                                            ),
+                                          )
+                                        : Container(),
                                   ),
                                 ],
                               ),

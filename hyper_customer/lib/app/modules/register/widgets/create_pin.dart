@@ -7,6 +7,7 @@ import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/light_bulb.dart';
 import 'package:hyper_customer/app/modules/register/controllers/register_controller.dart';
 
@@ -40,17 +41,24 @@ class CreatePin extends GetView<RegisterController> {
           SizedBox(
             height: 30.h,
           ),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ButtonStyles.primary(),
-              onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                controller.submit();
-              },
-              child: Text(
-                'Tạo tài khoản',
-                style: buttonBold,
+          Obx(
+            () => SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                style: ButtonStyles.primary(),
+                onPressed: controller.pageLoading.value
+                    ? null
+                    : () async {
+                        await controller.submit();
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                child: HyperButton.child(
+                  status: controller.pageLoading.value,
+                  child: Text(
+                    'Tạo tài khoản',
+                    style: buttonBold,
+                  ),
+                ),
               ),
             ),
           )
@@ -113,18 +121,6 @@ class CreatePin extends GetView<RegisterController> {
           ],
         ),
       ),
-    );
-  }
-
-  TextFormField _textField({String label = '', String value = ''}) {
-    return TextFormField(
-      enabled: false,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: label,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-      ),
-      initialValue: value,
     );
   }
 }

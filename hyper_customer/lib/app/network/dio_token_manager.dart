@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
@@ -67,6 +69,76 @@ class TokenManager extends Interceptor {
     if (userJson.isNotEmpty) {
       _user = User.fromJson(json.decode(userJson.toString()));
       await prefs.setString('userJson', userJson);
+    }
+  }
+
+  Future<void> savePhonePassword(
+    String? phone,
+    String? password, {
+    bool? mode,
+  }) async {
+    var storage = const FlutterSecureStorage();
+
+    await storage.write(
+      key: 'phone',
+      value: phone,
+    );
+    await storage.write(
+      key: 'password',
+      value: password,
+    );
+
+    if (mode != null) {
+      await storage.write(
+        key: 'mode',
+        value: mode ? 'true' : 'false',
+      );
+    }
+  }
+
+  void clearPhonePassword() {
+    var storage = const FlutterSecureStorage();
+    storage.delete(key: 'phone');
+    storage.delete(key: 'password');
+    storage.delete(key: 'mode');
+  }
+
+  Future<String?> getPhone() async {
+    var storage = const FlutterSecureStorage();
+
+    return await storage.read(
+      key: 'phone',
+    );
+  }
+
+  Future<String?> getPassword() async {
+    var storage = const FlutterSecureStorage();
+
+    return await storage.read(
+      key: 'password',
+    );
+  }
+
+  Future<void> setMode(bool mode) async {
+    var storage = const FlutterSecureStorage();
+
+    await storage.write(
+      key: 'mode',
+      value: mode ? 'true' : 'false',
+    );
+  }
+
+  Future<bool> getMode() async {
+    var storage = const FlutterSecureStorage();
+
+    var mode = await storage.read(
+      key: 'mode',
+    );
+
+    if (mode == 'true') {
+      return true;
+    } else {
+      return false;
     }
   }
 
