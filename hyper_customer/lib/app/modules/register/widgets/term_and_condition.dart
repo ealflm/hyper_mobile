@@ -18,6 +18,7 @@ class TermAndCondition extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _body(),
         _bottom(),

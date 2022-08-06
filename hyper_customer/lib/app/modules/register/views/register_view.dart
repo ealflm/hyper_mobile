@@ -1,14 +1,21 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
+import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/register/controllers/register_controller.dart';
+import 'package:hyper_customer/app/modules/register/model/view_state.dart';
+import 'package:hyper_customer/app/modules/register/widgets/confirm_info.dart';
 import 'package:hyper_customer/app/modules/register/widgets/scan.dart';
 import 'package:hyper_customer/app/modules/register/widgets/scan_prepare.dart';
 import 'package:hyper_customer/app/modules/register/widgets/term_and_condition.dart';
@@ -18,6 +25,56 @@ class RegisterView extends GetView<RegisterController> {
   const RegisterView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    return Obx(
+      () => Stack(
+        children: [
+          if (controller.state.value == ViewState.normal)
+            _main()
+          else if (controller.state.value == ViewState.scanSuccess)
+            _scanSuccess(),
+        ],
+      ),
+    );
+  }
+
+  Widget _scanSuccess() {
+    return StatusBar(
+      brightness: Brightness.dark,
+      child: Scaffold(
+        body: Container(
+          color: AppColors.white,
+          child: Center(
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 30.w),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SvgPicture.asset(
+                    AppAssets.success,
+                    width: 117.r,
+                  ),
+                  SizedBox(
+                    height: 30.h,
+                  ),
+                  Text(
+                    'Quét CCCD thành công',
+                    textAlign: TextAlign.center,
+                    style: h5.copyWith(
+                      color: AppColors.lightBlack,
+                      fontWeight: FontWeights.light,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _main() {
     return StatusBar(
       brightness: Brightness.light,
       child: Unfocus(
@@ -63,8 +120,8 @@ class RegisterView extends GetView<RegisterController> {
                     ),
                   ),
                   Expanded(
-                    flex: 712,
                     child: Container(
+                      // height: 1.sh - 88.h,
                       width: 1.sw,
                       decoration: BoxDecorations.top(),
                       padding:
@@ -94,7 +151,7 @@ class RegisterView extends GetView<RegisterController> {
                                 } else if (controller.step.value == 2) {
                                   return const Scan();
                                 } else if (controller.step.value == 3) {
-                                  return Container();
+                                  return const ConfirmInfo();
                                 } else if (controller.step.value == 4) {
                                   return Container();
                                 } else if (controller.step.value == 5) {

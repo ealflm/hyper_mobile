@@ -9,8 +9,8 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/light_bulb.dart';
 import 'package:hyper_customer/app/modules/register/controllers/register_controller.dart';
 
-class ScanPrepare extends GetView<RegisterController> {
-  const ScanPrepare({
+class ConfirmInfo extends GetView<RegisterController> {
+  const ConfirmInfo({
     Key? key,
   }) : super(key: key);
 
@@ -33,6 +33,9 @@ class ScanPrepare extends GetView<RegisterController> {
       width: double.infinity,
       child: Column(
         children: [
+          SizedBox(
+            height: 30.h,
+          ),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
@@ -58,27 +61,58 @@ class ScanPrepare extends GetView<RegisterController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Vui lòng chuẩn bị',
+              'Kiểm tra',
               style: h5.copyWith(
                 color: AppColors.lightBlack,
               ),
             ),
             Text(
-              'Bản gốc CCCD',
+              'thông tin cá nhân',
               style: h5.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
               ),
             ),
             SizedBox(
-              height: 34.h,
+              height: 30.h,
             ),
             const LightBulb(
-              message: 'Bạn cần đủ 16 tuổi để mở tài khoản Temper',
+              message:
+                  'Hãy chắc chắn rằng những thông tin bên dưới trùng khớp với thông tin thể hiện trên giấy tờ tuỳ thân',
             ),
+            SizedBox(
+              height: 30.h,
+            ),
+            _textField(
+              label: 'Họ và tên',
+              value: controller.citizenIdentityCard?.name ?? '-',
+            ),
+            SizedBox(height: 16.h),
+            _textField(
+              label: 'Ngày sinh',
+              value: controller.citizenIdentityCard?.birthDateStr ?? '-',
+            ),
+            SizedBox(height: 16.h),
+            _textField(
+              label: 'Giới tính',
+              value: controller.citizenIdentityCard?.genderStr ?? '-',
+            ),
+            SizedBox(height: 10.h),
           ],
         ),
       ),
+    );
+  }
+
+  TextFormField _textField({String label = '', String value = ''}) {
+    return TextFormField(
+      enabled: false,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        labelText: label,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+      ),
+      initialValue: value,
     );
   }
 }

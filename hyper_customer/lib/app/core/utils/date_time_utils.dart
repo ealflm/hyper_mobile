@@ -21,4 +21,11 @@ class DateTimeUtils {
         ? null
         : DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
   }
+
+  static DateTime? formCCCD(String value) {
+    int day = int.parse(value.substring(0, 2));
+    int month = int.parse(value.substring(2, 4));
+    int year = int.parse(value.substring(4, 8));
+    return DateTime(year, month, day);
+  }
 }

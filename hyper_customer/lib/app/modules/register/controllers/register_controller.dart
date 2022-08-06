@@ -4,11 +4,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
-import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/register/model/citizen_indentity_card.dart';
+import 'package:hyper_customer/app/modules/register/model/view_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -22,6 +23,9 @@ class RegisterController extends BaseController
   String? password;
   var phoneNumber = ''.obs;
   String fullName = '';
+  String userInfos = '';
+
+  var state = ViewState.normal.obs;
 
   @override
   void onInit() {
@@ -112,48 +116,25 @@ class RegisterController extends BaseController
 
       HapticFeedback.lightImpact();
 
-      if (data!.startsWith(AppValues.cardLinkQRPrefix)) {
-        var code = data.substring(AppValues.cardLinkQRPrefix.length);
+      if (data!.startsWith('0') && '|'.allMatches(data).length == 6) {
         qrController?.pauseCamera();
         HyperDialog.show(
-          title: 'Liên kết thẻ',
-          content: 'Bạn có chắc chắn muốn liên kết thẻ này hay không?',
-          primaryButtonText: 'Đồng ý',
-          secondaryButtonText: 'Huỷ',
-          primaryOnPressed: () {
-            Get.offAllNamed(
-              Routes.SCAN_CARD,
-              arguments: {'code': code},
-            );
-          },
-          secondaryOnPressed: () async {
-            await qrController?.resumeCamera();
-            Get.back();
-          },
-        );
-      } else if (data.startsWith(AppValues.rentingQRPrefix)) {
-        var code = data.substring(AppValues.rentingQRPrefix.length);
-        qrController?.pauseCamera();
-        await Get.toNamed(
-          Routes.RENTING_FORM,
-          arguments: {'code': code},
-        );
-        await qrController?.resumeCamera();
-      } else if (data.startsWith(AppValues.busQRPrefix)) {
-        var code = data.substring(AppValues.rentingQRPrefix.length);
-        qrController?.pauseCamera();
-
-        HyperDialog.show(
-          title: 'Thanh toán vé xe buýt',
-          content: 'Bạn có chắc chắn muốn thanh toán vé xe buýt này không?',
+          title: 'Quét QR Code',
+          content: 'Bạn có chắc chắn muốn sử dụng CCCD này hay không',
           primaryButtonText: 'Đồng ý',
           secondaryButtonText: 'Huỷ',
           primaryOnPressed: () async {
-            await Get.toNamed(
-              Routes.BUS_PAYMENT,
-              arguments: {'code': code},
+            userInfos = data;
+            toModel(userInfos);
+            Get.back();
+            state.value = ViewState.scanSuccess;
+            await Future.delayed(
+              const Duration(
+                seconds: 2,
+              ),
             );
-            await qrController?.resumeCamera();
+            state.value = ViewState.normal;
+            changeStep(3);
           },
           secondaryOnPressed: () async {
             await qrController?.resumeCamera();
@@ -174,6 +155,21 @@ class RegisterController extends BaseController
     });
   }
 
+  CitizenIdentityCard? citizenIdentityCard;
+
+  void toModel(String value) {
+    var data = value.split('|');
+    citizenIdentityCard = CitizenIdentityCard.fromString(
+      cccd: data[0],
+      cmnd: data[1],
+      name: data[2],
+      birthDate: data[3],
+      gender: data[4],
+      address: data[5],
+      createdDate: data[6],
+    );
+  }
+
   void toggleFlash() async {
     if (qrController != null) {
       await qrController?.toggleFlash();
@@ -188,4 +184,5 @@ class RegisterController extends BaseController
   }
 
   // End Region
+
 }

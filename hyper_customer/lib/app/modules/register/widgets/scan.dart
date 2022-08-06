@@ -3,13 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
-import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/light_bulb.dart';
 import 'package:hyper_customer/app/core/widgets/qr_painter.dart';
 import 'package:hyper_customer/app/modules/register/controllers/register_controller.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class Scan extends GetView<RegisterController> {
@@ -20,37 +18,10 @@ class Scan extends GetView<RegisterController> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _body(),
-        _bottom(),
       ],
-    );
-  }
-
-  Widget _bottom() {
-    return Container(
-      padding: EdgeInsets.only(
-        bottom: 20.h,
-      ),
-      width: double.infinity,
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ButtonStyles.primary(),
-              onPressed: () {
-                // controller.changeStep(3);
-                controller.qrController?.pauseCamera();
-              },
-              child: Text(
-                'Tiếp tục',
-                style: buttonBold,
-              ),
-            ),
-          )
-        ],
-      ),
     );
   }
 

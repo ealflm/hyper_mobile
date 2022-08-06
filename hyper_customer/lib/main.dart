@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:hyper_customer/app/core/controllers/network_controller.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/config/map_config.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import 'app/my_app.dart';
@@ -48,6 +49,7 @@ void main() {
   TokenManager.instance.init();
 
   Intl.defaultLocale = 'vi_VN';
+  initializeDateFormatting();
 
   runApp(const MyApp());
 }
