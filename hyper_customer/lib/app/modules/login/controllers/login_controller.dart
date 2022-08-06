@@ -69,8 +69,8 @@ class LoginController extends BaseController {
     );
 
     if (token != null) {
-      TokenManager.instance.saveToken(token);
-      TokenManager.instance.saveUser(token);
+      await TokenManager.instance.saveToken(token);
+      await TokenManager.instance.saveUser(token);
       Get.offAllNamed(Routes.MAIN);
     }
   }

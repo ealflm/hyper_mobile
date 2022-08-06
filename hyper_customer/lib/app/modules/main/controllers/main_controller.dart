@@ -5,11 +5,14 @@ import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
 import 'package:hyper_customer/app/core/model/payment_result.dart';
 import 'package:hyper_customer/app/modules/account/views/account_view.dart';
 import 'package:hyper_customer/app/modules/activity/views/activity_view.dart';
+import 'package:hyper_customer/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_customer/app/modules/home/views/home_view.dart';
+import 'package:hyper_customer/app/modules/main/bindings/main_binding.dart';
 import 'package:hyper_customer/app/modules/package/views/package_view.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class MainController extends GetxController {
+  late HomeController _homeController;
   var currentTab = 0.obs;
   final List<Widget> _screens = [
     const HomeView(),
@@ -23,6 +26,13 @@ class MainController extends GetxController {
 
   @override
   void onInit() async {
+    Get.put(
+      HomeController(),
+      permanent: true,
+    );
+    _homeController = Get.find<HomeController>();
+    _homeController.init();
+
     await SettingController.intance.init();
 
     final appLinks = AppLinks();

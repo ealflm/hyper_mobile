@@ -31,4 +31,7 @@ abstract class AppAssets {
   static const String busIcon = 'assets/svg/bus_icon.svg';
 
   static const String success = 'assets/svg/success.svg';
+
+  static const String male = 'assets/svg/male.svg';
+  static const String female = 'assets/svg/female.svg';
 }

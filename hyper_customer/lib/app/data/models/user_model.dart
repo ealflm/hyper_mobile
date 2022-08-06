@@ -16,6 +16,14 @@ class User {
   String? jti;
   int? exp;
 
+  String? get fullName {
+    return '$firstName $lastName';
+  }
+
+  String? get url {
+    return 'https://se32.blob.core.windows.net/customer/$photoUrl';
+  }
+
   User(
       {this.customerId,
       this.firstName,

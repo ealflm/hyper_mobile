@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -127,19 +128,38 @@ class AccountView extends GetView<AccountController> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            radius: 48.r,
-            backgroundColor: AppColors.gray,
-            backgroundImage: const NetworkImage(
-                'https://i.pinimg.com/280x280_RS/bb/e1/68/bbe168d17c7e6b40b87cf464015f6b16.jpg'),
+          ClipOval(
+            child: SizedBox.fromSize(
+              size: Size.fromRadius(58.r), // Image radius
+              child: Obx(
+                () => CachedNetworkImage(
+                  fadeInDuration: const Duration(),
+                  fadeOutDuration: const Duration(),
+                  placeholder: (context, url) {
+                    return controller.user.value?.gender == 'False'
+                        ? SvgPicture.asset(AppAssets.female)
+                        : SvgPicture.asset(AppAssets.male);
+                  },
+                  imageUrl: controller.user.value?.url ?? '-',
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) {
+                    return controller.user.value?.gender == 'False'
+                        ? SvgPicture.asset(AppAssets.female)
+                        : SvgPicture.asset(AppAssets.male);
+                  },
+                ),
+              ),
+            ),
           ),
           SizedBox(
             height: 10.h,
           ),
-          Text(
-            'Đào Phương Nam',
-            style: h6.copyWith(
-              color: AppColors.white,
+          Obx(
+            () => Text(
+              controller.user.value?.fullName ?? '-',
+              style: h6.copyWith(
+                color: AppColors.white,
+              ),
             ),
           )
         ],
