@@ -53,50 +53,55 @@ class Scan extends GetView<RegisterController> {
             SizedBox(
               height: 30.h,
             ),
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9.r),
-                  border: Border.all(
-                    color: AppColors.primary500,
-                    width: 2.r,
+            GestureDetector(
+              onTap: () {
+                controller.toggleFlash();
+              },
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(9.r),
+                    border: Border.all(
+                      color: AppColors.primary500,
+                      width: 2.r,
+                    ),
                   ),
-                ),
-                width: 240.r,
-                height: 240.r,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(7.r),
-                  child: OverflowBox(
-                    alignment: Alignment.center,
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: SizedBox(
-                        width: 1.sw,
-                        height: 1.sh,
-                        child: Stack(
-                          children: [
-                            QRView(
-                              key: controller.qrKey,
-                              onQRViewCreated: controller.onQRViewCreated,
-                              overlay: QrScannerOverlayShape(
-                                borderColor: Colors.white,
-                                borderRadius: 1.r,
-                                borderLength: 35.w,
-                                borderWidth: 10,
-                                cutOutSize: 200.r,
-                                overlayColor: AppColors.black.withOpacity(0),
-                              ),
-                            ),
-                            Center(
-                              child: CustomPaint(
-                                painter: QRPainter(),
-                                child: SizedBox(
-                                  width: 200.r,
-                                  height: 200.r,
+                  width: 240.r,
+                  height: 240.r,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(7.r),
+                    child: OverflowBox(
+                      alignment: Alignment.center,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: SizedBox(
+                          width: 1.sw,
+                          height: 1.sh,
+                          child: Stack(
+                            children: [
+                              QRView(
+                                key: controller.qrKey,
+                                onQRViewCreated: controller.onQRViewCreated,
+                                overlay: QrScannerOverlayShape(
+                                  borderColor: Colors.white,
+                                  borderRadius: 1.r,
+                                  borderLength: 35.w,
+                                  borderWidth: 10,
+                                  cutOutSize: 200.r,
+                                  overlayColor: AppColors.black.withOpacity(0),
                                 ),
                               ),
-                            )
-                          ],
+                              Center(
+                                child: CustomPaint(
+                                  painter: QRPainter(),
+                                  child: SizedBox(
+                                    width: 200.r,
+                                    height: 200.r,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

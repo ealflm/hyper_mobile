@@ -5,23 +5,27 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
+import 'package:hyper_customer/app/core/values/input_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/light_bulb.dart';
 import 'package:hyper_customer/app/modules/register/controllers/register_controller.dart';
 
-class ConfirmInfo extends GetView<RegisterController> {
-  const ConfirmInfo({
+class CreatePin extends GetView<RegisterController> {
+  const CreatePin({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _body(),
-        _bottom(),
-      ],
+    return Form(
+      key: controller.formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _body(),
+          _bottom(),
+        ],
+      ),
     );
   }
 
@@ -41,10 +45,11 @@ class ConfirmInfo extends GetView<RegisterController> {
             child: ElevatedButton(
               style: ButtonStyles.primary(),
               onPressed: () {
-                controller.changeStep(4);
+                FocusManager.instance.primaryFocus?.unfocus();
+                controller.submit();
               },
               child: Text(
-                'Xác nhận',
+                'Tạo tài khoản',
                 style: buttonBold,
               ),
             ),
@@ -61,13 +66,13 @@ class ConfirmInfo extends GetView<RegisterController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Kiểm tra',
+              'Tạo',
               style: h5.copyWith(
                 color: AppColors.lightBlack,
               ),
             ),
             Text(
-              'thông tin cá nhân',
+              'mã PIN đăng nhập',
               style: h5.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
@@ -77,27 +82,34 @@ class ConfirmInfo extends GetView<RegisterController> {
               height: 30.h,
             ),
             const LightBulb(
-              message:
-                  'Hãy chắc chắn rằng những thông tin bên dưới trùng khớp với thông tin thể hiện trên giấy tờ tuỳ thân',
+              message: 'Mã PIN gồm 6 chữ số',
+              isCenter: true,
             ),
             SizedBox(
               height: 30.h,
             ),
-            _textField(
-              label: 'Họ và tên',
-              value: controller.citizenIdentityCard?.name ?? '-',
+            TextFormField(
+              obscureText: true,
+              obscuringCharacter: '●',
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: InputStyles.roundBorder(
+                prefixIcon: const Icon(Icons.key),
+                hintText: "Nhập mã PIN",
+              ),
+              maxLength: 6,
+              validator: (value) {
+                if (value.toString().isEmpty) {
+                  return 'Vui lòng nhập mã PIN để tiếp tục';
+                }
+                if (value.toString().length != 6) {
+                  return 'Vui lòng nhập 6 chữ số';
+                }
+                return null;
+              },
+              onSaved: (value) => controller.password = value,
+              keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 16.h),
-            _textField(
-              label: 'Ngày sinh',
-              value: controller.citizenIdentityCard?.birthDateStr ?? '-',
-            ),
-            SizedBox(height: 16.h),
-            _textField(
-              label: 'Giới tính',
-              value: controller.citizenIdentityCard?.genderStr ?? '-',
-            ),
-            SizedBox(height: 10.h),
           ],
         ),
       ),

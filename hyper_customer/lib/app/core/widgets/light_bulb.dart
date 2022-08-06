@@ -10,15 +10,18 @@ class LightBulb extends StatelessWidget {
     Key? key,
     this.message = '',
     this.child,
+    this.isCenter = false,
   }) : super(key: key);
 
   final String message;
   final Widget? child;
+  final bool isCenter;
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment:
+          isCenter ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: [
         Container(
           width: 24.r,

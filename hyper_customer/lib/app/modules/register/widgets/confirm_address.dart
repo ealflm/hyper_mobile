@@ -9,8 +9,8 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/light_bulb.dart';
 import 'package:hyper_customer/app/modules/register/controllers/register_controller.dart';
 
-class ConfirmInfo extends GetView<RegisterController> {
-  const ConfirmInfo({
+class ConfirmAddress extends GetView<RegisterController> {
+  const ConfirmAddress({
     Key? key,
   }) : super(key: key);
 
@@ -41,7 +41,7 @@ class ConfirmInfo extends GetView<RegisterController> {
             child: ElevatedButton(
               style: ButtonStyles.primary(),
               onPressed: () {
-                controller.changeStep(4);
+                controller.changeStep(5);
               },
               child: Text(
                 'Xác nhận',
@@ -67,7 +67,7 @@ class ConfirmInfo extends GetView<RegisterController> {
               ),
             ),
             Text(
-              'thông tin cá nhân',
+              'địa chỉ',
               style: h5.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
@@ -84,18 +84,23 @@ class ConfirmInfo extends GetView<RegisterController> {
               height: 30.h,
             ),
             _textField(
-              label: 'Họ và tên',
-              value: controller.citizenIdentityCard?.name ?? '-',
+              label: 'Thành phố / Tỉnh',
+              value: controller.citizenIdentityCard?.city ?? '-',
             ),
             SizedBox(height: 16.h),
             _textField(
-              label: 'Ngày sinh',
-              value: controller.citizenIdentityCard?.birthDateStr ?? '-',
+              label: 'Quận / Huyện',
+              value: controller.citizenIdentityCard?.district ?? '-',
             ),
             SizedBox(height: 16.h),
             _textField(
-              label: 'Giới tính',
-              value: controller.citizenIdentityCard?.genderStr ?? '-',
+              label: 'Phường / Xã',
+              value: controller.citizenIdentityCard?.ward ?? '-',
+            ),
+            SizedBox(height: 16.h),
+            _textField(
+              label: 'Địa chỉ',
+              value: controller.citizenIdentityCard?.street ?? '-',
             ),
             SizedBox(height: 10.h),
           ],

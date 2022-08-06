@@ -4,6 +4,7 @@ import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
+import 'package:hyper_customer/app/modules/register/model/citizen_indentity_card.dart';
 import 'package:latlong2/latlong.dart';
 
 abstract class Repository {
@@ -37,4 +38,10 @@ abstract class Repository {
   Future<String> sendOtp(String phoneNumber);
 
   Future<bool> verifyOtp(String phoneNumber, String otp, String requestId);
+
+  Future<bool> register(
+    String phoneNumber,
+    String pin,
+    CitizenIdentityCard card,
+  );
 }

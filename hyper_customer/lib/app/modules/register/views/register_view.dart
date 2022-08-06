@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,10 +13,13 @@ import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/register/controllers/register_controller.dart';
 import 'package:hyper_customer/app/modules/register/model/view_state.dart';
+import 'package:hyper_customer/app/modules/register/widgets/confirm_address.dart';
 import 'package:hyper_customer/app/modules/register/widgets/confirm_info.dart';
+import 'package:hyper_customer/app/modules/register/widgets/create_pin.dart';
 import 'package:hyper_customer/app/modules/register/widgets/scan.dart';
 import 'package:hyper_customer/app/modules/register/widgets/scan_prepare.dart';
 import 'package:hyper_customer/app/modules/register/widgets/term_and_condition.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class RegisterView extends GetView<RegisterController> {
@@ -31,8 +32,86 @@ class RegisterView extends GetView<RegisterController> {
           if (controller.state.value == ViewState.normal)
             _main()
           else if (controller.state.value == ViewState.scanSuccess)
-            _scanSuccess(),
+            _scanSuccess()
+          else if (controller.state.value == ViewState.registerSuccess)
+            _registerSuccess()
         ],
+      ),
+    );
+  }
+
+  Widget _registerSuccess() {
+    return StatusBar(
+      brightness: Brightness.dark,
+      child: Scaffold(
+        body: Container(
+          color: AppColors.white,
+          child: Center(
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 30.w),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SvgPicture.asset(
+                            AppAssets.success,
+                            width: 117.r,
+                          ),
+                          SizedBox(
+                            height: 30.h,
+                          ),
+                          Text(
+                            'Tạo tài khoản thành công',
+                            textAlign: TextAlign.center,
+                            style: h5.copyWith(
+                              color: AppColors.lightBlack,
+                              fontWeight: FontWeights.light,
+                            ),
+                          ),
+                          Text(
+                            'Cảm ơn bạn đã đăng kí tài khoản Temper',
+                            textAlign: TextAlign.center,
+                            style: subtitle1.copyWith(
+                              color: AppColors.lightBlack,
+                              fontWeight: FontWeights.thin,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(
+                      bottom: 20.h,
+                    ),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        style: ButtonStyles.primary(),
+                        onPressed: () {
+                          Get.toNamed(
+                            Routes.LOGIN,
+                            arguments: {
+                              'phoneNumber': controller.phoneNumber.value,
+                            },
+                          );
+                        },
+                        child: Text(
+                          'Đăng nhập',
+                          style: buttonBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -144,20 +223,21 @@ class RegisterView extends GetView<RegisterController> {
                           Expanded(
                             child: Obx(
                               () {
-                                if (controller.step.value == 0) {
-                                  return const TermAndCondition();
-                                } else if (controller.step.value == 1) {
-                                  return const ScanPrepare();
-                                } else if (controller.step.value == 2) {
-                                  return const Scan();
-                                } else if (controller.step.value == 3) {
-                                  return const ConfirmInfo();
-                                } else if (controller.step.value == 4) {
-                                  return Container();
-                                } else if (controller.step.value == 5) {
-                                  return Container();
-                                } else {
-                                  return Container();
+                                switch (controller.step.value) {
+                                  case 0:
+                                    return const TermAndCondition();
+                                  case 1:
+                                    return const ScanPrepare();
+                                  case 2:
+                                    return const Scan();
+                                  case 3:
+                                    return const ConfirmInfo();
+                                  case 4:
+                                    return const ConfirmAddress();
+                                  case 5:
+                                    return const CreatePin();
+                                  default:
+                                    return Container();
                                 }
                               },
                             ),
