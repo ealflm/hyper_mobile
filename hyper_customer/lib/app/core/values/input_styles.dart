@@ -10,6 +10,7 @@ abstract class InputStyles {
       {Widget? prefixIcon, String labelText = "", String hintText = ""}) {
     return InputDecoration(
       errorStyle: caption,
+      errorMaxLines: 2,
       contentPadding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 20.w),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(50.r),

@@ -79,9 +79,14 @@ class StartView extends GetView<StartController> {
                                       prefixIcon: const Icon(Icons.phone),
                                       hintText: "Nhập số điện thoại",
                                     ),
+                                    maxLength: 10,
                                     validator: (value) {
                                       if (value.toString().isEmpty) {
                                         return 'Vui lòng nhập số điện thoại để tiếp tục';
+                                      }
+                                      if (!value.toString().startsWith('0') ||
+                                          value.toString().length != 10) {
+                                        return 'Nhập số điện thoại có 10 chữ số và bắt đầu bằng số 0';
                                       }
                                       return null;
                                     },

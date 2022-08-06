@@ -37,12 +37,6 @@ class StartController extends BaseController {
         } else {
           Utils.showToast('Kết nối thất bại');
         }
-        Get.offAllNamed(
-          Routes.REGISTER_OTP,
-          arguments: {
-            'phoneNumber': phoneNumber,
-          },
-        );
       },
     );
   }
