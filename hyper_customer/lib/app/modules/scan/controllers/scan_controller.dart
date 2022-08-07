@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
+import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/services.dart';
@@ -11,13 +12,16 @@ class ScanController extends GetxController {
   Barcode? result;
   QRViewController? qrController;
   var isFlashOn = false.obs;
-  bool isFromBusing = false;
+  var scanMode = ScanMode.all.obs;
 
   @override
   void onInit() {
     HyperDialog.isOpen = false;
     if (Get.arguments != null) {
-      isFromBusing = Get.arguments['isFromBusing'] ?? false;
+      var data = Get.arguments as Map<String, dynamic>;
+      if (data.containsKey('scanMode')) {
+        scanMode.value = Get.arguments['scanMode'];
+      }
     }
     super.onInit();
   }
@@ -32,7 +36,8 @@ class ScanController extends GetxController {
 
       HapticFeedback.lightImpact();
 
-      if (data!.startsWith(AppValues.cardLinkQRPrefix)) {
+      if (data!.startsWith(AppValues.cardLinkQRPrefix) &&
+          (scanMode.value == ScanMode.card || scanMode.value == ScanMode.all)) {
         var code = data.substring(AppValues.cardLinkQRPrefix.length);
         qrController?.pauseCamera();
         HyperDialog.show(
@@ -51,7 +56,9 @@ class ScanController extends GetxController {
             Get.back();
           },
         );
-      } else if (data.startsWith(AppValues.rentingQRPrefix)) {
+      } else if (data.startsWith(AppValues.rentingQRPrefix) &&
+          (scanMode.value == ScanMode.renting ||
+              scanMode.value == ScanMode.all)) {
         var code = data.substring(AppValues.rentingQRPrefix.length);
         qrController?.pauseCamera();
         await Get.toNamed(
@@ -59,7 +66,9 @@ class ScanController extends GetxController {
           arguments: {'code': code},
         );
         await qrController?.resumeCamera();
-      } else if (data.startsWith(AppValues.busQRPrefix)) {
+      } else if (data.startsWith(AppValues.busQRPrefix) &&
+          (scanMode.value == ScanMode.busing ||
+              scanMode.value == ScanMode.all)) {
         var code = data.substring(AppValues.rentingQRPrefix.length);
         qrController?.pauseCamera();
 
@@ -69,7 +78,7 @@ class ScanController extends GetxController {
           primaryButtonText: 'Đồng ý',
           secondaryButtonText: 'Huỷ',
           primaryOnPressed: () async {
-            if (isFromBusing) {
+            if (scanMode.value == ScanMode.busing) {
               if (HyperDialog.isOpen) {
                 Get.back();
               }

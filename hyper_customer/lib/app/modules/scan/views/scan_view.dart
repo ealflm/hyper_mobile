@@ -7,6 +7,7 @@ import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/qr_painter.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
+import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../controllers/scan_controller.dart';
@@ -78,12 +79,35 @@ class ScanView extends GetView<ScanController> {
                       horizontal: 12.w,
                       vertical: 8.h,
                     ),
-                    child: Text(
-                      'Quét mã QR',
-                      style: subtitle1.copyWith(
-                        fontWeight: FontWeights.medium,
-                        color: AppColors.white,
-                      ),
+                    child: Obx(
+                      () {
+                        switch (controller.scanMode.value) {
+                          case ScanMode.renting:
+                            return Text(
+                              'Quét mã QR - Thuê xe',
+                              style: subtitle1.copyWith(
+                                fontWeight: FontWeights.medium,
+                                color: AppColors.white,
+                              ),
+                            );
+                          case ScanMode.busing:
+                            return Text(
+                              'Quét mã QR - Đi xe buýt',
+                              style: subtitle1.copyWith(
+                                fontWeight: FontWeights.medium,
+                                color: AppColors.white,
+                              ),
+                            );
+                          default:
+                            return Text(
+                              'Quét mã QR',
+                              style: subtitle1.copyWith(
+                                fontWeight: FontWeights.medium,
+                                color: AppColors.white,
+                              ),
+                            );
+                        }
+                      },
                     ),
                   ),
                 ],

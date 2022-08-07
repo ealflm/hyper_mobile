@@ -12,6 +12,7 @@ import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
+import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
 
@@ -78,7 +79,12 @@ class DestinationArrivedView extends StatelessWidget {
                                 width: double.infinity,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Get.offAllNamed(Routes.SCAN);
+                                    Get.offAllNamed(
+                                      Routes.SCAN,
+                                      arguments: {
+                                        'scanMode': ScanMode.renting,
+                                      },
+                                    );
                                   },
                                   style: ButtonStyles.primary(),
                                   child: Text(

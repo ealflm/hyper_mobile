@@ -155,7 +155,7 @@ class RentingFormView extends GetView<RentingFormController> {
                                         child: _button(
                                           'Màn hình chính',
                                           () {
-                                            Get.toNamed(Routes.MAIN);
+                                            Get.offAllNamed(Routes.MAIN);
                                           },
                                         ),
                                       ),

@@ -15,6 +15,7 @@ import 'package:hyper_customer/app/modules/bus_direction/widgets/bus_item.dart';
 import 'package:hyper_customer/app/modules/bus_direction/widgets/walk_item.dart';
 import 'package:hyper_customer/app/modules/bus_payment/controllers/bus_payment_controller.dart';
 import 'package:hyper_customer/app/modules/bus_payment/models/state.dart';
+import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../routes/app_pages.dart';
@@ -293,7 +294,7 @@ class BusDirectionController extends BaseController {
     var data = await Get.toNamed(
       Routes.SCAN,
       arguments: {
-        'isFromBusing': true,
+        'scanMode': ScanMode.busing,
       },
     );
     if (data == null) return;
