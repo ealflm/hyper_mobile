@@ -79,7 +79,7 @@ class DestinationArrivedView extends StatelessWidget {
                                 width: double.infinity,
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Get.offAllNamed(
+                                    Get.toNamed(
                                       Routes.SCAN,
                                       arguments: {
                                         'scanMode': ScanMode.renting,

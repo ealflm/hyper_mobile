@@ -79,35 +79,12 @@ class ScanView extends GetView<ScanController> {
                       horizontal: 12.w,
                       vertical: 8.h,
                     ),
-                    child: Obx(
-                      () {
-                        switch (controller.scanMode.value) {
-                          case ScanMode.renting:
-                            return Text(
-                              'Quét mã QR - Thuê xe',
-                              style: subtitle1.copyWith(
-                                fontWeight: FontWeights.medium,
-                                color: AppColors.white,
-                              ),
-                            );
-                          case ScanMode.busing:
-                            return Text(
-                              'Quét mã QR - Đi xe buýt',
-                              style: subtitle1.copyWith(
-                                fontWeight: FontWeights.medium,
-                                color: AppColors.white,
-                              ),
-                            );
-                          default:
-                            return Text(
-                              'Quét mã QR',
-                              style: subtitle1.copyWith(
-                                fontWeight: FontWeights.medium,
-                                color: AppColors.white,
-                              ),
-                            );
-                        }
-                      },
+                    child: Text(
+                      'Quét mã QR',
+                      style: subtitle1.copyWith(
+                        fontWeight: FontWeights.medium,
+                        color: AppColors.white,
+                      ),
                     ),
                   ),
                 ],
