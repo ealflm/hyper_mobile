@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
+import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
@@ -64,6 +67,9 @@ class BusPaymentView extends GetView<BusPaymentController> {
                                       ViewState.loading)
                                     _loading()
                                   else if (controller.state.value ==
+                                      ViewState.showInfo)
+                                    _showInfo()
+                                  else if (controller.state.value ==
                                       ViewState.success)
                                     _successful()
                                   else
@@ -72,39 +78,19 @@ class BusPaymentView extends GetView<BusPaymentController> {
                               );
                             },
                           ),
-                          Column(
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                child: TextButton(
-                                  onPressed: () {
-                                    Get.offAllNamed(Routes.SCAN);
-                                  },
-                                  style: ButtonStyles.secondary(),
-                                  child: Text(
-                                    'Tiếp tục quét QR',
-                                    style: buttonBold,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10.h,
-                              ),
-                              SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    Get.offAllNamed(Routes.MAIN);
-                                  },
-                                  style: ButtonStyles.primary(),
-                                  child: Text(
-                                    'Màn hình chính',
-                                    style: buttonBold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
+                          Obx(
+                            () {
+                              if (controller.state.value ==
+                                  ViewState.showInfo) {
+                                return _bottomInfo();
+                              } else if (controller.state.value ==
+                                  ViewState.success) {
+                                return _bottomSuccess();
+                              } else {
+                                return Container();
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),
@@ -115,6 +101,76 @@ class BusPaymentView extends GetView<BusPaymentController> {
           ),
         ),
       ),
+    );
+  }
+
+  Column _bottomSuccess() {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: TextButton(
+            onPressed: () {
+              Get.offNamed(Routes.SCAN);
+            },
+            style: ButtonStyles.secondary(),
+            child: Text(
+              'Tiếp tục quét QR',
+              style: buttonBold,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              Get.offAllNamed(Routes.MAIN);
+            },
+            style: ButtonStyles.primary(),
+            child: Text(
+              'Màn hình chính',
+              style: buttonBold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column _bottomInfo() {
+    return Column(
+      children: [
+        SizedBox(
+          width: double.infinity,
+          child: TextButton(
+            onPressed: () {
+              Get.offNamed(Routes.SCAN);
+            },
+            style: ButtonStyles.secondary(),
+            child: Text(
+              'Tiếp tục quét QR',
+              style: buttonBold,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: controller.busPayment,
+            style: ButtonStyles.primary(),
+            child: Text(
+              'Thanh toán',
+              style: buttonBold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -156,6 +212,142 @@ class BusPaymentView extends GetView<BusPaymentController> {
     );
   }
 
+  Widget _showInfo() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Text(
+              'Chi tiết chuyến đi',
+              style: h6.copyWith(
+                color: AppColors.softBlack,
+                fontWeight: FontWeights.regular,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 30.h,
+        ),
+        Obx(
+          () => controller.busTrip.value != null
+              ? Column(
+                  children: [
+                    _detailItem(
+                      'Tên chuyến',
+                      controller.busTrip.value?.name ?? '-',
+                    ),
+                    const Divider(
+                      color: AppColors.line,
+                    ),
+                    _detailItem(
+                      'Tổng số trạm',
+                      controller.busTrip.value?.totalStation.toString() ?? '-',
+                    ),
+                    const Divider(
+                      color: AppColors.line,
+                    ),
+                    _detailItem(
+                      'Khoảng cách',
+                      NumberUtils.distance(
+                        controller.busTrip.value?.distance ?? 0,
+                      ),
+                    ),
+                    const Divider(
+                      color: AppColors.line,
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Tổng tiền',
+                              style: subtitle1.copyWith(
+                                fontWeight: FontWeights.regular,
+                                color: AppColors.lightBlack,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              NumberUtils.vnd(controller.busTrip.value?.price),
+                              style: subtitle1.copyWith(
+                                color: AppColors.softBlack,
+                                fontWeight: FontWeights.medium,
+                                fontSize: 18.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                )
+              : Container(),
+        ),
+        SizedBox(
+          height: 20.h,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 24.r,
+              height: 24.r,
+              padding: EdgeInsets.all(3.r),
+              decoration: const BoxDecoration(
+                color: AppColors.primary400,
+                shape: BoxShape.circle,
+              ),
+              child: SvgPicture.asset(
+                AppAssets.lightBulb,
+              ),
+            ),
+            SizedBox(
+              width: 10.w,
+            ),
+            Expanded(
+              child: Text(
+                'Tiền sẽ được hoàn lại nếu bạn không đi hết chuyến',
+                style: body2.copyWith(
+                  color: AppColors.description,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Row _detailItem(String key, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          key,
+          style: subtitle1.copyWith(
+            fontWeight: FontWeights.regular,
+            color: AppColors.lightBlack,
+          ),
+        ),
+        Text(
+          value,
+          style: subtitle1.copyWith(
+            color: AppColors.softBlack,
+            fontWeight: FontWeights.medium,
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _successful() {
     return Column(
       children: [
@@ -164,18 +356,59 @@ class BusPaymentView extends GetView<BusPaymentController> {
             Lottie.asset(
               AppAnimationAssets.successful,
               repeat: false,
-              width: 190.w,
+              height: 138.h,
             ),
             SizedBox(
               height: 10.h,
             ),
             Text(
-              'Thanh toán thành công',
-              style: h6.copyWith(
+              'Giao dịch thành công',
+              style: subtitle1.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.lightBlack,
+              ),
+            ),
+            SizedBox(
+              height: 5.h,
+            ),
+            Text(
+              NumberUtils.vnd(controller.busTrip.value?.price),
+              style: h5.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
-                fontSize: 18.sp,
               ),
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            Obx(
+              () => controller.busTrip.value != null
+                  ? Column(
+                      children: [
+                        _detailItem(
+                          'Tên chuyến',
+                          controller.busTrip.value?.name ?? '-',
+                        ),
+                        const Divider(
+                          color: AppColors.line,
+                        ),
+                        _detailItem(
+                          'Tổng số trạm',
+                          controller.busTrip.value?.totalStation.toString() ??
+                              '-',
+                        ),
+                        const Divider(
+                          color: AppColors.line,
+                        ),
+                        _detailItem(
+                          'Khoảng cách',
+                          NumberUtils.distance(
+                            controller.busTrip.value?.distance ?? 0,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Container(),
             ),
           ],
         ),

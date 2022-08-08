@@ -1,6 +1,7 @@
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
+import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
@@ -28,6 +29,8 @@ abstract class Repository {
   Future<List<BusDirection>> getBusDirection(LatLng start, LatLng end);
 
   Future<BusStations> getBusStation();
+
+  Future<BusTrip> getBusTrip(String id);
 
   Future<bool> busPayment({
     required String customerId,

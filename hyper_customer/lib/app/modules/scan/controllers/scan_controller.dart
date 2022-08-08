@@ -72,32 +72,12 @@ class ScanController extends GetxController {
         var code = data.substring(AppValues.rentingQRPrefix.length);
         qrController?.pauseCamera();
 
-        HyperDialog.show(
-          title: 'Thanh toán vé xe buýt',
-          content: 'Bạn có chắc chắn muốn thanh toán vé xe buýt này không?',
-          primaryButtonText: 'Đồng ý',
-          secondaryButtonText: 'Huỷ',
-          primaryOnPressed: () async {
-            if (scanMode.value == ScanMode.busing) {
-              if (HyperDialog.isOpen) {
-                Get.back();
-              }
-              Get.back(
-                result: {'code': code},
-              );
-            } else {
-              await Get.toNamed(
-                Routes.BUS_PAYMENT,
-                arguments: {'code': code},
-              );
-            }
-            await qrController?.resumeCamera();
-          },
-          secondaryOnPressed: () async {
-            await qrController?.resumeCamera();
-            Get.back();
-          },
+        await Get.offNamed(
+          Routes.BUS_PAYMENT,
+          arguments: {'code': code},
         );
+
+        await qrController?.resumeCamera();
       } else {
         HyperDialog.show(
           title: 'Không hỗ trợ',

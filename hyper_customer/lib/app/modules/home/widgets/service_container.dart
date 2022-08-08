@@ -26,7 +26,7 @@ class ServiceContainer extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.r),
+            borderRadius: BorderRadius.circular(5.w),
             boxShadow: [
               BoxShadow(
                 offset: const Offset(0, 4),
@@ -36,10 +36,10 @@ class ServiceContainer extends StatelessWidget {
               ),
             ],
           ),
-          width: 95.r,
-          height: 95.r,
+          width: 95.w,
+          height: 95.w,
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(5.r),
+            borderRadius: BorderRadius.circular(5.w),
             child: SvgPicture.asset(
               backgroundAsset,
               fit: BoxFit.cover,
@@ -47,15 +47,15 @@ class ServiceContainer extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 95.r,
-          height: 95.r,
+          width: 95.w,
+          height: 95.w,
           child: Column(
             children: [
               Expanded(
                 child: Center(
                   child: SizedBox(
-                    width: 40.r,
-                    height: 40.r,
+                    width: 40.w,
+                    height: 40.w,
                     child: SvgPicture.asset(
                       iconAsset,
                       fit: BoxFit.cover,
@@ -76,16 +76,16 @@ class ServiceContainer extends StatelessWidget {
         ),
         Material(
           color: Colors.transparent,
-          borderRadius: BorderRadius.circular(5.r),
+          borderRadius: BorderRadius.circular(5.w),
           child: InkWell(
             onTap: onPressed,
             splashColor: color.withOpacity(0.5),
             child: Ink(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.r),
+                borderRadius: BorderRadius.circular(5.w),
               ),
-              width: 95.r,
-              height: 95.r,
+              width: 95.w,
+              height: 95.w,
             ),
           ),
         ),

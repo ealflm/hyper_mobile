@@ -3,6 +3,7 @@ import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
+import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
@@ -292,6 +293,25 @@ class RepositoryImpl extends BaseRepository implements Repository {
       return callApi(dioCall).then((response) {
         return true;
       });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<BusTrip> getBusTrip(String id) {
+    var endpoint = "${DioProvider.baseUrl}/bus-trip";
+    var param = {
+      "vehicleId": id,
+    };
+    var dioCall = dioTokenClient.get(endpoint, queryParameters: param);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return BusTrip.fromJson(response.data['body']);
+        },
+      );
     } catch (e) {
       rethrow;
     }

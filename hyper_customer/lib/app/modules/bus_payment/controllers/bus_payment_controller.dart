@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/map_location_controller.dart';
+import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:latlong2/latlong.dart';
@@ -16,13 +18,41 @@ class BusPaymentController extends BaseController {
   @override
   void onInit() {
     if (Get.arguments != null) {
-      code = Get.arguments['code'];
-      busPayment();
+      var data = Get.arguments as Map<String, dynamic>;
+      if (data.containsKey('code')) {
+        code = Get.arguments['code'];
+        busTripInfo();
+      } else {
+        state.value = ViewState.error;
+      }
     }
     super.onInit();
   }
 
+  Rx<BusTrip?> busTrip = Rx<BusTrip?>(null);
+
+  Future<void> busTripInfo() async {
+    state.value = ViewState.loading;
+
+    var tripInfoService = _repository.getBusTrip(code ?? '');
+
+    await callDataService(
+      tripInfoService,
+      onSuccess: (BusTrip response) {
+        busTrip(response);
+        state.value = ViewState.showInfo;
+      },
+      onError: (DioError dioError) {
+        state.value = ViewState.error;
+      },
+    );
+
+    debugPrint('Nam: ${state.value}');
+  }
+
   Future<void> busPayment() async {
+    state.value = ViewState.loading;
+
     String customerId = TokenManager.instance.user?.customerId ?? '';
     if (customerId == '') return;
     MapLocationController locationController = MapLocationController();
@@ -46,7 +76,6 @@ class BusPaymentController extends BaseController {
       },
       onError: (DioError dioError) {
         state.value = ViewState.error;
-        // Utils.showToast('Kết nối thất bại');
       },
     );
   }
