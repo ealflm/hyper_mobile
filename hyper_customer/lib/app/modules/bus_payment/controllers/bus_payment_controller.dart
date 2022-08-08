@@ -14,6 +14,7 @@ class BusPaymentController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
   String? code = '';
   var state = ViewState.loading.obs;
+  var fromBusing = false.obs;
 
   @override
   void onInit() {
@@ -25,6 +26,9 @@ class BusPaymentController extends BaseController {
       } else {
         state.value = ViewState.error;
       }
+      if (data.containsKey('fromBusing')) {
+        fromBusing.value = Get.arguments['fromBusing'];
+      }
     }
     super.onInit();
   }
@@ -32,9 +36,11 @@ class BusPaymentController extends BaseController {
   Rx<BusTrip?> busTrip = Rx<BusTrip?>(null);
 
   Future<void> busTripInfo() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    if (customerId == '') return;
     state.value = ViewState.loading;
 
-    var tripInfoService = _repository.getBusTrip(code ?? '');
+    var tripInfoService = _repository.getBusTrip(code ?? '', customerId);
 
     await callDataService(
       tripInfoService,
@@ -43,11 +49,13 @@ class BusPaymentController extends BaseController {
         state.value = ViewState.showInfo;
       },
       onError: (DioError dioError) {
-        state.value = ViewState.error;
+        var response = dioError.response;
+
+        if (response?.statusCode == 404) {
+          busPaymentSecond();
+        }
       },
     );
-
-    debugPrint('Nam: ${state.value}');
   }
 
   Future<void> busPayment() async {
@@ -73,6 +81,36 @@ class BusPaymentController extends BaseController {
       busPaymentService,
       onSuccess: (bool response) {
         state.value = response ? ViewState.success : ViewState.error;
+      },
+      onError: (DioError dioError) {
+        state.value = ViewState.error;
+      },
+    );
+  }
+
+  Future<void> busPaymentSecond() async {
+    state.value = ViewState.loading;
+
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    if (customerId == '') return;
+    MapLocationController locationController = MapLocationController();
+    await locationController.init();
+    LatLng? location = locationController.location;
+    if (location == null) {
+      state.value = ViewState.error;
+      return;
+    }
+
+    var busPaymentService = _repository.busPayment(
+      customerId: customerId,
+      uid: code ?? '',
+      location: location,
+    );
+
+    await callDataService(
+      busPaymentService,
+      onSuccess: (bool response) {
+        state.value = response ? ViewState.done : ViewState.error;
       },
       onError: (DioError dioError) {
         state.value = ViewState.error;

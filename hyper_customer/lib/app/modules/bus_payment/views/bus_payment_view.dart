@@ -42,6 +42,24 @@ class BusPaymentView extends GetView<BusPaymentController> {
                       child: Stack(
                         children: [
                           Center(
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  style: ButtonStyles.textCircle(),
+                                  onPressed: () {
+                                    Get.offNamed(Routes.SCAN);
+                                  },
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_new,
+                                    size: 18,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Center(
                             child: Text('Thanh toán vé xe buýt',
                                 style: h6.copyWith(color: AppColors.white)),
                           ),
@@ -70,6 +88,9 @@ class BusPaymentView extends GetView<BusPaymentController> {
                                       ViewState.showInfo)
                                     _showInfo()
                                   else if (controller.state.value ==
+                                      ViewState.done)
+                                    _done()
+                                  else if (controller.state.value ==
                                       ViewState.success)
                                     _successful()
                                   else
@@ -84,7 +105,11 @@ class BusPaymentView extends GetView<BusPaymentController> {
                                   ViewState.showInfo) {
                                 return _bottomInfo();
                               } else if (controller.state.value ==
-                                  ViewState.success) {
+                                      ViewState.success ||
+                                  controller.state.value == ViewState.done) {
+                                return _bottomSuccess();
+                              } else if (controller.state.value ==
+                                  ViewState.error) {
                                 return _bottomSuccess();
                               } else {
                                 return Container();
@@ -109,31 +134,28 @@ class BusPaymentView extends GetView<BusPaymentController> {
       children: [
         SizedBox(
           width: double.infinity,
-          child: TextButton(
-            onPressed: () {
-              Get.offNamed(Routes.SCAN);
-            },
-            style: ButtonStyles.secondary(),
-            child: Text(
-              'Tiếp tục quét QR',
-              style: buttonBold,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: () {
-              Get.offAllNamed(Routes.MAIN);
-            },
-            style: ButtonStyles.primary(),
-            child: Text(
-              'Màn hình chính',
-              style: buttonBold,
-            ),
+          child: Obx(
+            () => controller.fromBusing.value
+                ? ElevatedButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    style: ButtonStyles.primary(),
+                    child: Text(
+                      'Trở lại bản đồ',
+                      style: buttonBold,
+                    ),
+                  )
+                : ElevatedButton(
+                    onPressed: () {
+                      Get.offAllNamed(Routes.MAIN);
+                    },
+                    style: ButtonStyles.primary(),
+                    child: Text(
+                      'Màn hình chính',
+                      style: buttonBold,
+                    ),
+                  ),
           ),
         ),
       ],
@@ -145,24 +167,8 @@ class BusPaymentView extends GetView<BusPaymentController> {
       children: [
         SizedBox(
           width: double.infinity,
-          child: TextButton(
-            onPressed: () {
-              Get.offNamed(Routes.SCAN);
-            },
-            style: ButtonStyles.secondary(),
-            child: Text(
-              'Tiếp tục quét QR',
-              style: buttonBold,
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        SizedBox(
-          width: double.infinity,
           child: ElevatedButton(
-            onPressed: controller.busPayment,
+            onPressed: controller.busPaymentSecond,
             style: ButtonStyles.primary(),
             child: Text(
               'Thanh toán',
@@ -318,6 +324,44 @@ class BusPaymentView extends GetView<BusPaymentController> {
                 style: body2.copyWith(
                   color: AppColors.description,
                 ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _done() {
+    return Column(
+      children: [
+        Column(
+          children: [
+            Lottie.asset(
+              AppAnimationAssets.successful,
+              repeat: false,
+              height: 138.h,
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              'Đã hoàn thành chuyến',
+              style: h6.copyWith(
+                fontWeight: FontWeights.medium,
+                color: AppColors.softBlack,
+              ),
+            ),
+            SizedBox(
+              height: 5.h,
+            ),
+            Text(
+              'Hyper cảm ơn quý khách đã sử dụng dịch vụ',
+              textAlign: TextAlign.center,
+              style: subtitle1.copyWith(
+                fontWeight: FontWeights.regular,
+                color: AppColors.lightBlack,
+                fontSize: 18.sp,
               ),
             ),
           ],

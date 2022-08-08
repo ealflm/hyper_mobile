@@ -30,7 +30,7 @@ abstract class Repository {
 
   Future<BusStations> getBusStation();
 
-  Future<BusTrip> getBusTrip(String id);
+  Future<BusTrip> getBusTrip(String id, String customerId);
 
   Future<bool> busPayment({
     required String customerId,

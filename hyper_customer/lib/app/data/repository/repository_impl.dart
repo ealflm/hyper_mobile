@@ -299,10 +299,11 @@ class RepositoryImpl extends BaseRepository implements Repository {
   }
 
   @override
-  Future<BusTrip> getBusTrip(String id) {
+  Future<BusTrip> getBusTrip(String id, String customerId) {
     var endpoint = "${DioProvider.baseUrl}/bus-trip";
     var param = {
       "vehicleId": id,
+      "customerId": customerId,
     };
     var dioCall = dioTokenClient.get(endpoint, queryParameters: param);
 

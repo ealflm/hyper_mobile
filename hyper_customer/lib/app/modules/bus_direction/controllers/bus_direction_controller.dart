@@ -7,14 +7,11 @@ import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/bus_station_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
-import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/repository/mapbox_repository.dart';
 import 'package:hyper_customer/app/modules/bus_direction/widgets/bus_item.dart';
 import 'package:hyper_customer/app/modules/bus_direction/widgets/walk_item.dart';
-import 'package:hyper_customer/app/modules/bus_payment/controllers/bus_payment_controller.dart';
-import 'package:hyper_customer/app/modules/bus_payment/models/state.dart';
 import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -23,9 +20,6 @@ import '../../../routes/app_pages.dart';
 class BusDirectionController extends BaseController {
   final MapboxRepository _repository =
       Get.find(tag: (MapboxRepository).toString());
-
-  final BusPaymentController _busPaymentController =
-      Get.find<BusPaymentController>();
 
   HyperMapController mapController = HyperMapController();
   late BusStationController busStationController;
@@ -291,31 +285,11 @@ class BusDirectionController extends BaseController {
   }
 
   void getToScanView() async {
-    var data = await Get.toNamed(
+    Get.toNamed(
       Routes.SCAN,
       arguments: {
         'scanMode': ScanMode.busing,
       },
     );
-    if (data == null) return;
-    String code = data['code'] ?? '';
-    _busPaymentController.code = code;
-    HyperDialog.showLoading(
-      title: 'Thanh toán vé xe buýt',
-      primaryButtonText: 'OK',
-    );
-    await _busPaymentController.busPayment();
-    if (HyperDialog.isOpen) Get.back();
-    if (_busPaymentController.state.value == ViewState.success) {
-      HyperDialog.showSuccess(
-        title: 'Thanh toán vé xe buýt',
-        primaryButtonText: 'OK',
-      );
-    } else {
-      HyperDialog.showFail(
-        title: 'Thanh toán vé xe buýt',
-        primaryButtonText: 'OK',
-      );
-    }
   }
 }

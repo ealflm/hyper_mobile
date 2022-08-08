@@ -74,7 +74,10 @@ class ScanController extends GetxController {
 
         await Get.offNamed(
           Routes.BUS_PAYMENT,
-          arguments: {'code': code},
+          arguments: {
+            'code': code,
+            'fromBusing': scanMode.value == ScanMode.busing,
+          },
         );
 
         await qrController?.resumeCamera();
