@@ -16,6 +16,13 @@ class DateTimeUtils {
         : DateFormat('HH:mm - dd/MM/yyyy').format(dateTime);
   }
 
+  static String dateTimeToStringFixUTC(DateTime? dateTime) {
+    initializeDateFormatting();
+    if (dateTime == null) return '-';
+    dateTime = dateTime.add(const Duration(hours: 7));
+    return DateFormat('HH:mm - dd/MM/yyyy').format(dateTime);
+  }
+
   static DateTime? parseDateTime(int? timestamp) {
     return timestamp == null
         ? null

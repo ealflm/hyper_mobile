@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
+import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
@@ -311,6 +312,22 @@ class RepositoryImpl extends BaseRepository implements Repository {
       return callApi(dioCall).then(
         (response) {
           return BusTrip.fromJson(response.data['body']);
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<Activity> getActivity(String customerId) {
+    var endpoint = "${DioProvider.baseUrl}/purchase-history/$customerId";
+    var dioCall = dioTokenClient.get(endpoint);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return Activity.fromJson(response.data['body']);
         },
       );
     } catch (e) {

@@ -30,24 +30,16 @@ class ServiceView extends GetView<ActivityController> {
             distance: 50.h,
             backgroundColor: AppColors.softRed,
           ),
-          child: ListView(
+          child: Column(
             children: [
               SizedBox(
                 height: 5.h,
               ),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
-              const TransactionItem(),
+              Expanded(
+                child: ListView(
+                  children: [],
+                ),
+              ),
             ],
           ),
         ),

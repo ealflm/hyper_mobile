@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/network_controller.dart';
 
@@ -64,6 +65,7 @@ abstract class BaseController extends GetxController {
     } on DioError catch (error) {
       dioError = error;
     } catch (error) {
+      debugPrint('API Parse Error: $error');
       rethrow;
     }
 

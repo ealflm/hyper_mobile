@@ -40,7 +40,7 @@ class Steps {
     partnerId = json['partnerId'];
     name = json['name'];
     totalStation = json['totalStation'];
-    distance = double.parse(json['distance'].toString());
+    distance = double.tryParse(json['distance'].toString());
     if (json['stationList'] != null) {
       List<dynamic> list = json['stationList'];
       List<dynamic> data = list.reversed.toList();

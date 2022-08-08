@@ -1,3 +1,4 @@
+import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
@@ -47,4 +48,6 @@ abstract class Repository {
     String pin,
     CitizenIdentityCard card,
   );
+
+  Future<Activity> getActivity(String customerId);
 }
