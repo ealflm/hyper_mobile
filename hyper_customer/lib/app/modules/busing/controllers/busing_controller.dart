@@ -194,6 +194,12 @@ class BusingController extends BaseController {
 
     List<SearchItem> result = [];
 
+    busDirectionList.sort(
+      (a, b) {
+        return a.steps?.length.compareTo(b.steps?.length ?? 0) ?? 0;
+      },
+    );
+
     for (BusDirection item in busDirectionList) {
       int stationNumber = 0;
       List<Steps> steps = item.steps ?? [];
