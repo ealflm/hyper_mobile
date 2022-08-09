@@ -100,7 +100,7 @@ class HomeView extends GetView<HomeController> {
             borderRadius: BorderRadius.circular(9.r),
           ),
           width: 324.w,
-          height: 160.h,
+          height: 324.w * 0.49,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(9.r),
             child: SvgPicture.asset(

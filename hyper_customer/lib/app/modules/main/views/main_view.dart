@@ -20,15 +20,21 @@ class MainView extends GetView<MainController> {
           child: controller.currentScreen,
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary400,
-        child: Icon(
-          Icons.qr_code_scanner,
-          size: 30.r,
+      floatingActionButton: SizedBox(
+        width: 50.w,
+        height: 50.w,
+        child: FittedBox(
+          child: FloatingActionButton(
+            backgroundColor: AppColors.primary400,
+            child: Icon(
+              Icons.qr_code_scanner,
+              size: 30.r,
+            ),
+            onPressed: () {
+              Get.toNamed(Routes.SCAN);
+            },
+          ),
         ),
-        onPressed: () {
-          Get.toNamed(Routes.SCAN);
-        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(

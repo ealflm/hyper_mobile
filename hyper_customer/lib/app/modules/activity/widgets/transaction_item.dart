@@ -34,8 +34,10 @@ class TransactionItem extends StatelessWidget {
                 _renting()
               else if ((model?.content ?? '').contains('đặt xe'))
                 _booking()
-              else if ((model?.content ?? '').contains('-'))
-                _topUp()
+              else if ((model?.content ?? '').contains('MoMo'))
+                _moMo()
+              else if ((model?.content ?? '').contains('Paypal'))
+                _payPal()
               else if ((model?.content ?? '').contains('Hoàn trả tiền dư'))
                 _refund()
               else
@@ -219,6 +221,48 @@ class TransactionItem extends StatelessWidget {
             child: SvgPicture.asset(
               AppAssets.up,
               color: AppColors.white,
+              width: 26.r,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _payPal() {
+    return Container(
+      width: 40.r,
+      height: 40.r,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.line,
+      ),
+      child: Stack(
+        children: [
+          Center(
+            child: SvgPicture.asset(
+              AppAssets.paypal,
+              width: 26.r,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _moMo() {
+    return Container(
+      width: 40.r,
+      height: 40.r,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.otp,
+      ),
+      child: Stack(
+        children: [
+          Center(
+            child: SvgPicture.asset(
+              AppAssets.momo,
               width: 26.r,
             ),
           ),
