@@ -53,6 +53,8 @@ class BusPaymentController extends BaseController {
 
         if (response?.statusCode == 404) {
           busPaymentSecond();
+        } else {
+          state.value = ViewState.error;
         }
       },
     );

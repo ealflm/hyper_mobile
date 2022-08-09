@@ -1,4 +1,3 @@
-import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:latlong2/latlong.dart';
 
 class BusDirection {

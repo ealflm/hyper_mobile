@@ -23,6 +23,11 @@ class DateTimeUtils {
     return DateFormat('HH:mm - dd/MM/yyyy').format(dateTime);
   }
 
+  static String dateTimeToStringAPI(DateTime? dateTime) {
+    initializeDateFormatting();
+    return dateTime == null ? '-' : DateFormat('yyyy-MM-dd').format(dateTime);
+  }
+
   static DateTime? parseDateTime(int? timestamp) {
     return timestamp == null
         ? null

@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
+import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
@@ -284,7 +285,7 @@ class RepositoryImpl extends BaseRepository implements Repository {
       "lastName": firstName,
       "gender": card.gender == Gender.male,
       "address": card.address,
-      "dataOfBirth": card.birthDate,
+      "dateOfBirth": card.birthDate,
       "indentityCard": '${card.cccd}, ${card.cmnd}',
     };
     var formData = FormData.fromMap(data);
