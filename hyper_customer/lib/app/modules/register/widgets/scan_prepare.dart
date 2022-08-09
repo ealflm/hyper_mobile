@@ -74,7 +74,7 @@ class ScanPrepare extends GetView<RegisterController> {
               height: 34.h,
             ),
             const LightBulb(
-              message: 'Bạn cần đủ 16 tuổi để mở tài khoản Temper',
+              message: 'Bạn cần đủ 16 tuổi để mở tài khoản Hyper',
             ),
           ],
         ),

@@ -188,61 +188,135 @@ class Bottom extends GetWidget<RentingController> {
   }
 
   Widget _detail() {
-    return Column(
-      children: [
-        _goToCurrentLocation(),
-        Container(
-          padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
-          child: Container(
-            decoration: BoxDecorations.map(),
-            padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  controller.selectedStation?.title ?? '',
-                  style: subtitle1.copyWith(
-                    fontSize: 18.sp,
-                    color: AppColors.softBlack,
+    return Obx(
+      () => Column(
+        children: [
+          _goToCurrentLocation(),
+          Container(
+            padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
+            child: Container(
+              decoration: BoxDecorations.map(),
+              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.selectedStation.value?.title ?? '',
+                    style: subtitle1.copyWith(
+                      fontSize: 18.sp,
+                      color: AppColors.softBlack,
+                    ),
                   ),
-                ),
-                Text(
-                  controller.selectedStation?.address ?? '',
-                  style: body2.copyWith(
-                    color: AppColors.description,
+                  Text(
+                    controller.selectedStation.value?.address ?? '',
+                    style: body2.copyWith(
+                      color: AppColors.description,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Obx(
-                      () => SizedBox(
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Obx(
+                        () => SizedBox(
+                          height: 36.h,
+                          width: 124.w,
+                          child: ElevatedButton(
+                            style: ButtonStyles.primarySmall(),
+                            onPressed: controller.isFindingRoute.value
+                                ? null
+                                : () {
+                                    controller.fetchGoongRoute();
+                                  },
+                            child: HyperButton.child(
+                              status: controller.isFindingRoute.value,
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.directions_outlined,
+                                    size: 20.r,
+                                  ),
+                                  SizedBox(
+                                    width: 6.w,
+                                  ),
+                                  Text(
+                                    'Đường đi',
+                                    style: buttonBold,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _routeDetail() {
+    return Obx(
+      () => Column(
+        children: [
+          _goToCurrentLocation(),
+          Container(
+            padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
+            child: Container(
+              decoration: BoxDecorations.map(),
+              padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    controller.selectedStation.value?.title ?? '',
+                    style: subtitle1.copyWith(
+                      fontSize: 18.sp,
+                      color: AppColors.softBlack,
+                    ),
+                  ),
+                  Text(
+                    controller.selectedStation.value?.address ?? '',
+                    style: body2.copyWith(
+                      color: AppColors.description,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SizedBox(
                         height: 36.h,
                         width: 124.w,
                         child: ElevatedButton(
                           style: ButtonStyles.primarySmall(),
-                          onPressed: controller.isFindingRoute.value
-                              ? null
-                              : () {
-                                  controller.fetchGoongRoute();
-                                },
+                          onPressed: () {
+                            controller.fromRouteModeToNavigationMode();
+                          },
                           child: HyperButton.child(
-                            status: controller.isFindingRoute.value,
+                            status: false,
                             child: Row(
                               children: [
                                 Icon(
-                                  Icons.directions_outlined,
+                                  Icons.navigation_outlined,
                                   size: 20.r,
                                 ),
                                 SizedBox(
                                   width: 6.w,
                                 ),
                                 Text(
-                                  'Đường đi',
+                                  'Bắt đầu',
                                   style: buttonBold,
                                 ),
                               ],
@@ -250,84 +324,14 @@ class Bottom extends GetWidget<RentingController> {
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _routeDetail() {
-    return Column(
-      children: [
-        _goToCurrentLocation(),
-        Container(
-          padding: EdgeInsets.only(bottom: 10.h, left: 10.w, right: 10.w),
-          child: Container(
-            decoration: BoxDecorations.map(),
-            padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 14.h),
-            width: double.infinity,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  controller.selectedStation?.title ?? '',
-                  style: subtitle1.copyWith(
-                    fontSize: 18.sp,
-                    color: AppColors.softBlack,
-                  ),
-                ),
-                Text(
-                  controller.selectedStation?.address ?? '',
-                  style: body2.copyWith(
-                    color: AppColors.description,
-                  ),
-                ),
-                SizedBox(
-                  height: 10.h,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      height: 36.h,
-                      width: 124.w,
-                      child: ElevatedButton(
-                        style: ButtonStyles.primarySmall(),
-                        onPressed: () {
-                          controller.fromRouteModeToNavigationMode();
-                        },
-                        child: HyperButton.child(
-                          status: false,
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.navigation_outlined,
-                                size: 20.r,
-                              ),
-                              SizedBox(
-                                width: 6.w,
-                              ),
-                              Text(
-                                'Bắt đầu',
-                                style: buttonBold,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

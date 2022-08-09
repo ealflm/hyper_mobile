@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -19,7 +20,6 @@ class RegisterOtpController extends BaseController {
   String? token;
   String? password;
   var phoneNumber = ''.obs;
-  String fullName = '';
   var otp = ''.obs;
   var hasFocus = true.obs;
 
@@ -27,13 +27,7 @@ class RegisterOtpController extends BaseController {
   void onInit() {
     if (Get.arguments != null) {
       phoneNumber.value = Get.arguments['phoneNumber'];
-    }
-    if (TokenManager.instance.hasUser) {
-      User user = TokenManager.instance.user!;
-      fullName = '${user.firstName} ${user.lastName}';
-      if (phoneNumber.value.isEmpty) {
-        phoneNumber.value = user.phone ?? '';
-      }
+      phoneNumber.value = '0369085835';
     }
     focusNode.addListener(_onFocusChange);
     sendOtp();
@@ -56,17 +50,17 @@ class RegisterOtpController extends BaseController {
   String requestId = '';
 
   void sendOtp() async {
-    // var sendOtpService = _repository.sendOtp(phoneNumber.value);
+    var sendOtpService = _repository.sendOtp(phoneNumber.value);
 
-    // await callDataService(
-    //   sendOtpService,
-    //   onSuccess: (String response) {
-    //     requestId = response;
-    //   },
-    //   onError: (DioError dioError) {
-    //     Utils.showToast('Không gửi được OTP');
-    //   },
-    // );
+    await callDataService(
+      sendOtpService,
+      onSuccess: (String response) {
+        requestId = response;
+      },
+      onError: (DioError dioError) {
+        Utils.showToast('Không gửi được OTP');
+      },
+    );
 
     _startCounter();
   }
@@ -114,9 +108,9 @@ class RegisterOtpController extends BaseController {
       },
     );
 
-    // if (result == true) {
-    goToRegister();
-    // }
+    if (result == true) {
+      goToRegister();
+    }
   }
 
   var hasShowMessage = false.obs;

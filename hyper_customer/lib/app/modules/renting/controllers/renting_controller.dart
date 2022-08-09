@@ -131,10 +131,10 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   }
 
   void moveToSelectedStation() {
-    if (selectedStation == null) return;
+    if (selectedStation.value == null) return;
 
-    double lat = selectedStation?.latitude ?? 0;
-    double lng = selectedStation?.longitude ?? 0;
+    double lat = selectedStation.value?.latitude ?? 0;
+    double lng = selectedStation.value?.longitude ?? 0;
 
     var location = LatLng(lat, lng);
     _mapMoveController.moveToPosition(location);
@@ -145,7 +145,7 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   // Region Fetch Rent Stations
   String? _selectedStationId;
 
-  Items? get selectedStation => rentStationMap[_selectedStationId];
+  Rx<Items?> selectedStation = Rx<Items?>(null);
 
   RentStations? rentStations;
 
@@ -240,6 +240,21 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   void _selectStatiton(String stationId) {
     _changeMapMode(MapMode.select);
     _selectedStationId = stationId;
+    selectedStation(rentStationMap[_selectedStationId]);
+  }
+
+  void selectStation(String stationId) {
+    _selectStatiton(stationId);
+
+    if (selectedStation.value == null) return;
+
+    double lat = selectedStation.value?.latitude ?? 0;
+    double lng = selectedStation.value?.longitude ?? 0;
+
+    var location = LatLng(lat, lng);
+
+    _mapMoveController.moveToPosition(location);
+    update();
   }
 
   void unfocus() {
@@ -269,8 +284,8 @@ class RentingController extends BaseController with WidgetsBindingObserver {
 
     LatLng from = currentLocation!;
     LatLng to = LatLng(
-      selectedStation?.latitude ?? 0,
-      selectedStation?.longitude ?? 0,
+      selectedStation.value?.latitude ?? 0,
+      selectedStation.value?.longitude ?? 0,
     );
     var loginService = _goongRepository.findRoute(from, to);
 
@@ -425,8 +440,8 @@ class RentingController extends BaseController with WidgetsBindingObserver {
 
       LatLng currentLocation = _mapLocationController.location!;
       LatLng destination = LatLng(
-        selectedStation?.latitude ?? 0,
-        selectedStation?.longitude ?? 0,
+        selectedStation.value?.latitude ?? 0,
+        selectedStation.value?.longitude ?? 0,
       );
       double distance = MapUtils.distance(currentLocation, destination);
       debugPrint('Current location to destination: $distance m');

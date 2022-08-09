@@ -15,7 +15,10 @@ class RentingSearchController extends BaseController {
     return _rentingController.rentStations;
   }
 
+  var text = ''.obs;
+
   void onSearchChanged(String query) {
+    text.value = query;
     if (query.isEmpty) {
       searchItems.clear();
       update();
@@ -29,7 +32,10 @@ class RentingSearchController extends BaseController {
           var searchItem = SearchItem(
             title: item.title ?? '',
             description: item.address ?? '',
-            onPressed: () {},
+            onPressed: () {
+              Get.back();
+              _rentingController.selectStation(item.id ?? '');
+            },
           );
           searchItems.add(searchItem);
         }

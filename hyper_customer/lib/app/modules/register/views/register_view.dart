@@ -73,7 +73,7 @@ class RegisterView extends GetView<RegisterController> {
                             ),
                           ),
                           Text(
-                            'Cảm ơn bạn đã đăng kí tài khoản Temper',
+                            'Cảm ơn bạn đã đăng kí tài khoản Hyper',
                             textAlign: TextAlign.center,
                             style: subtitle1.copyWith(
                               color: AppColors.lightBlack,

@@ -101,7 +101,7 @@ class TermAndCondition extends GetView<RegisterController> {
                 ),
                 children: const [
                   TextSpan(
-                    text: 'Để tạo tài khoản Temper, bạn cần phải đồng ý với ',
+                    text: 'Để tạo tài khoản Hyper, bạn cần phải đồng ý với ',
                   ),
                   TextSpan(
                     text: 'Điều khoản dịch vụ ',

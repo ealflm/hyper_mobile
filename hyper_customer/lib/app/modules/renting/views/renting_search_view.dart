@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/input_styles.dart';
+import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_search_controller.dart';
@@ -24,9 +25,25 @@ class RentingSearchView extends GetView<RentingSearchController> {
               ),
               GetBuilder<RentingSearchController>(
                 builder: (_) {
-                  return Column(
-                    children: controller.searchItems,
-                  );
+                  if (controller.text.isEmpty) {
+                    return Text(
+                      'Nhập để tìm kiếm',
+                      style: body2.copyWith(color: AppColors.description),
+                    );
+                  } else if (controller.searchItems.isEmpty) {
+                    return Text(
+                      'Không tìm thấy kết quả',
+                      style: body2.copyWith(color: AppColors.description),
+                    );
+                  } else {
+                    return Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: controller.searchItems,
+                        ),
+                      ),
+                    );
+                  }
                 },
               )
             ],

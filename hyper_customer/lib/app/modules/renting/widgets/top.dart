@@ -200,7 +200,8 @@ class Top extends GetWidget<RentingController> {
                                     color: AppColors.lightBlack,
                                   ),
                                   initialValue:
-                                      controller.selectedStation?.title ?? '',
+                                      controller.selectedStation.value?.title ??
+                                          '',
                                   decoration: InputStyles.map(
                                     hintText: 'Chọn điểm đến',
                                     labelText: 'Điểm đến',
@@ -358,7 +359,7 @@ class Top extends GetWidget<RentingController> {
                                 ),
                               )
                             : Text(
-                                '${controller.selectedStation?.title}',
+                                '${controller.selectedStation.value?.title}',
                                 style: h6.copyWith(
                                   fontWeight: FontWeights.regular,
                                   color: AppColors.white,

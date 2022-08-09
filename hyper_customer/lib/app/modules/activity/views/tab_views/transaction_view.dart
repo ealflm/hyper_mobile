@@ -45,7 +45,8 @@ class TransactionView extends GetView<ActivityController> {
                         return Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 18.w),
+                              padding: EdgeInsets.only(
+                                  left: 18.w, right: 18.w, top: 10.h),
                               child: Row(
                                 children: [
                                   Text(
@@ -66,7 +67,8 @@ class TransactionView extends GetView<ActivityController> {
                         return Column(
                           children: [
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 18.w),
+                              padding: EdgeInsets.only(
+                                  left: 18.w, right: 18.w, top: 10.h),
                               child: Row(
                                 children: [
                                   Text(
