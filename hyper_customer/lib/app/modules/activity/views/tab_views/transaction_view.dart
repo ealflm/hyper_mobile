@@ -34,7 +34,8 @@ class TransactionView extends GetView<ActivityController> {
               distance: 50.h,
               backgroundColor: AppColors.softRed,
             ),
-            child: controller.activity.value != null
+            child: controller.activity.value != null &&
+                    controller.activity.value!.transactions!.isNotEmpty
                 ? ListView.builder(
                     itemCount:
                         controller.activity.value?.transactions?.length ?? 0,
@@ -90,7 +91,17 @@ class TransactionView extends GetView<ActivityController> {
                         model: controller.activity.value?.transactions?[index],
                       );
                     })
-                : Container(),
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Không có giao dịch',
+                        style: body2.copyWith(
+                          color: AppColors.description,
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

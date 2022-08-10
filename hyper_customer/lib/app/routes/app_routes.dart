@@ -28,6 +28,7 @@ abstract class Routes {
   static const BUS_DIRECTION = _Paths.BUS_DIRECTION;
   static const BUS_PAYMENT = _Paths.BUS_PAYMENT;
   static const REGISTER_OTP = _Paths.REGISTER_OTP;
+  static const ORDER_DETAIL = _Paths.ORDER_DETAIL;
 }
 
 abstract class _Paths {
@@ -58,4 +59,5 @@ abstract class _Paths {
   static const BUS_DIRECTION = '/bus-direction';
   static const BUS_PAYMENT = '/bus-payment';
   static const REGISTER_OTP = '/register-otp';
+  static const ORDER_DETAIL = '/order-detail';
 }

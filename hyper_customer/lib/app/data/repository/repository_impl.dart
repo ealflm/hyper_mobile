@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
-import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
 import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
+import 'package:hyper_customer/app/data/models/order_detail_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
@@ -286,7 +286,7 @@ class RepositoryImpl extends BaseRepository implements Repository {
       "gender": card.gender == Gender.male,
       "address": card.address,
       "dateOfBirth": card.birthDate,
-      "indentityCard": '${card.cccd}, ${card.cmnd}',
+      "identityCard": '${card.cccd}, ${card.cmnd}',
     };
     var formData = FormData.fromMap(data);
     var dioCall = dioClient.post(endpoint, data: formData);
@@ -329,6 +329,26 @@ class RepositoryImpl extends BaseRepository implements Repository {
       return callApi(dioCall).then(
         (response) {
           return Activity.fromJson(response.data['body']);
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<OrderDetail>> getOrderDetails(String id) {
+    var endpoint = "${DioProvider.baseUrl}/purchase-history/order-detail/$id";
+    var dioCall = dioTokenClient.get(endpoint);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          var result = <OrderDetail>[];
+          response.data['body']['items'].forEach((v) {
+            result.add(OrderDetail.fromJson(v));
+          });
+          return result;
         },
       );
     } catch (e) {

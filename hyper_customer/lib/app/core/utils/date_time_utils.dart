@@ -40,4 +40,9 @@ class DateTimeUtils {
     int year = int.parse(value.substring(4, 8));
     return DateTime(year, month, day);
   }
+
+  static bool compare(DateTime? a, DateTime? b) {
+    if (a == null || b == null) return false;
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
 }

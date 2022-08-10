@@ -20,6 +20,8 @@ import '../modules/momo/bindings/momo_binding.dart';
 import '../modules/momo/views/momo_view.dart';
 import '../modules/notification/bindings/notification_binding.dart';
 import '../modules/notification/views/notification_view.dart';
+import '../modules/order_detail/bindings/order_detail_binding.dart';
+import '../modules/order_detail/views/order_detail_view.dart';
 import '../modules/package/bindings/package_binding.dart';
 import '../modules/package/views/package_view.dart';
 import '../modules/payment/bindings/payment_binding.dart';
@@ -212,6 +214,12 @@ class AppPages {
       name: _Paths.REGISTER_OTP,
       page: () => const RegisterOtpView(),
       binding: RegisterOtpBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.ORDER_DETAIL,
+      page: () => const OrderDetailView(),
+      binding: OrderDetailBinding(),
       transition: Transition.noTransition,
     ),
   ];

@@ -47,9 +47,10 @@ class Orders {
   String? serviceTypeId;
   String? serviceTypeName;
   String? discountId;
-  String? createdDate;
-  int? totalPrice;
+  DateTime? createdDate;
+  double? totalPrice;
   int? status;
+  int? filter;
 
   Orders(
       {this.id,
@@ -67,8 +68,9 @@ class Orders {
     serviceTypeId = json['serviceTypeId'];
     serviceTypeName = json['serviceTypeName'];
     discountId = json['discountId'];
-    createdDate = json['createdDate'];
-    totalPrice = json['totalPrice'];
+    createdDate =
+        DateTime.parse(json['createdDate']).add(const Duration(hours: 7));
+    totalPrice = double.tryParse(json['totalPrice'].toStringAsFixed(0));
     status = json['status'];
   }
 
@@ -107,7 +109,8 @@ class Transactions {
     orderId = json['orderId'];
     walletId = json['walletId'];
     amount = double.tryParse(json['amount'].toStringAsFixed(0));
-    createdDate = DateTime.parse(json['createdDate']);
+    createdDate =
+        DateTime.parse(json['createdDate']).add(const Duration(hours: 7));
     content = json['content'];
     status = json['status'];
   }

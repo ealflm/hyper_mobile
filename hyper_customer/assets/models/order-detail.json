@@ -1,0 +1,20 @@
+[
+  {
+    "orderDetailId": "dfcc12d0-9b09-4eb8-8f11-6fb5de323f88",
+    "priceOfRentingServiceId": "b5ddcae7-78f5-4699-865d-00667bf3f4a4",
+    "orderId": "3dba3362-d3d7-42b8-9dba-366164abac31",
+    "price": 0,
+    "quantity": 2,
+    "content": "Thuê xe theo ngày",
+    "status": 1
+  },
+  {
+    "orderDetailId": "acd2c238-b4ec-44d7-8e2c-d5ab89a3491d",
+    "priceOfRentingServiceId": "b5ddcae7-78f5-4699-865d-00667bf3f4a4",
+    "orderId": "3dba3362-d3d7-42b8-9dba-366164abac31",
+    "price": 90000,
+    "quantity": 1,
+    "content": "Phí thu hồi xe",
+    "status": 1
+  }
+]
