@@ -5,15 +5,18 @@ import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
 import 'package:hyper_customer/app/core/model/payment_result.dart';
 import 'package:hyper_customer/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_customer/app/modules/account/views/account_view.dart';
+import 'package:hyper_customer/app/modules/activity/controllers/activity_controller.dart';
 import 'package:hyper_customer/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_customer/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_customer/app/modules/home/views/home_view.dart';
-import 'package:hyper_customer/app/modules/main/bindings/main_binding.dart';
+import 'package:hyper_customer/app/modules/package/controllers/package_controller.dart';
 import 'package:hyper_customer/app/modules/package/views/package_view.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
+  late PackageController _packageController;
+  late ActivityController _activityController;
   late AccountController _accountController;
 
   var currentTab = 0.obs;
@@ -67,11 +70,39 @@ class MainController extends GetxController {
       AccountController(),
       permanent: true,
     );
+    _packageController = Get.find<PackageController>();
+    _packageController.init();
+
+    Get.put(
+      PackageController(),
+      permanent: true,
+    );
+    _activityController = Get.find<ActivityController>();
+    _activityController.init();
+
+    Get.put(
+      ActivityController(),
+      permanent: true,
+    );
     _accountController = Get.find<AccountController>();
     _accountController.init();
   }
 
   void changeTab(int index) {
     currentTab.value = index;
+    switch (index) {
+      case 0:
+        _homeController.init();
+        break;
+      case 1:
+        _packageController.init();
+        break;
+      case 2:
+        _activityController.init();
+        break;
+      case 3:
+        _accountController.init();
+        break;
+    }
   }
 }

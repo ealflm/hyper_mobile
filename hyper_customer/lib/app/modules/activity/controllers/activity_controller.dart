@@ -39,8 +39,12 @@ class ActivityController extends BaseController
   @override
   void onInit() {
     tabController = TabController(length: 3, vsync: this);
-    fetchActivity();
+    init();
     super.onInit();
+  }
+
+  void init() {
+    fetchActivity();
   }
 
   Rx<Activity?> activity = Rx<Activity?>(null);

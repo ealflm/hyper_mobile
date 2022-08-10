@@ -33,6 +33,9 @@ class PackageController extends GetxController
   @override
   void onInit() {
     tabController = TabController(length: 2, vsync: this);
+    init();
     super.onInit();
   }
+
+  void init() {}
 }
