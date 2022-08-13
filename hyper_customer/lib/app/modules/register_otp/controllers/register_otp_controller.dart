@@ -27,7 +27,6 @@ class RegisterOtpController extends BaseController {
   void onInit() {
     if (Get.arguments != null) {
       phoneNumber.value = Get.arguments['phoneNumber'];
-      phoneNumber.value = '0369085835';
     }
     focusNode.addListener(_onFocusChange);
     sendOtp();

@@ -1,18 +1,28 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hyper_customer/app/core/values/app_assets.dart';
+import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
+import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
+import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
+import 'package:hyper_customer/app/data/models/package_model.dart';
+import 'package:hyper_customer/app/modules/package/controllers/package_controller.dart';
+import 'package:shimmer/shimmer.dart';
 
-class PackageCard extends StatelessWidget {
-  const PackageCard({
+class PackageCard extends GetView<PackageController> {
+  const PackageCard(
+    this.model, {
     Key? key,
   }) : super(key: key);
+
+  final Package model;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +55,7 @@ class PackageCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Gói siêu VIP',
+                        '${model.name}',
                         style:
                             subtitle1.copyWith(fontWeight: FontWeights.medium),
                       ),
@@ -62,14 +72,17 @@ class PackageCard extends StatelessWidget {
                           SizedBox(
                             width: 2.w,
                           ),
-                          const Text('24:00'),
+                          Text(
+                            DateTimeUtils.durationToString(model.duration ?? 0),
+                            style: body1.copyWith(color: AppColors.lightBlack),
+                          ),
                         ],
                       ),
                       SizedBox(
                         height: 10.h,
                       ),
                       Text(
-                        'Đi xe buýt thả ga với 30 Km hoặc 5 lần quẹt thẻ. Giảm 10% giá đặt xe.',
+                        '${model.description}',
                         style: body2.copyWith(color: AppColors.softBlack),
                       ),
                       SizedBox(
@@ -86,7 +99,7 @@ class PackageCard extends StatelessWidget {
                                 style: body2.copyWith(
                                     color: AppColors.description),
                               ),
-                              Text('40.000đ',
+                              Text(NumberUtils.intToVnd(model.price),
                                   style: subtitle1.copyWith(
                                     fontWeight: FontWeights.medium,
                                   )),
@@ -94,7 +107,20 @@ class PackageCard extends StatelessWidget {
                           ),
                           ElevatedButton(
                             style: ButtonStyles.primarySmall(),
-                            onPressed: () {},
+                            onPressed: () {
+                              HyperDialog.show(
+                                title: 'Xác nhận',
+                                content: 'Bạn có chắc chắn muốn mua gói này?',
+                                primaryButtonText: 'Đồng ý',
+                                primaryOnPressed: () {
+                                  controller.buyPackage(model.id ?? '');
+                                },
+                                secondaryButtonText: 'Huỷ',
+                                secondaryOnPressed: () {
+                                  Get.back();
+                                },
+                              );
+                            },
                             child: HyperButton.child(
                               status: false,
                               child: Text('Áp dụng', style: button),
@@ -118,9 +144,26 @@ class PackageCard extends StatelessWidget {
             height: 160.h,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(9.r),
-              child: SvgPicture.asset(
-                AppAssets.packageBanner,
+              child: CachedNetworkImage(
+                fadeInDuration: const Duration(),
+                fadeOutDuration: const Duration(),
+                imageUrl:
+                    AppValues.photoBaseUrl + (model.photoUrl ?? '').trim(),
                 fit: BoxFit.cover,
+                placeholder: (context, url) {
+                  return Shimmer.fromColors(
+                    baseColor: AppColors.shimmerBaseColor,
+                    highlightColor: AppColors.shimmerHighlightColor,
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                      ),
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Container();
+                },
               ),
             ),
           ),

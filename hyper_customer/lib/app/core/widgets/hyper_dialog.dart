@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -20,6 +18,9 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
+    if (isOpen) {
+      Get.back();
+    }
     isOpen = true;
     await Get.dialog(
       AlertDialog(
@@ -73,6 +74,9 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
+    if (isOpen) {
+      Get.back();
+    }
     isOpen = true;
     await Get.dialog(
       AlertDialog(
@@ -127,6 +131,9 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
+    if (isOpen) {
+      Get.back();
+    }
     isOpen = true;
     await Get.dialog(
       AlertDialog(
@@ -184,6 +191,9 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
+    if (isOpen) {
+      Get.back();
+    }
     isOpen = true;
     await Get.dialog(
       AlertDialog(

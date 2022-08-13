@@ -8,6 +8,11 @@ abstract class NumberUtils {
     return "${numberFormat.format(value)} VNĐ";
   }
 
+  static String intToVnd(int? value) {
+    if (value == null) return '-';
+    return "${numberFormat.format(value)} VNĐ";
+  }
+
   static String vndd(double? value) {
     if (value == null) return '-';
     if (value > 0) {

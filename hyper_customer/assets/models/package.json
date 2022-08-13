@@ -1,0 +1,29 @@
+{
+  "id": "aec4838a-d7ce-4cf9-bcc3-56479b27be52",
+  "name": "Gối hoa hồng",
+  "peopleQuantity": 2,
+  "duration": 3,
+  "photoUrl": "cb345276-ace3-44cf-a48b-ed371715bf1c.jpeg ",
+  "description": "Gối khuyến mãi 5 lần đi xe theo chuyến và  10% đặt xe",
+  "price": 100000,
+  "promotedTitle": "Gối khuyến mãi 5 lần đi xe theo chuyến và  10% thuê xe  ",
+  "packageItems": [
+    {
+      "packageId": "aec4838a-d7ce-4cf9-bcc3-56479b27be52",
+      "serviceTypeId": "d3d43e77-1602-4e16-a8d7-485d4f309db7",
+      "name": "Khuyến mãi 5 lần đi xe theo chuyến",
+      "limit": 20,
+      "value": 5,
+      "status": 1
+    },
+    {
+      "packageId": "aec4838a-d7ce-4cf9-bcc3-56479b27be52",
+      "serviceTypeId": "c6ca1cf7-08bb-4f06-8d5d-48ba93251a6d",
+      "name": "Giarm 10% thuê xe",
+      "limit": 1,
+      "value": 10,
+      "status": 1
+    }
+  ],
+  "status": 1
+}

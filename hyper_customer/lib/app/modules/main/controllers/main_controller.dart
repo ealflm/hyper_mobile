@@ -67,21 +67,21 @@ class MainController extends GetxController {
     _homeController.init();
 
     Get.put(
-      AccountController(),
+      PackageController(),
       permanent: true,
     );
     _packageController = Get.find<PackageController>();
     _packageController.init();
 
     Get.put(
-      PackageController(),
+      ActivityController(),
       permanent: true,
     );
     _activityController = Get.find<ActivityController>();
     _activityController.init();
 
     Get.put(
-      ActivityController(),
+      AccountController(),
       permanent: true,
     );
     _accountController = Get.find<AccountController>();

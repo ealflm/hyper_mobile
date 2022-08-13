@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -14,6 +16,8 @@ class PackageStatusItem extends StatelessWidget {
     required this.total,
     required this.unit,
     required this.animation,
+    this.percent,
+    this.isDisable = false,
   }) : super(key: key);
 
   final String title;
@@ -22,9 +26,12 @@ class PackageStatusItem extends StatelessWidget {
   final int total;
   final String unit;
   final bool animation;
+  final int? percent;
+  final bool isDisable;
 
   @override
   Widget build(BuildContext context) {
+    if (total == 0) return Container();
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: 18.w,
@@ -39,17 +46,22 @@ class PackageStatusItem extends StatelessWidget {
             animation: true,
             lineHeight: 5.h,
             animationDuration: animation ? 500 : 0,
-            percent: value / total,
+            percent: min(value, total) / total,
             barRadius: Radius.circular(50.r),
-            progressColor: AppColors.primary400,
+            progressColor:
+                !isDisable ? AppColors.primary400 : AppColors.description,
             backgroundColor: AppColors.otp,
           ),
           SizedBox(
             height: 10.h,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon),
+              Icon(
+                icon,
+                color: !isDisable ? AppColors.softBlack : AppColors.description,
+              ),
               SizedBox(
                 width: 10.w,
               ),
@@ -59,15 +71,19 @@ class PackageStatusItem extends StatelessWidget {
                   Text(
                     title,
                     style: subtitle2.copyWith(
-                      color: AppColors.softBlack,
+                      color: !isDisable
+                          ? AppColors.softBlack
+                          : AppColors.description,
                     ),
                   ),
                   Row(
                     children: [
                       Text(
-                        '$value',
+                        '${value.round()}',
                         style: h6.copyWith(
-                          color: AppColors.softBlack,
+                          color: !isDisable
+                              ? AppColors.softBlack
+                              : AppColors.description,
                         ),
                       ),
                       SizedBox(
@@ -76,7 +92,9 @@ class PackageStatusItem extends StatelessWidget {
                       Text(
                         '/$total $unit',
                         style: body2.copyWith(
-                          color: AppColors.lightBlack,
+                          color: !isDisable
+                              ? AppColors.lightBlack
+                              : AppColors.description,
                           height: 1.5,
                         ),
                       ),
@@ -84,6 +102,20 @@ class PackageStatusItem extends StatelessWidget {
                   ),
                 ],
               ),
+              if (percent != null)
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.topRight,
+                    child: Text(
+                      'Giảm $percent%',
+                      style: body2.copyWith(
+                        color: !isDisable
+                            ? AppColors.softBlack
+                            : AppColors.description,
+                      ),
+                    ),
+                  ),
+                ),
             ],
           ),
         ],

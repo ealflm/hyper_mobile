@@ -94,10 +94,13 @@ class TransactionView extends GetView<ActivityController> {
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Không có giao dịch',
-                        style: body2.copyWith(
-                          color: AppColors.description,
+                      Container(
+                        padding: EdgeInsets.only(top: 20.h),
+                        child: Text(
+                          'Không có giao dịch',
+                          style: body2.copyWith(
+                            color: AppColors.description,
+                          ),
                         ),
                       ),
                     ],

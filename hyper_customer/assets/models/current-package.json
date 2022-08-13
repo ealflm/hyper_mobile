@@ -1,0 +1,15 @@
+{
+  "packageId": "aec4838a-d7ce-4cf9-bcc3-56479b27be52",
+  "packageName": "Gối hoa hồng",
+  "packageExpire": "2022-08-16T03:19:06.567",
+  "packageExpireTimeStamp": 1660619946.567,
+  "packagePrice": 100000,
+  "packagePhotoUrl": "cb345276-ace3-44cf-a48b-ed371715bf1c.jpeg ",
+  "currentDistances": 0,
+  "limitDistances": 20,
+  "currentCardSwipes": 0,
+  "limitCardSwipes": 5,
+  "currentNumberOfTrips": 0,
+  "limitNumberOfTrips": 1,
+  "discountValueTrip": 10
+}

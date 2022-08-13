@@ -1,6 +1,9 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 abstract class AppValues {
+  static const String photoBaseUrl =
+      'https://se32.blob.core.windows.net/admin/';
+
   static const String cardLinkQRPrefix = '[CLQR]';
   static const String rentingQRPrefix = '[RTQR]';
   static const String busQRPrefix = '[BSQR]';

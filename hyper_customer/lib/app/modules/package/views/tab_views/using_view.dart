@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
@@ -21,137 +22,201 @@ class UsingView extends GetView<PackageController> {
     controller.increaseBuildCount();
 
     return SingleChildScrollView(
-      child: SizedBox(
-        height: 1.sh - AppValues.bottomAppBarHeight - statusBarHeight - 115.h,
-        width: double.infinity,
-        child: SmartRefresher(
-          controller: refreshController,
-          onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 1));
-            refreshController.refreshCompleted();
-          },
-          header: WaterDropMaterialHeader(
-            distance: 50.h,
-            backgroundColor: AppColors.softRed,
-          ),
-          child: ListView(
-            children: [
-              SizedBox(
-                height: 10.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Bạn đang sử dụng gói dịch vụ',
-                      style: subtitle1.copyWith(fontWeight: FontWeights.light),
+      child: Obx(
+        () {
+          return controller.currentPackage.value != null
+              ? SizedBox(
+                  height: 1.sh -
+                      AppValues.bottomAppBarHeight -
+                      statusBarHeight -
+                      114.h,
+                  width: double.infinity,
+                  child: SmartRefresher(
+                    controller: refreshController,
+                    onRefresh: () async {
+                      await Future.delayed(const Duration(seconds: 1));
+                      await controller.getCurrentPackage();
+                      refreshController.refreshCompleted();
+                    },
+                    header: WaterDropMaterialHeader(
+                      distance: 50.h,
+                      backgroundColor: AppColors.softRed,
                     ),
-                    Text(
-                      'Gói siêu VIP',
-                      style: subtitle1.copyWith(
-                        color: AppColors.softBlack,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    Row(
+                    child: ListView(
                       children: [
-                        Icon(
-                          Icons.timer_outlined,
-                          color: AppColors.lightBlack,
-                          size: 20.r,
+                        SizedBox(
+                          height: 10.h,
                         ),
-                        Text(
-                          '16:04',
-                          style:
-                              subtitle1.copyWith(color: AppColors.lightBlack),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Bạn đang sử dụng gói dịch vụ',
+                                style: subtitle1.copyWith(
+                                    fontWeight: FontWeights.light),
+                              ),
+                              Text(
+                                '${controller.currentPackage.value?.packageName}',
+                                style: subtitle1.copyWith(
+                                  color: AppColors.softBlack,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 8.h,
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.timer_outlined,
+                                    color: AppColors.lightBlack,
+                                    size: 20.r,
+                                  ),
+                                  GetBuilder<PackageController>(
+                                    builder: (_) {
+                                      return Text(
+                                        DateTimeUtils.counter(
+                                          controller.currentPackage.value
+                                              ?.packageExpireTimeStamp,
+                                        ),
+                                        style: subtitle1.copyWith(
+                                            color: AppColors.lightBlack),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 40.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Đi xe buýt',
-                          style: subtitle2.copyWith(
-                            fontWeight: FontWeights.regular,
-                            color: AppColors.description,
+                        SizedBox(
+                          height: 40.h,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Đi xe buýt',
+                                    style: subtitle2.copyWith(
+                                      fontWeight: FontWeights.regular,
+                                      color: AppColors.description,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              PackageStatusItem(
+                                icon: Icons.moving,
+                                title: 'Khoảng cách',
+                                value: controller.currentDistance,
+                                total: controller.limitDistances,
+                                unit: 'Km',
+                                animation: controller.buildCounter.value == 1,
+                                isDisable: (controller.currentDistance >=
+                                        controller.limitDistances ||
+                                    controller.currentCardSwipes >=
+                                        controller.limitCardSwipes),
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              PackageStatusItem(
+                                icon: Icons.credit_card,
+                                title: 'Quẹt thẻ',
+                                value: controller.currentCardSwipes,
+                                total: controller.limitCardSwipes,
+                                unit: 'lần',
+                                animation: controller.buildCounter.value == 1,
+                                isDisable: (controller.currentDistance >=
+                                        controller.limitDistances ||
+                                    controller.currentCardSwipes >=
+                                        controller.limitCardSwipes),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 30.h,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Đặt xe',
+                                    style: subtitle2.copyWith(
+                                      fontWeight: FontWeights.regular,
+                                      color: AppColors.description,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              PackageStatusItem(
+                                icon: Icons.motorcycle,
+                                title: 'Chuyến đi',
+                                value: controller.currentNumberOfTrips,
+                                total: controller.limitNumberOfTrips,
+                                unit: 'chuyến',
+                                percent: controller.currentPackage.value
+                                        ?.discountValueTrip ??
+                                    0,
+                                animation: controller.buildCounter.value == 1,
+                                isDisable: (controller.currentNumberOfTrips >=
+                                    controller.limitNumberOfTrips),
+                              ),
+                            ],
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
+                  ),
+                )
+              : SizedBox(
+                  height: 1.sh -
+                      AppValues.bottomAppBarHeight -
+                      statusBarHeight -
+                      114.h,
+                  width: double.infinity,
+                  child: SmartRefresher(
+                    controller: refreshController,
+                    onRefresh: () async {
+                      await Future.delayed(const Duration(seconds: 1));
+                      refreshController.refreshCompleted();
+                    },
+                    header: WaterDropMaterialHeader(
+                      distance: 50.h,
+                      backgroundColor: AppColors.softRed,
                     ),
-                    PackageStatusItem(
-                      icon: Icons.moving,
-                      title: 'Khoảng cách',
-                      value: 6,
-                      total: 30,
-                      unit: 'Km',
-                      animation: controller.buildCounter.value == 1,
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    PackageStatusItem(
-                      icon: Icons.credit_card,
-                      title: 'Quẹt thẻ',
-                      value: 4,
-                      total: 5,
-                      unit: 'lần',
-                      animation: controller.buildCounter.value == 1,
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 30.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Column(
-                  children: [
-                    Row(
+                    child: ListView(
                       children: [
-                        Text(
-                          'Đi xe buýt',
-                          style: subtitle2.copyWith(
-                            fontWeight: FontWeights.regular,
-                            color: AppColors.description,
+                        Container(
+                          padding: EdgeInsets.only(top: 20.h),
+                          child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Bạn không sử dụng gói dịch vụ nào',
+                              style: body2.copyWith(
+                                color: AppColors.description,
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    PackageStatusItem(
-                      icon: Icons.motorcycle,
-                      title: 'Chuyến đi',
-                      value: 5,
-                      total: 15,
-                      unit: 'chuyến',
-                      animation: controller.buildCounter.value == 1,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+                  ),
+                );
+        },
       ),
     );
   }

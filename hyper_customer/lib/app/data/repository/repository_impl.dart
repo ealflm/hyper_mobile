@@ -5,8 +5,10 @@ import 'package:hyper_customer/app/data/models/auth_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
 import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
+import 'package:hyper_customer/app/data/models/current_package_model.dart';
 import 'package:hyper_customer/app/data/models/order_detail_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
+import 'package:hyper_customer/app/data/models/package_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/models/vehicle_rental_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
@@ -349,6 +351,71 @@ class RepositoryImpl extends BaseRepository implements Repository {
             result.add(OrderDetail.fromJson(v));
           });
           return result;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Package>> getPackages(String customerId) {
+    var endpoint = "${DioProvider.baseUrl}/package/list";
+    var param = {
+      "customerId": customerId,
+    };
+
+    var dioCall = dioTokenClient.get(endpoint, queryParameters: param);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          var result = <Package>[];
+          response.data['body']['items'].forEach((v) {
+            result.add(Package.fromJson(v));
+          });
+          return result;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> buyPackage(String customerId, String packageId) {
+    var endpoint = "${DioProvider.baseUrl}/package/package-purchase";
+
+    var data = {
+      "customerId": customerId,
+      "packageId": packageId,
+    };
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return true;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<CurrentPackage> getCurrentPackage(String customerId) {
+    var endpoint = "${DioProvider.baseUrl}/package/current-package";
+    var param = {
+      "customerId": customerId,
+    };
+
+    var dioCall = dioTokenClient.get(endpoint, queryParameters: param);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return CurrentPackage.fromJson(response.data['body']);
         },
       );
     } catch (e) {

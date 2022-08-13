@@ -24,7 +24,6 @@ class PackageView extends GetView<PackageController> {
                 SizedBox(height: 8.h),
                 GetBuilder<PackageController>(
                   init: PackageController(),
-                  initState: (_) {},
                   builder: (_) {
                     return PageStorage(
                       bucket: controller.bucket,
