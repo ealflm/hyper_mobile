@@ -87,6 +87,7 @@ class AccountController extends GetxController {
 
   void logout() {
     TokenManager.instance.clearToken();
+    TokenManager.instance.unregisterNotification();
     Get.offAllNamed(Routes.LOGIN);
   }
 }

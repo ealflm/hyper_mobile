@@ -34,13 +34,38 @@ class RentingFormController extends BaseController
 
   // Region Get vehicle rental
 
-  _fetchVehicleRental() async {
+  void _fetchVehicleRental() async {
     var cardLinkService = _repository.getVehicleRental(code ?? '');
 
     await callDataService(
       cardLinkService,
       onSuccess: (VehicleRental response) {
         vehicleRental = response;
+        state.value = ViewState.successful;
+      },
+      onError: (DioError dioError) {
+        state.value = ViewState.failed;
+      },
+    );
+  }
+
+  void createRentCustomerTrip() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    DateTime deadline = DateTime.now();
+
+    if (modeController.index == 0) {
+      deadline = deadline.add(Duration(days: dayNum));
+    } else {
+      deadline = deadline.add(Duration(hours: hourNum));
+    }
+
+    var rentCustomerTripService =
+        _repository.createRentCustomerTrip(customerId, code ?? '', deadline);
+
+    await callDataService(
+      rentCustomerTripService,
+      onSuccess: (bool response) {
         state.value = ViewState.successful;
       },
       onError: (DioError dioError) {

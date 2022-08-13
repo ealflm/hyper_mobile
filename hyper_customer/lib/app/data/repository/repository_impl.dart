@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
@@ -416,6 +418,50 @@ class RepositoryImpl extends BaseRepository implements Repository {
       return callApi(dioCall).then(
         (response) {
           return CurrentPackage.fromJson(response.data['body']);
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> registerNotification(String customerId, String code) {
+    var endpoint = "${DioProvider.baseUrl}/firebase/fcm/registrationToken";
+
+    var data = {
+      "entityId": customerId,
+      "registrationToken": code,
+    };
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return true;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> createRentCustomerTrip(
+      String customerId, String vehicleId, DateTime deadline) {
+    var endpoint = "${DioProvider.baseUrl}/rent-service-customer-trip";
+
+    var data = {
+      "customerId": customerId,
+      "vehicleId": vehicleId,
+      "rentDeadline": deadline.toUtc().toIso8601String(),
+    };
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return true;
         },
       );
     } catch (e) {

@@ -140,6 +140,7 @@ class RentingFormView extends GetView<RentingFormController> {
                                           'Thanh toán',
                                           () {
                                             controller.createOrder();
+                                            controller.createRentCustomerTrip();
                                           },
                                         ),
                                       ),

@@ -1,13 +1,18 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
+import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../config/firebase_options.dart';
 
 class TokenManager extends Interceptor {
   static final TokenManager _instance = TokenManager._internal();
@@ -36,6 +41,7 @@ class TokenManager extends Interceptor {
     var response = err.response;
     if (response?.statusCode == 401) {
       clearToken();
+      unregisterNotification();
       Get.offAllNamed(Routes.LOGIN);
     }
     super.onError(err, handler);
@@ -48,6 +54,43 @@ class TokenManager extends Interceptor {
     String? userJson = prefs.getString('userJson');
     if (userJson != null) {
       _user = User.fromJson(json.decode(userJson.toString()));
+    }
+    registerNotification();
+  }
+
+  Future<void> registerNotification() async {
+    Repository repository = Get.find(tag: (Repository).toString());
+    final String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
+    final String customerId = user?.customerId ?? '';
+    debugPrint('Notification: fcmToken: $fcmToken');
+
+    var registerNotificationService = repository.registerNotification(
+      customerId,
+      fcmToken,
+    );
+
+    try {
+      await registerNotificationService;
+    } catch (error) {
+      debugPrint('Notification: Can not register');
+      rethrow;
+    }
+  }
+
+  Future<void> unregisterNotification() async {
+    Repository repository = Get.find(tag: (Repository).toString());
+    final String customerId = user?.customerId ?? '';
+
+    var registerNotificationService = repository.registerNotification(
+      customerId,
+      '',
+    );
+
+    try {
+      await registerNotificationService;
+    } catch (error) {
+      debugPrint('Notification: Can not unregister');
+      rethrow;
     }
   }
 

@@ -29,6 +29,9 @@ abstract class Repository {
 
   Future<VehicleRental> getVehicleRental(String id);
 
+  Future<bool> createRentCustomerTrip(
+      String customerId, String vehicleId, DateTime deadline);
+
   Future<bool> createOrder(Order order);
 
   Future<List<BusDirection>> getBusDirection(LatLng start, LatLng end);
@@ -62,4 +65,6 @@ abstract class Repository {
   Future<bool> buyPackage(String customerId, String packageId);
 
   Future<CurrentPackage> getCurrentPackage(String customerId);
+
+  Future<bool> registerNotification(String customerId, String code);
 }
