@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
@@ -7,15 +7,15 @@ import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
-import 'package:hyper_customer/app/data/models/activity_model.dart';
+import 'package:hyper_customer/app/data/models/notification_model.dart';
 
-class TransactionItem extends StatelessWidget {
-  const TransactionItem({
+class NotificationItem extends StatelessWidget {
+  const NotificationItem({
     Key? key,
     required this.model,
   }) : super(key: key);
 
-  final Transactions? model;
+  final Notification? model;
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +28,17 @@ class TransactionItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if ((model?.content ?? '').contains('đi xe buýt'))
+              if ((model?.title ?? '').contains('đi xe buýt'))
                 _busing()
-              else if ((model?.content ?? '').contains('thuê xe'))
+              else if ((model?.title ?? '').contains('thuê xe'))
                 _renting()
-              else if ((model?.content ?? '').contains('đặt xe'))
+              else if ((model?.title ?? '').contains('đặt xe'))
                 _booking()
-              else if ((model?.content ?? '').contains('MoMo'))
+              else if ((model?.title ?? '').contains('MoMo'))
                 _moMo()
-              else if ((model?.content ?? '').contains('Paypal'))
+              else if ((model?.title ?? '').contains('Paypal'))
                 _payPal()
-              else if ((model?.content ?? '').contains('trả tiền dư'))
+              else if ((model?.title ?? '').contains('trả tiền dư'))
                 _refund()
               else
                 _default(),
@@ -56,7 +56,14 @@ class TransactionItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${model?.content}',
+                            '${model?.title}',
+                            style: subtitle2.copyWith(
+                              color: AppColors.softBlack,
+                              fontSize: 14.r,
+                            ),
+                          ),
+                          Text(
+                            model?.message ?? '',
                             style: body2.copyWith(
                               color: AppColors.softBlack,
                               fontSize: 14.r,
@@ -69,30 +76,6 @@ class TransactionItem extends StatelessWidget {
                               fontSize: 14.r,
                             ),
                           )
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      flex: 40,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          if ((model?.amount ?? 0) > 0)
-                            Text(
-                              NumberUtils.vndd(model?.amount),
-                              style: subtitle2.copyWith(
-                                color: AppColors.primary400,
-                                fontWeight: FontWeights.medium,
-                              ),
-                            )
-                          else
-                            Text(
-                              NumberUtils.vndd(model?.amount),
-                              style: subtitle2.copyWith(
-                                color: AppColors.softBlack,
-                                fontWeight: FontWeights.medium,
-                              ),
-                            ),
                         ],
                       ),
                     ),

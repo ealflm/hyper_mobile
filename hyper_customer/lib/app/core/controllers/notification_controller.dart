@@ -5,6 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
+import 'package:hyper_customer/app/modules/notification/controllers/notification_controller.dart'
+    as nt;
 
 import '../../../config/firebase_options.dart';
 
@@ -34,6 +36,11 @@ class NotificationController {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
+    Get.put(
+      nt.NotificationController(),
+      permanent: true,
+    );
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
       AndroidNotification? android = message.notification?.android;
@@ -55,6 +62,10 @@ class NotificationController {
           ),
         );
       }
+
+      nt.NotificationController notificationController =
+          Get.find<nt.NotificationController>();
+      notificationController.init();
     });
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

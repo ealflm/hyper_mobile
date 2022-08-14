@@ -4,6 +4,7 @@ import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
 import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
 import 'package:hyper_customer/app/data/models/current_package_model.dart';
+import 'package:hyper_customer/app/data/models/notification_model.dart';
 import 'package:hyper_customer/app/data/models/order_detail_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
@@ -67,4 +68,6 @@ abstract class Repository {
   Future<CurrentPackage> getCurrentPackage(String customerId);
 
   Future<bool> registerNotification(String customerId, String code);
+
+  Future<List<Notification>> getNotifications(String customerId);
 }

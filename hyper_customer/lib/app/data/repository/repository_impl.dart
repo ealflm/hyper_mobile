@@ -1,6 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
@@ -8,6 +6,7 @@ import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
 import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
 import 'package:hyper_customer/app/data/models/current_package_model.dart';
+import 'package:hyper_customer/app/data/models/notification_model.dart';
 import 'package:hyper_customer/app/data/models/order_detail_model.dart';
 import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/models/package_model.dart';
@@ -462,6 +461,27 @@ class RepositoryImpl extends BaseRepository implements Repository {
       return callApi(dioCall).then(
         (response) {
           return true;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<Notification>> getNotifications(String customerId) {
+    var endpoint = "${DioProvider.baseUrl}/notification/$customerId";
+
+    var dioCall = dioTokenClient.get(endpoint);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          var result = <Notification>[];
+          response.data['body'].forEach((v) {
+            result.add(Notification.fromJson(v));
+          });
+          return result;
         },
       );
     } catch (e) {
