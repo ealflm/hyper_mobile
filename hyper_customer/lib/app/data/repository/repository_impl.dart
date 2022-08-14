@@ -433,7 +433,7 @@ class RepositoryImpl extends BaseRepository implements Repository {
       "entityId": customerId,
       "registrationToken": code,
     };
-    var dioCall = dioTokenClient.post(endpoint, data: data);
+    var dioCall = dioClient.post(endpoint, data: data);
 
     try {
       return callApi(dioCall).then(
