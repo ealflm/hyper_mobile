@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
+import 'package:hyper_customer/app/core/controllers/notification_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
@@ -235,6 +236,7 @@ class LoginController extends BaseController {
         phone,
         password,
       );
+      NotificationController.instance.registerNotification();
       Get.offAllNamed(Routes.MAIN);
     }
   }

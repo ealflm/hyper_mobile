@@ -1,8 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyper_customer/app/core/controllers/network_controller.dart';
+import 'package:hyper_customer/app/core/controllers/notification_controller.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/config/map_config.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -11,9 +10,8 @@ import 'package:intl/intl.dart';
 import 'app/my_app.dart';
 import 'config/build_config.dart';
 import 'config/env_config.dart';
-import 'config/firebase_options.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   EnvConfig envConfig = EnvConfig(
@@ -44,35 +42,12 @@ void main() {
 
   NetworkController.intance.init();
 
-  initFireBase();
+  TokenManager.instance.init();
+
+  NotificationController.instance.init();
 
   Intl.defaultLocale = 'vi_VN';
   initializeDateFormatting();
 
   runApp(const MyApp());
-}
-
-void initFireBase() async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  TokenManager.instance.init();
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    debugPrint('Notification: Got a message whilst in the foreground!');
-    debugPrint('Notification: Message data: ${message.data}');
-
-    if (message.notification != null) {
-      debugPrint(
-          'Notification: Message also contained a notification: ${message.notification}');
-    }
-  });
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint(
-      "Notification: Handling a background message: ${message.messageId}");
 }
