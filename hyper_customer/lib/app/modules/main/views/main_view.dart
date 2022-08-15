@@ -20,6 +20,7 @@ class MainView extends GetView<MainController> {
           child: controller.currentScreen,
         ),
       ),
+      extendBody: true,
       floatingActionButton: SizedBox(
         width: 50.w,
         height: 50.w,
