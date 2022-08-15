@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
+import 'package:hyper_driver/app/core/values/app_values.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
 
 class Bottom extends GetWidget<HomeController> {
@@ -13,6 +14,7 @@ class Bottom extends GetWidget<HomeController> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomRight,
+      padding: EdgeInsets.only(bottom: AppValues.bottomAppBarHeight),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

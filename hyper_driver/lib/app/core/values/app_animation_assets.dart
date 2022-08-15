@@ -26,6 +26,9 @@ abstract class AppAnimationAssets {
   static const String scanPulse = 'assets/lottiefiles/scan-pulse.json';
   static const String scanPulsePurple =
       'assets/lottiefiles/scan-pulse-purple.json';
+  static const String scanPulsePrimary =
+      'assets/lottiefiles/scan-pulse-primary.json';
+  static const String scanPulseBlue = 'assets/lottiefiles/scan-pulse-blue.json';
 
   static const String rentingArrived =
       'assets/lottiefiles/renting-arrived.json';

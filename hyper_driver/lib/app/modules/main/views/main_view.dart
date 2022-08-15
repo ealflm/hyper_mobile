@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/values/app_animation_assets.dart';
 import 'package:hyper_driver/app/core/values/app_assets.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
+import 'package:hyper_driver/app/core/widgets/hyper_stack.dart';
+import 'package:hyper_driver/app/modules/home/views/home_view.dart';
 import 'package:hyper_driver/app/modules/main/widgets/nav_button.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
@@ -20,11 +22,16 @@ class MainView extends GetView<MainController> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
-      body: Obx(
-        () => PageStorage(
-          bucket: controller.bucket,
-          child: controller.currentScreen,
-        ),
+      body: Stack(
+        children: [
+          const HomeView(),
+          Obx(
+            () => PageStorage(
+              bucket: controller.bucket,
+              child: controller.currentScreen,
+            ),
+          ),
+        ],
       ),
       floatingActionButton: Obx(
         () => SizedBox(
@@ -77,9 +84,9 @@ class MainView extends GetView<MainController> {
                       width: 4.w,
                     ),
                     NavButton(
-                      title: 'Gói dịch vụ',
-                      icon: AntIcons.giftFilled,
-                      iconOutlined: AntIcons.giftOutlined,
+                      title: 'Hoạt động',
+                      icon: Icons.receipt_long,
+                      iconOutlined: Icons.receipt_long_outlined,
                       onPressed: () {
                         controller.changeTab(1);
                       },
@@ -91,9 +98,9 @@ class MainView extends GetView<MainController> {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     NavButton(
-                      title: 'Hoạt động',
-                      icon: Icons.receipt_long,
-                      iconOutlined: Icons.receipt_long_outlined,
+                      title: 'Thông báo',
+                      icon: Icons.notifications,
+                      iconOutlined: Icons.notifications_outlined,
                       onPressed: () {
                         controller.changeTab(2);
                       },
@@ -107,7 +114,7 @@ class MainView extends GetView<MainController> {
                       icon: Icons.person,
                       iconOutlined: Icons.person_outlined,
                       onPressed: () {
-                        controller.changeTab(4);
+                        controller.changeTab(3);
                       },
                       state: controller.currentTab.value == 3,
                     ),

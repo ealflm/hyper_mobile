@@ -10,22 +10,18 @@ class HomeController extends BaseController {
 
   HyperMapController mapController = HyperMapController();
 
+  var activityState = false.obs;
+
   // Region Init
 
   @override
   void onInit() async {
     init();
+    _goToCurrentLocationWithZoomDelay();
     super.onInit();
   }
 
-  void init() async {
-    _delayCenterMarker();
-    _goToCurrentLocationWithZoomDelay();
-  }
-
-  void _delayCenterMarker() async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-  }
+  void init() async {}
 
   // End Region
 
@@ -47,4 +43,12 @@ class HomeController extends BaseController {
   }
 
   // End Region
+
+  // State
+
+  void setActivityState(bool value) {
+    activityState.value = value;
+  }
+
+  // End State
 }

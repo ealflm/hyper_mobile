@@ -1,4 +1,3 @@
-import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
@@ -7,17 +6,20 @@ import 'package:hyper_driver/app/modules/account/views/account_view.dart';
 import 'package:hyper_driver/app/modules/activity/controllers/activity_controller.dart';
 import 'package:hyper_driver/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
-import 'package:hyper_driver/app/modules/home/views/home_view.dart';
+import 'package:hyper_driver/app/modules/package/controllers/package_controller.dart';
+import 'package:hyper_driver/app/modules/package/views/package_view.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
   late ActivityController _activityController;
+  late PackageController _packageController;
   late AccountController _accountController;
 
   var currentTab = 0.obs;
   final List<Widget> _screens = [
-    const HomeView(),
+    Container(),
     const ActivityView(),
+    const PackageView(),
     const AccountView(),
   ];
 
@@ -52,6 +54,13 @@ class MainController extends GetxController {
     _activityController.init();
 
     Get.put(
+      PackageController(),
+      permanent: true,
+    );
+    _packageController = Get.find<PackageController>();
+    _packageController.init();
+
+    Get.put(
       AccountController(),
       permanent: true,
     );
@@ -71,6 +80,9 @@ class MainController extends GetxController {
       case 3:
         _accountController.init();
         break;
+      case 4:
+        _accountController.init();
+        break;
     }
   }
 
@@ -79,5 +91,6 @@ class MainController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 1500));
     activityLoading.value = false;
     activityState.value = !activityState.value;
+    _homeController.setActivityState(activityState.value);
   }
 }

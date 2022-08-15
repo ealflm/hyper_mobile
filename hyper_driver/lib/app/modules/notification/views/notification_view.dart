@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
-import 'package:hyper_driver/app/core/values/app_values.dart';
 import 'package:hyper_driver/app/core/values/text_styles.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
