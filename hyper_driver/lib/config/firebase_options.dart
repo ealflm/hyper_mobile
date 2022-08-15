@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCH_MMpl1PcMp4R0RBjtBcgcrrBqtuleSg',
-    appId: '1:220815981102:android:077428d670478556243dbf',
+    appId: '1:220815981102:android:29c10b0884fdaef3243dbf',
     messagingSenderId: '220815981102',
     projectId: 'hypernotifications-9197a',
     storageBucket: 'hypernotifications-9197a.appspot.com',

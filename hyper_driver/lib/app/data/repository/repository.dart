@@ -9,7 +9,6 @@ import 'package:hyper_driver/app/data/models/order_detail_model.dart';
 import 'package:hyper_driver/app/data/models/order_model.dart';
 import 'package:hyper_driver/app/data/models/rent_stations_model.dart';
 import 'package:hyper_driver/app/data/models/vehicle_rental_model.dart';
-import 'package:hyper_driver/app/modules/register/model/citizen_indentity_card.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../models/package_model.dart';
@@ -50,12 +49,6 @@ abstract class Repository {
   Future<String> sendOtp(String phoneNumber);
 
   Future<bool> verifyOtp(String phoneNumber, String otp, String requestId);
-
-  Future<bool> register(
-    String phoneNumber,
-    String pin,
-    CitizenIdentityCard card,
-  );
 
   Future<Activity> getActivity(String customerId);
 

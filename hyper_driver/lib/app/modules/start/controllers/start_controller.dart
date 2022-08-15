@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/base/base_controller.dart';
 import 'package:hyper_driver/app/core/utils/utils.dart';
+import 'package:hyper_driver/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_driver/app/data/repository/repository.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
@@ -21,9 +22,11 @@ class StartController extends BaseController {
     await callDataService(
       verifyService,
       onSuccess: (String response) {
-        Get.offAllNamed(
-          Routes.REGISTER_OTP,
-          arguments: {'phoneNumber': phoneNumber},
+        HyperDialog.show(
+          title: 'Không tồn tại',
+          content:
+              'Số điện thoại không tồn tại. Liên hệ admin hệ thống để đăng ký',
+          primaryButtonText: 'OK',
         );
       },
       onError: (DioError dioError) {

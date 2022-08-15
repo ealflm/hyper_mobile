@@ -32,4 +32,7 @@ abstract class AppAnimationAssets {
 
   static const String dot = 'assets/lottiefiles/dot.json';
   static const String dots = 'assets/lottiefiles/dots.json';
+
+  // Driver
+  static const String fourLoading = 'assets/lottiefiles/four-loading.json';
 }

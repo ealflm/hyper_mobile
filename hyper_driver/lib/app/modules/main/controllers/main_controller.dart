@@ -2,27 +2,21 @@ import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
-import 'package:hyper_driver/app/core/model/payment_result.dart';
 import 'package:hyper_driver/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_driver/app/modules/account/views/account_view.dart';
 import 'package:hyper_driver/app/modules/activity/controllers/activity_controller.dart';
 import 'package:hyper_driver/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_driver/app/modules/home/views/home_view.dart';
-import 'package:hyper_driver/app/modules/package/controllers/package_controller.dart';
-import 'package:hyper_driver/app/modules/package/views/package_view.dart';
-import 'package:hyper_driver/app/routes/app_pages.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
-  late PackageController _packageController;
   late ActivityController _activityController;
   late AccountController _accountController;
 
   var currentTab = 0.obs;
   final List<Widget> _screens = [
     const HomeView(),
-    const PackageView(),
     const ActivityView(),
     const AccountView(),
   ];
@@ -30,30 +24,14 @@ class MainController extends GetxController {
   PageStorageBucket bucket = PageStorageBucket();
   Widget get currentScreen => _screens[currentTab.value];
 
+  var activityState = false.obs;
+  var activityLoading = false.obs;
+
   @override
   void onInit() async {
     initController();
 
     await SettingController.intance.init();
-
-    final appLinks = AppLinks();
-
-    appLinks.uriLinkStream.listen((uri) {
-      PaymentResult paymentResult = PaymentResult.fromString(
-        status: uri.queryParameters['resultCode'],
-        uid: uri.queryParameters['uid'],
-        amount: uri.queryParameters['amount'],
-        createdDate: uri.queryParameters['create-date'],
-        source: 'momo',
-      );
-
-      Get.offAllNamed(
-        Routes.PAYMENT_STATUS,
-        arguments: {
-          'paymentResult': paymentResult,
-        },
-      );
-    });
 
     super.onInit();
   }
@@ -65,13 +43,6 @@ class MainController extends GetxController {
     );
     _homeController = Get.find<HomeController>();
     _homeController.init();
-
-    Get.put(
-      PackageController(),
-      permanent: true,
-    );
-    _packageController = Get.find<PackageController>();
-    _packageController.init();
 
     Get.put(
       ActivityController(),
@@ -94,9 +65,6 @@ class MainController extends GetxController {
       case 0:
         _homeController.init();
         break;
-      case 1:
-        _packageController.init();
-        break;
       case 2:
         _activityController.init();
         break;
@@ -104,5 +72,12 @@ class MainController extends GetxController {
         _accountController.init();
         break;
     }
+  }
+
+  void toggleActivityState() async {
+    activityLoading.value = true;
+    await Future.delayed(const Duration(milliseconds: 1500));
+    activityLoading.value = false;
+    activityState.value = !activityState.value;
   }
 }

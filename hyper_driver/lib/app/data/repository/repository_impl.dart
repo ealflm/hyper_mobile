@@ -13,7 +13,6 @@ import 'package:hyper_driver/app/data/models/package_model.dart';
 import 'package:hyper_driver/app/data/models/rent_stations_model.dart';
 import 'package:hyper_driver/app/data/models/vehicle_rental_model.dart';
 import 'package:hyper_driver/app/data/repository/repository.dart';
-import 'package:hyper_driver/app/modules/register/model/citizen_indentity_card.dart';
 import 'package:hyper_driver/app/network/dio_provider.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -260,36 +259,6 @@ class RepositoryImpl extends BaseRepository implements Repository {
       "phone": phoneNumber,
       "otpCode": otp,
       "requestId": requestId,
-    };
-    var formData = FormData.fromMap(data);
-    var dioCall = dioClient.post(endpoint, data: formData);
-
-    try {
-      return callApi(dioCall).then((response) {
-        return true;
-      });
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  Future<bool> register(
-      String phoneNumber, String pin, CitizenIdentityCard card) {
-    var endpoint = "${DioProvider.baseUrl}/authorization/register";
-    var name = card.name;
-    var lastName = name.split(' ')[0];
-    var firstName = name.substring(name.indexOf(' ') + 1, name.length);
-
-    var data = {
-      "phone": phoneNumber,
-      "pin": pin,
-      "firstName": lastName,
-      "lastName": firstName,
-      "gender": card.gender == Gender.male,
-      "address": card.address,
-      "dateOfBirth": card.birthDate,
-      "identityCard": '${card.cccd}, ${card.cmnd}',
     };
     var formData = FormData.fromMap(data);
     var dioCall = dioClient.post(endpoint, data: formData);

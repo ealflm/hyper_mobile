@@ -1,77 +1,50 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/base/base_controller.dart';
-import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
-import 'package:hyper_driver/app/core/utils/number_utils.dart';
-import 'package:hyper_driver/app/data/models/user_model.dart';
-import 'package:hyper_driver/app/data/repository/repository.dart';
-import 'package:hyper_driver/app/modules/home/model/header_state.dart';
-import 'package:hyper_driver/app/network/dio_token_manager.dart';
+import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
+import 'package:hyper_driver/app/core/values/app_values.dart';
+import 'package:hyper_driver/app/data/repository/goong_repository.dart';
 
 class HomeController extends BaseController {
-  final contentKey = GlobalKey<AnimatedListState>();
-  final Repository _repository = Get.find(tag: (Repository).toString());
+  final GoongRepository _goongRepository =
+      Get.find(tag: (GoongRepository).toString());
 
-  final HeaderState headerState = HeaderState();
-  double accountBalance = -1.0;
+  HyperMapController mapController = HyperMapController();
 
-  Rx<User?> user = Rx<User?>(null);
-
-  String get accountBlanceVND => NumberUtils.vnd(accountBalance);
+  // Region Init
 
   @override
-  Future<void> onInit() async {
+  void onInit() async {
     init();
     super.onInit();
   }
 
-  void init() {
-    _getAccountBalance();
-    _loadUser();
-    _loadSetting();
+  void init() async {
+    _delayCenterMarker();
+    _goToCurrentLocationWithZoomDelay();
   }
 
-  void _loadUser() {
-    if (TokenManager.instance.hasUser) {
-      user(TokenManager.instance.user!);
-    }
+  void _delayCenterMarker() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
   }
 
-  void _loadSetting() {
-    headerState.setWalletUiState(SettingController.intance.walletUiState);
-    accountBalance = SettingController.intance.accountBalance;
+  // End Region
+
+  // Region Go to
+
+  void _goToCurrentLocationWithZoomDelay({double? zoom}) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    mapController.moveToCurrentLocation(zoom: zoom ?? AppValues.focusZoomLevel);
   }
 
-  void _saveSetting() {
-    SettingController.intance.accountBalance = accountBalance;
-    SettingController.intance.saveAccountBalance(accountBalance);
+  void goToCurrentLocation() async {
+    _goToCurrentLocation();
+    await Future.delayed(const Duration(milliseconds: 1000));
   }
 
-  Future<void> reload() async {
-    await _getAccountBalance();
+  void _goToCurrentLocation({double? zoom}) async {
+    mapController.moveToCurrentLocation(zoom: zoom ?? AppValues.focusZoomLevel);
   }
 
-  void toggleHeader() {
-    headerState.toggle();
-    SettingController.intance.saveWalletUiStatus(headerState.walletUiState);
-  }
-
-  Future<void> _getAccountBalance() async {
-    String customerId = TokenManager.instance.user?.customerId ?? '';
-    if (customerId == '') return;
-    var accountBalanceService = _repository.getBalance(customerId);
-
-    await callDataService(
-      accountBalanceService,
-      onSuccess: (double response) {
-        accountBalance = response;
-      },
-      onError: (dioError) {
-        debugPrint(dioError.message);
-      },
-    );
-
-    _saveSetting();
-    update();
-  }
+  // End Region
 }
