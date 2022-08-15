@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "220815981102",
+    "project_id": "hypernotifications-9197a",
+    "storage_bucket": "hypernotifications-9197a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220815981102:android:077428d670478556243dbf",
+        "android_client_info": {
+          "package_name": "com.hyper.hyper_customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "220815981102-l88jk16gj6spc9p695fp6sefdrulru0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH_MMpl1PcMp4R0RBjtBcgcrrBqtuleSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "220815981102-l88jk16gj6spc9p695fp6sefdrulru0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220815981102:android:29c10b0884fdaef3243dbf",
+        "android_client_info": {
+          "package_name": "com.hyper.hyper_driver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "220815981102-l88jk16gj6spc9p695fp6sefdrulru0n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH_MMpl1PcMp4R0RBjtBcgcrrBqtuleSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "220815981102-l88jk16gj6spc9p695fp6sefdrulru0n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

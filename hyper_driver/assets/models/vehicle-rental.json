@@ -1,0 +1,15 @@
+{
+  "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+  "priceOfRentingServiceId": "e779845e-d651-4102-abe0-142e48c975e3",
+  "serviceTypeId": "5168511d-57f1-460a-8c7c-14664e3dbccc",
+  "publishYearName": "2010 - 2012",
+  "categoryName": "Xe hạng A",
+  "minTime": 1,
+  "maxTime": 6,
+  "pricePerHour": 20000,
+  "pricePerDay": 90000,
+  "vehicleName": "Futuner",
+  "licensePlates": "51A2-23423",
+  "color": "Đỏ",
+  "status": 1
+}

@@ -1,0 +1,134 @@
+{
+  "steps": [
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "partnerId": "00000000-0000-0000-0000-000000000000",
+      "name": "Đi bộ",
+      "totalStation": 0,
+      "distance": 428.886,
+      "stationList": [
+        {
+          "id": "00000000-0000-0000-0000-000000000000",
+          "title": null,
+          "description": null,
+          "address": null,
+          "longitude": 104.0157800069718,
+          "latitude": 10.019237494032609,
+          "status": 0
+        },
+        {
+          "id": "be2371bb-abb1-42a5-aade-e02c8cf5a1c8",
+          "title": "Trạm Bến Phà Phú Quốc",
+          "description": "Trạm Bến Phà Phú Quốc",
+          "address": "Mặt Trời Phú Quốc, 159 Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+          "longitude": 104.01734045497193,
+          "latitude": 10.02201636525696,
+          "status": 1
+        }
+      ],
+      "status": 0
+    },
+    {
+      "id": "4fe485ba-d4e2-413a-925d-5fbafe3248c0",
+      "partnerId": "f27e239e-7291-48ac-92e9-a925188658a7",
+      "name": "Tuyến Đi bến phà",
+      "totalStation": 7,
+      "distance": 467,
+      "stationList": [
+        {
+          "id": "be2371bb-abb1-42a5-aade-e02c8cf5a1c8",
+          "title": "Trạm Bến Phà Phú Quốc",
+          "description": "Trạm Bến Phà Phú Quốc",
+          "address": "Mặt Trời Phú Quốc, 159 Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+          "longitude": 104.01734045497193,
+          "latitude": 10.02201636525696,
+          "status": 1
+        },
+        {
+          "id": "a30ba6ef-9604-46d2-bbeb-c54e42d64e09",
+          "title": "Trạm Phú An Khang",
+          "description": "Trạm Phú An Khang",
+          "address": "Coffee Baratie, 377 Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+          "longitude": 104.01757803652538,
+          "latitude": 10.035502887933177,
+          "status": 1
+        }
+      ],
+      "status": 1
+    },
+    {
+      "id": "28a96edc-7c0a-4bc4-b5e9-64e5bbe8c5a0",
+      "partnerId": "077da865-2ad1-4a47-81be-3dcab22acaed",
+      "name": "Tesst",
+      "totalStation": 4,
+      "distance": 8650,
+      "stationList": [
+        {
+          "id": "a30ba6ef-9604-46d2-bbeb-c54e42d64e09",
+          "title": "Trạm Phú An Khang",
+          "description": "Trạm Phú An Khang",
+          "address": "Coffee Baratie, 377 Nguyễn Văn Cừ, An Thới, Phú Quốc, Kiên Giang",
+          "longitude": 104.01757803652538,
+          "latitude": 10.035502887933177,
+          "status": 1
+        },
+        {
+          "id": "15279129-d3c2-44d3-b65c-e6619f59d18f",
+          "title": "Trạm Thanh Sơn",
+          "description": "Trạm Thanh Sơn",
+          "address": "Thanh Sơn, Dương Tơ, Phú Quốc, Kiên Giang",
+          "longitude": 104.01513436640141,
+          "latitude": 10.097949697980923,
+          "status": 1
+        },
+        {
+          "id": "59d4fd71-dd0d-44e7-bdbc-d7d065e660cc",
+          "title": "Trạm Motifs",
+          "description": "Trạm Motifs",
+          "address": "Motifs, Ấp Đường Bào, Dương Tơ, Phú Quốc, Kiên Giang",
+          "longitude": 103.97892825710392,
+          "latitude": 10.151248677214838,
+          "status": 1
+        },
+        {
+          "id": "b03de06b-3aa1-4c95-8ccb-26f710432b47",
+          "title": "Trạm Hạnh Ngọc Phú Quốc Resort",
+          "description": "Trạm Hạnh Ngọc Phú Quốc Resort",
+          "address": "Hạnh Ngọc Phú Quốc Resort, Trần Hưng Đạo, Dương Tơ, Phú Quốc, Kiên Giang",
+          "longitude": 103.9675825911043,
+          "latitude": 10.191658936327244,
+          "status": 1
+        }
+      ],
+      "status": 1
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "partnerId": "00000000-0000-0000-0000-000000000000",
+      "name": "Đi bộ",
+      "totalStation": 0,
+      "distance": 750.62,
+      "stationList": [
+        {
+          "id": "b03de06b-3aa1-4c95-8ccb-26f710432b47",
+          "title": "Trạm Hạnh Ngọc Phú Quốc Resort",
+          "description": "Trạm Hạnh Ngọc Phú Quốc Resort",
+          "address": "Hạnh Ngọc Phú Quốc Resort, Trần Hưng Đạo, Dương Tơ, Phú Quốc, Kiên Giang",
+          "longitude": 103.9675825911043,
+          "latitude": 10.191658936327244,
+          "status": 1
+        },
+        {
+          "id": "00000000-0000-0000-0000-000000000000",
+          "title": null,
+          "description": null,
+          "address": null,
+          "longitude": 103.96822378771799,
+          "latitude": 10.197282005378597,
+          "status": 0
+        }
+      ],
+      "status": 0
+    }
+  ]
+}

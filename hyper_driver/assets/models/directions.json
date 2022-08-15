@@ -1,0 +1,212 @@
+{
+  "geocoded_waypoints": [
+    {
+      "geocoder_status": "OK",
+      "place_id": "qpOffY38ukDl7SLRipBuMubXZZGLqGoc-9Uq576WTEv-izrMvs9mRsvhNf2Kq1RH5dU1126rvWzy8R_VO7RARvzDFOqIukBC_v8mzb3ORFP7K_Sr2iLtQS_3SKuWRkFB1-9IEypK4RE3-7yLhiJBYTPzTKve-zlBI_fIq0ZHSREzJkUXOvoZUc_6LBPGJlzJz5u8m-om6WFX-0irDvJBUcMvxPvGNqG5S_ogi6YuqWELK_T73ieVAT8_8Jdo"
+    },
+    {
+      "geocoder_status": "OK",
+      "place_id": "PUdN7gvy8j3E8jqdhJ5bfaXcPZ-HxDRcmNsQnLTAS1L-4U7oscPy6jg1KtqxwfLCwuI217W2PEno8iWQgsF1TemELdiDnmlT8fApwrLBS1zF8iX5h7RfRPLdJeqen1969N0LxZ23S0Lx4C3uh59XQ2HcJfixwfNHX90l3p6eS0PG84LBSolbfPGEsf6GmD186eAp9Ya1V1rx3SXMs59bf8T-Mf6Cp2FP8Ydd85oSlVy3F8jH4hsBPQP3zKtU"
+    }
+  ],
+  "routes": [
+    {
+      "legs": [
+        {
+          "distance": {
+            "text": "10.19 km",
+            "value": 10187
+          },
+          "duration": {
+            "text": "22 phút",
+            "value": 1321
+          },
+          "end_address": "Khu dân cư Ocenlan 5 Ba Trại, Cửa Dương, Phú Quốc, Kiên Giang",
+          "end_location": {
+            "lat": 10.288,
+            "lng": 103.97306
+          },
+          "start_address": "Lẩu Megalo's Phú Quốc, 20 Lý Thường Kiệt, Dương Đông, Phú Quốc, Kiên Giang",
+          "start_location": {
+            "lat": 10.22441,
+            "lng": 103.96617
+          },
+          "steps": [
+            {
+              "distance": {
+                "text": "676 m",
+                "value": 676
+              },
+              "duration": {
+                "text": "2 phút",
+                "value": 103
+              },
+              "end_location": {
+                "lat": 10.22464,
+                "lng": 103.97233
+              },
+              "html_instructions": "Bắt đầu đi từ Lý Thường Kiệt",
+              "maneuver": "",
+              "polyline": {
+                "points": "q}k}@q{pyRGqHMcKQsNEe@"
+              },
+              "start_location": {
+                "lat": 10.22441,
+                "lng": 103.96617
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "127 m",
+                "value": 127
+              },
+              "duration": {
+                "text": "24 giây",
+                "value": 24
+              },
+              "end_location": {
+                "lat": 10.22351,
+                "lng": 103.97252
+              },
+              "html_instructions": "Rẽ phải vào Hùng Vương",
+              "maneuver": "right",
+              "polyline": {
+                "points": "__l}@abryRlBSrBQ"
+              },
+              "start_location": {
+                "lat": 10.22464,
+                "lng": 103.97233
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "1.68 km",
+                "value": 1684
+              },
+              "duration": {
+                "text": "3 phút",
+                "value": 151
+              },
+              "end_location": {
+                "lat": 10.23262,
+                "lng": 103.98383
+              },
+              "html_instructions": "Rẽ trái vào Nguyễn Trung Trực",
+              "maneuver": "left",
+              "polyline": {
+                "points": "}wk}@gcryRM{BA]Ic@Ma@{BiEeEgHQWm@g@KKoE}CwByAg@YqAq@SGSQe@y@cBqEc@iAMe@u@gGQq@g@{@[_@o@e@e@[s@]{DkCg@W_@OIC}Co@"
+              },
+              "start_location": {
+                "lat": 10.22351,
+                "lng": 103.97252
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "6.74 km",
+                "value": 6738
+              },
+              "duration": {
+                "text": "10 phút",
+                "value": 611
+              },
+              "end_location": {
+                "lat": 10.28487,
+                "lng": 103.97983
+              },
+              "html_instructions": "Đi từ Dương Đông - Bãi Thơm",
+              "maneuver": "straight",
+              "polyline": {
+                "points": "{pm}@}ityRUQQImASm@GuBIgBBeKj@eCH_BCaBMyAU_AUkA_@iX}KsAi@gAYeAS{@MqD[iAGaACuGYm@AuA?aAFy@Lk@Jo@P_A\\aAd@m@^gB|Ai@r@g@z@a@`Ac@vAu@pCyAfG{AtFQd@[n@[f@c@j@Y^c@`@_BjAsDzBcE|BmFbDcBlAeAz@_BxAa@b@gCtC}C|Dq@r@k@f@c@Xm@Zg@Rm@PeARcAFm@@_BAaGWeQy@iRm@uIU_AEaBO_AQm@QgBo@_DeBy@a@_Bo@{@U_B[yGcA_RqC{@QaA]k@U]QcAu@mEiEa@[u@e@kAm@y@Wy@ScBS"
+              },
+              "start_location": {
+                "lat": 10.23262,
+                "lng": 103.98383
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "527 m",
+                "value": 527
+              },
+              "duration": {
+                "text": "4 phút",
+                "value": 234
+              },
+              "end_location": {
+                "lat": 10.28487,
+                "lng": 103.97531
+              },
+              "html_instructions": "Rẽ trái",
+              "maneuver": "left",
+              "polyline": {
+                "points": "mww}@}psyRCVHpAEt@S~@eAxBU`AK~AXnBCnATjAh@pAd@l@"
+              },
+              "start_location": {
+                "lat": 10.28487,
+                "lng": 103.97983
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "436 m",
+                "value": 436
+              },
+              "duration": {
+                "text": "3 phút",
+                "value": 196
+              },
+              "end_location": {
+                "lat": 10.288,
+                "lng": 103.97306
+              },
+              "html_instructions": "Rẽ phải",
+              "maneuver": "right",
+              "polyline": {
+                "points": "mww}@utryRa@`@a@VqBb@[RsCtCu@hAkAz@iCr@"
+              },
+              "start_location": {
+                "lat": 10.28487,
+                "lng": 103.97531
+              },
+              "travel_mode": "DRIVING"
+            },
+            {
+              "distance": {
+                "text": "0 m",
+                "value": 0
+              },
+              "duration": {
+                "text": "0 giây",
+                "value": 0
+              },
+              "end_location": {
+                "lat": 10.288,
+                "lng": 103.97306
+              },
+              "html_instructions": "Bạn đã đến điểm đích",
+              "maneuver": "left",
+              "polyline": {
+                "points": "_kx}@sfryR"
+              },
+              "start_location": {
+                "lat": 10.288,
+                "lng": 103.97306
+              },
+              "travel_mode": "DRIVING"
+            }
+          ]
+        }
+      ],
+      "overview_polyline": {
+        "points": "q}k}@q{pyRGqHMcKQsNEe@lBSrBQM{BA]Ic@Ma@{BiEeEgHQWm@g@KKoE}CwByAg@YqAq@SGSQe@y@cBqEc@iAMe@u@gGQq@g@{@[_@o@e@e@[s@]{DkCg@W_@OIC}Co@UQQImASm@GuBIgBBeKj@eCH_BCaBMyAU_AUkA_@iX}KsAi@gAYeAS{@MqD[iAGaACuGYm@AuA?aAFy@Lk@Jo@P_A\\aAd@m@^gB|Ai@r@g@z@a@`Ac@vAu@pCyAfG{AtFQd@[n@[f@c@j@Y^c@`@_BjAsDzBcE|BmFbDcBlAeAz@_BxAa@b@gCtC}C|Dq@r@k@f@c@Xm@Zg@Rm@PeARcAFm@@_BAaGWeQy@iRm@uIU_AEaBO_AQm@QgBo@_DeBy@a@_Bo@{@U_B[yGcA_RqC{@QaA]k@U]QcAu@mEiEa@[u@e@kAm@y@Wy@ScBSCVHpAEt@S~@eAxBU`AK~AXnBCnATjAh@pAd@l@a@`@a@VqBb@[RsCtCu@hAkAz@iCr@"
+      },
+      "summary": ""
+    }
+  ]
+}
