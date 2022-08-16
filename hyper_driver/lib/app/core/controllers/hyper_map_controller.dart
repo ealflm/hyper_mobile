@@ -7,12 +7,31 @@ import 'package:hyper_driver/app/core/values/app_values.dart';
 import 'package:latlong2/latlong.dart';
 
 class HyperMapController {
+  static final HyperMapController _instance = HyperMapController._internal();
+  static HyperMapController get instance => _instance;
+  HyperMapController._internal();
+
   MapController controller = MapController();
   HyperPositionStream? _positionStream;
   final MapLocationController _mapLocationController = MapLocationController();
 
-  HyperMapController() {
+  init() {
     _mapLocationController.loadLocation();
+  }
+
+  void onMapCreated(MapController controller) {
+    this.controller = controller;
+  }
+
+  void onMapCreatedGoCurrentLocation(MapController controller) {
+    this.controller = controller;
+    goToCurrentLocationWithZoomDelay();
+  }
+
+  void goToCurrentLocationWithZoomDelay({double? zoom}) async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+
+    moveToCurrentLocation(zoom: zoom ?? AppValues.focusZoomLevel);
   }
 
   Future<LatLng?> getCurrentLocation() async {

@@ -13,6 +13,8 @@ import 'package:hyper_driver/config/build_config.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../core/controllers/hyper_map_controller.dart';
+
 class HyperMap extends GetWidget<HomeController> {
   const HyperMap({
     Key? key,
@@ -23,7 +25,6 @@ class HyperMap extends GetWidget<HomeController> {
     return HyperStack(
       children: [
         FlutterMap(
-          mapController: controller.mapController.controller,
           options: MapOptions(
             interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
             center: LatLng(10.212884, 103.964889),
@@ -31,6 +32,8 @@ class HyperMap extends GetWidget<HomeController> {
             minZoom: 10.5,
             maxZoom: 18.4,
             slideOnBoundaries: true,
+            onMapCreated:
+                HyperMapController.instance.onMapCreatedGoCurrentLocation,
           ),
           children: [
             TileLayerWidget(

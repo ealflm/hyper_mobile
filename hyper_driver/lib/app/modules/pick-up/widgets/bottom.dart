@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
-import 'package:hyper_driver/app/core/values/app_values.dart';
-import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
+import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
+import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
+import 'package:hyper_driver/app/modules/pick-up/widgets/finished.dart';
+import 'package:hyper_driver/app/modules/pick-up/widgets/picked.dart';
 
-class Bottom extends GetWidget<HomeController> {
+import '../../../core/controllers/hyper_map_controller.dart';
+
+class Bottom extends GetWidget<PickUpController> {
   const Bottom({
     Key? key,
   }) : super(key: key);
@@ -14,11 +18,22 @@ class Bottom extends GetWidget<HomeController> {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomRight,
-      padding: EdgeInsets.only(bottom: AppValues.bottomAppBarHeight),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           _goToCurrentLocation(),
+          Obx(
+            () {
+              switch (controller.state.value) {
+                case ViewState.picked:
+                  return const Picked();
+                case ViewState.finished:
+                  return const Finished();
+                case ViewState.completed:
+                  return Text('TODO');
+              }
+            },
+          ),
         ],
       ),
     );
@@ -32,7 +47,7 @@ class Bottom extends GetWidget<HomeController> {
         children: [
           ElevatedButton(
             onPressed: () {
-              controller.goToCurrentLocation();
+              HyperMapController.instance.moveToCurrentLocation();
             },
             style: ElevatedButton.styleFrom(
               shape: const CircleBorder(),
