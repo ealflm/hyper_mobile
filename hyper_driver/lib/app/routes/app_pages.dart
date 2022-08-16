@@ -14,6 +14,8 @@ import '../modules/main/bindings/main_binding.dart';
 import '../modules/main/views/main_view.dart';
 import '../modules/notification/bindings/notification_binding.dart';
 import '../modules/notification/views/notification_view.dart';
+import '../modules/pick-up/bindings/pick_up_binding.dart';
+import '../modules/pick-up/views/pick_up_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 import '../modules/start/bindings/start_binding.dart';
@@ -80,6 +82,11 @@ class AppPages {
       page: () => const BookingRequestView(),
       binding: BookingRequestBinding(),
       transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.PICK_UP,
+      page: () => const PickUpView(),
+      binding: PickUpBinding(),
     ),
   ];
 }

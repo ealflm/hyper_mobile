@@ -7,6 +7,7 @@ import 'package:hyper_driver/app/core/values/box_decorations.dart';
 import 'package:hyper_driver/app/core/values/button_styles.dart';
 import 'package:hyper_driver/app/core/values/text_styles.dart';
 import 'package:hyper_driver/app/core/widgets/hyper_shape.dart';
+import 'package:hyper_driver/app/routes/app_pages.dart';
 
 import '../controllers/booking_request_controller.dart';
 
@@ -66,7 +67,9 @@ class BookingRequestView extends GetView<BookingRequestController> {
               Row(
                 children: [
                   _circleButton(
-                    () {},
+                    () {
+                      Get.back();
+                    },
                   ),
                   SizedBox(
                     width: 10.w,
@@ -74,7 +77,9 @@ class BookingRequestView extends GetView<BookingRequestController> {
                   Expanded(
                     child: _button(
                       'Chấp nhận',
-                      () {},
+                      () {
+                        Get.offAllNamed(Routes.PICK_UP);
+                      },
                     ),
                   ),
                 ],
