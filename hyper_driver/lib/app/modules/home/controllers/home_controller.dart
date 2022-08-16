@@ -50,5 +50,6 @@ class HomeController extends BaseController {
     activityState.value = value;
   }
 
-  // End State
+  // End Region
+
 }

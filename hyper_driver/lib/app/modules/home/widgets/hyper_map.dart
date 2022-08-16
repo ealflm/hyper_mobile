@@ -43,81 +43,84 @@ class HyperMap extends GetWidget<HomeController> {
                 },
               ),
             ),
-            IgnorePointer(
-              child: Obx(
-                () => controller.activityState.value
-                    ? LocationMarkerLayerWidget(
-                        options: LocationMarkerLayerOptions(
-                          moveAnimationDuration:
-                              const Duration(milliseconds: 800),
-                          showHeadingSector: false,
-                          markerSize: Size(90.r, 90.r),
-                          markerDirection: MarkerDirection.heading,
-                          marker: Stack(
-                            children: [
-                              Lottie.asset(AppAnimationAssets.scanPulsePrimary),
-                              Center(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    boxShadow: ShadowStyles.locationMarker,
-                                  ),
-                                  height: 26.r,
-                                  width: 26.r,
-                                  child: DefaultLocationMarker(
-                                    color: AppColors.primary400,
-                                    child: Container(
-                                      padding: EdgeInsets.only(bottom: 2.r),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.navigation,
-                                          color: Colors.white,
-                                          size: 16.r,
-                                        ),
-                                      ),
-                                    ),
+            Obx(
+              () => Opacity(
+                opacity: controller.activityState.value ? 1 : 0,
+                child: LocationMarkerLayerWidget(
+                  options: LocationMarkerLayerOptions(
+                    moveAnimationDuration: const Duration(milliseconds: 800),
+                    showHeadingSector: false,
+                    markerSize: Size(90.r, 90.r),
+                    markerDirection: MarkerDirection.heading,
+                    marker: Stack(
+                      children: [
+                        Lottie.asset(AppAnimationAssets.scanPulsePurple),
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: ShadowStyles.locationMarker,
+                            ),
+                            height: 26.r,
+                            width: 26.r,
+                            child: DefaultLocationMarker(
+                              color: AppColors.primary400,
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 2.r),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.navigation,
+                                    color: Colors.white,
+                                    size: 16.r,
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      )
-                    : LocationMarkerLayerWidget(
-                        options: LocationMarkerLayerOptions(
-                          moveAnimationDuration:
-                              const Duration(milliseconds: 800),
-                          showHeadingSector: false,
-                          markerSize: Size(60.r, 60.r),
-                          markerDirection: MarkerDirection.heading,
-                          marker: Stack(
-                            children: [
-                              Center(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    boxShadow: ShadowStyles.locationMarker,
-                                  ),
-                                  height: 26.r,
-                                  width: 26.r,
-                                  child: DefaultLocationMarker(
-                                    child: Container(
-                                      padding: EdgeInsets.only(bottom: 2.r),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.navigation,
-                                          color: Colors.white,
-                                          size: 16.r,
-                                        ),
-                                      ),
-                                    ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Obx(
+              () => Opacity(
+                opacity: controller.activityState.value ? 0 : 1,
+                child: LocationMarkerLayerWidget(
+                  options: LocationMarkerLayerOptions(
+                    moveAnimationDuration: const Duration(milliseconds: 800),
+                    showHeadingSector: false,
+                    markerSize: Size(60.r, 60.r),
+                    markerDirection: MarkerDirection.heading,
+                    marker: Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: ShadowStyles.locationMarker,
+                            ),
+                            height: 26.r,
+                            width: 26.r,
+                            child: DefaultLocationMarker(
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 2.r),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.navigation,
+                                    color: Colors.white,
+                                    size: 16.r,
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

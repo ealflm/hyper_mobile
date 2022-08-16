@@ -4,6 +4,8 @@ import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
 import '../modules/activity/bindings/activity_binding.dart';
 import '../modules/activity/views/activity_view.dart';
+import '../modules/booking-request/bindings/booking_request_binding.dart';
+import '../modules/booking-request/views/booking_request_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -71,6 +73,12 @@ class AppPages {
       name: _Paths.ACCOUNT,
       page: () => const AccountView(),
       binding: AccountBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BOOKING_REQUEST,
+      page: () => const BookingRequestView(),
+      binding: BookingRequestBinding(),
       transition: Transition.noTransition,
     ),
   ];

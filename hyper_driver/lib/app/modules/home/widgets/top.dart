@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/values/text_styles.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
+import 'package:hyper_driver/app/routes/app_pages.dart';
 
 class Top extends GetWidget<HomeController> {
   const Top({
@@ -36,8 +37,13 @@ class Top extends GetWidget<HomeController> {
                   ),
                 ],
               ),
-              child: Obx(
-                () => controller.activityState.value ? _active() : _disable(),
+              child: InkWell(
+                onTap: () {
+                  Get.toNamed(Routes.BOOKING_REQUEST);
+                },
+                child: Obx(
+                  () => controller.activityState.value ? _active() : _disable(),
+                ),
               ),
             ),
           ],

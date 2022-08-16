@@ -30,6 +30,7 @@ abstract class Routes {
   static const REGISTER_OTP = _Paths.REGISTER_OTP;
   static const ORDER_DETAIL = _Paths.ORDER_DETAIL;
   static const CHAT = _Paths.CHAT;
+  static const BOOKING_REQUEST = _Paths.BOOKING_REQUEST;
 }
 
 abstract class _Paths {
@@ -62,4 +63,5 @@ abstract class _Paths {
   static const REGISTER_OTP = '/register-otp';
   static const ORDER_DETAIL = '/order-detail';
   static const CHAT = '/chat';
+  static const BOOKING_REQUEST = '/booking-request';
 }
