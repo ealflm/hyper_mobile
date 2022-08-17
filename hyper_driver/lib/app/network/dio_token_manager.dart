@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
+import 'package:hyper_driver/app/core/utils/date_time_utils.dart';
 import 'package:hyper_driver/app/data/models/user_model.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
 import 'package:jwt_decode/jwt_decode.dart';
@@ -18,16 +19,19 @@ class TokenManager extends Interceptor {
   User? _user;
 
   User? get user => _user;
-  bool get hasToken => () {
-        return _token != null && _token.toString().isNotEmpty ? true : false;
-      }();
-  bool get hasUser => () {
-        return _user != null ? true : false;
-      }();
+  bool get hasToken {
+    checkTokenValid();
+    return _token != null && _token.toString().isNotEmpty;
+  }
 
-  String get token => () {
-        return _token ?? '';
-      }();
+  bool get hasUser {
+    return _user != null ? true : false;
+  }
+
+  String get token {
+    checkTokenValid();
+    return _token ?? '';
+  }
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -157,5 +161,17 @@ class TokenManager extends Interceptor {
     var prefs = await SharedPreferences.getInstance();
     _user = null;
     await prefs.remove('userJson');
+  }
+
+  void checkTokenValid() {
+    Map<String, dynamic> payload = Jwt.parseJwt(token.toString());
+
+    DateTime? exp = DateTimeUtils.parseDateTime(payload['exp']);
+
+    if (exp != null && exp.compareTo(DateTime.now()) > 0) {
+      return;
+    } else {
+      _token = null;
+    }
   }
 }
