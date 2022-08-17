@@ -42,4 +42,7 @@ abstract class AppAssets {
   static const String topUpUp = 'assets/svg/top_up_up.svg';
 
   static const String up = 'assets/svg/up.svg';
+
+  static const String motorcycle = 'assets/svg/motorcycle.svg';
+  static const String car = 'assets/svg/car.svg';
 }

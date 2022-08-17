@@ -4,6 +4,10 @@ import '../modules/account/bindings/account_binding.dart';
 import '../modules/account/views/account_view.dart';
 import '../modules/activity/bindings/activity_binding.dart';
 import '../modules/activity/views/activity_view.dart';
+import '../modules/booking/bindings/booking_binding.dart';
+import '../modules/booking/views/booking_view.dart';
+import '../modules/booking_direction/bindings/booking_direction_binding.dart';
+import '../modules/booking_direction/views/booking_direction_view.dart';
 import '../modules/bus_direction/bindings/bus_direction_binding.dart';
 import '../modules/bus_direction/views/bus_direction_view.dart';
 import '../modules/bus_payment/bindings/bus_payment_binding.dart';
@@ -228,6 +232,19 @@ class AppPages {
       name: _Paths.CHAT,
       page: () => const ChatView(),
       binding: ChatBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BOOKING,
+      page: () => const BookingView(),
+      binding: BookingBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.BOOKING_DIRECTION,
+      page: () => const BookingDirectionView(),
+      binding: BookingDirectionBinding(),
+      transition: Transition.noTransition,
     ),
   ];
 }

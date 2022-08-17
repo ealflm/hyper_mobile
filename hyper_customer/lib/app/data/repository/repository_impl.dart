@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:hyper_customer/app/core/base/base_repository.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/data/models/auth_model.dart';
+import 'package:hyper_customer/app/data/models/booking_price_model.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
 import 'package:hyper_customer/app/data/models/bus_stations_model.dart';
 import 'package:hyper_customer/app/data/models/bus_trip_model.dart';
@@ -482,6 +483,28 @@ class RepositoryImpl extends BaseRepository implements Repository {
             result.add(Notification.fromJson(v));
           });
           return result;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<BookingPrice> getBookingPrice(double distance, int seat) {
+    var endpoint = "${DioProvider.baseUrl}/booking";
+
+    var param = {
+      "distance": distance,
+      "seat": seat,
+    };
+
+    var dioCall = dioTokenClient.get(endpoint, queryParameters: param);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return BookingPrice.fromJson(response.data['body']);
         },
       );
     } catch (e) {

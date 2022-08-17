@@ -141,7 +141,9 @@ class HomeView extends GetView<HomeController> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ServiceContainer(
-              onPressed: () {},
+              onPressed: () {
+                Get.toNamed(Routes.BOOKING);
+              },
               title: 'Đặt xe',
               backgroundAsset: AppAssets.booking,
               iconAsset: AppAssets.bookingIcon,

@@ -8,7 +8,7 @@ class SignalRController {
   SignalRController._internal();
 
   static const host =
-      "https://tourism-smart-transportation-api.azurewebsites.net/notification";
+      "https://tourism-smart-transportation-api.azurewebsites.net/hub";
 
   void init() async {
     // Logger init

@@ -68,7 +68,7 @@ class NotificationController {
       notificationController.init();
     });
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(

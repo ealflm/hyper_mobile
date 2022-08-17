@@ -14,12 +14,10 @@ import 'package:hyper_customer/app/modules/busing/widgets/search_item.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 
-class BusingController extends BaseController {
+class BookingController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
 
   HyperMapController mapController = HyperMapController();
-
-  late BusStationController busStationController;
 
   TextEditingController startTextEditingController = TextEditingController();
   Rx<PlaceDetail> startPlace = Rx<PlaceDetail>(PlaceDetail());
@@ -43,7 +41,6 @@ class BusingController extends BaseController {
     );
   }
 
-  var searchMode = false.obs;
   var isLoadingPage = false.obs;
 
   bool get canSwap {
@@ -52,7 +49,6 @@ class BusingController extends BaseController {
 
   @override
   void onInit() {
-    busStationController = BusStationController(mapController);
     super.onInit();
   }
 
@@ -72,7 +68,6 @@ class BusingController extends BaseController {
         const Duration(milliseconds: 300),
       );
       centerZoomFitBounds();
-      searchMode.value = false;
     }
   }
 
@@ -93,7 +88,6 @@ class BusingController extends BaseController {
         const Duration(milliseconds: 300),
       );
       centerZoomFitBounds();
-      searchMode.value = false;
     }
   }
 
@@ -106,7 +100,6 @@ class BusingController extends BaseController {
     endTextEditingController.text = endPlace.value.formattedAddress ?? '';
     startTextEditingController.text = startPlace.value.formattedAddress ?? '';
     centerZoomFitBounds();
-    searchMode.value = false;
   }
 
   void centerZoomFitBounds() {
@@ -159,12 +152,12 @@ class BusingController extends BaseController {
   }
 
   void focusOnEndPlace() {
-    var endlocation = LatLng(
+    var startlocation = LatLng(
       endPlace.value.geometry?.location?.lat ?? 0,
       endPlace.value.geometry?.location?.lng ?? 0,
     );
 
-    mapController.moveToPosition(endlocation, zoom: AppValues.focusZoomLevel);
+    mapController.moveToPosition(startlocation, zoom: AppValues.focusZoomLevel);
   }
 
   void goToCurrentLocation({double? zoom}) async {
@@ -174,63 +167,17 @@ class BusingController extends BaseController {
   List<BusDirection> busDirectionList = [];
   Rx<List<SearchItem>> searchItemList = Rx<List<SearchItem>>([]);
 
-  void fetchBusDirection() async {
+  void getToBookingDirection() async {
     isLoadingPage.value = true;
     if (startPlaceLocation == null || endPlaceLocation == null) {
       Utils.showToast('Vui lòng chọn điểm đi và điểm đến');
       isLoadingPage.value = false;
       return;
     }
-    var busDirectionService =
-        _repository.getBusDirection(startPlaceLocation!, endPlaceLocation!);
-
-    await callDataService(
-      busDirectionService,
-      onSuccess: (List<BusDirection> response) {
-        busDirectionList = response;
-      },
-      onError: (DioError dioError) {},
-    );
-
-    List<SearchItem> result = [];
-
-    busDirectionList.sort(
-      (a, b) {
-        return a.steps?.length.compareTo(b.steps?.length ?? 0) ?? 0;
-      },
-    );
-
-    for (BusDirection item in busDirectionList) {
-      int stationNumber = 0;
-      List<Steps> steps = item.steps ?? [];
-
-      for (Steps step in steps) {
-        if (step.name != 'Đi bộ') {
-          stationNumber++;
-        }
-      }
-
-      String firstStationName = steps[0].stationList?[1].title ?? '';
-
-      SearchItem searchItem = SearchItem(
-        stationNumber: stationNumber,
-        firstStationName: firstStationName,
-        price: 100000,
-        onPressed: () {
-          Get.toNamed(
-            Routes.BUS_DIRECTION,
-            arguments: {
-              'busDirection': item,
-              'endPlace': endPlace.value,
-            },
-          );
-        },
-      );
-      result.add(searchItem);
-    }
-
-    searchItemList(result);
+    Get.toNamed(Routes.BOOKING_DIRECTION, arguments: {
+      'startPlace': startPlace.value,
+      'endPlace': endPlace.value,
+    });
     isLoadingPage.value = false;
-    searchMode.value = true;
   }
 }

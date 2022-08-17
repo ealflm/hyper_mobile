@@ -67,4 +67,10 @@ class HyperMapController {
   void onPositionChanged(MapPosition mapPosition, bool hasGesture) {
     postion.value = mapPosition;
   }
+
+  void goToCurrentLocationWithZoomDelay({double? zoom}) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    moveToCurrentLocation(zoom: zoom ?? AppValues.focusZoomLevel);
+  }
 }

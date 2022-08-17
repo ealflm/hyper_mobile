@@ -185,7 +185,8 @@ class PlaceSearchController extends BaseController {
       int distance = directions?.routes?[0].legs?[0].distance?.value ?? 0;
 
       if (distance <= 1000) {
-        Utils.showToast('Khoản cách giữa điểm đi và điểm đến phải lớn hơn 1km');
+        Utils.showToast(
+            'Khoảng cách giữa điểm đi và điểm đến phải lớn hơn 1km');
         return false;
       }
     }

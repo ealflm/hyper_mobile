@@ -1,0 +1,8 @@
+{
+  "priceOfBookingServiceId": "a6442191-d3e6-4e15-853f-fbde74313cef",
+  "vehicleTypeId": "364485eb-dc4c-4498-af47-046a9c0764eb",
+  "fixedPrice": 29000,
+  "fixedDistance": 2,
+  "pricePerKilometer": 10000,
+  "totalPrice": 29000
+}
