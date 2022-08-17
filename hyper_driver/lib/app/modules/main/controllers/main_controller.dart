@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_driver/app/modules/account/views/account_view.dart';
 import 'package:hyper_driver/app/modules/activity/controllers/activity_controller.dart';
@@ -88,6 +89,13 @@ class MainController extends GetxController {
 
   void toggleActivityState() async {
     activityLoading.value = true;
+
+    if (activityState.value == false) {
+      SignalRController.instance.openDriver();
+    } else {
+      SignalRController.instance.closeDriver();
+    }
+
     await Future.delayed(const Duration(milliseconds: 1500));
     activityLoading.value = false;
     activityState.value = !activityState.value;

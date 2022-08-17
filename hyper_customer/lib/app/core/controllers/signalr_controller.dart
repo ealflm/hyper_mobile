@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
@@ -6,6 +7,8 @@ class SignalRController {
   static final SignalRController _instance = SignalRController._internal();
   static SignalRController get instance => _instance;
   SignalRController._internal();
+
+  static late HubConnection _hubConnection;
 
   static const host =
       "https://tourism-smart-transportation-api.azurewebsites.net/hub";
@@ -23,19 +26,26 @@ class SignalRController {
     // If you want to also to log out transport messages:
     final transportProtLogger = Logger("SignalR - transport");
 
+    var token = TokenManager.instance.token;
+
     // The location of the SignalR Server.
-    final httpOptions = HttpConnectionOptions(logger: transportProtLogger);
+    final httpOptions = HttpConnectionOptions(
+      logger: transportProtLogger,
+      accessTokenFactory: () async {
+        return token;
+      },
+    );
 
     // Creates the connection by using the HubConnectionBuilder.
-    final hubConnection = HubConnectionBuilder()
+    _hubConnection = HubConnectionBuilder()
         .withUrl(host, options: httpOptions)
         .configureLogging(hubProtLogger)
         .build();
 
     // When the connection is closed, print out a message to the console.
-    hubConnection
+    _hubConnection
         .onclose(({error}) => debugPrint("SignalR: connection closed"));
 
-    await hubConnection.start();
+    await _hubConnection.start();
   }
 }

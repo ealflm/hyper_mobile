@@ -43,7 +43,7 @@ void main() async {
 
   NetworkController.intance.init();
 
-  TokenManager.instance.init();
+  await TokenManager.instance.init();
 
   NotificationController.instance.init();
 

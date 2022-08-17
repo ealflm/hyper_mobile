@@ -17,7 +17,7 @@ void main() async {
 
   EnvConfig envConfig = EnvConfig(
     baseUrl:
-        'https://tourism-smart-transportation-api.azurewebsites.net/api/v1.0/customer',
+        'https://tourism-smart-transportation-api.azurewebsites.net/api/v1.0/driver',
   );
 
   MapConfig mapConfig = MapConfig(
@@ -43,11 +43,9 @@ void main() async {
 
   NetworkController.intance.init();
 
-  TokenManager.instance.init();
+  await TokenManager.instance.init();
 
   NotificationController.instance.init();
-
-  SignalRController.instance.init();
 
   Intl.defaultLocale = 'vi_VN';
   initializeDateFormatting();

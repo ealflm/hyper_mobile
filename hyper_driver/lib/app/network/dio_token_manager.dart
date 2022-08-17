@@ -1,19 +1,13 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
 import 'package:hyper_driver/app/data/models/user_model.dart';
-import 'package:hyper_driver/app/data/repository/repository.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
 import 'package:jwt_decode/jwt_decode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../config/firebase_options.dart';
 
 class TokenManager extends Interceptor {
   static final TokenManager _instance = TokenManager._internal();
@@ -29,6 +23,10 @@ class TokenManager extends Interceptor {
       }();
   bool get hasUser => () {
         return _user != null ? true : false;
+      }();
+
+  String get token => () {
+        return _token ?? '';
       }();
 
   @override
