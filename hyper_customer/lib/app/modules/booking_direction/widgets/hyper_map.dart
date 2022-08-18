@@ -4,13 +4,16 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_stack.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
+import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/config/build_config.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:lottie/lottie.dart' hide Marker;
 
 class HyperMap extends GetWidget<BookingDirectionController> {
   const HyperMap({
@@ -110,38 +113,91 @@ class HyperMap extends GetWidget<BookingDirectionController> {
                 }
               },
             ),
-            IgnorePointer(
-              child: LocationMarkerLayerWidget(
-                options: LocationMarkerLayerOptions(
-                  moveAnimationDuration: const Duration(milliseconds: 800),
-                  showHeadingSector: false,
-                  markerSize: Size(60.r, 60.r),
-                  markerDirection: MarkerDirection.heading,
-                  marker: Stack(
-                    children: [
-                      Center(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: ShadowStyles.locationMarker,
+            Obx(
+              () => Opacity(
+                opacity: controller.bookingState.value == BookingState.finding
+                    ? 1
+                    : 0,
+                child: LocationMarkerLayerWidget(
+                  options: LocationMarkerLayerOptions(
+                    moveAnimationDuration: const Duration(milliseconds: 800),
+                    showHeadingSector: false,
+                    markerSize: Size(200.r, 200.r),
+                    markerDirection: MarkerDirection.heading,
+                    marker: Stack(
+                      children: [
+                        Opacity(
+                          opacity: 0.5,
+                          child: Lottie.asset(
+                            AppAnimationAssets.scanPulsePurple,
                           ),
-                          height: 26.r,
-                          width: 26.r,
-                          child: DefaultLocationMarker(
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 2.r),
-                              child: Center(
-                                child: Icon(
-                                  Icons.navigation,
-                                  color: Colors.white,
-                                  size: 16.r,
+                        ),
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: ShadowStyles.locationMarker,
+                            ),
+                            height: 26.r,
+                            width: 26.r,
+                            child: DefaultLocationMarker(
+                              color: AppColors.purple,
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 2.r),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.navigation,
+                                    color: Colors.white,
+                                    size: 16.r,
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Obx(
+              () => Opacity(
+                opacity: controller.bookingState.value == BookingState.select
+                    ? 1
+                    : 0,
+                child: LocationMarkerLayerWidget(
+                  options: LocationMarkerLayerOptions(
+                    moveAnimationDuration: const Duration(milliseconds: 800),
+                    showHeadingSector: false,
+                    markerSize: Size(60.r, 60.r),
+                    markerDirection: MarkerDirection.heading,
+                    marker: Stack(
+                      children: [
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              boxShadow: ShadowStyles.locationMarker,
+                            ),
+                            height: 26.r,
+                            width: 26.r,
+                            child: DefaultLocationMarker(
+                              child: Container(
+                                padding: EdgeInsets.only(bottom: 2.r),
+                                child: Center(
+                                  child: Icon(
+                                    Icons.navigation,
+                                    color: Colors.white,
+                                    size: 16.r,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

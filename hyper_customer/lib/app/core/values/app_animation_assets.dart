@@ -32,4 +32,8 @@ abstract class AppAnimationAssets {
 
   static const String dot = 'assets/lottiefiles/dot.json';
   static const String dots = 'assets/lottiefiles/dots.json';
+
+  static const String lookingDriver = 'assets/lottiefiles/looking-driver.json';
+
+  static const String cantMatching = 'assets/lottiefiles/cant-matching.json';
 }

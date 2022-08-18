@@ -7,6 +7,7 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/modules/package/widget/package_km_item.dart';
 import 'package:hyper_customer/app/modules/package/widget/package_status_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -114,7 +115,7 @@ class UsingView extends GetView<PackageController> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              PackageStatusItem(
+                              PackageKmItem(
                                 icon: Icons.moving,
                                 title: 'Khoảng cách',
                                 value: controller.currentDistance,

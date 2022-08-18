@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
@@ -11,7 +12,9 @@ import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/vehicle.dart';
+import 'package:hyper_customer/app/modules/return_vehicle/models/state.dart';
 import 'package:latlong2/latlong.dart';
 
 class BookingDirectionController extends BaseController {
@@ -182,6 +185,20 @@ class BookingDirectionController extends BaseController {
     );
 
     return result;
+  }
+
+  // End Region
+
+  // Region State Management
+
+  var bookingState = BookingState.select.obs;
+
+  void changeState(BookingState value) {
+    bookingState.value = value;
+
+    if (value == BookingState.finding) {
+      mapController.moveToCurrentLocation();
+    }
   }
 
   // End Region
