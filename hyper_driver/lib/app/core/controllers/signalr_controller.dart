@@ -96,12 +96,12 @@ class SignalRController {
   }
 
   void action4() async {
-    debugPrint('Hyper SignalR: Action 3 Pressed');
+    debugPrint('Hyper SignalR: Action 4 Pressed');
     // TO DO
   }
 
   void action5() async {
-    debugPrint('Hyper SignalR: Action 4 Pressed');
+    debugPrint('Hyper SignalR: Action 5 Pressed');
     // TO DO
   }
 }

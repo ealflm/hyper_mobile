@@ -73,8 +73,8 @@ class Bottom extends GetWidget<HomeController> {
                 child: const Text('Action 4'),
               ),
               ElevatedButton(
-                onPressed: SignalRController.instance.action3,
-                child: const Text('Action 4'),
+                onPressed: SignalRController.instance.action5,
+                child: const Text('Action 5'),
               ),
             ],
           ),
