@@ -73,6 +73,9 @@ class UsingView extends GetView<PackageController> {
                                     color: AppColors.lightBlack,
                                     size: 20.r,
                                   ),
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
                                   GetBuilder<PackageController>(
                                     builder: (_) {
                                       return Text(

@@ -51,15 +51,20 @@ class OrderDetailsInfos {
   int? price;
   int? quantity;
   String? content;
+  String? licensePlates;
+  int? modePrice;
 
-  OrderDetailsInfos(
-      {this.packageId,
-      this.priceOfBusServiceId,
-      this.priceOfBookingServiceId,
-      this.priceOfRentingServiceId,
-      this.price,
-      this.quantity,
-      this.content});
+  OrderDetailsInfos({
+    this.packageId,
+    this.priceOfBusServiceId,
+    this.priceOfBookingServiceId,
+    this.priceOfRentingServiceId,
+    this.price,
+    this.quantity,
+    this.content,
+    this.licensePlates,
+    this.modePrice,
+  });
 
   OrderDetailsInfos.fromJson(Map<String, dynamic> json) {
     packageId = json['packageId'];
@@ -69,6 +74,8 @@ class OrderDetailsInfos {
     price = json['price'];
     quantity = json['quantity'];
     content = json['content'];
+    licensePlates = json['licensePlates'];
+    modePrice = json['modePrice'];
   }
 
   Map<String, dynamic> toJson() {
@@ -80,6 +87,8 @@ class OrderDetailsInfos {
     data['price'] = price;
     data['quantity'] = quantity;
     data['content'] = content;
+    data['licensePlates'] = licensePlates;
+    data['modePrice'] = modePrice;
     return data;
   }
 }

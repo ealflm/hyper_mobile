@@ -7,12 +7,16 @@ import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/services.dart';
 
+import '../../../data/models/activity_model.dart';
+
 class ScanController extends GetxController {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? qrController;
   var isFlashOn = false.obs;
   var scanMode = ScanMode.all.obs;
+
+  CustomerTrips? customerTrips;
 
   @override
   void onInit() {
@@ -21,6 +25,12 @@ class ScanController extends GetxController {
       var data = Get.arguments as Map<String, dynamic>;
       if (data.containsKey('scanMode')) {
         scanMode.value = Get.arguments['scanMode'];
+
+        if (scanMode.value == ScanMode.returnVehicle) {
+          if (data.containsKey('customerTrips')) {
+            customerTrips = Get.arguments['customerTrips'];
+          }
+        }
       }
     }
     super.onInit();
@@ -77,6 +87,21 @@ class ScanController extends GetxController {
           arguments: {
             'code': code,
             'fromBusing': scanMode.value == ScanMode.busing,
+          },
+        );
+
+        await qrController?.resumeCamera();
+      } else if (data.startsWith(AppValues.returnVehicleQRPrefix) &&
+          (scanMode.value == ScanMode.returnVehicle ||
+              scanMode.value == ScanMode.all)) {
+        var code = data.substring(AppValues.returnVehicleQRPrefix.length);
+        qrController?.pauseCamera();
+
+        await Get.offNamed(
+          Routes.RETURN_VEHICLE,
+          arguments: {
+            'code': code,
+            'customerTripId': customerTrips?.customerTripId,
           },
         );
 

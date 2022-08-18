@@ -11,6 +11,7 @@ import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/modules/account/widgets/account_item.dart';
+import 'package:hyper_customer/app/modules/account/widgets/card_item.dart';
 
 import '../controllers/account_controller.dart';
 
@@ -79,6 +80,36 @@ class AccountView extends GetView<AccountController> {
                               ),
                             ),
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 28.h,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 18.w,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dịch vụ',
+                          style: body2.copyWith(color: AppColors.gray),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        CardItem(
+                          onPress: () {
+                            // TO DO
+                          },
+                          icon: Icons.credit_card,
+                          text: 'Trạng thái thẻ',
+                          description: 'Đã liên kết',
+                          color: AppColors.hardBlue,
                         ),
                       ],
                     ),

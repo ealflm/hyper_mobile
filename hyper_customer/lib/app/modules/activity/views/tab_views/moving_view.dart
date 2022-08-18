@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
+import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/modules/activity/controllers/activity_controller.dart';
-import 'package:hyper_customer/app/modules/activity/widgets/transaction_item.dart';
+import 'package:hyper_customer/app/modules/activity/widgets/renting_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class MovingView extends GetView<ActivityController> {
@@ -30,18 +32,77 @@ class MovingView extends GetView<ActivityController> {
             distance: 50.h,
             backgroundColor: AppColors.softRed,
           ),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 5.h,
-              ),
-              Expanded(
-                child: ListView(
-                  children: [],
+          child: controller.activity.value != null &&
+                  controller.activity.value!.customerTrips!.isNotEmpty
+              ? ListView.builder(
+                  itemCount:
+                      controller.activity.value?.customerTrips?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    CustomerTrips? item =
+                        controller.activity.value?.customerTrips?[index];
+                    if (item?.filter == 0) {
+                      return Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 18.w, right: 18.w, top: 10.h),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Hôm nay',
+                                  style: h6.copyWith(
+                                      color: AppColors.softBlack,
+                                      fontSize: 18.sp),
+                                ),
+                              ],
+                            ),
+                          ),
+                          RentingItem(
+                            model: item,
+                          ),
+                        ],
+                      );
+                    } else if (item?.filter == 1) {
+                      return Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(
+                                left: 18.w, right: 18.w, top: 10.h),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Trước đó',
+                                  style: h6.copyWith(
+                                      color: AppColors.softBlack,
+                                      fontSize: 18.sp),
+                                ),
+                              ],
+                            ),
+                          ),
+                          RentingItem(
+                            model: item,
+                          ),
+                        ],
+                      );
+                    }
+                    return RentingItem(
+                      model: controller.activity.value?.customerTrips?[index],
+                    );
+                  })
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: 20.h),
+                      child: Text(
+                        'Không có dịch vụ',
+                        style: body2.copyWith(
+                          color: AppColors.description,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

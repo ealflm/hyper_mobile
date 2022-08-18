@@ -164,7 +164,8 @@ class TokenManager extends Interceptor {
   }
 
   void checkTokenValid() {
-    Map<String, dynamic> payload = Jwt.parseJwt(token.toString());
+    if (_token == null) return;
+    Map<String, dynamic> payload = Jwt.parseJwt(_token.toString());
 
     DateTime? exp = DateTimeUtils.parseDateTime(payload['exp']);
 

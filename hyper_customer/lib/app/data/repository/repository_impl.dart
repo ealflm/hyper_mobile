@@ -511,4 +511,22 @@ class RepositoryImpl extends BaseRepository implements Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<bool> returnVehicle(String code, String customerTripId) {
+    var endpoint = "${DioProvider.baseUrl}/return-vehicle";
+    var data = {
+      "rentStationId": code,
+      "customerTripId": customerTripId,
+    };
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return true;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

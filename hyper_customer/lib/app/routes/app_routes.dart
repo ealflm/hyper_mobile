@@ -32,6 +32,7 @@ abstract class Routes {
   static const CHAT = _Paths.CHAT;
   static const BOOKING = _Paths.BOOKING;
   static const BOOKING_DIRECTION = _Paths.BOOKING_DIRECTION;
+  static const RETURN_VEHICLE = _Paths.RETURN_VEHICLE;
 }
 
 abstract class _Paths {
@@ -66,4 +67,5 @@ abstract class _Paths {
   static const CHAT = '/chat';
   static const BOOKING = '/booking';
   static const BOOKING_DIRECTION = '/booking-direction';
+  static const RETURN_VEHICLE = '/return-vehicle';
 }

@@ -138,10 +138,7 @@ class RentingFormView extends GetView<RentingFormController> {
                                       Expanded(
                                         child: _button(
                                           'Thanh toán',
-                                          () {
-                                            controller.createOrder();
-                                            controller.createRentCustomerTrip();
-                                          },
+                                          controller.payment,
                                         ),
                                       ),
                                     ],

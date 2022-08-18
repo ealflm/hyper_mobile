@@ -3,4 +3,5 @@ enum ScanMode {
   card,
   busing,
   renting,
+  returnVehicle,
 }

@@ -6,6 +6,7 @@ abstract class AppValues {
 
   static const String cardLinkQRPrefix = '[CLQR]';
   static const String rentingQRPrefix = '[RTQR]';
+  static const String returnVehicleQRPrefix = '[RSQR]';
   static const String busQRPrefix = '[BSQR]';
 
   static double bottomAppBarHeight = 60.h;

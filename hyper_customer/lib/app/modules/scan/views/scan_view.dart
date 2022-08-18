@@ -7,7 +7,6 @@ import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/qr_painter.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
-import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../controllers/scan_controller.dart';

@@ -48,6 +48,8 @@ import '../modules/renting/views/renting_search_view.dart';
 import '../modules/renting/views/renting_view.dart';
 import '../modules/renting_form/bindings/renting_form_binding.dart';
 import '../modules/renting_form/views/renting_form_view.dart';
+import '../modules/return_vehicle/bindings/return_vehicle_binding.dart';
+import '../modules/return_vehicle/views/return_vehicle_view.dart';
 import '../modules/scan/bindings/scan_binding.dart';
 import '../modules/scan/views/scan_view.dart';
 import '../modules/scan_card/bindings/scan_card_binding.dart';
@@ -244,6 +246,12 @@ class AppPages {
       name: _Paths.BOOKING_DIRECTION,
       page: () => const BookingDirectionView(),
       binding: BookingDirectionBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.RETURN_VEHICLE,
+      page: () => const ReturnVehicleView(),
+      binding: ReturnVehicleBinding(),
       transition: Transition.noTransition,
     ),
   ];

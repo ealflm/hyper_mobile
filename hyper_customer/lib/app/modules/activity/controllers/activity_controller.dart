@@ -79,7 +79,7 @@ class ActivityController extends BaseController
     }
 
     flag = false;
-    for (Orders item in result?.orders ?? []) {
+    for (CustomerTrips item in result?.customerTrips ?? []) {
       if (DateTimeUtils.compare(item.createdDate, DateTime.now()) &&
           flag == false) {
         item.filter = 0;

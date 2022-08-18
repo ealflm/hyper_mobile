@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyper_driver/app/core/controllers/network_controller.dart';
 import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
-import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/config/map_config.dart';
 import 'package:intl/date_symbol_data_local.dart';

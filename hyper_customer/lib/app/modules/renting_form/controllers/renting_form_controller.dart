@@ -49,40 +49,25 @@ class RentingFormController extends BaseController
     );
   }
 
-  void createRentCustomerTrip() async {
-    String customerId = TokenManager.instance.user?.customerId ?? '';
-
-    DateTime deadline = DateTime.now();
-
-    if (modeController.index == 0) {
-      deadline = deadline.add(Duration(days: dayNum));
-    } else {
-      deadline = deadline.add(Duration(hours: hourNum));
-    }
-
-    var rentCustomerTripService =
-        _repository.createRentCustomerTrip(customerId, code ?? '', deadline);
-
-    await callDataService(
-      rentCustomerTripService,
-      onSuccess: (bool response) {
-        state.value = ViewState.successful;
-      },
-      onError: (DioError dioError) {
-        state.value = ViewState.failed;
-      },
-    );
-  }
-
   // End Region
 
   // Region Create order
 
-  createOrder() async {
+  void payment() async {
     state.value = ViewState.loading;
+    bool orderCreated = await createOrder();
+    bool rentCustomerTripCreated = await createRentCustomerTrip();
+    if (orderCreated && rentCustomerTripCreated) {
+      state.value = ViewState.paymentSuccessful;
+    } else {
+      state.value = ViewState.paymentFailed;
+    }
+  }
 
+  Future<bool> createOrder() async {
+    bool result = false;
     String customerId = TokenManager.instance.user?.customerId ?? '';
-    if (customerId == '') return;
+    if (customerId == '') return result;
 
     List<OrderDetailsInfos> orderDetailsInfos;
 
@@ -93,12 +78,16 @@ class RentingFormController extends BaseController
           content: 'Thuê xe theo ngày',
           quantity: dayNum,
           price: vehicleRental?.pricePerDay ?? 0,
+          licensePlates: vehicleRental?.licensePlates,
+          modePrice: 1,
         ),
         OrderDetailsInfos(
           priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
           content: 'Phí thu hồi xe',
           quantity: 1,
           price: AppValues.recallFee.toInt(),
+          licensePlates: vehicleRental?.licensePlates,
+          modePrice: 1,
         ),
       ];
     } else {
@@ -108,12 +97,16 @@ class RentingFormController extends BaseController
           content: 'Thuê xe theo giờ',
           quantity: hourNum,
           price: vehicleRental?.pricePerHour ?? 0,
+          licensePlates: vehicleRental?.licensePlates,
+          modePrice: 0,
         ),
         OrderDetailsInfos(
           priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
           content: 'Phí thu hồi xe',
           quantity: 1,
           price: AppValues.recallFee.toInt(),
+          licensePlates: vehicleRental?.licensePlates,
+          modePrice: 0,
         ),
       ];
     }
@@ -131,12 +124,41 @@ class RentingFormController extends BaseController
     await callDataService(
       orderService,
       onSuccess: (bool response) {
-        state.value = ViewState.paymentSuccessful;
+        result = true;
       },
       onError: (DioError dioError) {
-        state.value = ViewState.paymentFailed;
+        result = false;
       },
     );
+    return result;
+  }
+
+  Future<bool> createRentCustomerTrip() async {
+    bool result = false;
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    DateTime deadline = DateTime.now();
+
+    if (modeController.index == 0) {
+      deadline = deadline.add(Duration(days: dayNum));
+    } else {
+      deadline = deadline.add(Duration(hours: hourNum));
+    }
+
+    var rentCustomerTripService =
+        _repository.createRentCustomerTrip(customerId, code ?? '', deadline);
+
+    await callDataService(
+      rentCustomerTripService,
+      onSuccess: (bool response) {
+        result = true;
+      },
+      onError: (DioError dioError) {
+        result = false;
+      },
+    );
+
+    return result;
   }
 
   // End region

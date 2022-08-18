@@ -133,14 +133,15 @@ class CustomerTrips {
   String? routeId;
   String? vehicleId;
   int? distance;
-  String? createdDate;
-  String? modifiedDate;
-  String? rentDeadline;
+  DateTime? createdDate;
+  DateTime? modifiedDate;
+  DateTime? rentDeadline;
   String? coordinates;
   String? serviceTypeName;
   String? vehicleName;
   String? licensePlates;
   int? status;
+  int? filter;
 
   CustomerTrips(
       {this.customerTripId,
@@ -165,9 +166,13 @@ class CustomerTrips {
     if (json['distance'] != null) {
       distance = int.tryParse(json['distance'].toStringAsFixed(0));
     }
-    createdDate = json['createdDate'];
-    modifiedDate = json['modifiedDate'];
-    rentDeadline = json['rentDeadline'];
+    createdDate =
+        DateTime.parse(json['createdDate']).add(const Duration(hours: 7));
+    modifiedDate =
+        DateTime.parse(json['modifiedDate']).add(const Duration(hours: 7));
+    rentDeadline =
+        DateTime.parse(json['rentDeadline']).add(const Duration(hours: 7));
+
     coordinates = json['coordinates'];
     serviceTypeName = json['serviceTypeName'];
     vehicleName = json['vehicleName'];
