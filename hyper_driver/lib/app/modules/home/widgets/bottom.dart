@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/values/app_values.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
@@ -27,9 +28,10 @@ class Bottom extends GetWidget<HomeController> {
 
   Container _goToCurrentLocation() {
     return Container(
-      padding: EdgeInsets.only(bottom: 20.h, right: 20.w),
+      padding: EdgeInsets.only(bottom: 20.h, right: 20.w, left: 20.w),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        // mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
             onPressed: () {
@@ -51,6 +53,30 @@ class Bottom extends GetWidget<HomeController> {
                 color: AppColors.gray,
               ),
             ),
+          ),
+          Column(
+            children: [
+              ElevatedButton(
+                onPressed: SignalRController.instance.action1,
+                child: const Text('Action 1'),
+              ),
+              ElevatedButton(
+                onPressed: SignalRController.instance.action2,
+                child: const Text('Action 2'),
+              ),
+              ElevatedButton(
+                onPressed: SignalRController.instance.action3,
+                child: const Text('Action 3'),
+              ),
+              ElevatedButton(
+                onPressed: SignalRController.instance.action4,
+                child: const Text('Action 4'),
+              ),
+              ElevatedButton(
+                onPressed: SignalRController.instance.action3,
+                child: const Text('Action 4'),
+              ),
+            ],
           ),
         ],
       ),

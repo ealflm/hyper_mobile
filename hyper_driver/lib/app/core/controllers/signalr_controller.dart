@@ -79,4 +79,29 @@ class SignalRController {
 
     debugPrint('Hyper SignalR: $result');
   }
+
+  void action1() async {
+    debugPrint('Hyper SignalR: Action 1 Pressed');
+    // TO DO
+  }
+
+  void action2() async {
+    debugPrint('Hyper SignalR: Action 2 Pressed');
+    // TO DO
+  }
+
+  void action3() async {
+    debugPrint('Hyper SignalR: Action 3 Pressed');
+    // TO DO
+  }
+
+  void action4() async {
+    debugPrint('Hyper SignalR: Action 3 Pressed');
+    // TO DO
+  }
+
+  void action5() async {
+    debugPrint('Hyper SignalR: Action 4 Pressed');
+    // TO DO
+  }
 }
