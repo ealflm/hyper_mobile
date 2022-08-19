@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
+import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/map_polyline_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
@@ -14,7 +18,6 @@ import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/vehicle.dart';
-import 'package:hyper_customer/app/modules/return_vehicle/models/state.dart';
 import 'package:latlong2/latlong.dart';
 
 class BookingDirectionController extends BaseController {
@@ -62,6 +65,7 @@ class BookingDirectionController extends BaseController {
       }
     }
     if (startPlace.value != null && endPlace.value != null) {
+      loadDriverInfos();
       await fetchGoongRoute();
       await fetchPrice();
     } else {
@@ -199,6 +203,41 @@ class BookingDirectionController extends BaseController {
     if (value == BookingState.finding) {
       mapController.moveToCurrentLocation();
     }
+  }
+
+  // End Region
+
+  // Region SignalR
+
+  Rx<List<LatLng>> driverInfos = Rx<List<LatLng>>([]);
+  Rx<List<Marker>> driverMarkers = Rx<List<Marker>>([]);
+  Timer? timer;
+
+  void loadDriverInfos() async {
+    timer = Timer.periodic(
+      const Duration(seconds: 2),
+      (_) => fetchDriverInfos(),
+    );
+  }
+
+  void fetchDriverInfos() async {
+    driverInfos.value = await SignalRController.instance.getDriverInfos(
+      startPlaceLocation ?? LatLng(0, 0),
+    );
+
+    List<Marker> markers = [];
+    for (LatLng item in driverInfos.value) {
+      markers.add(
+        Marker(
+          point: item,
+          width: 18.r,
+          height: 18.r,
+          builder: (context) => const Icon(Icons.motorcycle),
+        ),
+      );
+    }
+
+    driverMarkers(markers);
   }
 
   // End Region

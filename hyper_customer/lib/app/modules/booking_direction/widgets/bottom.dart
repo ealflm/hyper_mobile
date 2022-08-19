@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
@@ -13,6 +15,7 @@ import 'package:hyper_customer/app/modules/booking_direction/controllers/booking
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/vehicle.dart';
 import 'package:hyper_customer/app/modules/booking_direction/widgets/service_item.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -34,13 +37,14 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 case BookingState.select:
                   return _select();
                 case BookingState.finding:
+                  return _pickedUp();
                   return _findDriver();
                 case BookingState.failed:
                   return _failed();
                 case BookingState.coming:
-                  return Container();
+                  return _coming();
                 case BookingState.pickedUp:
-                  return Container();
+                  return _pickedUp();
               }
             },
           )
@@ -220,113 +224,505 @@ class Bottom extends GetWidget<BookingDirectionController> {
       boxShadow: const [],
       maxHeight: 480.h,
       minHeight: 215.h,
-      panel: Column(
-        children: [
-          _goToCurrentLocation(),
-          Container(
-            padding: EdgeInsets.only(
-              bottom: 10.h,
-              left: 10.w,
-              right: 10.w,
-            ),
-            child: Container(
-              decoration: BoxDecorations.map(),
-              padding: EdgeInsets.only(
-                bottom: 20.h,
-                left: 18.w,
-                right: 18.w,
-                top: 10.h,
-              ),
-              width: double.infinity,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.otp,
-                      borderRadius: BorderRadius.circular(9.r),
-                    ),
-                    width: 35.w,
-                    height: 4,
+      panelBuilder: (sc) {
+        return SingleChildScrollView(
+          controller: sc,
+          child: Column(
+            children: [
+              _goToCurrentLocation(),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.map(),
+                  padding: EdgeInsets.only(
+                    bottom: 20.h,
+                    left: 18.w,
+                    right: 18.w,
+                    top: 10.h,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Lottie.asset(AppAnimationAssets.lookingDriver, width: 100.w),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Text(
-                    'Đang tìm tài xế...',
-                    style: subtitle1.copyWith(
-                      color: AppColors.softBlack,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeights.medium,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              bottom: 10.h,
-              left: 10.w,
-              right: 10.w,
-            ),
-            child: Container(
-              decoration: BoxDecorations.map(),
-              padding: EdgeInsets.only(
-                bottom: 10.h,
-                left: 18.w,
-                right: 18.w,
-                top: 20.h,
-              ),
-              width: double.infinity,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _start(
-                              title: '117 Nguyễn Đình Chiểu',
-                              content:
-                                  '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.otp,
+                          borderRadius: BorderRadius.circular(9.r),
+                        ),
+                        width: 35.w,
+                        height: 4,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Lottie.asset(AppAnimationAssets.lookingDriver,
+                          width: 100.w),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(
+                        'Đang tìm tài xế...',
+                        style: subtitle1.copyWith(
+                          color: AppColors.softBlack,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeights.medium,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.map(),
+                  padding: EdgeInsets.only(
+                    bottom: 10.h,
+                    left: 18.w,
+                    right: 18.w,
+                    top: 20.h,
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _start(
+                                  title:
+                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh ',
+                                  content:
+                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                ),
+                                _space(),
+                                _end(
+                                  title:
+                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                  content:
+                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                ),
+                              ],
                             ),
-                            _space(),
-                            _end(
-                              title: '117 Nguyễn Đình Chiểu',
-                              content:
-                                  '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
-                            ),
-                          ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Huỷ chuyến xe',
+                          style: subtitle2.copyWith(
+                            color: AppColors.softRed,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  const Divider(),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Huỷ chuyến xe',
-                      style: subtitle2.copyWith(
-                        color: AppColors.softRed,
-                      ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _coming() {
+    return SlidingUpPanel(
+      color: Colors.transparent,
+      boxShadow: const [],
+      maxHeight: 530.h,
+      minHeight: 270.h,
+      panelBuilder: (sc) {
+        return SingleChildScrollView(
+          controller: sc,
+          child: Column(
+            children: [
+              _goToCurrentLocation(),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.mapHigh(),
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(9.r),
+                    child: Column(
+                      children: [
+                        Container(
+                          color: AppColors.line,
+                          padding: EdgeInsets.only(
+                            bottom: 10.h,
+                            left: 18.w,
+                            right: 18.w,
+                            top: 10.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(9.r),
+                                ),
+                                width: 35.w,
+                                height: 4,
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Tài xế đang đến',
+                                          style: subtitle1.copyWith(
+                                            color: AppColors.softBlack,
+                                            fontWeight: FontWeights.medium,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Đại học FPT Thành phố Hồ Chí Minh',
+                                          style: body2.copyWith(
+                                            color: AppColors.softBlack,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '100 phút',
+                                    style: subtitle1.copyWith(
+                                      color: AppColors.softBlack,
+                                      fontWeight: FontWeights.medium,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(
+                            bottom: 10.h,
+                            left: 18.w,
+                            right: 18.w,
+                            top: 10.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                // crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                _avatar(),
+                                                SizedBox(
+                                                  width: 10.w,
+                                                ),
+                                                Text(
+                                                  '5',
+                                                  style: subtitle1.copyWith(
+                                                    color: AppColors.softBlack,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 5.w,
+                                                ),
+                                                const Icon(
+                                                  Icons.star,
+                                                  color: AppColors.yellow,
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5.h,
+                                        ),
+                                        Text(
+                                          'Đào Phương Nam',
+                                          style: subtitle1.copyWith(
+                                            color: AppColors.softBlack,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        'Yamaha Mxking',
+                                        style: subtitle1.copyWith(
+                                          color: AppColors.softBlack,
+                                          fontWeight: FontWeights.medium,
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10.h,
+                                      ),
+                                      Text(
+                                        '69E1-477.18',
+                                        style: subtitle1.copyWith(
+                                          color: AppColors.softBlack,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(
+                          height: 1,
+                        ),
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              Get.toNamed(Routes.CHAT);
+                            },
+                            child: Ink(
+                                width: double.infinity,
+                                padding: EdgeInsets.only(
+                                  top: 12.h,
+                                  bottom: 12.h,
+                                  left: 18.w,
+                                  right: 18.w,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Chat với tài xế',
+                                      style: body2.copyWith(
+                                        color: AppColors.softBlack,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10.w,
+                                    ),
+                                    Icon(
+                                      Icons.sms_outlined,
+                                      color: AppColors.softBlack,
+                                      size: 22.w,
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.mapHigh(),
+                  padding: EdgeInsets.only(
+                    bottom: 10.h,
+                    left: 18.w,
+                    right: 18.w,
+                    top: 20.h,
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _start(
+                                  title:
+                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh ',
+                                  content:
+                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                ),
+                                _space(),
+                                _end(
+                                  title:
+                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                  content:
+                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Huỷ chuyến xe',
+                          style: subtitle2.copyWith(
+                            color: AppColors.softRed,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        );
+      },
+    );
+  }
+
+  Widget _pickedUp() {
+    return SlidingUpPanel(
+      color: Colors.transparent,
+      boxShadow: const [],
+      maxHeight: 120.h,
+      minHeight: 120.h,
+      panelBuilder: (sc) {
+        return SingleChildScrollView(
+          controller: sc,
+          child: Column(
+            children: [
+              _goToCurrentLocation(),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.mapHigh(),
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(9.r),
+                    child: Column(
+                      children: [
+                        Container(
+                          color: AppColors.line,
+                          padding: EdgeInsets.only(
+                            bottom: 10.h,
+                            left: 18.w,
+                            right: 18.w,
+                            top: 10.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(9.r),
+                                ),
+                                width: 35.w,
+                                height: 4,
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Bạn đã bị tài xế đón',
+                                          style: subtitle1.copyWith(
+                                            color: AppColors.softBlack,
+                                            fontWeight: FontWeights.medium,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  ClipOval _avatar() {
+    return ClipOval(
+      child: SizedBox.fromSize(
+        size: Size.fromRadius(18.r), // Image radius
+        child:
+            //  Obx(
+            //   () =>
+            CachedNetworkImage(
+          fadeInDuration: const Duration(),
+          fadeOutDuration: const Duration(),
+          placeholder: (context, url) {
+            return true
+                // return controller.user.value?.gender == 'False'
+                ? SvgPicture.asset(AppAssets.female)
+                : SvgPicture.asset(AppAssets.male);
+          },
+          // imageUrl: controller.user.value?.url ?? '-',
+          imageUrl: 'https://avatars.githubusercontent.com/u/51223583?v=4',
+          fit: BoxFit.cover,
+          errorWidget: (context, url, error) {
+            return true
+                // return controller.user.value?.gender == 'False'
+                ? SvgPicture.asset(AppAssets.female)
+                : SvgPicture.asset(AppAssets.male);
+          },
+        ),
       ),
     );
   }
@@ -384,12 +780,16 @@ class Bottom extends GetWidget<BookingDirectionController> {
                   fontSize: 18.sp,
                   color: AppColors.softBlack,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               Text(
                 content,
                 style: body2.copyWith(
                   color: AppColors.lightBlack,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -434,12 +834,16 @@ class Bottom extends GetWidget<BookingDirectionController> {
                   fontSize: 18.sp,
                   color: AppColors.softBlack,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               Text(
                 content,
                 style: body2.copyWith(
                   color: AppColors.lightBlack,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

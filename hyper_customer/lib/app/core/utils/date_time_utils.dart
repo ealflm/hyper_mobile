@@ -9,6 +9,10 @@ class DateTimeUtils {
     return DateFormat('HH:mm').format(addSecond);
   }
 
+  static DateTime? stringToDateTimeFixUTC(String? value) {
+    return DateTime.tryParse(value ?? '')?.add(const Duration(hours: 7));
+  }
+
   static String dateTimeToString(DateTime? dateTime) {
     initializeDateFormatting();
     return dateTime == null

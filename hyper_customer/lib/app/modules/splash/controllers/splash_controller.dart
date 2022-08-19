@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/notification_controller.dart';
+import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
@@ -20,6 +21,7 @@ class SplashController extends GetxController {
 
     if (TokenManager.instance.hasToken) {
       NotificationController.instance.registerNotification();
+      SignalRController.instance.init();
       Get.offAllNamed(Routes.MAIN);
     } else if (TokenManager.instance.hasUser) {
       Get.offAllNamed(Routes.LOGIN);

@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
@@ -47,5 +50,33 @@ class SignalRController {
         .onclose(({error}) => debugPrint("SignalR: connection closed"));
 
     await _hubConnection.start();
+  }
+
+  void close() {
+    _hubConnection.stop();
+  }
+
+  Future<List<LatLng>> getDriverInfos(LatLng location) async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    var data = {
+      'Id': customerId,
+      'Latitude': location.latitude,
+      'Longitude': location.longitude,
+    };
+
+    String? str = await _hubConnection.invoke(
+      "GetDriversListMatching",
+      args: <Object>[jsonEncode(data)],
+    ) as String;
+
+    List<dynamic> list = jsonDecode(str);
+
+    List<LatLng> result = <LatLng>[];
+
+    for (var item in list) {
+      result.add(LatLng(item['Latitude'], item['Longitude']));
+    }
+
+    return result;
   }
 }

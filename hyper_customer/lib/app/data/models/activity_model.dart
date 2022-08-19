@@ -1,3 +1,5 @@
+import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
+
 class Activity {
   List<Orders>? orders;
   List<Transactions>? transactions;
@@ -68,8 +70,7 @@ class Orders {
     serviceTypeId = json['serviceTypeId'];
     serviceTypeName = json['serviceTypeName'];
     discountId = json['discountId'];
-    createdDate =
-        DateTime.parse(json['createdDate']).add(const Duration(hours: 7));
+    createdDate = DateTimeUtils.stringToDateTimeFixUTC(json['createdDate']);
     totalPrice = double.tryParse(json['totalPrice'].toStringAsFixed(0));
     status = json['status'];
   }
@@ -109,8 +110,7 @@ class Transactions {
     orderId = json['orderId'];
     walletId = json['walletId'];
     amount = double.tryParse(json['amount'].toStringAsFixed(0));
-    createdDate =
-        DateTime.parse(json['createdDate']).add(const Duration(hours: 7));
+    createdDate = DateTimeUtils.stringToDateTimeFixUTC(json['createdDate']);
     content = json['content'];
     status = json['status'];
   }
@@ -166,12 +166,9 @@ class CustomerTrips {
     if (json['distance'] != null) {
       distance = int.tryParse(json['distance'].toStringAsFixed(0));
     }
-    createdDate =
-        DateTime.parse(json['createdDate']).add(const Duration(hours: 7));
-    modifiedDate =
-        DateTime.parse(json['modifiedDate']).add(const Duration(hours: 7));
-    rentDeadline =
-        DateTime.parse(json['rentDeadline']).add(const Duration(hours: 7));
+    createdDate = DateTimeUtils.stringToDateTimeFixUTC(json['createdDate']);
+    modifiedDate = DateTimeUtils.stringToDateTimeFixUTC(json['modifiedDate']);
+    rentDeadline = DateTimeUtils.stringToDateTimeFixUTC(json['rentDeadline']);
 
     coordinates = json['coordinates'];
     serviceTypeName = json['serviceTypeName'];
