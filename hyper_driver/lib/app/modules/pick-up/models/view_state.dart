@@ -1,4 +1,5 @@
-enum ViewState {
+enum PickUpState {
+  came,
   picked,
   finished,
   completed,

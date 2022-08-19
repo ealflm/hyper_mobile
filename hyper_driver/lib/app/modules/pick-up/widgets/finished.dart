@@ -148,7 +148,7 @@ class Finished extends GetView<PickUpController> {
       width: double.infinity,
       child: SliderButton(
         action: () {
-          controller.changeState(ViewState.completed);
+          controller.changeState(PickUpState.completed);
         },
         alignLabel: Alignment.center,
         label: Text(

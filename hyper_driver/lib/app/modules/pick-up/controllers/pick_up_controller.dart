@@ -7,7 +7,7 @@ class PickUpController extends BaseController {
   final GoongRepository _goongRepository =
       Get.find(tag: (GoongRepository).toString());
 
-  var state = ViewState.picked.obs;
+  var state = PickUpState.came.obs;
 
   // Region Init
 
@@ -23,7 +23,7 @@ class PickUpController extends BaseController {
 
   // Region Change State
 
-  void changeState(ViewState value) {
+  void changeState(PickUpState value) {
     state.value = value;
   }
 

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
 import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
+import 'package:hyper_driver/app/modules/pick-up/widgets/came.dart';
 import 'package:hyper_driver/app/modules/pick-up/widgets/finished.dart';
 import 'package:hyper_driver/app/modules/pick-up/widgets/picked.dart';
 
@@ -25,11 +26,13 @@ class Bottom extends GetWidget<PickUpController> {
           Obx(
             () {
               switch (controller.state.value) {
-                case ViewState.picked:
+                case PickUpState.came:
+                  return const Came();
+                case PickUpState.picked:
                   return const Picked();
-                case ViewState.finished:
+                case PickUpState.finished:
                   return const Finished();
-                case ViewState.completed:
+                case PickUpState.completed:
                   return Text('TODO');
               }
             },

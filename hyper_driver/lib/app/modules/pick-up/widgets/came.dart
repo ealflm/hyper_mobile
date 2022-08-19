@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/values/box_decorations.dart';
 import 'package:hyper_driver/app/core/values/text_styles.dart';
@@ -8,8 +9,8 @@ import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.
 import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
 import 'package:slider_button/slider_button.dart';
 
-class Picked extends GetView<PickUpController> {
-  const Picked({
+class Came extends GetView<PickUpController> {
+  const Came({
     Key? key,
   }) : super(key: key);
 
@@ -27,8 +28,10 @@ class Picked extends GetView<PickUpController> {
             ),
             _location(),
             _button(
-              'Đã đón khách',
-              () {},
+              'Đã tới điểm đón',
+              () {
+                SignalRController.instance.driverArrived();
+              },
             ),
           ],
         ),
@@ -141,21 +144,19 @@ class Picked extends GetView<PickUpController> {
     );
   }
 
-  Widget _button(String title, Function()? onPressed) {
+  Widget _button(String title, Function() onPressed) {
     return Container(
       padding:
           EdgeInsets.only(left: 15.w, right: 15.w, bottom: 20.h, top: 10.h),
       width: double.infinity,
       child: SliderButton(
-        action: () {
-          controller.changeState(PickUpState.finished);
-        },
+        action: onPressed,
         alignLabel: Alignment.center,
         label: Text(
           title,
           style: buttonBold.copyWith(color: AppColors.white),
         ),
-        backgroundColor: AppColors.hardBlue,
+        backgroundColor: AppColors.yellow,
         height: 56.h,
         buttonSize: 50.h,
         shimmer: false,

@@ -6,6 +6,8 @@ import 'package:hyper_driver/app/core/model/data_hub_model.dart';
 import 'package:hyper_driver/app/core/model/driver_response_model.dart';
 import 'package:hyper_driver/app/core/model/location_model.dart';
 import 'package:hyper_driver/app/core/model/startLocationBooking_model.dart';
+import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
+import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
@@ -116,6 +118,20 @@ class SignalRController {
       "CloseDriver",
       args: [driverId],
     );
+
+    debugPrint(result.toString());
+  }
+
+  void driverArrived() async {
+    String driverId = TokenManager.instance.user?.driverId ?? '';
+
+    final result = await _hubConnection.invoke(
+      "DriverArrived",
+      args: [driverId],
+    );
+
+    PickUpController _pickUpController = Get.find<PickUpController>();
+    _pickUpController.changeState(PickUpState.picked);
 
     debugPrint(result.toString());
   }
