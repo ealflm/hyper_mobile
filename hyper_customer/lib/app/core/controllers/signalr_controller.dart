@@ -1,7 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/location_model.dart';
+import 'package:hyper_customer/app/modules/booking_direction/bindings/booking_direction_binding.dart';
+import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
+import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
@@ -51,10 +55,20 @@ class SignalRController {
         .onclose(({error}) => debugPrint("SignalR: connection closed"));
 
     await _hubConnection.start();
+
+    _hubConnection.on("BookingResponse", _bookingResponse);
   }
 
   void close() {
     _hubConnection.stop();
+  }
+
+  void _bookingResponse(List<Object>? parameters) {
+    debugPrint('_bookingResponse ${parameters?[0]}');
+    BookingDirectionController bookingDirectionController =
+        Get.find<BookingDirectionController>();
+
+    bookingDirectionController.changeState(BookingState.coming);
   }
 
   Future<List<LatLng>> getDriverInfos(LatLng location) async {
