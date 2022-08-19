@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
-import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -17,7 +16,6 @@ class NotificationView extends GetView<NotificationController> {
   Widget build(BuildContext context) {
     RefreshController refreshController =
         RefreshController(initialRefresh: false);
-    double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       //extendBodyBehindAppBar: true,

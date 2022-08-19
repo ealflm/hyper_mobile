@@ -56,6 +56,15 @@ abstract class ShadowStyles {
     ),
   ];
 
+  static List<BoxShadow> mapHigh = [
+    BoxShadow(
+      offset: const Offset(0, 4),
+      blurRadius: 10,
+      spreadRadius: 0,
+      color: AppColors.black.withOpacity(0.2),
+    ),
+  ];
+
   static List<BoxShadow> locationMarker = [
     BoxShadow(
       offset: const Offset(0, 0),

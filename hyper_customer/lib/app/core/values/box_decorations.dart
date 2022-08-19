@@ -41,6 +41,14 @@ abstract class BoxDecorations {
     );
   }
 
+  static BoxDecoration mapHigh({Color? color}) {
+    return BoxDecoration(
+      color: color ?? AppColors.white,
+      borderRadius: BorderRadius.circular(9.r),
+      boxShadow: ShadowStyles.mapHigh,
+    );
+  }
+
   static BoxDecoration paymentChip() {
     return BoxDecoration(
       border: Border.all(
