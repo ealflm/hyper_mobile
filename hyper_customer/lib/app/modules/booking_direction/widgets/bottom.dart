@@ -37,7 +37,6 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 case BookingState.select:
                   return _select();
                 case BookingState.finding:
-                  return _pickedUp();
                   return _findDriver();
                 case BookingState.failed:
                   return _failed();

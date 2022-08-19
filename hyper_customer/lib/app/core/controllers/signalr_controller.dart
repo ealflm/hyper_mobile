@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:hyper_customer/app/core/controllers/location_model.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
@@ -64,9 +65,11 @@ class SignalRController {
       'Longitude': location.longitude,
     };
 
+    debugPrint('Nam: ${jsonEncode(data)}');
+
     String? str = await _hubConnection.invoke(
       "GetDriversListMatching",
-      args: <Object>[jsonEncode(data)],
+      args: [jsonEncode(data)],
     ) as String;
 
     List<dynamic> list = jsonDecode(str);
@@ -78,5 +81,10 @@ class SignalRController {
     }
 
     return result;
+  }
+
+  Future<void> findDriver(LocationModel locationModel) async {
+    var data = jsonEncode(locationModel.toJson());
+    await _hubConnection.invoke("FindDriver", args: [data]);
   }
 }

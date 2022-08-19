@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
+import 'package:hyper_customer/app/core/controllers/location_model.dart';
 import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/map_polyline_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
@@ -18,6 +19,7 @@ import 'package:hyper_customer/app/data/repository/goong_repository.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/vehicle.dart';
+import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:latlong2/latlong.dart';
 
 class BookingDirectionController extends BaseController {
@@ -65,7 +67,7 @@ class BookingDirectionController extends BaseController {
       }
     }
     if (startPlace.value != null && endPlace.value != null) {
-      loadDriverInfos();
+      // loadDriverInfos();
       await fetchGoongRoute();
       await fetchPrice();
     } else {
@@ -202,7 +204,24 @@ class BookingDirectionController extends BaseController {
 
     if (value == BookingState.finding) {
       mapController.moveToCurrentLocation();
+      findDriver();
     }
+  }
+
+  void findDriver() {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    double distance =
+        (directions?.routes?[0].legs?[0].distance?.value)?.toDouble() ?? 0;
+    LocationModel location = LocationModel(
+      id: customerId,
+      latitude: startPlaceLocation?.latitude ?? 0.0,
+      longitude: startPlaceLocation?.longitude ?? 0.0,
+      priceBookingId: motocyclePrice.value?.priceOfBookingServiceId ?? '',
+      price: motocyclePrice.value?.totalPrice ?? 0.0,
+      distance: distance,
+      seats: 2,
+    );
+    SignalRController.instance.findDriver(location);
   }
 
   // End Region
