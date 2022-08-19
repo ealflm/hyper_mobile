@@ -50,7 +50,7 @@ class ActivityController extends BaseController
   Rx<Activity?> activity = Rx<Activity?>(null);
 
   Future<void> fetchActivity() async {
-    String customerId = TokenManager.instance.user?.customerId ?? '';
+    String customerId = TokenManager.instance.user?.driverId ?? '';
     if (customerId == '') return;
 
     var activityService = _repository.getActivity(customerId);

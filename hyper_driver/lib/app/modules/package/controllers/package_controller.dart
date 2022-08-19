@@ -54,7 +54,7 @@ class PackageController extends BaseController
   Rx<List<Package>> packages = Rx<List<Package>>([]);
 
   Future<void> fetchPackages() async {
-    String customerId = TokenManager.instance.user?.customerId ?? '';
+    String customerId = TokenManager.instance.user?.driverId ?? '';
 
     var packageService = _repository.getPackages(customerId);
 
@@ -68,7 +68,7 @@ class PackageController extends BaseController
   }
 
   Future<void> buyPackage(String packageId) async {
-    String customerId = TokenManager.instance.user?.customerId ?? '';
+    String customerId = TokenManager.instance.user?.driverId ?? '';
 
     var buyPackageService = _repository.buyPackage(customerId, packageId);
 
@@ -116,7 +116,7 @@ class PackageController extends BaseController
   Rx<CurrentPackage?> currentPackage = Rx<CurrentPackage?>(null);
 
   Future<void> getCurrentPackage() async {
-    String customerId = TokenManager.instance.user?.customerId ?? '';
+    String customerId = TokenManager.instance.user?.driverId ?? '';
     var currentPackageService = _repository.getCurrentPackage(customerId);
 
     await callDataService(

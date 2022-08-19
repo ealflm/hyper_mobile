@@ -80,7 +80,7 @@ class NotificationController {
   Future<void> registerNotification() async {
     Repository repository = Get.find(tag: (Repository).toString());
     final String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
-    final String customerId = TokenManager.instance.user?.customerId ?? '';
+    final String customerId = TokenManager.instance.user?.driverId ?? '';
 
     var registerNotificationService = repository.registerNotification(
       customerId,
@@ -98,7 +98,7 @@ class NotificationController {
 
   Future<void> unregisterNotification() async {
     Repository repository = Get.find(tag: (Repository).toString());
-    final String customerId = TokenManager.instance.user?.customerId ?? '';
+    final String customerId = TokenManager.instance.user?.driverId ?? '';
 
     var registerNotificationService = repository.registerNotification(
       customerId,

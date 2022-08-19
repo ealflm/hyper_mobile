@@ -22,7 +22,7 @@ class NotificationController extends BaseController {
   }
 
   Future<void> fetchNotifications() async {
-    String customerId = TokenManager.instance.user?.customerId ?? '';
+    String customerId = TokenManager.instance.user?.driverId ?? '';
 
     var notificationService = _repository.getNotifications(customerId);
 
