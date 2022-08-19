@@ -68,7 +68,7 @@ class BookingRequestView extends GetView<BookingRequestController> {
                 children: [
                   _circleButton(
                     () {
-                      Get.back();
+                      Get.back(result: 0);
                     },
                   ),
                   SizedBox(
@@ -78,7 +78,7 @@ class BookingRequestView extends GetView<BookingRequestController> {
                     child: _button(
                       'Chấp nhận',
                       () {
-                        Get.offAllNamed(Routes.PICK_UP);
+                        Get.back(result: 1);
                       },
                     ),
                   ),

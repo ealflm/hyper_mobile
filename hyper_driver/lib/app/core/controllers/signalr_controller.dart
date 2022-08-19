@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/model/data_hub_model.dart';
 import 'package:hyper_driver/app/core/model/driver_response_model.dart';
 import 'package:hyper_driver/app/core/model/location_model.dart';
 import 'package:hyper_driver/app/core/model/startLocationBooking_model.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
+import 'package:hyper_driver/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
@@ -61,7 +63,63 @@ class SignalRController {
     // Call from sever
     // _hubConnection.on("BookingRequest", _bookingRequest);
     // _hubConnection.on("BookingResponse", _bookingResponse);
+
+    _hubConnection.on("BookingRequest", _bookingRequest);
   }
+
+  void close() {
+    _hubConnection.stop();
+  }
+
+  void _bookingRequest(List<Object>? parameters) async {
+    var mapper = parameters?[0] as Map<String, dynamic>;
+    var driver = jsonEncode(DataHubModel.fromJson(mapper['driver']).toJson());
+
+    driver = jsonEncode(DriverResponseModel.fromJson(mapper));
+
+    var result = await Get.toNamed(Routes.BOOKING_REQUEST);
+
+    if (result == 1) {
+      await _hubConnection.invoke(
+        "CheckAcceptedRequest",
+        args: [driver, "1"],
+      );
+      Get.offAllNamed(Routes.PICK_UP);
+    } else {
+      await _hubConnection.invoke(
+        "CheckAcceptedRequest",
+        args: [driver, "0"],
+      );
+    }
+  }
+
+  void openDriver(LatLng location) async {
+    String driverId = TokenManager.instance.user?.driverId ?? '';
+    var data = {
+      'Id': driverId,
+      'Latitude': location.latitude,
+      'Longitude': location.longitude,
+    };
+
+    final result = await _hubConnection.invoke(
+      "OpenDriver",
+      args: [jsonEncode(data)],
+    );
+
+    debugPrint(result.toString());
+  }
+
+  void closeDriver() async {
+    String driverId = TokenManager.instance.user?.driverId ?? '';
+
+    final result = await _hubConnection.invoke(
+      "CloseDriver",
+      args: [driverId],
+    );
+
+    debugPrint(result.toString());
+  }
+}
 
   // void _bookingRequest(List<Object>? parameters) async {
   //   debugPrint('_bookingRequest ${parameters?[0]}');
@@ -165,35 +223,3 @@ class SignalRController {
   //   debugPrint('Hyper SignalR: Action 5 Pressed');
   //   // TO DO
   // }
-
-  void close() {
-    _hubConnection.stop();
-  }
-
-  void openDriver(LatLng location) async {
-    String driverId = TokenManager.instance.user?.driverId ?? '';
-    var data = {
-      'Id': driverId,
-      'Latitude': location.latitude,
-      'Longitude': location.longitude,
-    };
-
-    final result = await _hubConnection.invoke(
-      "OpenDriver",
-      args: [jsonEncode(data)],
-    );
-
-    debugPrint(result.toString());
-  }
-
-  void closeDriver() async {
-    String driverId = TokenManager.instance.user?.driverId ?? '';
-
-    final result = await _hubConnection.invoke(
-      "CloseDriver",
-      args: [driverId],
-    );
-
-    debugPrint(result.toString());
-  }
-}
