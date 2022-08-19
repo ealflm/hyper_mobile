@@ -47,8 +47,6 @@ void main() async {
 
   NotificationController.instance.init();
 
-  SignalRController.instance.init();
-
   Intl.defaultLocale = 'vi_VN';
   initializeDateFormatting();
 

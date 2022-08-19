@@ -114,6 +114,19 @@ class HyperMap extends GetWidget<BookingDirectionController> {
               },
             ),
             Obx(
+              () {
+                if (controller.driverMarkers.value.isNotEmpty) {
+                  return MarkerLayerWidget(
+                    options: MarkerLayerOptions(
+                      markers: controller.driverMarkers.value,
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
+            ),
+            Obx(
               () => Opacity(
                 opacity: controller.bookingState.value == BookingState.finding
                     ? 1
