@@ -37,14 +37,14 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 case BookingState.select:
                   return _select();
                 case BookingState.finding:
-                  return _coming();
+                  return _pickedUp();
                   return _findDriver();
                 case BookingState.failed:
                   return _failed();
                 case BookingState.coming:
                   return _coming();
                 case BookingState.pickedUp:
-                  return Container();
+                  return _pickedUp();
               }
             },
           )
@@ -605,6 +605,88 @@ class Bottom extends GetWidget<BookingDirectionController> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _pickedUp() {
+    return SlidingUpPanel(
+      color: Colors.transparent,
+      boxShadow: const [],
+      maxHeight: 120.h,
+      minHeight: 120.h,
+      panelBuilder: (sc) {
+        return SingleChildScrollView(
+          controller: sc,
+          child: Column(
+            children: [
+              _goToCurrentLocation(),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.mapHigh(),
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(9.r),
+                    child: Column(
+                      children: [
+                        Container(
+                          color: AppColors.line,
+                          padding: EdgeInsets.only(
+                            bottom: 10.h,
+                            left: 18.w,
+                            right: 18.w,
+                            top: 10.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(9.r),
+                                ),
+                                width: 35.w,
+                                height: 4,
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Bạn đã bị tài xế đón',
+                                          style: subtitle1.copyWith(
+                                            color: AppColors.softBlack,
+                                            fontWeight: FontWeights.medium,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
