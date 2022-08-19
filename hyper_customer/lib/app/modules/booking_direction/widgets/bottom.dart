@@ -220,114 +220,122 @@ class Bottom extends GetWidget<BookingDirectionController> {
       boxShadow: const [],
       maxHeight: 480.h,
       minHeight: 215.h,
-      panel: Column(
-        children: [
-          _goToCurrentLocation(),
-          Container(
-            padding: EdgeInsets.only(
-              bottom: 10.h,
-              left: 10.w,
-              right: 10.w,
-            ),
-            child: Container(
-              decoration: BoxDecorations.map(),
-              padding: EdgeInsets.only(
-                bottom: 20.h,
-                left: 18.w,
-                right: 18.w,
-                top: 10.h,
-              ),
-              width: double.infinity,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.otp,
-                      borderRadius: BorderRadius.circular(9.r),
-                    ),
-                    width: 35.w,
-                    height: 4,
+      panelBuilder: (sc) {
+        return SingleChildScrollView(
+          controller: sc,
+          child: Column(
+            children: [
+              _goToCurrentLocation(),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.map(),
+                  padding: EdgeInsets.only(
+                    bottom: 20.h,
+                    left: 18.w,
+                    right: 18.w,
+                    top: 10.h,
                   ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Lottie.asset(AppAnimationAssets.lookingDriver, width: 100.w),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Text(
-                    'Đang tìm tài xế...',
-                    style: subtitle1.copyWith(
-                      color: AppColors.softBlack,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeights.medium,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              bottom: 10.h,
-              left: 10.w,
-              right: 10.w,
-            ),
-            child: Container(
-              decoration: BoxDecorations.map(),
-              padding: EdgeInsets.only(
-                bottom: 10.h,
-                left: 18.w,
-                right: 18.w,
-                top: 20.h,
-              ),
-              width: double.infinity,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _start(
-                              title: '117 Nguyễn Đình Chiểu',
-                              content:
-                                  '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                      Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.otp,
+                          borderRadius: BorderRadius.circular(9.r),
+                        ),
+                        width: 35.w,
+                        height: 4,
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Lottie.asset(AppAnimationAssets.lookingDriver,
+                          width: 100.w),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Text(
+                        'Đang tìm tài xế...',
+                        style: subtitle1.copyWith(
+                          color: AppColors.softBlack,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeights.medium,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.map(),
+                  padding: EdgeInsets.only(
+                    bottom: 10.h,
+                    left: 18.w,
+                    right: 18.w,
+                    top: 20.h,
+                  ),
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                _start(
+                                  title:
+                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh ',
+                                  content:
+                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                ),
+                                _space(),
+                                _end(
+                                  title:
+                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                  content:
+                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                ),
+                              ],
                             ),
-                            _space(),
-                            _end(
-                              title: '117 Nguyễn Đình Chiểu',
-                              content:
-                                  '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
-                            ),
-                          ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.h,
+                      ),
+                      const Divider(),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'Huỷ chuyến xe',
+                          style: subtitle2.copyWith(
+                            color: AppColors.softRed,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 15.h,
-                  ),
-                  const Divider(),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Huỷ chuyến xe',
-                      style: subtitle2.copyWith(
-                        color: AppColors.softRed,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -384,12 +392,16 @@ class Bottom extends GetWidget<BookingDirectionController> {
                   fontSize: 18.sp,
                   color: AppColors.softBlack,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               Text(
                 content,
                 style: body2.copyWith(
                   color: AppColors.lightBlack,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
@@ -434,12 +446,16 @@ class Bottom extends GetWidget<BookingDirectionController> {
                   fontSize: 18.sp,
                   color: AppColors.softBlack,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
               Text(
                 content,
                 style: body2.copyWith(
                   color: AppColors.lightBlack,
                 ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

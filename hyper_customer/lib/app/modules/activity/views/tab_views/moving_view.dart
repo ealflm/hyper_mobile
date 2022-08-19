@@ -26,6 +26,7 @@ class MovingView extends GetView<ActivityController> {
           controller: refreshController,
           onRefresh: () async {
             await Future.delayed(const Duration(seconds: 1));
+            await controller.fetchActivity();
             refreshController.refreshCompleted();
           },
           header: WaterDropMaterialHeader(
