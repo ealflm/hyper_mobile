@@ -30,8 +30,7 @@ class Bottom extends GetWidget<HomeController> {
     return Container(
       padding: EdgeInsets.only(bottom: 20.h, right: 20.w, left: 20.w),
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           ElevatedButton(
             onPressed: () {
@@ -53,30 +52,6 @@ class Bottom extends GetWidget<HomeController> {
                 color: AppColors.gray,
               ),
             ),
-          ),
-          Column(
-            children: [
-              ElevatedButton(
-                onPressed: SignalRController.instance.action1,
-                child: const Text('Action 1'),
-              ),
-              ElevatedButton(
-                onPressed: SignalRController.instance.action2,
-                child: const Text('Action 2'),
-              ),
-              ElevatedButton(
-                onPressed: SignalRController.instance.action3,
-                child: const Text('Action 3'),
-              ),
-              ElevatedButton(
-                onPressed: SignalRController.instance.action4,
-                child: const Text('Action 4'),
-              ),
-              ElevatedButton(
-                onPressed: SignalRController.instance.action5,
-                child: const Text('Action 5'),
-              ),
-            ],
           ),
         ],
       ),

@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
+import 'package:hyper_driver/app/core/controllers/map_location_controller.dart';
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
 import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/modules/account/controllers/account_controller.dart';
@@ -9,6 +13,7 @@ import 'package:hyper_driver/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_driver/app/modules/package/controllers/package_controller.dart';
 import 'package:hyper_driver/app/modules/package/views/package_view.dart';
+import 'package:latlong2/latlong.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
@@ -35,6 +40,7 @@ class MainController extends GetxController {
     initController();
 
     await SettingController.intance.init();
+    HyperMapController.instance.init();
 
     super.onInit();
   }
@@ -91,8 +97,9 @@ class MainController extends GetxController {
     activityLoading.value = true;
 
     if (activityState.value == false) {
-      SignalRController.instance.openDriver();
+      sendLocations();
     } else {
+      timer?.cancel();
       SignalRController.instance.closeDriver();
     }
 
@@ -100,5 +107,19 @@ class MainController extends GetxController {
     activityLoading.value = false;
     activityState.value = !activityState.value;
     _homeController.setActivityState(activityState.value);
+  }
+
+  Timer? timer;
+
+  void sendLocations() async {
+    timer = Timer.periodic(
+      const Duration(seconds: 2),
+      (_) => sendLocation(),
+    );
+  }
+
+  void sendLocation() async {
+    LatLng? location = await HyperMapController.instance.getCurrentLocation();
+    SignalRController.instance.openDriver(location ?? LatLng(0, 0));
   }
 }
