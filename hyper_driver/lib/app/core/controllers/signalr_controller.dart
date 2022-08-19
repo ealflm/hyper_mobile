@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:hyper_driver/app/core/model/data_hub_model.dart';
+import 'package:hyper_driver/app/core/model/driver_response_model.dart';
 import 'package:hyper_driver/app/core/model/location_model.dart';
+import 'package:hyper_driver/app/core/model/startLocationBooking_model.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
@@ -13,8 +16,8 @@ class SignalRController {
 
   static late HubConnection _hubConnection;
 
-  static const host =
-      "https://tourism-smart-transportation-api.azurewebsites.net/hub";
+  // static const host = "http://10.0.2.2:5000/hub";
+  static const host = "http://localhost:5000/hub";
 
   void init() async {
     // Logger init
@@ -50,6 +53,40 @@ class SignalRController {
         .onclose(({error}) => debugPrint("SignalR: connection closed"));
 
     await _hubConnection.start();
+
+    // Call from sever
+    _hubConnection.on("BookingRequest", _bookingRequest);
+    _hubConnection.on("BookingResponse", _bookingResponse);
+  }
+
+  void _bookingRequest(List<Object>? parameters) async {
+    debugPrint('_bookingRequest ${parameters?[0]}');
+
+    var locationModel = LocationModel(
+      id: '84cd154d-a453-497a-b2aa-85a5aa9d9029',
+      latitude: 10.865836,
+      longitude: 106.781622,
+    );
+
+    String data = jsonEncode(locationModel.toJson());
+
+    var mapper = parameters?[0] as Map<String, dynamic>;
+    var driver = jsonEncode(DataHubModel.fromJson(mapper['driver']).toJson());
+    var customer =
+        jsonEncode(DataHubModel.fromJson(mapper['customer']).toJson());
+
+    driver = jsonEncode(DriverResponseModel.fromJson(mapper));
+
+    final result = await _hubConnection.invoke(
+      "CheckAcceptedRequest",
+      args: <Object>[driver, "1"],
+    );
+
+    debugPrint('CheckAcceptedRequest ${parameters?[0]}');
+  }
+
+  void _bookingResponse(List<Object>? parameters) {
+    debugPrint('_bookingResponse ${parameters?[0]}');
   }
 
   void close() {
@@ -58,9 +95,9 @@ class SignalRController {
 
   void openDriver() async {
     var locationModel = LocationModel(
-      id: 'ff7bb0f5-b404-4f36-a736-20a73a7c7498',
-      latitude: 10.207511,
-      longitude: 103.988106,
+      id: '84cd154d-a453-497a-b2aa-85a5aa9d9029',
+      latitude: 10.865836,
+      longitude: 106.781622,
     );
 
     String data = jsonEncode(locationModel.toJson());
@@ -71,27 +108,75 @@ class SignalRController {
     );
   }
 
+  // void closeDriver() async {
+  //   final bool result = await _hubConnection.invoke(
+  //     "CloseDriver",
+  //     args: <Object>["80FA07EC-CDE1-480F-BCA8-2FAD927C4DA3"],
+  //   ) as bool;
+
+  //   debugPrint('Hyper SignalR: $result');
+  // }
+
   void closeDriver() async {
-    final bool result = await _hubConnection.invoke(
+    // var locationModel = LocationModel(
+    //   id: '84cd154d-a453-497a-b2aa-85a5aa9d9029',
+    //   latitude: 10.864483,
+    //   longitude: 106.780907,
+    //   seats: 2,
+    // );
+
+    // String data = jsonEncode(locationModel.toJson());
+
+    final result = await _hubConnection.invoke(
       "CloseDriver",
-      args: <Object>["ff7bb0f5-b404-4f36-a736-20a73a7c7498"],
-    ) as bool;
+      args: <Object>["84cd154d-a453-497a-b2aa-85a5aa9d9029"],
+    );
 
     debugPrint('Hyper SignalR: $result');
   }
 
   void action1() async {
-    debugPrint('Hyper SignalR: Action 1 Pressed');
-    // TO DO
+    var locationModel = StartLocationBookingModel(
+      id: '1D17684A-00DD-4840-937B-9BC1E4DA033D',
+      latitude: 10.868463,
+      longitude: 106.779407,
+    );
+    String data = jsonEncode(locationModel.toJson());
+    final String result = await _hubConnection.invoke(
+      "GetDriversListMatching",
+      args: <Object>[data],
+    ) as String;
+
+    debugPrint('Hyper SignalR: Action 1 Pressed $result');
   }
 
   void action2() async {
+    var locationModel = LocationModel(
+      id: '1D17684A-00DD-4840-937B-9BC1E4DA033D',
+      latitude: 10.868463,
+      longitude: 106.779407,
+      priceBookingId: '8C06808E-E38A-4A1D-90FF-04E153DDF1FF',
+      price: 99000,
+      distance: 2500,
+      seats: 2,
+    );
+
+    String data = jsonEncode(locationModel.toJson());
+    final result = await _hubConnection.invoke(
+      "FindDriver",
+      args: <Object>[data],
+    );
+
     debugPrint('Hyper SignalR: Action 2 Pressed');
-    // TO DO
   }
 
   void action3() async {
     debugPrint('Hyper SignalR: Action 3 Pressed');
+
+    final result = await _hubConnection.invoke(
+      "CancelBooking",
+      args: <Object>['1D17684A-00DD-4840-937B-9BC1E4DA033D'],
+    );
     // TO DO
   }
 
