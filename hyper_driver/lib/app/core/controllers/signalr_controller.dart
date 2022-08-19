@@ -135,6 +135,34 @@ class SignalRController {
 
     debugPrint(result.toString());
   }
+
+  void driverPickedUp() async {
+    String driverId = TokenManager.instance.user?.driverId ?? '';
+
+    final result = await _hubConnection.invoke(
+      "DriverPickedUp",
+      args: [driverId],
+    );
+
+    PickUpController _pickUpController = Get.find<PickUpController>();
+    _pickUpController.changeState(PickUpState.finished);
+
+    debugPrint(result.toString());
+  }
+
+  void completedBooking() async {
+    String driverId = TokenManager.instance.user?.driverId ?? '';
+
+    final result = await _hubConnection.invoke(
+      "CompletedBooking",
+      args: [driverId],
+    );
+
+    PickUpController _pickUpController = Get.find<PickUpController>();
+    _pickUpController.changeState(PickUpState.completed);
+
+    debugPrint(result.toString());
+  }
 }
 
   // void _bookingRequest(List<Object>? parameters) async {

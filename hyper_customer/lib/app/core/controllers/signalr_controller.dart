@@ -57,10 +57,21 @@ class SignalRController {
     await _hubConnection.start();
 
     _hubConnection.on("BookingResponse", _bookingResponse);
+    _hubConnection.on("DriverArrived", _driverArrived);
+    _hubConnection.on("DriverPickedUp", _driverPickedUp);
+    _hubConnection.on("CompletedBooking", _completedBooking);
   }
 
   void close() {
     _hubConnection.stop();
+  }
+
+  void _driverArrived(List<Object>? parameters) {
+    debugPrint('_bookingResponse ${parameters?[0]}');
+    BookingDirectionController bookingDirectionController =
+        Get.find<BookingDirectionController>();
+
+    bookingDirectionController.changeState(BookingState.coming);
   }
 
   void _bookingResponse(List<Object>? parameters) {
@@ -69,6 +80,22 @@ class SignalRController {
         Get.find<BookingDirectionController>();
 
     bookingDirectionController.changeState(BookingState.coming);
+  }
+
+  void _driverPickedUp(List<Object>? parameters) {
+    debugPrint('_bookingResponse ${parameters?[0]}');
+    BookingDirectionController bookingDirectionController =
+        Get.find<BookingDirectionController>();
+
+    bookingDirectionController.changeState(BookingState.pickedUp);
+  }
+
+  void _completedBooking(List<Object>? parameters) {
+    debugPrint('_bookingResponse ${parameters?[0]}');
+    BookingDirectionController bookingDirectionController =
+        Get.find<BookingDirectionController>();
+
+    bookingDirectionController.changeState(BookingState.feedBack);
   }
 
   Future<List<LatLng>> getDriverInfos(LatLng location) async {

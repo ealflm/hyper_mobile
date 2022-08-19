@@ -4,4 +4,5 @@ enum BookingState {
   failed,
   coming,
   pickedUp,
+  feedBack,
 }

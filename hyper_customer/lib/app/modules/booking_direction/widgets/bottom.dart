@@ -44,6 +44,10 @@ class Bottom extends GetWidget<BookingDirectionController> {
                   return _coming();
                 case BookingState.pickedUp:
                   return _pickedUp();
+                case BookingState.feedBack:
+                  return Container(
+                    child: Text('Vui lòng feedback'),
+                  );
               }
             },
           )
