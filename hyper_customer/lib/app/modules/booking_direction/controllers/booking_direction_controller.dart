@@ -67,7 +67,7 @@ class BookingDirectionController extends BaseController {
       }
     }
     if (startPlace.value != null && endPlace.value != null) {
-      // loadDriverInfos();
+      loadDriverInfos();
       await fetchGoongRoute();
       await fetchPrice();
     } else {
