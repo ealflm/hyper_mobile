@@ -82,14 +82,16 @@ class SignalRController {
         await _hubConnection?.start();
         connectionIsOpen = true;
       } catch (e) {
-        _checkConnection();
+        debugPrint('Hyper SignalR: Connecting again');
+        _hubConnection?.stop();
+        await _hubConnection?.start();
       }
     }
 
     _listen();
   }
 
-  Future<void> _checkConnection() async {
+  Future<void> checkConnection() async {
     if (_hubConnection?.state != HubConnectionState.Connected) {
       debugPrint('Hyper SignalR: Connecting again');
       _hubConnection?.stop();
@@ -146,8 +148,6 @@ class SignalRController {
   }
 
   Future<List<LatLng>> getDriverInfos(LatLng location) async {
-    _checkConnection();
-
     String customerId = TokenManager.instance.user?.customerId ?? '';
     var data = {
       'Id': customerId,
@@ -174,10 +174,9 @@ class SignalRController {
   }
 
   Future<void> findDriver(LocationModel locationModel) async {
-    _checkConnection();
-
+    checkConnection();
     var data = jsonEncode(locationModel.toJson());
-    _hubConnection?.invoke("FindDriver", args: [data]);
+    _hubConnection?.invoke("FindDriver", args: [data, 'true']);
     debugPrint('Hyper SignalR: Finding Driver - $data');
   }
 }

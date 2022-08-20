@@ -45,6 +45,12 @@ class MainController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    timer?.cancel();
+    super.onClose();
+  }
+
   void initController() {
     Get.put(
       HomeController(),
