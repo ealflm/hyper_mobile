@@ -144,15 +144,13 @@ class Finished extends GetView<PickUpController> {
     );
   }
 
-  Widget _button(String title, Function()? onPressed) {
+  Widget _button(String title, Function() onPressed) {
     return Container(
       padding:
           EdgeInsets.only(left: 15.w, right: 15.w, bottom: 20.h, top: 10.h),
       width: double.infinity,
       child: SliderButton(
-        action: () {
-          controller.changeState(PickUpState.completed);
-        },
+        action: onPressed,
         alignLabel: Alignment.center,
         label: Text(
           title,
