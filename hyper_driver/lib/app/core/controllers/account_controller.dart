@@ -87,10 +87,10 @@ class AccountController extends GetxController {
     fingerprintOnChanged(fingerprintState.value);
   }
 
-  void hyper_driver() {
+  void logout() {
     TokenManager.instance.clearToken();
     NotificationController.instance.unregisterNotification();
-    SignalRController.instance.close();
+    SignalRController.instance.closeConnection();
     Get.offAllNamed(Routes.LOGIN);
   }
 }

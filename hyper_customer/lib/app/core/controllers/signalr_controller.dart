@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/location_model.dart';
-import 'package:hyper_customer/app/modules/booking_direction/bindings/booking_direction_binding.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
@@ -16,54 +15,97 @@ class SignalRController {
   static SignalRController get instance => _instance;
   SignalRController._internal();
 
-  static late HubConnection _hubConnection;
+  HubConnection? _hubConnection;
+  late Logger _logger;
+
+  bool connectionIsOpen = false;
 
   static const host =
-      "https://tourism-smart-transportation-api.azurewebsites.net/hub";
+      "https://tourism-smart-transportation-api.azurewebsites.net";
+  final String _serverUrl = "$host/hub";
 
   void init() async {
-    // Logger init
+    connectionIsOpen = false;
+
     Logger.root.level = Level.ALL;
     Logger.root.onRecord.listen((LogRecord rec) {
       debugPrint(
           'Hyper SignalR: ${rec.level.name}: ${rec.time}: ${rec.message}');
     });
+    _logger = Logger("Hyper SignalR");
 
-    // If you want only to log out the message for the higer level hub protocol:
-    final hubProtLogger = Logger("SignalR - hub");
-    // If you want to also to log out transport messages:
-    final transportProtLogger = Logger("SignalR - transport");
-
-    var token = TokenManager.instance.token;
-
-    // The location of the SignalR Server.
-    final httpOptions = HttpConnectionOptions(
-      logger: transportProtLogger,
-      accessTokenFactory: () async {
-        return token;
-      },
-    );
-
-    // Creates the connection by using the HubConnectionBuilder.
-    _hubConnection = HubConnectionBuilder()
-        .withUrl(host, options: httpOptions)
-        .configureLogging(hubProtLogger)
-        .build();
-
-    // When the connection is closed, print out a message to the console.
-    _hubConnection
-        .onclose(({error}) => debugPrint("SignalR: connection closed"));
-
-    await _hubConnection.start();
-
-    _hubConnection.on("BookingResponse", _bookingResponse);
-    _hubConnection.on("DriverArrived", _driverArrived);
-    _hubConnection.on("DriverPickedUp", _driverPickedUp);
-    _hubConnection.on("CompletedBooking", _completedBooking);
+    _openConnection();
   }
 
-  void close() {
-    _hubConnection.stop();
+  void _openConnection() async {
+    var token = TokenManager.instance.token;
+
+    final logger = _logger;
+
+    if (_hubConnection == null) {
+      final httpConnectionOptions = HttpConnectionOptions(
+          logger: logger,
+          logMessageContent: true,
+          accessTokenFactory: () async {
+            return token;
+          });
+
+      _hubConnection = HubConnectionBuilder()
+          .withUrl(_serverUrl, options: httpConnectionOptions)
+          .withAutomaticReconnect(retryDelays: [
+            1000,
+            2000,
+            3000,
+            3000,
+            3000,
+            3000,
+            3000,
+            3000,
+            10000
+          ])
+          .configureLogging(logger)
+          .build();
+
+      _hubConnection?.onclose(({error}) => connectionIsOpen = false);
+      _hubConnection?.onreconnecting(({error}) {
+        debugPrint("Hyper SignalR: Onreconnecting called");
+        connectionIsOpen = false;
+      });
+      _hubConnection?.onreconnected(({connectionId}) {
+        debugPrint("Hyper SignalR: onreconnected called");
+        connectionIsOpen = true;
+      });
+    }
+
+    if (_hubConnection?.state != HubConnectionState.Connected) {
+      try {
+        await _hubConnection?.start();
+        connectionIsOpen = true;
+      } catch (e) {
+        _checkConnection();
+      }
+    }
+
+    _listen();
+  }
+
+  Future<void> _checkConnection() async {
+    if (_hubConnection?.state != HubConnectionState.Connected) {
+      debugPrint('Hyper SignalR: Connecting again');
+      _hubConnection?.stop();
+      await _hubConnection?.start();
+    }
+  }
+
+  void closeConnection() {
+    _hubConnection?.stop();
+  }
+
+  void _listen() {
+    _hubConnection?.on("BookingResponse", _bookingResponse);
+    _hubConnection?.on("DriverArrived", _driverArrived);
+    _hubConnection?.on("DriverPickedUp", _driverPickedUp);
+    _hubConnection?.on("CompletedBooking", _completedBooking);
   }
 
   void _driverArrived(List<Object>? parameters) {
@@ -104,6 +146,8 @@ class SignalRController {
   }
 
   Future<List<LatLng>> getDriverInfos(LatLng location) async {
+    _checkConnection();
+
     String customerId = TokenManager.instance.user?.customerId ?? '';
     var data = {
       'Id': customerId,
@@ -113,7 +157,7 @@ class SignalRController {
 
     debugPrint('Nam: ${jsonEncode(data)}');
 
-    String? str = await _hubConnection.invoke(
+    String? str = await _hubConnection?.invoke(
       "GetDriversListMatching",
       args: [jsonEncode(data)],
     ) as String;
@@ -130,7 +174,10 @@ class SignalRController {
   }
 
   Future<void> findDriver(LocationModel locationModel) async {
+    _checkConnection();
+
     var data = jsonEncode(locationModel.toJson());
-    await _hubConnection.invoke("FindDriver", args: [data]);
+    _hubConnection?.invoke("FindDriver", args: [data]);
+    debugPrint('Hyper SignalR: Finding Driver - $data');
   }
 }

@@ -19,58 +19,94 @@ class SignalRController {
   static SignalRController get instance => _instance;
   SignalRController._internal();
 
-  static late HubConnection _hubConnection;
+  HubConnection? _hubConnection;
+  late Logger _logger;
 
-  // static const host = "http://10.0.2.2:5000/hub";
-  // static const host = "http://localhost:5000/hub";
+  bool connectionIsOpen = false;
 
   static const host =
-      "https://tourism-smart-transportation-api.azurewebsites.net/hub";
+      "https://tourism-smart-transportation-api.azurewebsites.net";
+  final String _serverUrl = "$host/hub";
 
   void init() async {
-    // Logger init
+    connectionIsOpen = false;
+
     Logger.root.level = Level.ALL;
     Logger.root.onRecord.listen((LogRecord rec) {
       debugPrint(
           'Hyper SignalR: ${rec.level.name}: ${rec.time}: ${rec.message}');
     });
+    _logger = Logger("Hyper SignalR");
 
-    // If you want only to log out the message for the higer level hub protocol:
-    final hubProtLogger = Logger("SignalR - hub");
-    // If you want to also to log out transport messages:
-    final transportProtLogger = Logger("SignalR - transport");
-
-    var token = TokenManager.instance.token;
-
-    // The location of the SignalR Server.
-    final httpOptions = HttpConnectionOptions(
-      logger: transportProtLogger,
-      accessTokenFactory: () async {
-        return token;
-      },
-    );
-
-    // Creates the connection by using the HubConnectionBuilder.
-    _hubConnection = HubConnectionBuilder()
-        .withUrl(host, options: httpOptions)
-        .configureLogging(hubProtLogger)
-        .build();
-
-    // When the connection is closed, print out a message to the console.
-    _hubConnection
-        .onclose(({error}) => debugPrint("SignalR: connection closed"));
-
-    await _hubConnection.start();
-
-    // Call from sever
-    // _hubConnection.on("BookingRequest", _bookingRequest);
-    // _hubConnection.on("BookingResponse", _bookingResponse);
-
-    _hubConnection.on("BookingRequest", _bookingRequest);
+    _openConnection();
   }
 
-  void close() {
-    _hubConnection.stop();
+  void _openConnection() async {
+    var token = TokenManager.instance.token;
+
+    final logger = _logger;
+
+    if (_hubConnection == null) {
+      final httpConnectionOptions = HttpConnectionOptions(
+          logger: logger,
+          logMessageContent: true,
+          accessTokenFactory: () async {
+            return token;
+          });
+
+      _hubConnection = HubConnectionBuilder()
+          .withUrl(_serverUrl, options: httpConnectionOptions)
+          .withAutomaticReconnect(retryDelays: [
+            1000,
+            2000,
+            3000,
+            3000,
+            3000,
+            3000,
+            3000,
+            3000,
+            10000
+          ])
+          .configureLogging(logger)
+          .build();
+
+      _hubConnection?.onclose(({error}) => connectionIsOpen = false);
+      _hubConnection?.onreconnecting(({error}) {
+        debugPrint("Hyper SignalR: Onreconnecting called");
+        connectionIsOpen = false;
+      });
+      _hubConnection?.onreconnected(({connectionId}) {
+        debugPrint("Hyper SignalR: onreconnected called");
+        connectionIsOpen = true;
+      });
+    }
+
+    if (_hubConnection?.state != HubConnectionState.Connected) {
+      try {
+        await _hubConnection?.start();
+        connectionIsOpen = true;
+      } catch (e) {
+        _checkConnection();
+      }
+    }
+
+    _listen();
+  }
+
+  Future<void> _checkConnection() async {
+    if (_hubConnection?.state != HubConnectionState.Connected) {
+      debugPrint('Hyper SignalR: Connecting again');
+      _hubConnection?.stop();
+      await _hubConnection?.start();
+    }
+  }
+
+  void closeConnection() {
+    _hubConnection?.stop();
+  }
+
+  void _listen() {
+    _hubConnection?.on("BookingRequest", _bookingRequest);
   }
 
   void _bookingRequest(List<Object>? parameters) async {
@@ -82,13 +118,13 @@ class SignalRController {
     var result = await Get.toNamed(Routes.BOOKING_REQUEST);
 
     if (result == 1) {
-      await _hubConnection.invoke(
+      await _hubConnection?.invoke(
         "CheckAcceptedRequest",
         args: [driver, "1"],
       );
       Get.offAllNamed(Routes.PICK_UP);
     } else {
-      await _hubConnection.invoke(
+      await _hubConnection?.invoke(
         "CheckAcceptedRequest",
         args: [driver, "0"],
       );
@@ -96,6 +132,7 @@ class SignalRController {
   }
 
   void openDriver(LatLng location) async {
+    await _checkConnection();
     String driverId = TokenManager.instance.user?.driverId ?? '';
     var data = {
       'Id': driverId,
@@ -103,7 +140,7 @@ class SignalRController {
       'Longitude': location.longitude,
     };
 
-    final result = await _hubConnection.invoke(
+    final result = await _hubConnection?.invoke(
       "OpenDriver",
       args: [jsonEncode(data)],
     );
@@ -114,7 +151,7 @@ class SignalRController {
   void closeDriver() async {
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection.invoke(
+    final result = await _hubConnection?.invoke(
       "CloseDriver",
       args: [driverId],
     );
@@ -123,9 +160,11 @@ class SignalRController {
   }
 
   void driverArrived() async {
+    await _checkConnection();
+
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection.invoke(
+    final result = await _hubConnection?.invoke(
       "DriverArrived",
       args: [driverId],
     );
@@ -137,9 +176,11 @@ class SignalRController {
   }
 
   void driverPickedUp() async {
+    await _checkConnection();
+
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection.invoke(
+    final result = await _hubConnection?.invoke(
       "DriverPickedUp",
       args: [driverId],
     );
@@ -151,9 +192,11 @@ class SignalRController {
   }
 
   void completedBooking() async {
+    await _checkConnection();
+
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection.invoke(
+    final result = await _hubConnection?.invoke(
       "CompletedBooking",
       args: [driverId],
     );
