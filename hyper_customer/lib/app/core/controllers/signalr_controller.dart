@@ -113,7 +113,7 @@ class SignalRController {
     BookingDirectionController bookingDirectionController =
         Get.find<BookingDirectionController>();
 
-    bookingDirectionController.changeState(BookingState.coming);
+    bookingDirectionController.changeState(BookingState.arrived);
   }
 
   void _bookingResponse(List<Object>? parameters) {
@@ -123,7 +123,7 @@ class SignalRController {
 
     var map = parameters?[0] as Map<String, dynamic>;
     if (map['statusCode'] == 200) {
-      bookingDirectionController.changeState(BookingState.arrived);
+      bookingDirectionController.changeState(BookingState.coming);
     } else {
       bookingDirectionController.changeState(BookingState.failed);
     }
