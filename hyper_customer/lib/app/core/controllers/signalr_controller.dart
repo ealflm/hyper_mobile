@@ -79,7 +79,12 @@ class SignalRController {
     BookingDirectionController bookingDirectionController =
         Get.find<BookingDirectionController>();
 
-    bookingDirectionController.changeState(BookingState.coming);
+    var map = parameters?[0] as Map<String, dynamic>;
+    if (map['statusCode'] == 200) {
+      bookingDirectionController.changeState(BookingState.arrived);
+    } else {
+      bookingDirectionController.changeState(BookingState.failed);
+    }
   }
 
   void _driverPickedUp(List<Object>? parameters) {

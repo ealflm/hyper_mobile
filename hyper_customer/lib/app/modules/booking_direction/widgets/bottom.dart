@@ -47,9 +47,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 case BookingState.pickedUp:
                   return _pickedUp();
                 case BookingState.feedBack:
-                  return Container(
-                    child: Text('Vui lòng feedback'),
-                  );
+                  return _feedBack();
               }
             },
           )
@@ -882,6 +880,88 @@ class Bottom extends GetWidget<BookingDirectionController> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _feedBack() {
+    return SlidingUpPanel(
+      color: Colors.transparent,
+      boxShadow: const [],
+      maxHeight: 120.h,
+      minHeight: 120.h,
+      panelBuilder: (sc) {
+        return SingleChildScrollView(
+          controller: sc,
+          child: Column(
+            children: [
+              _goToCurrentLocation(),
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 10.h,
+                  left: 10.w,
+                  right: 10.w,
+                ),
+                child: Container(
+                  decoration: BoxDecorations.mapHigh(),
+                  width: double.infinity,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(9.r),
+                    child: Column(
+                      children: [
+                        Container(
+                          color: AppColors.line,
+                          padding: EdgeInsets.only(
+                            bottom: 10.h,
+                            left: 18.w,
+                            right: 18.w,
+                            top: 10.h,
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.white,
+                                  borderRadius: BorderRadius.circular(9.r),
+                                ),
+                                width: 35.w,
+                                height: 4,
+                              ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Vui lòng feedBack',
+                                          style: subtitle1.copyWith(
+                                            color: AppColors.softBlack,
+                                            fontWeight: FontWeights.medium,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
