@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -10,6 +11,7 @@ import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
@@ -327,7 +329,21 @@ class Bottom extends GetWidget<BookingDirectionController> {
                       ),
                       const Divider(),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          HyperDialog.show(
+                            title: 'Xác nhận',
+                            content: 'Bạn có chắc chắn muốn huỷ chuyến xe?',
+                            primaryButtonText: 'Đồng ý',
+                            primaryOnPressed: () {
+                              controller.changeState(BookingState.select);
+                              Get.back();
+                            },
+                            secondaryButtonText: 'Huỷ',
+                            secondaryOnPressed: () {
+                              Get.back();
+                            },
+                          );
+                        },
                         child: Text(
                           'Huỷ chuyến xe',
                           style: subtitle2.copyWith(
@@ -599,7 +615,24 @@ class Bottom extends GetWidget<BookingDirectionController> {
                       ),
                       const Divider(),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          HyperDialog.show(
+                            title: 'Xác nhận',
+                            content:
+                                'Bạn có chắc chắn muốn huỷ chuyến xe? Bạn có thể bị trừ chi phí nếu tài xế đã đi được 60% quảng đường',
+                            primaryButtonText: 'Đồng ý',
+                            primaryOnPressed: () async {
+                              await SignalRController.instance.cancelBooking();
+                              controller.changeState(BookingState.select);
+
+                              Get.back();
+                            },
+                            secondaryButtonText: 'Huỷ',
+                            secondaryOnPressed: () {
+                              Get.back();
+                            },
+                          );
+                        },
                         child: Text(
                           'Huỷ chuyến xe',
                           style: subtitle2.copyWith(
@@ -871,7 +904,23 @@ class Bottom extends GetWidget<BookingDirectionController> {
                       ),
                       const Divider(),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          HyperDialog.show(
+                            title: 'Xác nhận',
+                            content:
+                                'Bạn có chắc chắn muốn huỷ chuyến xe? Bạn sẽ bị trừ 30% số tiền đặt xe. ',
+                            primaryButtonText: 'Đồng ý',
+                            primaryOnPressed: () async {
+                              await SignalRController.instance.cancelBooking();
+                              controller.changeState(BookingState.select);
+                              Get.back();
+                            },
+                            secondaryButtonText: 'Huỷ',
+                            secondaryOnPressed: () {
+                              Get.back();
+                            },
+                          );
+                        },
                         child: Text(
                           'Huỷ chuyến xe',
                           style: subtitle2.copyWith(

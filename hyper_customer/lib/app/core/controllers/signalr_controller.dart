@@ -179,4 +179,13 @@ class SignalRController {
     _hubConnection?.invoke("FindDriver", args: [data, 'true']);
     debugPrint('Hyper SignalR: Finding Driver - $data');
   }
+
+  Future<void> cancelBooking() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    _hubConnection?.invoke(
+      "CancelBooking",
+      args: [customerId],
+    );
+  }
 }
