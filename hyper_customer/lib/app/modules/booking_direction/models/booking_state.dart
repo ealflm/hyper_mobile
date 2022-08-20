@@ -3,6 +3,7 @@ enum BookingState {
   finding,
   failed,
   coming,
+  arrived,
   pickedUp,
   feedBack,
 }
