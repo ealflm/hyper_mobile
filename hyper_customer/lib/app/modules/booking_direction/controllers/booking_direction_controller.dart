@@ -56,6 +56,12 @@ class BookingDirectionController extends BaseController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    timer?.cancel();
+    super.onClose();
+  }
+
   void init() async {
     if (Get.arguments != null) {
       var data = Get.arguments as Map<String, dynamic>;
