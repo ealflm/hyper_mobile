@@ -188,4 +188,13 @@ class SignalRController {
       args: [customerId],
     );
   }
+
+  Future<void> canceledFinding() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    _hubConnection?.invoke(
+      "CanceledFinding",
+      args: [customerId],
+    );
+  }
 }
