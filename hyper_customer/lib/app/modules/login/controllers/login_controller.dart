@@ -209,6 +209,7 @@ class LoginController extends BaseController {
       );
       Get.offAllNamed(Routes.MAIN);
       SignalRController.instance.init();
+      NotificationController.instance.registerNotification();
     }
   }
 

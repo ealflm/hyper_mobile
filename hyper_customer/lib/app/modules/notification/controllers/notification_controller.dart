@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
+import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/data/models/notification_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
@@ -50,5 +51,23 @@ class NotificationController extends BaseController {
     }
 
     notifications(result);
+  }
+
+  Future<void> clearNotifications() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    var notificationService = _repository.clearNotifications(customerId);
+
+    await callDataService(
+      notificationService,
+      onSuccess: (bool response) {
+        Utils.showToast('Đã xoá thông báo');
+      },
+      onError: ((dioError) {
+        Utils.showToast('Không thể kết nối');
+      }),
+    );
+
+    fetchNotifications();
   }
 }

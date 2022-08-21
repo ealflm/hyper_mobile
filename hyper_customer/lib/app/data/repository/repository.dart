@@ -72,6 +72,8 @@ abstract class Repository {
 
   Future<List<Notification>> getNotifications(String customerId);
 
+  Future<bool> clearNotifications(String customerId);
+
   Future<BookingPrice> getBookingPrice(double distance, int seat);
 
   Future<bool> returnVehicle(String code, String customerTripId);

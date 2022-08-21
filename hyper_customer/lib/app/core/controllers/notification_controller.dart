@@ -17,10 +17,9 @@ class NotificationController {
   NotificationController._internal();
 
   AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.', // description
+    'hyper.notification', // id
+    'Hyper Notification', // title
+    description: 'Hyper Copy Right', // description
     importance: Importance.max,
   );
 
@@ -56,7 +55,13 @@ class NotificationController {
             android: AndroidNotificationDetails(
               channel.id,
               channel.name,
+              sound: const RawResourceAndroidNotificationSound(
+                'sound_notification',
+              ),
+              playSound: true,
               channelDescription: channel.description,
+              importance: Importance.max,
+              priority: Priority.high,
               icon: 'mipmap/ic_launcher',
             ),
           ),

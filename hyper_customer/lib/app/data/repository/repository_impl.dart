@@ -529,4 +529,21 @@ class RepositoryImpl extends BaseRepository implements Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<bool> clearNotifications(String customerId) {
+    var endpoint = "${DioProvider.baseUrl}/notification/$customerId";
+
+    var dioCall = dioTokenClient.put(endpoint);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return true;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

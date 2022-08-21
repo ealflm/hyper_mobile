@@ -28,6 +28,19 @@ class NotificationView extends GetView<NotificationController> {
           ),
           onPressed: () => Get.back(),
         ),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+              shape: const CircleBorder(),
+              primary: AppColors.softBlack,
+            ),
+            onPressed: controller.clearNotifications,
+            child: Icon(
+              Icons.delete_sweep_outlined,
+              size: 26.r,
+            ),
+          ),
+        ],
         titleSpacing: 0,
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
@@ -41,6 +54,7 @@ class NotificationView extends GetView<NotificationController> {
           ),
         ),
       ),
+
       body: Obx(
         () => SizedBox(
           width: double.infinity,
