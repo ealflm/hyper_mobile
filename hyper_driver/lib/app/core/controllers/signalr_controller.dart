@@ -109,10 +109,17 @@ class SignalRController {
   void _listen() {
     _hubConnection?.on("BookingRequest", _bookingRequest);
     _hubConnection?.on("CanceledBooking", _canceledBooking);
+    _hubConnection?.on("FindingOut", _findingOut);
   }
 
   void _canceledBooking(List<Object>? parameters) {
     HyperDialog.show(title: 'Chú ý', content: 'Bạn đã bị từ chối :(((');
+    Get.offAllNamed(Routes.MAIN);
+  }
+
+  void _findingOut(List<Object>? parameters) {
+    HyperDialog.show(
+        title: 'Chú ý', content: 'Bạn đã bị người dùng tắt app :(((');
     Get.offAllNamed(Routes.MAIN);
   }
 
