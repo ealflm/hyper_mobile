@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/core/controllers/location_model.dart';
+import 'package:hyper_customer/app/core/model/location_model.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';

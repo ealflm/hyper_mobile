@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/notification_controller.dart';
-import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
+import 'package:hyper_customer/app/network/signalr.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
@@ -90,7 +90,7 @@ class AccountController extends GetxController {
   void logout() {
     TokenManager.instance.clearToken();
     NotificationController.instance.unregisterNotification();
-    SignalRController.instance.closeConnection();
+    SignalR.instance.close();
     Get.offAllNamed(Routes.LOGIN);
   }
 }

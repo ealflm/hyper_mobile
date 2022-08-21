@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
+import 'package:hyper_customer/app/network/signalr.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
 
@@ -23,7 +23,7 @@ class Top extends GetWidget<BookingDirectionController> {
           children: [
             ElevatedButton(
               onPressed: () async {
-                await SignalRController.instance.canceledFinding();
+                await SignalR.instance.canceledFinding();
                 Get.back();
               },
               style: ElevatedButton.styleFrom(

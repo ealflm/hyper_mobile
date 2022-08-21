@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
+import 'package:hyper_customer/app/network/signalr.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -335,8 +335,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                             content: 'Bạn có chắc chắn muốn huỷ chuyến xe?',
                             primaryButtonText: 'Đồng ý',
                             primaryOnPressed: () async {
-                              await SignalRController.instance
-                                  .canceledFinding();
+                              await SignalR.instance.canceledFinding();
                               controller.changeState(BookingState.select);
                               Get.back();
                             },
@@ -624,7 +623,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                 'Bạn có chắc chắn muốn huỷ chuyến xe? Bạn có thể bị trừ chi phí nếu tài xế đã đi được 60% quảng đường',
                             primaryButtonText: 'Đồng ý',
                             primaryOnPressed: () async {
-                              await SignalRController.instance.cancelBooking();
+                              await SignalR.instance.cancelBooking();
                               controller.changeState(BookingState.select);
 
                               Get.back();
@@ -913,7 +912,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                 'Bạn có chắc chắn muốn huỷ chuyến xe? Bạn sẽ bị trừ 30% số tiền đặt xe. ',
                             primaryButtonText: 'Đồng ý',
                             primaryOnPressed: () async {
-                              await SignalRController.instance.cancelBooking();
+                              await SignalR.instance.cancelBooking();
                               controller.changeState(BookingState.select);
                               Get.back();
                             },
