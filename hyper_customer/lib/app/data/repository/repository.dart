@@ -25,7 +25,9 @@ abstract class Repository {
 
   Future<double> getBalance(String customerId);
 
-  Future<bool> cardLink(String customerId, String uid);
+  Future<bool> updateCard(String customerId, String uid);
+
+  Future<bool> removeCard(String customerId);
 
   Future<RentStations> getRentStations();
 

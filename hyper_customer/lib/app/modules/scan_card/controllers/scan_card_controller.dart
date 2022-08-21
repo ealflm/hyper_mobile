@@ -23,7 +23,7 @@ class ScanCardController extends BaseController {
     String customerId = TokenManager.instance.user?.customerId ?? '';
     if (customerId == '') return;
 
-    var cardLinkService = _repository.cardLink(customerId, code ?? '');
+    var cardLinkService = _repository.updateCard(customerId, code ?? '');
 
     await callDataService(
       cardLinkService,

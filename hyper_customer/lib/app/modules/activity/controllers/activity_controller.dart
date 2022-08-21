@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
+import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 
@@ -67,6 +68,19 @@ class ActivityController extends BaseController
 
     bool flag = false;
     for (Transactions item in result?.transactions ?? []) {
+      if (DateTimeUtils.compare(item.createdDate, DateTime.now()) &&
+          flag == false) {
+        item.filter = 0;
+        flag = true;
+      } else if (!DateTimeUtils.compare(item.createdDate, DateTime.now()) &&
+          flag == true) {
+        item.filter = 1;
+        break;
+      }
+    }
+
+    flag = false;
+    for (Orders item in result?.orders ?? []) {
       if (DateTimeUtils.compare(item.createdDate, DateTime.now()) &&
           flag == false) {
         item.filter = 0;
