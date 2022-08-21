@@ -6,6 +6,7 @@ import 'package:hyper_driver/app/core/model/data_hub_model.dart';
 import 'package:hyper_driver/app/core/model/driver_response_model.dart';
 import 'package:hyper_driver/app/core/model/location_model.dart';
 import 'package:hyper_driver/app/core/model/startLocationBooking_model.dart';
+import 'package:hyper_driver/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
 import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
@@ -107,6 +108,12 @@ class SignalRController {
 
   void _listen() {
     _hubConnection?.on("BookingRequest", _bookingRequest);
+    _hubConnection?.on("CanceledBooking", _canceledBooking);
+  }
+
+  void _canceledBooking(List<Object>? parameters) {
+    HyperDialog.show(title: 'Chú ý', content: 'Bạn đã bị từ chối :(((');
+    Get.offAllNamed(Routes.MAIN);
   }
 
   void _bookingRequest(List<Object>? parameters) async {
