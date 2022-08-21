@@ -17,7 +17,7 @@ class NotificationController {
   NotificationController._internal();
 
   AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    'hyper.notification', // id
+    'hyper.notification.', // id
     'Hyper Notification', // title
     description: 'Hyper Copy Right', // description
     importance: Importance.max,
@@ -53,12 +53,11 @@ class NotificationController {
           notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              channel.id,
+              channel.id + '.123',
               channel.name,
               sound: const RawResourceAndroidNotificationSound(
                 'sound_notification',
               ),
-              playSound: true,
               channelDescription: channel.description,
               importance: Importance.max,
               priority: Priority.high,

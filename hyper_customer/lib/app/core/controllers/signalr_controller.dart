@@ -126,6 +126,8 @@ class SignalRController {
     var map = parameters?[0] as Map<String, dynamic>;
     if (map['statusCode'] == 200) {
       bookingDirectionController.changeState(BookingState.coming);
+    } else if (map['statusCode'] == 210) {
+      bookingDirectionController.changeState(BookingState.select);
     } else {
       bookingDirectionController.changeState(BookingState.failed);
     }
@@ -192,9 +194,12 @@ class SignalRController {
   Future<void> canceledFinding() async {
     String customerId = TokenManager.instance.user?.customerId ?? '';
 
+    debugPrint('CanceledFinding: $customerId');
+
     _hubConnection?.invoke(
       "CanceledFinding",
       args: [customerId],
     );
+    debugPrint('CanceledFinding End: $customerId');
   }
 }

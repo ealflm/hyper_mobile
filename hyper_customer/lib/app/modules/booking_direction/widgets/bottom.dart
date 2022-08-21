@@ -334,7 +334,9 @@ class Bottom extends GetWidget<BookingDirectionController> {
                             title: 'Xác nhận',
                             content: 'Bạn có chắc chắn muốn huỷ chuyến xe?',
                             primaryButtonText: 'Đồng ý',
-                            primaryOnPressed: () {
+                            primaryOnPressed: () async {
+                              await SignalRController.instance
+                                  .canceledFinding();
                               controller.changeState(BookingState.select);
                               Get.back();
                             },
