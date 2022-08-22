@@ -114,7 +114,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     child: ElevatedButton(
                       style: ButtonStyles.primaryMedium(),
                       onPressed: controller.isLoadingPrice.value ||
-                              SignalR.instance.connectionState.value !=
+                              SignalR.instance.hubState.value !=
                                   HubState.connected
                           ? null
                           : () {
@@ -123,7 +123,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                       child: HyperButton.child(
                         loadingText: 'Tiếp tục tìm xe',
                         status: controller.isLoadingPrice.value ||
-                            SignalR.instance.connectionState.value !=
+                            SignalR.instance.hubState.value !=
                                 HubState.connected,
                         child: Text(
                           'Tiếp tục tìm xe',
@@ -174,7 +174,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     child: ElevatedButton(
                         style: ButtonStyles.primaryMedium(),
                         onPressed: controller.isLoadingPrice.value ||
-                                SignalR.instance.connectionState.value !=
+                                SignalR.instance.hubState.value !=
                                     HubState.connected
                             ? null
                             : () {

@@ -31,7 +31,7 @@ class SignalR {
   bool _autoReconnect = false;
 
   /// Describes the current state of the HubConnection to the server.
-  Rx<HubState> connectionState = HubState.disconnected.obs;
+  Rx<HubState> hubState = HubState.disconnected.obs;
 
   final String _hubUrl =
       "https://tourism-smart-transportation-api.azurewebsites.net/hub";
@@ -61,7 +61,7 @@ class SignalR {
               'SignalR: (Open connect on resume) Current State = $lastLifecyleState');
 
           Utils.showToast('Đang kết nối lại');
-          _openConnection();
+          _retryUntilSuccessfulConnection();
         }
       }
 
@@ -73,7 +73,7 @@ class SignalR {
   void start() async {
     _autoReconnect = true;
     _handleAppLifecycleState();
-    _openConnection();
+    _retryUntilSuccessfulConnection();
   }
 
   /// Stops the connection
@@ -83,6 +83,8 @@ class SignalR {
   }
 
   Future<void> _openConnection() async {
+    if (hubState.value == HubState.connected) return;
+
     var token = TokenManager.instance.token;
 
     final httpConnectionOptions = HttpConnectionOptions(
@@ -103,6 +105,7 @@ class SignalR {
 
     connection.onclose(({error}) {
       Utils.showToast('Mất kết nối đến server');
+      _retryUntilSuccessfulConnection();
 
       changeState(HubState.disconnected);
     });
@@ -113,7 +116,7 @@ class SignalR {
       changeState(HubState.disconnected);
 
       connection.stop();
-      _openConnection();
+      _retryUntilSuccessfulConnection();
     });
     connection.onreconnected(({connectionId}) {
       debugPrint("SignalR: onreconnected called");
@@ -122,31 +125,41 @@ class SignalR {
     });
 
     if (connection.state != HubConnectionState.Connected) {
-      try {
-        await connection.start();
-
-        changeState(HubState.connected);
-
-        debugPrint('SignalR: Connected (${connection.connectionId})');
-        Utils.showToast('Kết nối tới server thành công');
-      } catch (e) {
-        if (_autoReconnect) {
-          debugPrint('SignalR: Connecting again');
-
-          await Future.delayed(const Duration(seconds: 1));
-
-          Utils.showToast('Đang kết nối lại');
-
-          _openConnection();
-        }
-      }
+      await connection.start();
+      hubState.value = HubState.connected;
     }
 
     _listen();
   }
 
+  final delayTime = 1;
+  bool _onReconnect = false;
+
+  void _retryUntilSuccessfulConnection() async {
+    if (_onReconnect) return;
+    _onReconnect = true;
+
+    while (true) {
+      try {
+        await _openConnection();
+
+        if (connection.state == HubConnectionState.Connected) {
+          Utils.showToast('Kết nối thành công');
+          _onReconnect = false;
+          return;
+        }
+      } catch (e) {
+        if (!_autoReconnect) return;
+        Utils.showToast('Kết nối tới server thất bại');
+      }
+
+      await Future.delayed(Duration(seconds: delayTime));
+      Utils.showToast('Đang kết nối lại');
+    }
+  }
+
   void changeState(HubState value) {
-    connectionState.value = value;
+    hubState.value = value;
   }
 
   void _listen() {
