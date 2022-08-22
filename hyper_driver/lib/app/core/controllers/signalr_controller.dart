@@ -142,8 +142,6 @@ class SignalR {
     if (_onReconnect) return;
     _onReconnect = true;
 
-    int count = 0;
-
     while (true) {
       try {
         await _openConnection();
@@ -159,7 +157,7 @@ class SignalR {
       }
 
       await Future.delayed(Duration(seconds: delayTime));
-      Utils.showToast('Đang kết nối lại ${++count}');
+      Utils.showToast('Đang kết nối lại');
     }
   }
 

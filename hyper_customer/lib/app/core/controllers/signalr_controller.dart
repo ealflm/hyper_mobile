@@ -139,10 +139,7 @@ class SignalR {
     if (_onReconnect) return;
     _onReconnect = true;
 
-    int count = 0;
-
     while (true) {
-      ++count;
       try {
         await _openConnection();
 
