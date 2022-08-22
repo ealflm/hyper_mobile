@@ -10,6 +10,7 @@ import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
+import 'package:flutter/services.dart';
 
 enum ConnectionState {
   disconnected,
@@ -36,9 +37,43 @@ class SignalR {
 
   final String _hubUrl = "$host/hub";
 
+  // Handle on resume
+  _handleAppLifecycleState() {
+    AppLifecycleState? lastLifecyleState;
+    SystemChannels.lifecycle.setMessageHandler((message) async {
+      switch (message) {
+        case "AppLifecycleState.paused":
+          lastLifecyleState = AppLifecycleState.paused;
+          break;
+        case "AppLifecycleState.inactive":
+          lastLifecyleState = AppLifecycleState.inactive;
+          break;
+        case "AppLifecycleState.resumed":
+          lastLifecyleState = AppLifecycleState.resumed;
+          break;
+        default:
+      }
+
+      if (lastLifecyleState == AppLifecycleState.resumed) {
+        debugPrint('SignalR: (App State) $message');
+        if (_autoReconnect &&
+            connection.state != HubConnectionState.Connected) {
+          debugPrint(
+              'SignalR: (Open connect on resume) Current State = $lastLifecyleState');
+
+          Utils.showToast('Đang kết nối lại');
+          _openConnection();
+        }
+      }
+
+      return message;
+    });
+  }
+
   /// Initiate a connection to the server
   void start() async {
     _autoReconnect = true;
+    _handleAppLifecycleState();
     _openConnection();
   }
 
@@ -48,7 +83,7 @@ class SignalR {
     connection.stop();
   }
 
-  void _openConnection() async {
+  Future<void> _openConnection() async {
     var token = TokenManager.instance.token;
 
     final httpConnectionOptions = HttpConnectionOptions(
