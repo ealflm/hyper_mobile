@@ -16,7 +16,7 @@ import 'package:signalr_netcore/signalr_client.dart';
 
 import '../../routes/app_pages.dart';
 
-enum HubState {
+enum ConnectionState {
   disconnected,
   connecting,
   connected,
@@ -27,17 +27,19 @@ class SignalR {
   static SignalR get instance => _instance;
   SignalR._internal();
 
-  late HubConnection connection;
+  static late HubConnection connection;
 
-  final Logger _logger = Logger("SignalR: ");
+  static final Logger _logger = Logger("SignalR: ");
 
-  bool _autoReconnect = false;
+  static bool _autoReconnect = false;
 
   /// Describes the current state of the HubConnection to the server.
-  Rx<HubState> hubState = HubState.disconnected.obs;
+  static Rx<ConnectionState> connectionState = ConnectionState.disconnected.obs;
 
-  final String _hubUrl =
-      "https://tourism-smart-transportation-api.azurewebsites.net/hub";
+  static const host =
+      "https://tourism-smart-transportation-api.azurewebsites.net";
+
+  final String _hubUrl = "$host/hub";
 
   // Handle on resume
   _handleAppLifecycleState() {
@@ -64,7 +66,7 @@ class SignalR {
               'SignalR: (Open connect on resume) Current State = $lastLifecyleState');
 
           Utils.showToast('Đang kết nối lại');
-          _retryUntilSuccessfulConnection();
+          _openConnection();
         }
       }
 
@@ -76,7 +78,7 @@ class SignalR {
   void start() async {
     _autoReconnect = true;
     _handleAppLifecycleState();
-    _retryUntilSuccessfulConnection();
+    _openConnection();
   }
 
   /// Stops the connection
@@ -86,8 +88,6 @@ class SignalR {
   }
 
   Future<void> _openConnection() async {
-    if (hubState.value == HubState.connected) return;
-
     var token = TokenManager.instance.token;
 
     final httpConnectionOptions = HttpConnectionOptions(
@@ -108,63 +108,50 @@ class SignalR {
 
     connection.onclose(({error}) {
       Utils.showToast('Mất kết nối đến server');
-      _retryUntilSuccessfulConnection();
 
-      changeState(HubState.disconnected);
+      changeState(ConnectionState.disconnected);
     });
     connection.onreconnecting(({error}) {
       Utils.showToast('Mất kết nối đến server');
       debugPrint("SignalR: Onreconnecting called");
 
-      changeState(HubState.disconnected);
+      changeState(ConnectionState.disconnected);
 
       connection.stop();
-      _retryUntilSuccessfulConnection();
+      _openConnection();
     });
     connection.onreconnected(({connectionId}) {
       debugPrint("SignalR: onreconnected called");
 
-      changeState(HubState.connected);
+      changeState(ConnectionState.connected);
     });
 
     if (connection.state != HubConnectionState.Connected) {
-      await connection.start();
-      hubState.value = HubState.connected;
+      try {
+        await connection.start();
+
+        changeState(ConnectionState.connected);
+
+        debugPrint('SignalR: Connected (${connection.connectionId})');
+        Utils.showToast('Kết nối tới server thành công');
+      } catch (e) {
+        if (_autoReconnect) {
+          debugPrint('SignalR: Connecting again');
+
+          await Future.delayed(const Duration(seconds: 1));
+
+          Utils.showToast('Đang kết nối lại');
+
+          _openConnection();
+        }
+      }
     }
 
     _listen();
   }
 
-  final delayTime = 1;
-  bool _onReconnect = false;
-
-  void _retryUntilSuccessfulConnection() async {
-    if (_onReconnect) return;
-    _onReconnect = true;
-
-    int count = 0;
-
-    while (true) {
-      try {
-        await _openConnection();
-
-        if (connection.state == HubConnectionState.Connected) {
-          Utils.showToast('Kết nối thành công');
-          _onReconnect = false;
-          return;
-        }
-      } catch (e) {
-        if (!_autoReconnect) return;
-        Utils.showToast('Kết nối tới server thất bại');
-      }
-
-      await Future.delayed(Duration(seconds: delayTime));
-      Utils.showToast('Đang kết nối lại ${++count}');
-    }
-  }
-
-  void changeState(HubState value) {
-    hubState.value = value;
+  void changeState(ConnectionState value) {
+    connectionState.value = value;
   }
 
   void _listen() {

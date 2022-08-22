@@ -132,14 +132,17 @@ class SignalR {
     _listen();
   }
 
-  final delayTime = 1;
+  final delayTime = 3;
   bool _onReconnect = false;
 
   void _retryUntilSuccessfulConnection() async {
     if (_onReconnect) return;
     _onReconnect = true;
 
+    int count = 0;
+
     while (true) {
+      ++count;
       try {
         await _openConnection();
 
