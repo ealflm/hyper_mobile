@@ -207,9 +207,8 @@ class LoginController extends BaseController {
         phoneNumber.value,
         password!,
       );
+
       Get.offAllNamed(Routes.MAIN);
-      SignalRController.instance.init();
-      NotificationController.instance.registerNotification();
     }
   }
 
@@ -239,9 +238,7 @@ class LoginController extends BaseController {
         phone,
         password,
       );
-      NotificationController.instance.registerNotification();
 
-      SignalRController.instance.init();
       Get.offAllNamed(Routes.MAIN);
     }
   }

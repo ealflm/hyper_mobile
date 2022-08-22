@@ -52,8 +52,6 @@ class BookingDirectionController extends BaseController {
 
   @override
   void onInit() async {
-    // SignalRController.instance.checkConnection();
-    SignalRController.instance.init();
     init();
     super.onInit();
   }

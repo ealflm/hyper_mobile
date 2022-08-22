@@ -1,7 +1,9 @@
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/controllers/notification_controller.dart';
 import 'package:hyper_customer/app/core/controllers/setting_controller.dart';
+import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/model/payment_result.dart';
 import 'package:hyper_customer/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_customer/app/modules/account/views/account_view.dart';
@@ -32,6 +34,9 @@ class MainController extends GetxController {
 
   @override
   void onInit() async {
+    SignalRController.instance.init();
+    NotificationController.instance.registerNotification();
+
     initController();
 
     await SettingController.intance.init();

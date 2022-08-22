@@ -19,11 +19,7 @@ class SplashController extends GetxController {
   Future<void> onReady() async {
     await Future.delayed(const Duration(seconds: 2, milliseconds: 500));
 
-    if (TokenManager.instance.hasToken) {
-      NotificationController.instance.registerNotification();
-      SignalRController.instance.init();
-      Get.offAllNamed(Routes.MAIN);
-    } else if (TokenManager.instance.hasUser) {
+    if (TokenManager.instance.hasUser) {
       Get.offAllNamed(Routes.LOGIN);
     } else {
       Get.offAllNamed(Routes.START);

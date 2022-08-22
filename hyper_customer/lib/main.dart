@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hyper_customer/app/core/controllers/network_controller.dart';
 import 'package:hyper_customer/app/core/controllers/notification_controller.dart';
-import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/config/map_config.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 
 import 'app/my_app.dart';
 import 'config/build_config.dart';
@@ -14,6 +14,11 @@ import 'config/env_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    debugPrint('Hyper SignalR: ${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
 
   EnvConfig envConfig = EnvConfig(
     baseUrl:
