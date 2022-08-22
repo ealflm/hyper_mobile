@@ -15,7 +15,7 @@ class BookingDirectionView extends GetView<BookingDirectionController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        await SignalRController.instance.canceledFinding();
+        await SignalR.instance.canceledFinding();
         return true;
       },
       child: StatusBar(

@@ -7,7 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
-import 'package:hyper_customer/app/core/controllers/location_model.dart';
+import 'package:hyper_customer/app/core/model/location_model.dart';
 import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/map_polyline_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
@@ -227,7 +227,7 @@ class BookingDirectionController extends BaseController {
       distance: distance,
       seats: 2,
     );
-    SignalRController.instance.findDriver(location);
+    SignalR.instance.findDriver(location);
   }
 
   // End Region
@@ -246,7 +246,7 @@ class BookingDirectionController extends BaseController {
   }
 
   void fetchDriverInfos() async {
-    driverInfos.value = await SignalRController.instance.getDriverInfos(
+    driverInfos.value = await SignalR.instance.getDriverInfos(
       startPlaceLocation ?? LatLng(0, 0),
     );
 

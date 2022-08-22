@@ -34,7 +34,7 @@ class MainController extends GetxController {
 
   @override
   void onInit() async {
-    SignalRController.instance.init();
+    SignalR.instance.start();
     NotificationController.instance.registerNotification();
 
     initController();

@@ -23,7 +23,7 @@ class Top extends GetWidget<BookingDirectionController> {
           children: [
             ElevatedButton(
               onPressed: () async {
-                await SignalRController.instance.canceledFinding();
+                await SignalR.instance.canceledFinding();
                 Get.back();
               },
               style: ElevatedButton.styleFrom(
