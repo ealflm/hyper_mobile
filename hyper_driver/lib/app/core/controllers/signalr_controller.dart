@@ -135,7 +135,7 @@ class SignalRController {
         args: [driver, "1"],
       );
       Get.offAllNamed(Routes.PICK_UP);
-    } else {
+    } else if (result == 0) {
       await _hubConnection?.invoke(
         "CheckAcceptedRequest",
         args: [driver, "0"],
