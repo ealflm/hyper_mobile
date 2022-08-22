@@ -74,6 +74,7 @@ class SignalR {
 
   /// Initiate a connection to the server
   void start() async {
+    if (hubState.value == HubState.connected) return;
     _autoReconnect = true;
     _handleAppLifecycleState();
     _retryUntilSuccessfulConnection();
