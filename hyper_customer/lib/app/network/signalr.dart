@@ -105,10 +105,28 @@ class SignalR {
   // Region Connection On
 
   void _connectionOn() {
+    connection.on("PingToCustomer", _pingToCustomer);
     connection.on("BookingResponse", _bookingResponse);
     connection.on("DriverArrived", _driverArrived);
     connection.on("DriverPickedUp", _driverPickedUp);
     connection.on("CompletedBooking", _completedBooking);
+  }
+
+  void _pingToCustomer(List<dynamic>? parameters) {
+    debugPrint('Received Ping from Sever ${parameters?[0]}');
+  }
+
+  Future<void> pingToServer() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    debugPrint('SignalR: Staring ping to sever');
+
+    await connection.invoke(
+      "Ping",
+      args: [customerId],
+    );
+
+    debugPrint('SignalR: Ping success to sever');
   }
 
   void _driverArrived(List<Object>? parameters) {
