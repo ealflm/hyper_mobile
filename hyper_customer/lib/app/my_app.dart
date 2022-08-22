@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/bindings/initial_binding.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/widgets/scroll_behavior.dart';
+import 'package:hyper_customer/app/modules/login/controllers/login_controller.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
@@ -19,6 +20,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     String initialRoute = AppPages.INITIAL;
     if (TokenManager.instance.hasToken) {
+      LoginController.loginInit();
       initialRoute = Routes.MAIN;
     }
 
