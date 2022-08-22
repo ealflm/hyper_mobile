@@ -92,6 +92,7 @@ class SignalR {
     _connectionOn();
 
     await connection.start();
+    startPing();
     debugPrint('SignalR: Connection started');
   }
 
@@ -101,6 +102,17 @@ class SignalR {
   }
 
   // End Region
+
+    Timer? timer;
+
+  void startPing() async {
+    timer = Timer.periodic(
+      const Duration(seconds: 2),
+      (_) {
+        SignalR.instance.pingToServer();
+      },
+    );
+  }
 
   // Region Connection On
 
