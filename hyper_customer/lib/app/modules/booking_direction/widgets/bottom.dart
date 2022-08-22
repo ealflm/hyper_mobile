@@ -307,17 +307,15 @@ class Bottom extends GetWidget<BookingDirectionController> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 _start(
-                                  title:
-                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh ',
+                                  title: 'Vị trí của bạn',
                                   content:
-                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                      'Trúc Cafe, Xa Lộ Phú Quốc, Dương Tơ, Phú Quốc',
                                 ),
                                 _space(),
                                 _end(
-                                  title:
-                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                  title: 'Cơm gà xé',
                                   content:
-                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                      '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
                                 ),
                               ],
                             ),
@@ -594,17 +592,15 @@ class Bottom extends GetWidget<BookingDirectionController> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 _start(
-                                  title:
-                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh ',
+                                  title: 'Vị trí của bạn',
                                   content:
-                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                      'Trúc Cafe, Xa Lộ Phú Quốc, Dương Tơ, Phú Quốc',
                                 ),
                                 _space(),
                                 _end(
-                                  title:
-                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                  title: 'Cơm gà xé',
                                   content:
-                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                      '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
                                 ),
                               ],
                             ),
@@ -883,17 +879,15 @@ class Bottom extends GetWidget<BookingDirectionController> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 _start(
-                                  title:
-                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh ',
+                                  title: 'Vị trí của bạn',
                                   content:
-                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                      'Trúc Cafe, Xa Lộ Phú Quốc, Dương Tơ, Phú Quốc',
                                 ),
                                 _space(),
                                 _end(
-                                  title:
-                                      '117 Nguyễn Đình Chiểu 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                  title: 'Cơm gà xé',
                                   content:
-                                      '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh 117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
+                                      '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
                                 ),
                               ],
                             ),
