@@ -139,6 +139,7 @@ class SignalR {
   bool _onReconnect = false;
 
   void _retryUntilSuccessfulConnection() async {
+    if (hubState.value == HubState.connected) return;
     if (_onReconnect) return;
     _onReconnect = true;
 

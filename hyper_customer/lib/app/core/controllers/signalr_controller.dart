@@ -83,8 +83,6 @@ class SignalR {
   }
 
   Future<void> _openConnection() async {
-    if (hubState.value == HubState.connected) return;
-
     var token = TokenManager.instance.token;
 
     final httpConnectionOptions = HttpConnectionOptions(
@@ -132,10 +130,11 @@ class SignalR {
     _listen();
   }
 
-  final delayTime = 3;
+  final delayTime = 1;
   bool _onReconnect = false;
 
   void _retryUntilSuccessfulConnection() async {
+    if (hubState.value == HubState.connected) return;
     if (_onReconnect) return;
     _onReconnect = true;
 
