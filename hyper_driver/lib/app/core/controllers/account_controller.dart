@@ -90,7 +90,7 @@ class AccountController extends GetxController {
   void logout() {
     TokenManager.instance.clearToken();
     NotificationController.instance.unregisterNotification();
-    SignalRController.instance.closeConnection();
+    SignalR.instance.stop();
     Get.offAllNamed(Routes.LOGIN);
   }
 }

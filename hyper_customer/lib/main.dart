@@ -17,7 +17,7 @@ void main() async {
 
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {
-    debugPrint('Hyper SignalR: ${rec.level.name}: ${rec.time}: ${rec.message}');
+    debugPrint('SignalR: ${rec.level.name}: ${rec.time}: ${rec.message}');
   });
 
   EnvConfig envConfig = EnvConfig(

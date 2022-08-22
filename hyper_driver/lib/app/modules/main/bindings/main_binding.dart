@@ -12,7 +12,6 @@ class MainBinding extends Bindings {
   void dependencies() {
     Get.put(
       MainController(),
-      permanent: true,
     );
     Get.put(
       HomeController(),

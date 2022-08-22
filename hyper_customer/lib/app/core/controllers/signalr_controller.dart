@@ -74,7 +74,7 @@ class SignalR {
     });
     connection.onreconnecting(({error}) {
       Utils.showToast('Mất kết nối đến server');
-      debugPrint("Hyper SignalR: Onreconnecting called");
+      debugPrint("SignalR: Onreconnecting called");
 
       changeState(ConnectionState.disconnected);
 
@@ -82,7 +82,7 @@ class SignalR {
       _openConnection();
     });
     connection.onreconnected(({connectionId}) {
-      debugPrint("Hyper SignalR: onreconnected called");
+      debugPrint("SignalR: onreconnected called");
 
       changeState(ConnectionState.connected);
     });
@@ -93,11 +93,11 @@ class SignalR {
 
         changeState(ConnectionState.connected);
 
-        debugPrint('Hyper SignalR: Connected (${connection.connectionId})');
+        debugPrint('SignalR: Connected (${connection.connectionId})');
         Utils.showToast('Kết nối tới server thành công');
       } catch (e) {
         if (_autoReconnect) {
-          debugPrint('Hyper SignalR: Connecting again');
+          debugPrint('SignalR: Connecting again');
 
           await Future.delayed(const Duration(seconds: 1));
 
@@ -190,7 +190,7 @@ class SignalR {
   Future<void> findDriver(LocationModel locationModel) async {
     var data = jsonEncode(locationModel.toJson());
     connection.invoke("FindDriver", args: [data, 'true']);
-    debugPrint('Hyper SignalR: Finding Driver - $data');
+    debugPrint('SignalR: Finding Driver - $data');
   }
 
   Future<void> cancelBooking() async {

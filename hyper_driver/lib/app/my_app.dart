@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hyper_driver/app/bindings/initial_binding.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/widgets/scroll_behavior.dart';
+import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
 
 class MyApp extends StatefulWidget {
@@ -16,6 +17,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    String initialRoute = AppPages.INITIAL;
+    if (TokenManager.instance.hasToken) {
+      initialRoute = Routes.MAIN;
+    }
+
     return ScreenUtilInit(
       designSize: const Size(360, 800),
       minTextAdapt: true,
@@ -23,7 +29,7 @@ class _MyAppState extends State<MyApp> {
         return GetMaterialApp(
           title: "Hyper",
           initialBinding: InitialBinding(),
-          initialRoute: AppPages.INITIAL,
+          initialRoute: initialRoute,
           getPages: AppPages.routes,
           debugShowCheckedModeBanner: false,
           scrollBehavior: NoneScrollBehavior(),

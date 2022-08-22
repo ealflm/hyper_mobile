@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
-import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/values/app_assets.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
@@ -19,11 +18,7 @@ class SplashController extends GetxController {
   Future<void> onReady() async {
     await Future.delayed(const Duration(seconds: 2, milliseconds: 500));
 
-    if (TokenManager.instance.hasToken) {
-      NotificationController.instance.registerNotification();
-      Get.offAllNamed(Routes.MAIN);
-      SignalRController.instance.init();
-    } else if (TokenManager.instance.hasUser) {
+    if (TokenManager.instance.hasUser) {
       Get.offAllNamed(Routes.LOGIN);
     } else {
       Get.offAllNamed(Routes.START);

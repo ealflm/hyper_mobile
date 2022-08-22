@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
-import 'package:hyper_driver/app/core/controllers/map_location_controller.dart';
+import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
 import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/modules/account/controllers/account_controller.dart';
@@ -41,13 +41,15 @@ class MainController extends GetxController {
 
     await SettingController.intance.init();
     HyperMapController.instance.init();
+    NotificationController.instance.registerNotification();
+    SignalR.instance.start();
 
     super.onInit();
   }
 
   @override
   void onClose() {
-    timer?.cancel();
+    SignalR.instance.stopStreamDriverLocation();
     super.onClose();
   }
 
@@ -103,29 +105,14 @@ class MainController extends GetxController {
     activityLoading.value = true;
 
     if (activityState.value == false) {
-      sendLocations();
+      SignalR.instance.streamDriverLocation();
     } else {
-      timer?.cancel();
-      SignalRController.instance.closeDriver();
+      SignalR.instance.closeDriver();
     }
 
     await Future.delayed(const Duration(milliseconds: 1500));
     activityLoading.value = false;
     activityState.value = !activityState.value;
     _homeController.setActivityState(activityState.value);
-  }
-
-  Timer? timer;
-
-  void sendLocations() async {
-    timer = Timer.periodic(
-      const Duration(seconds: 2),
-      (_) => sendLocation(),
-    );
-  }
-
-  void sendLocation() async {
-    LatLng? location = await HyperMapController.instance.getCurrentLocation();
-    SignalRController.instance.openDriver(location ?? LatLng(0, 0));
   }
 }

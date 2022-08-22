@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/base/base_controller.dart';
-import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
-import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/utils/utils.dart';
 import 'package:hyper_driver/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_driver/app/data/models/auth_model.dart';
@@ -207,7 +205,6 @@ class LoginController extends BaseController {
         phoneNumber.value,
         password!,
       );
-      SignalRController.instance.init();
       Get.offAllNamed(Routes.MAIN);
     }
   }
@@ -238,8 +235,6 @@ class LoginController extends BaseController {
         phone,
         password,
       );
-      NotificationController.instance.registerNotification();
-      SignalRController.instance.init();
       Get.offAllNamed(Routes.MAIN);
     }
   }

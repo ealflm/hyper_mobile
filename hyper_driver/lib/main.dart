@@ -6,6 +6,7 @@ import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/config/map_config.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:logging/logging.dart';
 
 import 'app/my_app.dart';
 import 'config/build_config.dart';
@@ -13,6 +14,11 @@ import 'config/env_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    debugPrint('SignalR: ${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
 
   EnvConfig envConfig = EnvConfig(
     baseUrl:

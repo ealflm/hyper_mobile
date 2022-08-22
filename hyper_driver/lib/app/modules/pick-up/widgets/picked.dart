@@ -6,7 +6,6 @@ import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/values/box_decorations.dart';
 import 'package:hyper_driver/app/core/values/text_styles.dart';
 import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
-import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
 import 'package:slider_button/slider_button.dart';
 
 class Picked extends GetView<PickUpController> {
@@ -29,9 +28,7 @@ class Picked extends GetView<PickUpController> {
             _location(),
             _button(
               'Đã đón khách',
-              () {
-                SignalRController.instance.driverPickedUp();
-              },
+              SignalR.instance.driverPickedUp,
             ),
           ],
         ),

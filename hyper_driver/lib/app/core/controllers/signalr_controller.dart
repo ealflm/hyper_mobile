@@ -1,142 +1,158 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hyper_driver/app/core/model/data_hub_model.dart';
+import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_driver/app/core/model/driver_response_model.dart';
-import 'package:hyper_driver/app/core/model/location_model.dart';
-import 'package:hyper_driver/app/core/model/startLocationBooking_model.dart';
-import 'package:hyper_driver/app/core/widgets/hyper_dialog.dart';
+import 'package:hyper_driver/app/core/utils/utils.dart';
 import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
 import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
-import 'package:hyper_driver/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
-class SignalRController {
-  static final SignalRController _instance = SignalRController._internal();
-  static SignalRController get instance => _instance;
-  SignalRController._internal();
+import '../../routes/app_pages.dart';
 
-  HubConnection? _hubConnection;
-  late Logger _logger;
+enum ConnectionState {
+  disconnected,
+  connecting,
+  connected,
+}
 
-  bool connectionIsOpen = false;
+class SignalR {
+  static final SignalR _instance = SignalR._internal();
+  static SignalR get instance => _instance;
+  SignalR._internal();
+
+  static late HubConnection connection;
+
+  static final Logger _logger = Logger("SignalR: ");
+
+  static bool _autoReconnect = false;
+
+  /// Describes the current state of the HubConnection to the server.
+  static Rx<ConnectionState> connectionState = ConnectionState.disconnected.obs;
 
   static const host =
       "https://tourism-smart-transportation-api.azurewebsites.net";
-  final String _serverUrl = "$host/hub";
 
-  void init() async {
-    connectionIsOpen = false;
+  final String _hubUrl = "$host/hub";
 
-    Logger.root.level = Level.ALL;
-    Logger.root.onRecord.listen((LogRecord rec) {
-      debugPrint(
-          'Hyper SignalR: ${rec.level.name}: ${rec.time}: ${rec.message}');
-    });
-    _logger = Logger("Hyper SignalR");
-
+  /// Initiate a connection to the server
+  void start() async {
+    _autoReconnect = true;
     _openConnection();
+  }
+
+  /// Stops the connection
+  void stop() {
+    _autoReconnect = false;
+    connection.stop();
   }
 
   void _openConnection() async {
     var token = TokenManager.instance.token;
 
-    final logger = _logger;
+    final httpConnectionOptions = HttpConnectionOptions(
+        logger: _logger,
+        logMessageContent: true,
+        accessTokenFactory: () async {
+          return token;
+        });
 
-    if (_hubConnection == null) {
-      final httpConnectionOptions = HttpConnectionOptions(
-          logger: logger,
-          logMessageContent: true,
-          accessTokenFactory: () async {
-            return token;
-          });
+    connection = HubConnectionBuilder()
+        .withUrl(
+          _hubUrl,
+          options: httpConnectionOptions,
+        )
+        .withAutomaticReconnect(retryDelays: [1000])
+        .configureLogging(_logger)
+        .build();
 
-      _hubConnection = HubConnectionBuilder()
-          .withUrl(_serverUrl, options: httpConnectionOptions)
-          .withAutomaticReconnect(retryDelays: [
-            1000,
-            2000,
-            3000,
-            3000,
-            3000,
-            3000,
-            3000,
-            3000,
-            10000
-          ])
-          .configureLogging(logger)
-          .build();
+    connection.onclose(({error}) {
+      Utils.showToast('Mất kết nối đến server');
 
-      _hubConnection?.onclose(({error}) => connectionIsOpen = false);
-      _hubConnection?.onreconnecting(({error}) {
-        debugPrint("Hyper SignalR: Onreconnecting called");
-        connectionIsOpen = false;
-      });
-      _hubConnection?.onreconnected(({connectionId}) {
-        debugPrint("Hyper SignalR: onreconnected called");
-        connectionIsOpen = true;
-      });
-    }
+      changeState(ConnectionState.disconnected);
+    });
+    connection.onreconnecting(({error}) {
+      Utils.showToast('Mất kết nối đến server');
+      debugPrint("SignalR: Onreconnecting called");
 
-    if (_hubConnection?.state != HubConnectionState.Connected) {
+      changeState(ConnectionState.disconnected);
+
+      connection.stop();
+      _openConnection();
+    });
+    connection.onreconnected(({connectionId}) {
+      debugPrint("SignalR: onreconnected called");
+
+      changeState(ConnectionState.connected);
+    });
+
+    if (connection.state != HubConnectionState.Connected) {
       try {
-        await _hubConnection?.start();
-        connectionIsOpen = true;
+        await connection.start();
+
+        changeState(ConnectionState.connected);
+
+        debugPrint('SignalR: Connected (${connection.connectionId})');
+        Utils.showToast('Kết nối tới server thành công');
       } catch (e) {
-        _checkConnection();
+        if (_autoReconnect) {
+          debugPrint('SignalR: Connecting again');
+
+          await Future.delayed(const Duration(seconds: 1));
+
+          Utils.showToast('Đang kết nối lại');
+
+          _openConnection();
+        }
       }
     }
 
     _listen();
   }
 
-  Future<void> _checkConnection() async {
-    if (_hubConnection?.state != HubConnectionState.Connected) {
-      debugPrint('Hyper SignalR: Connecting again');
-      _hubConnection?.stop();
-      await _hubConnection?.start();
-    }
-  }
-
-  void closeConnection() {
-    _hubConnection?.stop();
+  void changeState(ConnectionState value) {
+    connectionState.value = value;
   }
 
   void _listen() {
-    _hubConnection?.on("BookingRequest", _bookingRequest);
-    _hubConnection?.on("CanceledBooking", _canceledBooking);
-    _hubConnection?.on("FindingOut", _findingOut);
+    connection.on("BookingRequest", _bookingRequest);
+    connection.on("CanceledBooking", _canceledBooking);
+    connection.on("FindingOut", _findingOut);
   }
 
   void _canceledBooking(List<Object>? parameters) {
-    HyperDialog.show(title: 'Chú ý', content: 'Bạn đã bị từ chối :(((');
+    debugPrint('SignalR: Canceled booking');
+
     Get.offAllNamed(Routes.MAIN);
   }
 
   void _findingOut(List<Object>? parameters) {
-    HyperDialog.show(
-        title: 'Chú ý', content: 'Bạn đã bị người dùng tắt app :(((');
+    debugPrint('SignalR: Finding out');
+
     Get.offAllNamed(Routes.MAIN);
   }
 
   void _bookingRequest(List<Object>? parameters) async {
+    debugPrint('SignalR: Booking request');
+
     var mapper = parameters?[0] as Map<String, dynamic>;
     var driver = jsonEncode(DriverResponseModel.fromJson(mapper).toJson());
 
     var result = await Get.toNamed(Routes.BOOKING_REQUEST);
 
     if (result == 1) {
-      await _hubConnection?.invoke(
+      await connection.invoke(
         "CheckAcceptedRequest",
         args: [driver, "1"],
       );
       Get.offAllNamed(Routes.PICK_UP);
     } else if (result == 0) {
-      await _hubConnection?.invoke(
+      await connection.invoke(
         "CheckAcceptedRequest",
         args: [driver, "0"],
       );
@@ -144,7 +160,8 @@ class SignalRController {
   }
 
   void openDriver(LatLng location) async {
-    await _checkConnection();
+    debugPrint('SignalR: (Sending) Open Driver');
+
     String driverId = TokenManager.instance.user?.driverId ?? '';
     var data = {
       'Id': driverId,
@@ -152,173 +169,87 @@ class SignalRController {
       'Longitude': location.longitude,
     };
 
-    final result = await _hubConnection?.invoke(
+    await connection.invoke(
       "OpenDriver",
       args: [jsonEncode(data)],
     );
 
-    debugPrint(result.toString());
+    debugPrint('SignalR: (Received) Open Driver');
+  }
+
+  Timer? locationSendingTimer;
+
+  void streamDriverLocation() async {
+    locationSendingTimer = Timer.periodic(
+      const Duration(seconds: 2),
+      (_) => _updateDriverLocation(),
+    );
+  }
+
+  void stopStreamDriverLocation() async {
+    locationSendingTimer?.cancel();
+  }
+
+  void _updateDriverLocation() async {
+    LatLng? location = await HyperMapController.instance.getCurrentLocation();
+    openDriver(location ?? LatLng(0, 0));
   }
 
   void closeDriver() async {
+    debugPrint('SignalR: (Sending) Close Driver');
+
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection?.invoke(
+    await connection.invoke(
       "CloseDriver",
       args: [driverId],
     );
 
-    debugPrint(result.toString());
+    debugPrint('SignalR: (Received) Close Driver');
   }
 
   void driverArrived() async {
-    await _checkConnection();
+    debugPrint('SignalR: (Sending) Driver Arrived');
 
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection?.invoke(
+    await connection.invoke(
       "DriverArrived",
       args: [driverId],
     );
 
-    PickUpController _pickUpController = Get.find<PickUpController>();
-    _pickUpController.changeState(PickUpState.picked);
+    Get.find<PickUpController>().changeState(PickUpState.picked);
 
-    debugPrint(result.toString());
+    debugPrint('SignalR: (Received) Driver Arrived');
   }
 
   void driverPickedUp() async {
-    await _checkConnection();
+    debugPrint('SignalR: (Sending) Driver Picked Up');
 
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection?.invoke(
+    await connection.invoke(
       "DriverPickedUp",
       args: [driverId],
     );
 
-    PickUpController _pickUpController = Get.find<PickUpController>();
-    _pickUpController.changeState(PickUpState.finished);
+    Get.find<PickUpController>().changeState(PickUpState.finished);
 
-    debugPrint(result.toString());
+    debugPrint('SignalR: (Received) Driver Picked Up');
   }
 
   void completedBooking() async {
-    await _checkConnection();
+    debugPrint('SignalR: (Sending) Completed Booking');
 
     String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    final result = await _hubConnection?.invoke(
+    await connection.invoke(
       "CompletedBooking",
       args: [driverId],
     );
 
-    PickUpController _pickUpController = Get.find<PickUpController>();
-    _pickUpController.changeState(PickUpState.completed);
+    Get.find<PickUpController>().changeState(PickUpState.completed);
 
-    debugPrint(result.toString());
+    debugPrint('SignalR: (Received) Completed Booking');
   }
 }
-
-  // void _bookingRequest(List<Object>? parameters) async {
-  //   debugPrint('_bookingRequest ${parameters?[0]}');
-
-  //   var locationModel = LocationModel(
-  //     id: '84cd154d-a453-497a-b2aa-85a5aa9d9029',
-  //     latitude: 10.865836,
-  //     longitude: 106.781622,
-  //   );
-
-  //   String data = jsonEncode(locationModel.toJson());
-
-  //   var mapper = parameters?[0] as Map<String, dynamic>;
-  //   var driver = jsonEncode(DataHubModel.fromJson(mapper['driver']).toJson());
-  //   var customer =
-  //       jsonEncode(DataHubModel.fromJson(mapper['customer']).toJson());
-
-  //   driver = jsonEncode(DriverResponseModel.fromJson(mapper));
-
-  //   final result = await _hubConnection.invoke(
-  //     "CheckAcceptedRequest",
-  //     args: <Object>[driver, "1"],
-  //   );
-
-  //   debugPrint('CheckAcceptedRequest ${parameters?[0]}');
-  // }
-
-  // void _bookingResponse(List<Object>? parameters) {
-  //   debugPrint('_bookingResponse ${parameters?[0]}');
-  // }
-
-  // void closeDriver() async {
-  //   // var locationModel = LocationModel(
-  //   //   id: '84cd154d-a453-497a-b2aa-85a5aa9d9029',
-  //   //   latitude: 10.864483,
-  //   //   longitude: 106.780907,
-  //   //   seats: 2,
-  //   // );
-
-  //   // String data = jsonEncode(locationModel.toJson());
-
-  //   final result = await _hubConnection.invoke(
-  //     "CloseDriver",
-  //     args: <Object>["84cd154d-a453-497a-b2aa-85a5aa9d9029"],
-  //   );
-
-  //   debugPrint('Hyper SignalR: $result');
-  // }
-
-  // void action1() async {
-  //   var locationModel = StartLocationBookingModel(
-  //     id: '1D17684A-00DD-4840-937B-9BC1E4DA033D',
-  //     latitude: 10.868463,
-  //     longitude: 106.779407,
-  //   );
-  //   String data = jsonEncode(locationModel.toJson());
-  //   final String result = await _hubConnection.invoke(
-  //     "GetDriversListMatching",
-  //     args: <Object>[data],
-  //   ) as String;
-
-  //   debugPrint('Hyper SignalR: Action 1 Pressed $result');
-  // }
-
-  // void action2() async {
-  //   var locationModel = LocationModel(
-  //     id: '1D17684A-00DD-4840-937B-9BC1E4DA033D',
-  //     latitude: 10.868463,
-  //     longitude: 106.779407,
-  //     priceBookingId: '8C06808E-E38A-4A1D-90FF-04E153DDF1FF',
-  //     price: 99000,
-  //     distance: 2500,
-  //     seats: 2,
-  //   );
-
-  //   String data = jsonEncode(locationModel.toJson());
-  //   final result = await _hubConnection.invoke(
-  //     "FindDriver",
-  //     args: <Object>[data],
-  //   );
-
-  //   debugPrint('Hyper SignalR: Action 2 Pressed');
-  // }
-
-  // void action3() async {
-  //   debugPrint('Hyper SignalR: Action 3 Pressed');
-
-  //   final result = await _hubConnection.invoke(
-  //     "CancelBooking",
-  //     args: <Object>['1D17684A-00DD-4840-937B-9BC1E4DA033D'],
-  //   );
-  //   // TO DO
-  // }
-
-  // void action4() async {
-  //   debugPrint('Hyper SignalR: Action 4 Pressed');
-  //   // TO DO
-  // }
-
-  // void action5() async {
-  //   debugPrint('Hyper SignalR: Action 5 Pressed');
-  //   // TO DO
-  // }
