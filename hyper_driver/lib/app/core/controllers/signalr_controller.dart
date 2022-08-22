@@ -125,7 +125,7 @@ class SignalRController {
 
   void _bookingRequest(List<Object>? parameters) async {
     var mapper = parameters?[0] as Map<String, dynamic>;
-    var driver = jsonEncode(DataHubModel.fromJson(mapper).toJson());
+    var driver = jsonEncode(DriverResponseModel.fromJson(mapper).toJson());
 
     var result = await Get.toNamed(Routes.BOOKING_REQUEST);
 

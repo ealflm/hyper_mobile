@@ -1,23 +1,35 @@
 import 'package:hyper_driver/app/core/model/data_hub_model.dart';
 
 class DriverResponseModel {
-  bool? accepted;
+  int? statusCode;
   DataHubModel? driver;
   DataHubModel? customer;
+  String? type;
+  String? message;
 
-  DriverResponseModel({this.accepted, this.driver, this.customer});
+  DriverResponseModel({
+    this.statusCode,
+    this.driver,
+    this.customer,
+    this.type,
+    this.message,
+  });
 
   DriverResponseModel.fromJson(Map<String, dynamic> json) {
-    accepted = json['accepted'];
+    statusCode = json['statusCode'];
     driver = DataHubModel.fromJson(json['driver']);
     customer = DataHubModel.fromJson(json['customer']);
+    type = json['type'];
+    message = json['message'];
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-    data['Accept'] = accepted;
+    data['StatusCode'] = statusCode;
     data['Driver'] = driver?.toJson();
     data['Customer'] = customer?.toJson();
+    data['type'] = type;
+    data['message'] = message;
     return data;
   }
 }
