@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ import 'package:hyper_customer/app/modules/home/controllers/home_controller.dart
 import 'package:hyper_customer/app/modules/home/views/home_view.dart';
 import 'package:hyper_customer/app/modules/package/controllers/package_controller.dart';
 import 'package:hyper_customer/app/modules/package/views/package_view.dart';
+import 'package:hyper_customer/app/network/signalr.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
 class MainController extends GetxController {
@@ -55,7 +58,20 @@ class MainController extends GetxController {
       );
     });
 
+    startPing();
+
     super.onInit();
+  }
+
+  Timer? timer;
+
+  void startPing() async {
+    timer = Timer.periodic(
+      const Duration(seconds: 2),
+      (_) {
+        SignalR.instance.pingToServer();
+      },
+    );
   }
 
   void initController() {

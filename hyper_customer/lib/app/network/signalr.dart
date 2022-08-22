@@ -3,13 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/model/location_model.dart';
-import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
-import 'package:signalr_netcore/signalr_client.dart';
+import 'package:signalr_core/signalr_core.dart';
 
 class SignalR {
   static final SignalR _instance = SignalR._internal();
@@ -76,7 +75,9 @@ class SignalR {
     String token = TokenManager.instance.token;
 
     final httpConnectionOptions = HttpConnectionOptions(
-      logger: _logger,
+      logging: (level, message) {
+        debugPrint('SignalR: $message');
+      },
       logMessageContent: true,
       accessTokenFactory: () async {
         return token;
@@ -84,15 +85,28 @@ class SignalR {
     );
 
     connection = HubConnectionBuilder()
-        .withUrl(host, options: httpConnectionOptions)
-        .withAutomaticReconnect(retryDelays: retryDelays)
-        .configureLogging(_logger)
+        .withUrl(host, httpConnectionOptions)
+        .withAutomaticReconnect(retryDelays)
         .build();
+
+    connection.onclose(
+      (exception) {
+        debugPrint('SignalR: On close');
+      },
+    );
+
+    connection.onreconnecting(((exception) {
+      debugPrint('SignalR: On reconnecting!');
+    }));
+
+    connection.onreconnected(((String? connectionId) {
+      debugPrint('SignalR: Reconnected with connectionId $connectionId');
+    }));
 
     _connectionOn();
 
     await connection.start();
-    debugPrint('SignalR: Connection started');
+    debugPrint('SignalR: Connection started: ${connection.connectionId}');
   }
 
   void close() async {
@@ -105,13 +119,31 @@ class SignalR {
   // Region Connection On
 
   void _connectionOn() {
+    connection.on("PingToCustomer", _pingToCustomer);
     connection.on("BookingResponse", _bookingResponse);
     connection.on("DriverArrived", _driverArrived);
     connection.on("DriverPickedUp", _driverPickedUp);
     connection.on("CompletedBooking", _completedBooking);
   }
 
-  void _driverArrived(List<Object>? parameters) {
+  void _pingToCustomer(List<dynamic>? parameters) {
+    debugPrint('Received Ping from Sever ${parameters?[0]}');
+  }
+
+  Future<void> pingToServer() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    debugPrint('SignalR: Staring ping to sever');
+
+    await connection.invoke(
+      "Ping",
+      args: [customerId],
+    );
+
+    debugPrint('SignalR: Ping success to sever');
+  }
+
+  void _driverArrived(List<dynamic>? parameters) {
     debugPrint('_bookingResponse ${parameters?[0]}');
     BookingDirectionController bookingDirectionController =
         Get.find<BookingDirectionController>();
@@ -119,7 +151,7 @@ class SignalR {
     bookingDirectionController.changeState(BookingState.arrived);
   }
 
-  void _bookingResponse(List<Object>? parameters) {
+  void _bookingResponse(List<dynamic>? parameters) {
     debugPrint('_bookingResponse ${parameters?[0]}');
     BookingDirectionController bookingDirectionController =
         Get.find<BookingDirectionController>();
@@ -134,7 +166,7 @@ class SignalR {
     }
   }
 
-  void _driverPickedUp(List<Object>? parameters) {
+  void _driverPickedUp(List<dynamic>? parameters) {
     debugPrint('_bookingResponse ${parameters?[0]}');
     BookingDirectionController bookingDirectionController =
         Get.find<BookingDirectionController>();
@@ -142,7 +174,7 @@ class SignalR {
     bookingDirectionController.changeState(BookingState.pickedUp);
   }
 
-  void _completedBooking(List<Object>? parameters) {
+  void _completedBooking(List<dynamic>? parameters) {
     debugPrint('_bookingResponse ${parameters?[0]}');
     BookingDirectionController bookingDirectionController =
         Get.find<BookingDirectionController>();
