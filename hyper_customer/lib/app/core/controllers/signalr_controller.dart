@@ -7,6 +7,7 @@ import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
@@ -189,11 +190,10 @@ class SignalR {
   }
 
   void _completedBooking(List<Object>? parameters) {
-    debugPrint('_bookingResponse ${parameters?[0]}');
-    BookingDirectionController bookingDirectionController =
-        Get.find<BookingDirectionController>();
+    debugPrint('SignalR: Completed Booking');
 
-    bookingDirectionController.changeState(BookingState.feedBack);
+    Get.offAllNamed(Routes.MAIN);
+    Get.toNamed(Routes.FEEDBACK_DRIVER);
   }
 
   Future<List<LatLng>> getDriverInfos(LatLng location) async {

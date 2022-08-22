@@ -48,8 +48,6 @@ class Bottom extends GetWidget<BookingDirectionController> {
                   return _arrived();
                 case BookingState.pickedUp:
                   return _pickedUp();
-                case BookingState.feedBack:
-                  return _feedBack();
               }
             },
           )
@@ -1017,84 +1015,74 @@ class Bottom extends GetWidget<BookingDirectionController> {
   }
 
   Widget _pickedUp() {
-    return SlidingUpPanel(
-      color: Colors.transparent,
-      boxShadow: const [],
-      maxHeight: 120.h,
-      minHeight: 120.h,
-      panelBuilder: (sc) {
-        return SingleChildScrollView(
-          controller: sc,
-          child: Column(
-            children: [
-              _goToCurrentLocation(),
-              Container(
-                padding: EdgeInsets.only(
-                  bottom: 10.h,
-                  left: 10.w,
-                  right: 10.w,
-                ),
-                child: Container(
-                  decoration: BoxDecorations.mapHigh(),
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(9.r),
+    return Column(
+      children: [
+        _goToCurrentLocation(),
+        Container(
+          padding: EdgeInsets.only(
+            bottom: 10.h,
+            left: 10.w,
+            right: 10.w,
+          ),
+          child: Container(
+            decoration: BoxDecorations.mapHigh(),
+            width: double.infinity,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(9.r),
+              child: Column(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(
+                      bottom: 10.h,
+                      left: 18.w,
+                      right: 18.w,
+                      top: 10.h,
+                    ),
+                    color: AppColors.primary600,
                     child: Column(
                       children: [
-                        Container(
-                          color: AppColors.line,
-                          padding: EdgeInsets.only(
-                            bottom: 10.h,
-                            left: 18.w,
-                            right: 18.w,
-                            top: 10.h,
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  borderRadius: BorderRadius.circular(9.r),
-                                ),
-                                width: 35.w,
-                                height: 4,
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Row(
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Bạn đã bị tài xế đón',
-                                          style: subtitle1.copyWith(
-                                            color: AppColors.softBlack,
-                                            fontWeight: FontWeights.medium,
-                                          ),
-                                        ),
-                                      ],
+                                  Text(
+                                    'Đang đi đến điểm đến',
+                                    style: body2.copyWith(
+                                      color: AppColors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Cơm gà xé',
+                                    style: subtitle1.copyWith(
+                                      fontSize: 18.sp,
+                                      color: AppColors.white,
+                                      fontWeight: FontWeights.medium,
+                                    ),
+                                  ),
+                                  Text(
+                                    '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
+                                    style: body1.copyWith(
+                                      color: AppColors.white,
                                     ),
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        );
-      },
+        ),
+      ],
     );
   }
 

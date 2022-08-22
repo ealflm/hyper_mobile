@@ -16,6 +16,8 @@ import '../modules/busing/bindings/busing_binding.dart';
 import '../modules/busing/views/busing_view.dart';
 import '../modules/chat/bindings/chat_binding.dart';
 import '../modules/chat/views/chat_view.dart';
+import '../modules/feedback_driver/bindings/feedback_driver_binding.dart';
+import '../modules/feedback_driver/views/feedback_driver_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
@@ -252,6 +254,12 @@ class AppPages {
       name: _Paths.RETURN_VEHICLE,
       page: () => const ReturnVehicleView(),
       binding: ReturnVehicleBinding(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: _Paths.FEEDBACK_DRIVER,
+      page: () => const FeedbackDriverView(),
+      binding: FeedbackDriverBinding(),
       transition: Transition.noTransition,
     ),
   ];

@@ -45,4 +45,14 @@ abstract class AppAssets {
 
   static const String motorcycle = 'assets/svg/motorcycle.svg';
   static const String car = 'assets/svg/car.svg';
+
+  static const String fun = 'assets/svg/fun.svg';
+  static const String friendly = 'assets/svg/friendly.svg';
+  static const String enthusiasm = 'assets/svg/enthusiasm.svg';
+  static const String impressive = 'assets/svg/impressive.svg';
+  static const String goodService = 'assets/svg/good-service.svg';
+
+  static const String notFriendly = 'assets/svg/not-friendly.svg';
+  static const String badService = 'assets/svg/bad-service.svg';
+  static const String dangerous = 'assets/svg/dangerous.svg';
 }

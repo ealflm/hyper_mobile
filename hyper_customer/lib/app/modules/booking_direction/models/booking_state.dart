@@ -5,5 +5,4 @@ enum BookingState {
   coming,
   arrived,
   pickedUp,
-  feedBack,
 }
