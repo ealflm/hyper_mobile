@@ -283,7 +283,7 @@ class SignalR {
       args: [driverId],
     );
 
-    Get.find<PickUpController>().changeState(PickUpState.completed);
+    Get.offAllNamed(Routes.MAIN);
 
     debugPrint('SignalR: (Received) Completed Booking');
   }

@@ -32,8 +32,6 @@ class Bottom extends GetWidget<PickUpController> {
                   return const Picked();
                 case PickUpState.finished:
                   return const Finished();
-                case PickUpState.completed:
-                  return Text('TODO');
               }
             },
           ),
