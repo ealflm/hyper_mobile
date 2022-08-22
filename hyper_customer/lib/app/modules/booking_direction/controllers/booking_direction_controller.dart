@@ -176,11 +176,16 @@ class BookingDirectionController extends BaseController {
   Rx<BookingPrice?> motocyclePrice = Rx<BookingPrice?>(null);
   Rx<BookingPrice?> carPrice = Rx<BookingPrice?>(null);
 
+  Rx<bool> isLoadingPrice = false.obs;
+
   Future<void> fetchPrice() async {
+    isLoadingPrice.value = true;
     double distance =
         (directions?.routes?[0].legs?[0].distance?.value)?.toDouble() ?? 0;
     motocyclePrice.value = await getBookingPrice(distance, 2);
     carPrice.value = await getBookingPrice(distance, 4);
+
+    isLoadingPrice.value = false;
   }
 
   Future<BookingPrice?> getBookingPrice(double distance, int seat) async {

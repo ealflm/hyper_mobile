@@ -11,6 +11,7 @@ import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_shape.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
@@ -19,6 +20,7 @@ import 'package:hyper_customer/app/modules/booking_direction/models/vehicle.dart
 import 'package:hyper_customer/app/modules/booking_direction/widgets/service_item.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
+import 'package:signalr_netcore/hub_connection.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Bottom extends GetWidget<BookingDirectionController> {
@@ -102,43 +104,32 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 SizedBox(
                   height: 14.h,
                 ),
-                Obx(
-                  () => ServiceItem(
-                    svgAsset: AppAssets.motorcycle,
-                    title: 'Xe máy',
-                    description: 'Tối đa 1 hành khách',
-                    isSelected: controller.vehicle.value == Vehicle.motorcycle,
-                    price: controller.motocyclePrice.value?.totalPrice ?? 0.0,
-                    onPressed: () {
-                      controller.changeVehicle(Vehicle.motorcycle);
-                    },
-                  ),
-                ),
-                Obx(
-                  () => ServiceItem(
-                    svgAsset: AppAssets.car,
-                    title: 'Xe ô tô',
-                    description: 'Tối đa 4 hành khách',
-                    isSelected: controller.vehicle.value == Vehicle.car,
-                    price: controller.carPrice.value?.totalPrice ?? 0.0,
-                    onPressed: () {
-                      controller.changeVehicle(Vehicle.car);
-                    },
-                  ),
-                ),
+                _servicePrice(),
                 SizedBox(
                   height: 14.h,
                 ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ButtonStyles.primaryMedium(),
-                    onPressed: () {
-                      controller.changeState(BookingState.finding);
-                    },
-                    child: Text(
-                      'Tiếp tục tìm xe',
-                      style: buttonBold,
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ButtonStyles.primaryMedium(),
+                      onPressed: controller.isLoadingPrice.value ||
+                              SignalR.instance.connectionState.value !=
+                                  HubState.connected
+                          ? null
+                          : () {
+                              controller.changeState(BookingState.finding);
+                            },
+                      child: HyperButton.child(
+                        loadingText: 'Tiếp tục tìm xe',
+                        status: controller.isLoadingPrice.value ||
+                            SignalR.instance.connectionState.value !=
+                                HubState.connected,
+                        child: Text(
+                          'Tiếp tục tìm xe',
+                          style: buttonBold,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -173,6 +164,45 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 SizedBox(
                   height: 14.h,
                 ),
+                _servicePrice(),
+                SizedBox(
+                  height: 14.h,
+                ),
+                Obx(
+                  () => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: ButtonStyles.primaryMedium(),
+                        onPressed: controller.isLoadingPrice.value ||
+                                SignalR.instance.connectionState.value !=
+                                    HubState.connected
+                            ? null
+                            : () {
+                                controller.changeState(BookingState.finding);
+                              },
+                        child: HyperButton.child(
+                          loadingText: 'Đặt xe',
+                          status: controller.isLoadingPrice.value,
+                          child: Text(
+                            'Đặt xe',
+                            style: buttonBold,
+                          ),
+                        )),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Obx _servicePrice() {
+    return Obx(
+      () => !controller.isLoadingPrice.value
+          ? Column(
+              children: [
                 Obx(
                   () => ServiceItem(
                     svgAsset: AppAssets.motorcycle,
@@ -197,27 +227,16 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     },
                   ),
                 ),
-                SizedBox(
-                  height: 14.h,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ButtonStyles.primaryMedium(),
-                    onPressed: () {
-                      controller.changeState(BookingState.finding);
-                    },
-                    child: Text(
-                      'Đặt xe',
-                      style: buttonBold,
-                    ),
-                  ),
-                ),
               ],
+            )
+          : SizedBox(
+              height: 40.h,
+              child: Center(
+                child: Lottie.asset(
+                  AppAnimationAssets.dot,
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
     );
   }
 

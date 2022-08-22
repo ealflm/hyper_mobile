@@ -13,7 +13,7 @@ import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 import 'package:flutter/services.dart';
 
-enum ConnectionState {
+enum HubState {
   disconnected,
   connecting,
   connected,
@@ -24,19 +24,17 @@ class SignalR {
   static SignalR get instance => _instance;
   SignalR._internal();
 
-  static late HubConnection connection;
+  late HubConnection connection;
 
-  static final Logger _logger = Logger("SignalR: ");
+  final Logger _logger = Logger("SignalR: ");
 
-  static bool _autoReconnect = false;
+  bool _autoReconnect = false;
 
   /// Describes the current state of the HubConnection to the server.
-  static Rx<ConnectionState> connectionState = ConnectionState.disconnected.obs;
+  Rx<HubState> connectionState = HubState.disconnected.obs;
 
-  static const host =
-      "https://tourism-smart-transportation-api.azurewebsites.net";
-
-  final String _hubUrl = "$host/hub";
+  final String _hubUrl =
+      "https://tourism-smart-transportation-api.azurewebsites.net/hub";
 
   // Handle on resume
   _handleAppLifecycleState() {
@@ -106,13 +104,13 @@ class SignalR {
     connection.onclose(({error}) {
       Utils.showToast('Mất kết nối đến server');
 
-      changeState(ConnectionState.disconnected);
+      changeState(HubState.disconnected);
     });
     connection.onreconnecting(({error}) {
       Utils.showToast('Mất kết nối đến server');
       debugPrint("SignalR: Onreconnecting called");
 
-      changeState(ConnectionState.disconnected);
+      changeState(HubState.disconnected);
 
       connection.stop();
       _openConnection();
@@ -120,14 +118,14 @@ class SignalR {
     connection.onreconnected(({connectionId}) {
       debugPrint("SignalR: onreconnected called");
 
-      changeState(ConnectionState.connected);
+      changeState(HubState.connected);
     });
 
     if (connection.state != HubConnectionState.Connected) {
       try {
         await connection.start();
 
-        changeState(ConnectionState.connected);
+        changeState(HubState.connected);
 
         debugPrint('SignalR: Connected (${connection.connectionId})');
         Utils.showToast('Kết nối tới server thành công');
@@ -147,7 +145,7 @@ class SignalR {
     _listen();
   }
 
-  void changeState(ConnectionState value) {
+  void changeState(HubState value) {
     connectionState.value = value;
   }
 
