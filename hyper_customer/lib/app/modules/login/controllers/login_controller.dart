@@ -198,17 +198,17 @@ class LoginController extends BaseController {
 
     await Future.delayed(const Duration(seconds: 1));
 
-    pageLoading.value = false;
-
     if (token != null) {
-      await TokenManager.instance.saveToken(token);
-      await TokenManager.instance.saveUser(token);
-      await TokenManager.instance.savePhonePassword(
+      TokenManager.instance.saveToken(token);
+      TokenManager.instance.saveUser(token);
+      TokenManager.instance.savePhonePassword(
         phoneNumber.value,
         password!,
       );
 
       Get.offAllNamed('${Routes.MAIN}?appInit=true');
+    } else {
+      pageLoading.value = false;
     }
   }
 
@@ -229,17 +229,17 @@ class LoginController extends BaseController {
 
     await Future.delayed(const Duration(seconds: 1));
 
-    pageLoading.value = false;
-
     if (token != null) {
-      await TokenManager.instance.saveToken(token);
-      await TokenManager.instance.saveUser(token);
-      await TokenManager.instance.savePhonePassword(
+      TokenManager.instance.saveToken(token);
+      TokenManager.instance.saveUser(token);
+      TokenManager.instance.savePhonePassword(
         phone,
         password,
       );
 
       Get.offAllNamed('${Routes.MAIN}?appInit=true');
+    } else {
+      pageLoading.value = false;
     }
   }
 
