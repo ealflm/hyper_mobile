@@ -36,7 +36,8 @@ class MainController extends GetxController {
   @override
   void onInit() async {
     if (Get.parameters['appInit'] == 'true') {
-      LoginController.loginInit();
+      SignalR.instance.start();
+      NotificationController.instance.registerNotification();
     }
 
     initController();

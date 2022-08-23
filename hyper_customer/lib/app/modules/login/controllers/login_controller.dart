@@ -208,8 +208,7 @@ class LoginController extends BaseController {
         password!,
       );
 
-      loginInit();
-      Get.offAllNamed(Routes.MAIN);
+      Get.offAllNamed('${Routes.MAIN}?appInit=true');
     }
   }
 
@@ -240,14 +239,8 @@ class LoginController extends BaseController {
         password,
       );
 
-      loginInit();
-      Get.offAllNamed(Routes.MAIN);
+      Get.offAllNamed('${Routes.MAIN}?appInit=true');
     }
-  }
-
-  static void loginInit() {
-    SignalR.instance.start();
-    NotificationController.instance.registerNotification();
   }
 
   void back() {
