@@ -11,6 +11,7 @@ import 'package:hyper_customer/app/modules/activity/controllers/activity_control
 import 'package:hyper_customer/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_customer/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_customer/app/modules/home/views/home_view.dart';
+import 'package:hyper_customer/app/modules/login/controllers/login_controller.dart';
 import 'package:hyper_customer/app/modules/package/controllers/package_controller.dart';
 import 'package:hyper_customer/app/modules/package/views/package_view.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
@@ -34,6 +35,10 @@ class MainController extends GetxController {
 
   @override
   void onInit() async {
+    if (Get.parameters['appInit'] == 'true') {
+      LoginController.loginInit();
+    }
+
     initController();
 
     await SettingController.intance.init();

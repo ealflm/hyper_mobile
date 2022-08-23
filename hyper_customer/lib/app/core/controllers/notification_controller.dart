@@ -26,7 +26,7 @@ class NotificationController {
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  void init() async {
+  Future<void> init() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -34,11 +34,6 @@ class NotificationController {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-
-    Get.put(
-      nt.NotificationController(),
-      permanent: true,
-    );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
@@ -66,10 +61,6 @@ class NotificationController {
           ),
         );
       }
-
-      nt.NotificationController notificationController =
-          Get.find<nt.NotificationController>();
-      notificationController.init();
     });
 
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);

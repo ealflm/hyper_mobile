@@ -20,8 +20,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     String initialRoute = AppPages.INITIAL;
     if (TokenManager.instance.hasToken) {
-      LoginController.loginInit();
-      initialRoute = Routes.MAIN;
+      initialRoute = '${Routes.MAIN}?appInit=true';
     }
 
     return ScreenUtilInit(
