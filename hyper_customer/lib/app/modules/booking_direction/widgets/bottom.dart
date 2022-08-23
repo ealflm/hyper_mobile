@@ -108,31 +108,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 SizedBox(
                   height: 14.h,
                 ),
-                Obx(
-                  () => SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      style: ButtonStyles.primaryMedium(),
-                      onPressed: controller.isLoadingPrice.value ||
-                              SignalR.instance.hubState.value !=
-                                  HubState.connected
-                          ? null
-                          : () {
-                              controller.changeState(BookingState.finding);
-                            },
-                      child: HyperButton.child(
-                        loadingText: 'Tiếp tục tìm xe',
-                        status: controller.isLoadingPrice.value ||
-                            SignalR.instance.hubState.value !=
-                                HubState.connected,
-                        child: Text(
-                          'Tiếp tục tìm xe',
-                          style: buttonBold,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                _bookingButton('Tiếp tục tìm xe'),
               ],
             ),
           ),
@@ -168,33 +144,36 @@ class Bottom extends GetWidget<BookingDirectionController> {
                 SizedBox(
                   height: 14.h,
                 ),
-                Obx(
-                  () => SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                        style: ButtonStyles.primaryMedium(),
-                        onPressed: controller.isLoadingPrice.value ||
-                                SignalR.instance.hubState.value !=
-                                    HubState.connected
-                            ? null
-                            : () {
-                                controller.changeState(BookingState.finding);
-                              },
-                        child: HyperButton.child(
-                          loadingText: 'Đặt xe',
-                          status: controller.isLoadingPrice.value,
-                          child: Text(
-                            'Đặt xe',
-                            style: buttonBold,
-                          ),
-                        )),
-                  ),
-                ),
+                _bookingButton('Đặt xe'),
               ],
             ),
           ),
         ),
       ],
+    );
+  }
+
+  Obx _bookingButton(String title) {
+    return Obx(
+      () => SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          style: ButtonStyles.primaryMedium(),
+          onPressed: controller.isLoadingPrice.value ||
+                  SignalR.instance.hubState.value != HubState.connected
+              ? null
+              : controller.lookingForDriver,
+          child: HyperButton.child(
+            loadingText: title,
+            status: controller.isLoadingPrice.value ||
+                SignalR.instance.hubState.value != HubState.connected,
+            child: Text(
+              title,
+              style: buttonBold,
+            ),
+          ),
+        ),
+      ),
     );
   }
 

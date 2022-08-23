@@ -212,14 +212,15 @@ class BookingDirectionController extends BaseController {
 
   void changeState(BookingState value) {
     bookingState.value = value;
-
-    if (value == BookingState.finding) {
-      mapController.moveToCurrentLocation();
-      findDriver();
-    }
   }
 
-  void findDriver() {
+  void lookingForDriver() async {
+    changeState(BookingState.finding);
+    mapController.moveToCurrentLocation();
+    _findDriver();
+  }
+
+  void _findDriver() {
     String customerId = TokenManager.instance.user?.customerId ?? '';
     double distance =
         (directions?.routes?[0].legs?[0].distance?.value)?.toDouble() ?? 0;
