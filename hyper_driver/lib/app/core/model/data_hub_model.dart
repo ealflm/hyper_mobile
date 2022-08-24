@@ -55,19 +55,19 @@ class DataHubModel {
     gender = json['gender'];
     phone = json['phone'];
     status = json['status'];
-    longitude = json['longitude'].toDouble();
-    latitude = json['latitude'].toDouble();
+    longitude = json['longitude']?.toDouble();
+    latitude = json['latitude']?.toDouble();
     placeName = json['placeName'];
     address = json['address'];
-    distanceBetween = json['distanceBetween'].toDouble();
-    point = json['point'].toDouble();
+    distanceBetween = json['distanceBetween']?.toDouble();
+    point = json['point']?.toDouble();
     intervalLoopIndex = json['intervalLoopIndex'];
     priceBookingId = json['priceBookingId'];
-    price = json['price'].toDouble();
-    distance = json['distance'].toDouble();
+    price = json['price']?.toDouble();
+    distance = json['distance']?.toDouble();
     seats = json['seats'];
     totalDriverItems = json['totalDriverItems'];
-    feedbackPoint = json['feedbackPoint'].toDouble();
+    feedbackPoint = json['feedbackPoint']?.toDouble();
     vehicleName = json['vehicleName'];
     licensePlates = json['licensePlates'];
   }
