@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_driver/app/core/model/driver_response_model.dart';
-import 'package:hyper_driver/app/core/utils/utils.dart';
 import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
 import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
@@ -62,8 +61,6 @@ class SignalR {
             connection.state != HubConnectionState.Connected) {
           debugPrint(
               'SignalR: (Open connect on resume) Current State = $lastLifecyleState');
-
-          Utils.showToast('Đang kết nối lại');
           _retryUntilSuccessfulConnection();
         }
       }
@@ -87,8 +84,6 @@ class SignalR {
   }
 
   Future<void> _openConnection() async {
-    if (hubState.value == HubState.connected) return;
-
     var token = TokenManager.instance.token;
 
     final httpConnectionOptions = HttpConnectionOptions(
@@ -108,13 +103,12 @@ class SignalR {
         .build();
 
     connection.onclose(({error}) {
-      Utils.showToast('Mất kết nối đến server');
+      debugPrint('Mất kết nối đến server');
       _retryUntilSuccessfulConnection();
 
       changeState(HubState.disconnected);
     });
     connection.onreconnecting(({error}) {
-      Utils.showToast('Mất kết nối đến server');
       debugPrint("SignalR: Onreconnecting called");
 
       changeState(HubState.disconnected);
@@ -149,17 +143,17 @@ class SignalR {
         await _openConnection();
 
         if (connection.state == HubConnectionState.Connected) {
-          Utils.showToast('Kết nối thành công');
+          debugPrint('SignalR: Kết nối thành công');
           _onReconnect = false;
           return;
         }
       } catch (e) {
         if (!_autoReconnect) return;
-        Utils.showToast('Kết nối tới server thất bại');
+        debugPrint('SignalR: Kết nối tới server thất bại');
       }
 
       await Future.delayed(Duration(seconds: delayTime));
-      Utils.showToast('Đang kết nối lại');
+      debugPrint('SignalR: Đang kết nối lại');
     }
   }
 
