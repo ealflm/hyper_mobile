@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/model/driver_response_model.dart';
 import 'package:hyper_customer/app/core/model/location_model.dart';
-import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/modules/booking_direction/controllers/booking_direction_controller.dart';
 import 'package:hyper_customer/app/modules/booking_direction/models/booking_state.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:logging/logging.dart';
 import 'package:signalr_netcore/signalr_client.dart';
@@ -167,11 +166,9 @@ class SignalR {
   }
 
   void _driverArrived(List<Object>? parameters) {
-    debugPrint('_bookingResponse ${parameters?[0]}');
-    BookingDirectionController bookingDirectionController =
-        Get.find<BookingDirectionController>();
+    debugPrint('_driverArrived ${parameters?[0]}');
 
-    bookingDirectionController.changeState(BookingState.arrived);
+    Get.find<BookingDirectionController>().changeState(BookingState.arrived);
   }
 
   void _bookingResponse(List<Object>? parameters) {
@@ -181,6 +178,9 @@ class SignalR {
 
     var map = parameters?[0] as Map<String, dynamic>;
     if (map['statusCode'] == 200) {
+      var model = DriverResponseModel.fromJson(map);
+
+      bookingDirectionController.updateDriver(model);
       bookingDirectionController.changeState(BookingState.coming);
     } else if (map['statusCode'] == 210) {
       bookingDirectionController.changeState(BookingState.select);
@@ -191,17 +191,18 @@ class SignalR {
 
   void _driverPickedUp(List<Object>? parameters) {
     debugPrint('_bookingResponse ${parameters?[0]}');
-    BookingDirectionController bookingDirectionController =
-        Get.find<BookingDirectionController>();
 
-    bookingDirectionController.changeState(BookingState.pickedUp);
+    Get.find<BookingDirectionController>().changeState(BookingState.pickedUp);
   }
 
   void _completedBooking(List<Object>? parameters) {
     debugPrint('SignalR: Completed Booking');
 
-    Get.offAllNamed(Routes.MAIN);
-    Get.toNamed(Routes.FEEDBACK_DRIVER);
+    var map = parameters?[0] as Map<String, dynamic>;
+
+    String customerTripId = map['customerTripId'];
+
+    Get.find<BookingDirectionController>().getOffFeedBack(customerTripId);
   }
 
   Future<List<LatLng>> getDriverInfos(LatLng location) async {

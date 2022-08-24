@@ -96,7 +96,6 @@ class HomeView extends GetView<HomeController> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: AppColors.gray,
             borderRadius: BorderRadius.circular(9.r),
           ),
           width: 324.w,
@@ -105,6 +104,15 @@ class HomeView extends GetView<HomeController> {
             borderRadius: BorderRadius.circular(9.r),
             child: SvgPicture.asset(
               AppAssets.packageBanner,
+              placeholderBuilder: (context) {
+                return Shimmer.fromColors(
+                  baseColor: AppColors.shimmerBaseColor,
+                  highlightColor: AppColors.shimmerHighlightColor,
+                  child: Container(
+                    color: AppColors.softRed,
+                  ),
+                );
+              },
               fit: BoxFit.cover,
             ),
           ),

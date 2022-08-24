@@ -79,4 +79,6 @@ abstract class Repository {
   Future<BookingPrice> getBookingPrice(double distance, int seat);
 
   Future<bool> returnVehicle(String code, String customerTripId);
+
+  Future<bool> feedbackDriver(String customerTripId, int rate, String content);
 }

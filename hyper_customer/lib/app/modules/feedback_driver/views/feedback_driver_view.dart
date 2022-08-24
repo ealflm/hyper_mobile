@@ -8,9 +8,11 @@ import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
+import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
 import 'package:hyper_customer/app/modules/feedback_driver/widgets/starts.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart';
 
 import '../controllers/feedback_driver_controller.dart';
 
@@ -35,7 +37,11 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
                           padding: EdgeInsets.only(left: 10.w, top: 10.h),
                           child: ElevatedButton(
                             onPressed: () async {
-                              Get.back();
+                              if (controller.backToHome) {
+                                Get.offAllNamed(Routes.MAIN);
+                              } else {
+                                Get.back();
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),
@@ -61,7 +67,7 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
                   SizedBox(
                     height: 0.05.sh,
                   ),
-                  _avatar(),
+                  _avatarCircle(),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -82,7 +88,7 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
                   ),
                   const Stars(),
                   SizedBox(
-                    height: 20.h,
+                    height: 30.h,
                   ),
                   Obx(
                     () {
@@ -104,10 +110,27 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
                               SizedBox(
                                 height: 40.h,
                               ),
-                              ElevatedButton(
-                                style: ButtonStyles.primaryMedium(),
-                                onPressed: () {},
-                                child: Text('Gửi đánh giá', style: button),
+                              Obx(
+                                () => SizedBox(
+                                  width: 200.w,
+                                  child: ElevatedButton(
+                                    style: ButtonStyles.primaryMedium(),
+                                    onPressed: controller.isLoading
+                                        ? null
+                                        : () {
+                                            FocusManager.instance.primaryFocus
+                                                ?.unfocus();
+                                            controller.submit();
+                                          },
+                                    child: HyperButton.child(
+                                      status: controller.isLoading,
+                                      child: Text(
+                                        'Gửi đánh giá',
+                                        style: buttonBold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ],
                           )
@@ -188,6 +211,9 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
                 color: AppColors.description,
               ),
             ),
+            onChanged: (String text) {
+              controller.changeFeedBackMessage(text);
+            },
           ),
         ),
       ],
@@ -248,7 +274,7 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
                 horizontal: 15.w,
                 vertical: 11.h,
               ),
-              labelText: 'Để lại lời khen',
+              labelText: 'Để lại góp ý',
               labelStyle: subtitle1.copyWith(
                 color: AppColors.description,
               ),
@@ -256,6 +282,9 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
                 color: AppColors.description,
               ),
             ),
+            onChanged: (String text) {
+              controller.changeFeedBackMessage(text);
+            },
           ),
         ),
       ],
@@ -265,34 +294,44 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
   Widget _iconFeedBack(String asset, String title) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(9.r),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: Ink(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-            child: Column(
-              children: [
-                SizedBox(
-                  width: 80.w,
-                  height: 80.w,
-                  child: SvgPicture.asset(
-                    asset,
-                    fit: BoxFit.cover,
+      child: Obx(
+        () => Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              if (controller.feedBackEmotion.value == title) {
+                controller.changeFeedBackEmotion('');
+              } else {
+                controller.changeFeedBackEmotion(title);
+              }
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Ink(
+              color: controller.feedBackEmotion.value == title
+                  ? AppColors.otp
+                  : null,
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              child: Column(
+                children: [
+                  SizedBox(
+                    width: 80.w,
+                    height: 80.w,
+                    child: SvgPicture.asset(
+                      asset,
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
-                Text(
-                  title,
-                  style: body2.copyWith(
-                    color: AppColors.softBlack,
+                  SizedBox(
+                    height: 20.h,
                   ),
-                ),
-              ],
+                  Text(
+                    title,
+                    style: body2.copyWith(
+                      color: AppColors.softBlack,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -300,29 +339,31 @@ class FeedbackDriverView extends GetView<FeedbackDriverController> {
     );
   }
 
-  ClipOval _avatar() {
+  Widget _avatarCircle() {
+    return Obx(
+      () => _oval(
+        controller.photoUrl.value ?? '',
+        controller.gender.value != 'True',
+      ),
+    );
+  }
+
+  ClipOval _oval(String url, bool gender) {
     return ClipOval(
       child: SizedBox.fromSize(
         size: Size.fromRadius(30.r), // Image radius
-        child:
-            //  Obx(
-            //   () =>
-            CachedNetworkImage(
+        child: CachedNetworkImage(
           fadeInDuration: const Duration(),
           fadeOutDuration: const Duration(),
           placeholder: (context, url) {
-            return true
-                // return controller.user.value?.gender == 'False'
+            return gender
                 ? SvgPicture.asset(AppAssets.female)
                 : SvgPicture.asset(AppAssets.male);
           },
-          // imageUrl: controller.user.value?.url ?? '-',
-          imageUrl:
-              'https://scontent-hkt1-2.xx.fbcdn.net/v/t1.6435-9/169527907_3015381458750007_4745031971809477507_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=174925&_nc_ohc=qDNSnADBb-gAX-BP0_w&tn=UDyz_9o-7VgYgtCy&_nc_ht=scontent-hkt1-2.xx&oh=00_AT-57A_wWkHnDaKt3Bcl3oXFeFkmsCF08gr-MxzxA7jwHA&oe=63291479',
+          imageUrl: url,
           fit: BoxFit.cover,
           errorWidget: (context, url, error) {
-            return true
-                // return controller.user.value?.gender == 'False'
+            return gender
                 ? SvgPicture.asset(AppAssets.female)
                 : SvgPicture.asset(AppAssets.male);
           },

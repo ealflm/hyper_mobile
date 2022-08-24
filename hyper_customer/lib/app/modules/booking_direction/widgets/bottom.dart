@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
+import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -20,7 +21,6 @@ import 'package:hyper_customer/app/modules/booking_direction/models/vehicle.dart
 import 'package:hyper_customer/app/modules/booking_direction/widgets/service_item.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
-import 'package:signalr_netcore/hub_connection.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Bottom extends GetWidget<BookingDirectionController> {
@@ -297,25 +297,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _start(
-                                  title: 'Vị trí của bạn',
-                                  content:
-                                      'Trúc Cafe, Xa Lộ Phú Quốc, Dương Tơ, Phú Quốc',
-                                ),
-                                _space(),
-                                _end(
-                                  title: 'Cơm gà xé',
-                                  content:
-                                      '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
-                                ),
-                              ],
-                            ),
-                          ),
+                          _fromToAddress(),
                         ],
                       ),
                       SizedBox(
@@ -354,6 +336,28 @@ class Bottom extends GetWidget<BookingDirectionController> {
           ),
         );
       },
+    );
+  }
+
+  Expanded _fromToAddress() {
+    return Expanded(
+      child: Obx(
+        () => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _start(
+              title: '${controller.startPlace.value?.name}',
+              content: '${controller.startPlace.value?.formattedAddress}',
+            ),
+            _space(),
+            _end(
+              title: '${controller.endPlace.value?.name}',
+              content: '${controller.endPlace.value?.formattedAddress}',
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -419,10 +423,14 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                             fontWeight: FontWeights.medium,
                                           ),
                                         ),
-                                        Text(
-                                          'Đại học FPT Thành phố Hồ Chí Minh',
-                                          style: body2.copyWith(
-                                            color: AppColors.softBlack,
+                                        Obx(
+                                          () => Text(
+                                            '${controller.startPlace.value?.formattedAddress}',
+                                            style: body2.copyWith(
+                                              color: AppColors.softBlack,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ],
@@ -461,23 +469,11 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                           children: [
                                             Row(
                                               children: [
-                                                _avatar(),
+                                                _avatarCircle(),
                                                 SizedBox(
                                                   width: 10.w,
                                                 ),
-                                                Text(
-                                                  '5',
-                                                  style: subtitle1.copyWith(
-                                                    color: AppColors.softBlack,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 5.w,
-                                                ),
-                                                const Icon(
-                                                  Icons.star,
-                                                  color: AppColors.yellow,
-                                                ),
+                                                _feedbackPoint(),
                                               ],
                                             ),
                                           ],
@@ -485,35 +481,20 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                         SizedBox(
                                           height: 5.h,
                                         ),
-                                        Text(
-                                          'Đào Phương Nam',
-                                          style: subtitle1.copyWith(
-                                            color: AppColors.softBlack,
-                                          ),
+                                        Obx(
+                                          () {
+                                            return Text(
+                                              '${controller.driverResponse.value?.driver?.lastName} ${controller.driverResponse.value?.driver?.firstName}',
+                                              style: subtitle1.copyWith(
+                                                color: AppColors.softBlack,
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Yamaha Mxking',
-                                        style: subtitle1.copyWith(
-                                          color: AppColors.softBlack,
-                                          fontWeight: FontWeights.medium,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      Text(
-                                        '69E1-477.18',
-                                        style: subtitle1.copyWith(
-                                          color: AppColors.softBlack,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  _vehicleInfo(),
                                 ],
                               ),
                             ],
@@ -582,25 +563,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _start(
-                                  title: 'Vị trí của bạn',
-                                  content:
-                                      'Trúc Cafe, Xa Lộ Phú Quốc, Dương Tơ, Phú Quốc',
-                                ),
-                                _space(),
-                                _end(
-                                  title: 'Cơm gà xé',
-                                  content:
-                                      '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
-                                ),
-                              ],
-                            ),
-                          ),
+                          _fromToAddress(),
                         ],
                       ),
                       SizedBox(
@@ -641,6 +604,72 @@ class Bottom extends GetWidget<BookingDirectionController> {
           ),
         );
       },
+    );
+  }
+
+  Obx _avatarCircle() {
+    return Obx(
+      () => _oval(
+        controller.driverResponse.value?.driver?.photoUrl ?? '',
+        controller.driverResponse.value?.driver?.gender != 'True',
+      ),
+    );
+  }
+
+  Obx _feedbackPoint() {
+    return Obx(
+      () => controller.driverResponse.value?.driver?.feedbackPoint != 0
+          ? Row(
+              children: [
+                Obx(
+                  () => Text(
+                    NumberUtils.feedbackPoint(
+                      controller.driverResponse.value?.driver?.feedbackPoint,
+                    ),
+                    style: subtitle1.copyWith(
+                      color: AppColors.softBlack,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 5.w,
+                ),
+                const Icon(
+                  Icons.star,
+                  color: AppColors.yellow,
+                ),
+              ],
+            )
+          : Text(
+              'Chưa có đánh giá',
+              style: body2.copyWith(
+                color: AppColors.softBlack,
+              ),
+            ),
+    );
+  }
+
+  Column _vehicleInfo() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          '${controller.driverResponse.value?.driver?.vehicleName}',
+          style: subtitle1.copyWith(
+            color: AppColors.softBlack,
+            fontWeight: FontWeights.medium,
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        Text(
+          '${controller.driverResponse.value?.driver?.licensePlates}',
+          style: subtitle1.copyWith(
+            color: AppColors.softBlack,
+          ),
+        ),
+      ],
     );
   }
 
@@ -706,10 +735,14 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                             fontWeight: FontWeights.medium,
                                           ),
                                         ),
-                                        Text(
-                                          'Đại học FPT Thành phố Hồ Chí Minh',
-                                          style: body2.copyWith(
-                                            color: AppColors.softBlack,
+                                        Obx(
+                                          () => Text(
+                                            '${controller.startPlace.value?.formattedAddress}',
+                                            style: body2.copyWith(
+                                              color: AppColors.softBlack,
+                                            ),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
                                           ),
                                         ),
                                       ],
@@ -748,23 +781,11 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                           children: [
                                             Row(
                                               children: [
-                                                _avatar(),
+                                                _avatarCircle(),
                                                 SizedBox(
                                                   width: 10.w,
                                                 ),
-                                                Text(
-                                                  '5',
-                                                  style: subtitle1.copyWith(
-                                                    color: AppColors.softBlack,
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 5.w,
-                                                ),
-                                                const Icon(
-                                                  Icons.star,
-                                                  color: AppColors.yellow,
-                                                ),
+                                                _feedbackPoint(),
                                               ],
                                             ),
                                           ],
@@ -772,35 +793,20 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                         SizedBox(
                                           height: 5.h,
                                         ),
-                                        Text(
-                                          'Đào Phương Nam',
-                                          style: subtitle1.copyWith(
-                                            color: AppColors.softBlack,
-                                          ),
+                                        Obx(
+                                          () {
+                                            return Text(
+                                              '${controller.driverResponse.value?.driver?.lastName} ${controller.driverResponse.value?.driver?.firstName}',
+                                              style: subtitle1.copyWith(
+                                                color: AppColors.softBlack,
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ],
                                     ),
                                   ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        'Yamaha Mxking',
-                                        style: subtitle1.copyWith(
-                                          color: AppColors.softBlack,
-                                          fontWeight: FontWeights.medium,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 10.h,
-                                      ),
-                                      Text(
-                                        '69E1-477.18',
-                                        style: subtitle1.copyWith(
-                                          color: AppColors.softBlack,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  _vehicleInfo(),
                                 ],
                               ),
                             ],
@@ -869,25 +875,7 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     children: [
                       Row(
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                _start(
-                                  title: 'Vị trí của bạn',
-                                  content:
-                                      'Trúc Cafe, Xa Lộ Phú Quốc, Dương Tơ, Phú Quốc',
-                                ),
-                                _space(),
-                                _end(
-                                  title: 'Cơm gà xé',
-                                  content:
-                                      '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
-                                ),
-                              ],
-                            ),
-                          ),
+                          _fromToAddress(),
                         ],
                       ),
                       SizedBox(
@@ -920,88 +908,6 @@ class Bottom extends GetWidget<BookingDirectionController> {
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _feedBack() {
-    return SlidingUpPanel(
-      color: Colors.transparent,
-      boxShadow: const [],
-      maxHeight: 120.h,
-      minHeight: 120.h,
-      panelBuilder: (sc) {
-        return SingleChildScrollView(
-          controller: sc,
-          child: Column(
-            children: [
-              _goToCurrentLocation(),
-              Container(
-                padding: EdgeInsets.only(
-                  bottom: 10.h,
-                  left: 10.w,
-                  right: 10.w,
-                ),
-                child: Container(
-                  decoration: BoxDecorations.mapHigh(),
-                  width: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(9.r),
-                    child: Column(
-                      children: [
-                        Container(
-                          color: AppColors.line,
-                          padding: EdgeInsets.only(
-                            bottom: 10.h,
-                            left: 18.w,
-                            right: 18.w,
-                            top: 10.h,
-                          ),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: AppColors.white,
-                                  borderRadius: BorderRadius.circular(9.r),
-                                ),
-                                width: 35.w,
-                                height: 4,
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Vui lòng feedBack',
-                                          style: subtitle1.copyWith(
-                                            color: AppColors.softBlack,
-                                            fontWeight: FontWeights.medium,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ),
@@ -1053,18 +959,26 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                       color: AppColors.white,
                                     ),
                                   ),
-                                  Text(
-                                    'Cơm gà xé',
-                                    style: subtitle1.copyWith(
-                                      fontSize: 18.sp,
-                                      color: AppColors.white,
-                                      fontWeight: FontWeights.medium,
-                                    ),
-                                  ),
-                                  Text(
-                                    '100 Trần Hưng Đạo, Dương Tơ, Phú Quốc',
-                                    style: body1.copyWith(
-                                      color: AppColors.white,
+                                  Obx(
+                                    () => Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${controller.endPlace.value?.name}',
+                                          style: subtitle1.copyWith(
+                                            fontSize: 18.sp,
+                                            color: AppColors.white,
+                                            fontWeight: FontWeights.medium,
+                                          ),
+                                        ),
+                                        Text(
+                                          '${controller.endPlace.value?.formattedAddress}',
+                                          style: body1.copyWith(
+                                            color: AppColors.white,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -1084,28 +998,22 @@ class Bottom extends GetWidget<BookingDirectionController> {
     );
   }
 
-  ClipOval _avatar() {
+  ClipOval _oval(String url, bool gender) {
     return ClipOval(
       child: SizedBox.fromSize(
         size: Size.fromRadius(18.r), // Image radius
-        child:
-            //  Obx(
-            //   () =>
-            CachedNetworkImage(
+        child: CachedNetworkImage(
           fadeInDuration: const Duration(),
           fadeOutDuration: const Duration(),
           placeholder: (context, url) {
-            return true
-                // return controller.user.value?.gender == 'False'
+            return gender
                 ? SvgPicture.asset(AppAssets.female)
                 : SvgPicture.asset(AppAssets.male);
           },
-          // imageUrl: controller.user.value?.url ?? '-',
-          imageUrl: 'https://avatars.githubusercontent.com/u/51223583?v=4',
+          imageUrl: url,
           fit: BoxFit.cover,
           errorWidget: (context, url, error) {
-            return true
-                // return controller.user.value?.gender == 'False'
+            return gender
                 ? SvgPicture.asset(AppAssets.female)
                 : SvgPicture.asset(AppAssets.male);
           },

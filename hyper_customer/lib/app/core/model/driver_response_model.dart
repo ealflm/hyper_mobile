@@ -1,4 +1,4 @@
-import 'package:hyper_driver/app/core/model/data_hub_model.dart';
+import 'package:hyper_customer/app/core/model/data_hub_model.dart';
 
 class DriverResponseModel {
   int? statusCode;

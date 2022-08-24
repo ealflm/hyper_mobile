@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
+import 'package:hyper_customer/app/core/model/driver_response_model.dart';
 import 'package:hyper_customer/app/core/model/location_model.dart';
 import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/map_polyline_utils.dart';
@@ -21,6 +22,7 @@ import 'package:hyper_customer/app/modules/booking_direction/models/booking_stat
 import 'package:hyper_customer/app/modules/booking_direction/models/vehicle.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:hyper_customer/app/routes/app_pages.dart' as app;
 
 class BookingDirectionController extends BaseController {
   final Repository _repository = Get.find(tag: (Repository).toString());
@@ -67,9 +69,33 @@ class BookingDirectionController extends BaseController {
       var data = Get.arguments as Map<String, dynamic>;
       if (data.containsKey('startPlace')) {
         startPlace.value = data['startPlace'];
+
+        if (startPlace.value?.name == 'Vị trí của bạn') {
+          LatLng location = LatLng(
+            startPlace.value?.geometry?.location?.lat ?? 0,
+            startPlace.value?.geometry?.location?.lng ?? 0,
+          );
+          PlaceDetail? placeDetail = await fetchPlaceDetail(location);
+          if (placeDetail != null) {
+            placeDetail.name = 'Vị trí của bạn';
+            startPlace.value = placeDetail;
+          }
+        }
       }
       if (data.containsKey('endPlace')) {
         endPlace.value = data['endPlace'];
+
+        if (endPlace.value?.name == 'Vị trí của bạn') {
+          LatLng location = LatLng(
+            endPlace.value?.geometry?.location?.lat ?? 0,
+            endPlace.value?.geometry?.location?.lng ?? 0,
+          );
+          PlaceDetail? placeDetail = await fetchPlaceDetail(location);
+          if (placeDetail != null) {
+            placeDetail.name = 'Vị trí của bạn';
+            endPlace.value = placeDetail;
+          }
+        }
       }
     }
     if (startPlace.value != null && endPlace.value != null) {
@@ -79,6 +105,36 @@ class BookingDirectionController extends BaseController {
     } else {
       Utils.showToast('Không có điểm bắt đầu và kết thúc');
     }
+  }
+
+  Future<PlaceDetail?> fetchPlaceDetail(LatLng location) async {
+    PlaceDetail? result;
+    var placeIdService = _goongRepository.getPlaceId(location);
+    String? placeId;
+
+    await callDataService(
+      placeIdService,
+      onSuccess: (String response) {
+        placeId = response;
+      },
+      onError: (dioError) {},
+    );
+
+    if (placeId == null) {
+      return result;
+    }
+
+    var placeDetailService = _goongRepository.getPlaceDetail(placeId!);
+
+    await callDataService(
+      placeDetailService,
+      onSuccess: (PlaceDetail response) {
+        result = response;
+      },
+      onError: (dioError) {},
+    );
+
+    return result;
   }
 
   // End Region
@@ -273,4 +329,26 @@ class BookingDirectionController extends BaseController {
 
   // End Region
 
+  // Region driver info
+
+  Rx<DriverResponseModel?> driverResponse = Rx<DriverResponseModel?>(null);
+
+  void updateDriver(DriverResponseModel model) {
+    driverResponse.value = model;
+  }
+
+  // End Region
+
+  void getOffFeedBack(String customerTripId) {
+    Get.offAllNamed(
+      app.Routes.FEEDBACK_DRIVER,
+      arguments: {
+        'backToHome': true,
+        'customerTripId': customerTripId,
+        'driverId': driverResponse.value?.driver?.id,
+        'photoUrl': driverResponse.value?.driver?.photoUrl,
+        'gender': driverResponse.value?.driver?.gender,
+      },
+    );
+  }
 }

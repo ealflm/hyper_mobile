@@ -562,4 +562,27 @@ class RepositoryImpl extends BaseRepository implements Repository {
       rethrow;
     }
   }
+
+  @override
+  Future<bool> feedbackDriver(
+    String customerTripId,
+    int rate,
+    String content,
+  ) {
+    var endpoint = "${DioProvider.baseUrl}/feedback-for-driver";
+    var data = {
+      "customerTripId": customerTripId,
+      "rate": rate,
+      "content": content,
+    };
+    var dioCall = dioTokenClient.post(endpoint, data: data);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return true;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
