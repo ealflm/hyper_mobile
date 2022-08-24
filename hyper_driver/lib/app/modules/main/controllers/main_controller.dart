@@ -13,7 +13,6 @@ import 'package:hyper_driver/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_driver/app/modules/package/controllers/package_controller.dart';
 import 'package:hyper_driver/app/modules/package/views/package_view.dart';
-import 'package:latlong2/latlong.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
@@ -37,12 +36,15 @@ class MainController extends GetxController {
 
   @override
   void onInit() async {
+    if (Get.parameters['appInit'] == 'true') {
+      SignalR.instance.start();
+      NotificationController.instance.registerNotification();
+    }
+
     initController();
 
     await SettingController.intance.init();
     HyperMapController.instance.init();
-    NotificationController.instance.registerNotification();
-    SignalR.instance.start();
 
     super.onInit();
   }

@@ -205,7 +205,7 @@ class LoginController extends BaseController {
         phoneNumber.value,
         password!,
       );
-      Get.offAllNamed(Routes.MAIN);
+      Get.offAllNamed('${Routes.MAIN}?appInit=true');
     }
   }
 
@@ -235,7 +235,7 @@ class LoginController extends BaseController {
         phone,
         password,
       );
-      Get.offAllNamed(Routes.MAIN);
+      Get.offAllNamed('${Routes.MAIN}?appInit=true');
     }
   }
 
