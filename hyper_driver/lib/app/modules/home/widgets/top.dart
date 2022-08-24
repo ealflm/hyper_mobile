@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/values/text_styles.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
@@ -42,7 +43,9 @@ class Top extends GetWidget<HomeController> {
                   Get.toNamed(Routes.BOOKING_REQUEST);
                 },
                 child: Obx(
-                  () => controller.activityState.value ? _active() : _disable(),
+                  () => SignalR.instance.activityState.value
+                      ? _active()
+                      : _disable(),
                 ),
               ),
             ),

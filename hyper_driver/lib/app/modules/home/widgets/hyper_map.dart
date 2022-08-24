@@ -4,6 +4,7 @@ import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/values/app_animation_assets.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/values/shadow_styles.dart';
@@ -48,7 +49,7 @@ class HyperMap extends GetWidget<HomeController> {
             ),
             Obx(
               () => Opacity(
-                opacity: controller.activityState.value ? 1 : 0,
+                opacity: SignalR.instance.activityState.value ? 1 : 0,
                 child: LocationMarkerLayerWidget(
                   options: LocationMarkerLayerOptions(
                     moveAnimationDuration: const Duration(milliseconds: 800),
@@ -89,7 +90,7 @@ class HyperMap extends GetWidget<HomeController> {
             ),
             Obx(
               () => Opacity(
-                opacity: controller.activityState.value ? 0 : 1,
+                opacity: SignalR.instance.activityState.value ? 0 : 1,
                 child: LocationMarkerLayerWidget(
                   options: LocationMarkerLayerOptions(
                     moveAnimationDuration: const Duration(milliseconds: 800),

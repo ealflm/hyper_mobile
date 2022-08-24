@@ -9,8 +9,6 @@ class HomeController extends BaseController {
   final GoongRepository _goongRepository =
       Get.find(tag: (GoongRepository).toString());
 
-  var activityState = false.obs;
-
   // Region Init
 
   @override
@@ -20,14 +18,6 @@ class HomeController extends BaseController {
   }
 
   void init() async {}
-
-  // End Region
-
-  // State
-
-  void setActivityState(bool value) {
-    activityState.value = value;
-  }
 
   // End Region
 

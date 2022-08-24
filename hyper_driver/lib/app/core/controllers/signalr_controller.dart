@@ -201,6 +201,8 @@ class SignalR {
     }
   }
 
+  var activityState = false.obs;
+
   void openDriver(LatLng location) async {
     debugPrint('SignalR: (Sending) Open Driver');
 

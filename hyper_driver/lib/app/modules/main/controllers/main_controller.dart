@@ -31,7 +31,6 @@ class MainController extends GetxController {
   PageStorageBucket bucket = PageStorageBucket();
   Widget get currentScreen => _screens[currentTab.value];
 
-  var activityState = false.obs;
   var activityLoading = false.obs;
 
   @override
@@ -100,7 +99,7 @@ class MainController extends GetxController {
   void toggleActivityState() async {
     activityLoading.value = true;
 
-    if (activityState.value == false) {
+    if (SignalR.instance.activityState.value == false) {
       SignalR.instance.streamDriverLocation();
     } else {
       SignalR.instance.stopStreamDriverLocation();
@@ -109,7 +108,7 @@ class MainController extends GetxController {
 
     await Future.delayed(const Duration(milliseconds: 1500));
     activityLoading.value = false;
-    activityState.value = !activityState.value;
-    _homeController.setActivityState(activityState.value);
+    SignalR.instance.activityState.value =
+        !SignalR.instance.activityState.value;
   }
 }

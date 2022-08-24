@@ -5,6 +5,7 @@ import 'package:flutter_svg/parser.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/values/app_animation_assets.dart';
 import 'package:hyper_driver/app/core/values/app_assets.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
@@ -39,7 +40,7 @@ class MainView extends GetView<MainController> {
           height: 50.w,
           child: FittedBox(
             child: FloatingActionButton(
-              backgroundColor: controller.activityState.value
+              backgroundColor: SignalR.instance.activityState.value
                   ? AppColors.primary400
                   : AppColors.softBlack,
               onPressed: controller.activityLoading.value
