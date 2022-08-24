@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
-import 'package:hyper_driver/app/core/controllers/signalr_controller_bak.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_driver/app/modules/account/views/account_view.dart';
 import 'package:hyper_driver/app/modules/activity/controllers/activity_controller.dart';
@@ -47,12 +47,6 @@ class MainController extends GetxController {
     HyperMapController.instance.init();
 
     super.onInit();
-  }
-
-  @override
-  void onClose() {
-    SignalR.instance.stopStreamDriverLocation();
-    super.onClose();
   }
 
   void initController() {
@@ -109,6 +103,7 @@ class MainController extends GetxController {
     if (activityState.value == false) {
       SignalR.instance.streamDriverLocation();
     } else {
+      SignalR.instance.stopStreamDriverLocation();
       SignalR.instance.closeDriver();
     }
 

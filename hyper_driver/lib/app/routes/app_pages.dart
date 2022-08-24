@@ -87,6 +87,7 @@ class AppPages {
       name: _Paths.PICK_UP,
       page: () => const PickUpView(),
       binding: PickUpBinding(),
+      transition: Transition.noTransition,
     ),
   ];
 }
