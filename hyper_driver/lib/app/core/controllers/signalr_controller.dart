@@ -165,6 +165,13 @@ class SignalR {
     connection.on("BookingRequest", _bookingRequest);
     connection.on("CanceledBooking", _canceledBooking);
     connection.on("FindingOut", _findingOut);
+    connection.on("DriverNotResponse", _driverNotResponse);
+  }
+
+  void _driverNotResponse(List<Object>? parameters) {
+    closeDriver();
+
+    Get.offAllNamed(Routes.MAIN);
   }
 
   void _canceledBooking(List<Object>? parameters) {
