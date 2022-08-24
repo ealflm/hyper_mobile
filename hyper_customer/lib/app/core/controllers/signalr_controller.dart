@@ -32,8 +32,10 @@ class SignalR {
   /// Describes the current state of the HubConnection to the server.
   Rx<HubState> hubState = HubState.disconnected.obs;
 
-  final String _hubUrl =
-      "https://tourism-smart-transportation-api.azurewebsites.net/hub";
+  // final String _hubUrl =
+  //     "https://tourism-smart-transportation-api.azurewebsites.net/hub";
+
+  final String _hubUrl = "https://localhost:5001/hub";
 
   // Handle on resume
   _handleAppLifecycleState() {
