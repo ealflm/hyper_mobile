@@ -37,7 +37,7 @@ class SignalR {
 
   // final String _hubUrl =
   //     "https://tourism-smart-transportation-api.azurewebsites.net/hub";
-  final String _hubUrl = "https://localhost:5001/hub";
+  final String _hubUrl = "http://localhost:5000/hub";
 
   // Handle on resume
   _handleAppLifecycleState() {
