@@ -6,6 +6,7 @@ import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
 import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
+import 'package:hyper_driver/app/core/utils/utils.dart';
 import 'package:hyper_driver/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_driver/app/modules/account/views/account_view.dart';
 import 'package:hyper_driver/app/modules/activity/controllers/activity_controller.dart';
@@ -98,15 +99,26 @@ class MainController extends GetxController {
 
   void toggleActivityState() async {
     activityLoading.value = true;
+    await Future.delayed(const Duration(milliseconds: 1500));
 
     if (SignalR.instance.activityState.value == false) {
-      SignalR.instance.streamDriverLocation();
+      bool result = await SignalR.instance.streamDriverLocation();
+      if (result == false) {
+        Utils.showToast('Không thể kết nối');
+        activityLoading.value = false;
+        return;
+      }
     } else {
       SignalR.instance.stopStreamDriverLocation();
-      SignalR.instance.closeDriver();
+      bool result = await SignalR.instance.closeDriver();
+      if (result == false) {
+        Utils.showToast('Không thể kết nối');
+        activityLoading.value = false;
+        SignalR.instance.activityState.value = false;
+        return;
+      }
     }
 
-    await Future.delayed(const Duration(milliseconds: 1500));
     activityLoading.value = false;
     SignalR.instance.activityState.value =
         !SignalR.instance.activityState.value;

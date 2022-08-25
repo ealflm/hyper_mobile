@@ -58,9 +58,9 @@ class StartView extends GetView<StartController> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('Hyper xin chào!', style: h6),
+                              Text('Hyper xin chào tài xế!', style: h6),
                               Text(
-                                'Nhập số điện thoại để đăng kí hoặc đăng nhập',
+                                'Nhập số điện thoại để đăng nhập',
                                 style: body2,
                               ),
                             ],

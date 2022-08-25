@@ -394,11 +394,11 @@ class RepositoryImpl extends BaseRepository implements Repository {
   }
 
   @override
-  Future<bool> registerNotification(String customerId, String code) {
+  Future<bool> registerNotification(String driverId, String code) {
     var endpoint = "${DioProvider.baseUrl}/firebase/fcm/registrationToken";
 
     var data = {
-      "entityId": customerId,
+      "entityId": driverId,
       "registrationToken": code,
     };
     var dioCall = dioClient.post(endpoint, data: data);

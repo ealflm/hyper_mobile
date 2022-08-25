@@ -169,8 +169,10 @@ class SignalR {
     connection.on("DriverNotResponse", _driverNotResponse);
   }
 
-  void _driverNotResponse(List<Object>? parameters) {
+  void _driverNotResponse(List<Object>? parameters) async {
+    stopStreamDriverLocation();
     closeDriver();
+    activityState.value = false;
 
     Get.offAllNamed(Routes.MAIN);
   }
@@ -231,11 +233,15 @@ class SignalR {
 
   Timer? locationSendingTimer;
 
-  void streamDriverLocation() async {
+  Future<bool> streamDriverLocation() async {
+    if (hubState.value != HubState.connected) {
+      return false;
+    }
     locationSendingTimer = Timer.periodic(
       const Duration(seconds: 2),
       (_) => _updateDriverLocation(),
     );
+    return true;
   }
 
   void stopStreamDriverLocation() async {
@@ -247,61 +253,81 @@ class SignalR {
     openDriver(location ?? LatLng(0, 0));
   }
 
-  void closeDriver() async {
-    debugPrint('SignalR: (Sending) Close Driver');
+  Future<bool> closeDriver() async {
+    try {
+      debugPrint('SignalR: (Sending) Close Driver');
 
-    String driverId = TokenManager.instance.user?.driverId ?? '';
+      String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    await connection.invoke(
-      "CloseDriver",
-      args: [driverId],
-    );
+      await connection.invoke(
+        "CloseDriver",
+        args: [driverId],
+      );
 
-    debugPrint('SignalR: (Received) Close Driver');
+      debugPrint('SignalR: (Received) Close Driver');
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  void driverArrived() async {
-    debugPrint('SignalR: (Sending) Driver Arrived');
+  Future<bool> driverArrived() async {
+    try {
+      debugPrint('SignalR: (Sending) Driver Arrived');
 
-    String driverId = TokenManager.instance.user?.driverId ?? '';
+      String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    await connection.invoke(
-      "DriverArrived",
-      args: [driverId],
-    );
+      await connection.invoke(
+        "DriverArrived",
+        args: [driverId],
+      );
 
-    Get.find<PickUpController>().changeState(PickUpState.picked);
+      Get.find<PickUpController>().changeState(PickUpState.picked);
 
-    debugPrint('SignalR: (Received) Driver Arrived');
+      debugPrint('SignalR: (Received) Driver Arrived');
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  void driverPickedUp() async {
-    debugPrint('SignalR: (Sending) Driver Picked Up');
+  Future<bool> driverPickedUp() async {
+    try {
+      debugPrint('SignalR: (Sending) Driver Picked Up');
 
-    String driverId = TokenManager.instance.user?.driverId ?? '';
+      String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    await connection.invoke(
-      "DriverPickedUp",
-      args: [driverId],
-    );
+      await connection.invoke(
+        "DriverPickedUp",
+        args: [driverId],
+      );
 
-    Get.find<PickUpController>().changeState(PickUpState.finished);
+      Get.find<PickUpController>().changeState(PickUpState.finished);
 
-    debugPrint('SignalR: (Received) Driver Picked Up');
+      debugPrint('SignalR: (Received) Driver Picked Up');
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
-  void completedBooking() async {
-    debugPrint('SignalR: (Sending) Completed Booking');
+  Future<bool> completedBooking() async {
+    try {
+      debugPrint('SignalR: (Sending) Completed Booking');
 
-    String driverId = TokenManager.instance.user?.driverId ?? '';
+      String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    await connection.invoke(
-      "CompletedBooking",
-      args: [driverId],
-    );
+      await connection.invoke(
+        "CompletedBooking",
+        args: [driverId],
+      );
 
-    Get.offAllNamed(Routes.MAIN);
+      Get.offAllNamed(Routes.MAIN);
 
-    debugPrint('SignalR: (Received) Completed Booking');
+      debugPrint('SignalR: (Received) Completed Booking');
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 }

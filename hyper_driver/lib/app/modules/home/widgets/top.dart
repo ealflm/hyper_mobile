@@ -24,24 +24,24 @@ class Top extends GetWidget<HomeController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(50.r),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 2),
-                    blurRadius: 2,
-                    spreadRadius: 0,
-                    color: AppColors.black.withOpacity(0.2),
-                  ),
-                ],
-              ),
-              child: InkWell(
-                onTap: () {
-                  Get.toNamed(Routes.BOOKING_REQUEST);
-                },
+            Obx(
+              () => Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                decoration: BoxDecoration(
+                  color: AppColors.white,
+                  borderRadius: BorderRadius.circular(50.r),
+                  border: SignalR.instance.hubState.value == HubState.connected
+                      ? Border.all(color: AppColors.primary400.withOpacity(0.5))
+                      : null,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 2),
+                      blurRadius: 2,
+                      spreadRadius: 0,
+                      color: AppColors.black.withOpacity(0.2),
+                    ),
+                  ],
+                ),
                 child: Obx(
                   () => SignalR.instance.activityState.value
                       ? _active()

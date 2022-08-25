@@ -5,8 +5,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/data/repository/repository.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
-import 'package:hyper_driver/app/modules/notification/controllers/notification_controller.dart'
-    as nt;
 
 import '../../../config/firebase_options.dart';
 
@@ -17,17 +15,16 @@ class NotificationController {
   NotificationController._internal();
 
   AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    description:
-        'This channel is used for important notifications.', // description
+    'hyper.notification.', // id
+    'Hyper Notification', // title
+    description: 'Hyper Copy Right', // description
     importance: Importance.max,
   );
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  void init() async {
+  Future<void> init() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -35,11 +32,6 @@ class NotificationController {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-
-    Get.put(
-      nt.NotificationController(),
-      permanent: true,
-    );
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteNotification? notification = message.notification;
@@ -54,18 +46,19 @@ class NotificationController {
           notification.body,
           NotificationDetails(
             android: AndroidNotificationDetails(
-              channel.id,
+              channel.id + '.124',
               channel.name,
+              sound: const RawResourceAndroidNotificationSound(
+                'sound_notification',
+              ),
               channelDescription: channel.description,
+              importance: Importance.max,
+              priority: Priority.high,
               icon: 'mipmap/ic_launcher',
             ),
           ),
         );
       }
-
-      nt.NotificationController notificationController =
-          Get.find<nt.NotificationController>();
-      notificationController.init();
     });
 
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -80,10 +73,10 @@ class NotificationController {
   Future<void> registerNotification() async {
     Repository repository = Get.find(tag: (Repository).toString());
     final String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
-    final String customerId = TokenManager.instance.user?.driverId ?? '';
+    final String driverId = TokenManager.instance.user?.driverId ?? '';
 
     var registerNotificationService = repository.registerNotification(
-      customerId,
+      driverId,
       fcmToken,
     );
 
@@ -98,10 +91,10 @@ class NotificationController {
 
   Future<void> unregisterNotification() async {
     Repository repository = Get.find(tag: (Repository).toString());
-    final String customerId = TokenManager.instance.user?.driverId ?? '';
+    final String driverId = TokenManager.instance.user?.driverId ?? '';
 
     var registerNotificationService = repository.registerNotification(
-      customerId,
+      driverId,
       'null',
     );
 

@@ -50,7 +50,7 @@ void main() async {
 
   await TokenManager.instance.init();
 
-  NotificationController.instance.init();
+  await NotificationController.instance.init();
 
   Intl.defaultLocale = 'vi_VN';
   initializeDateFormatting();
