@@ -75,6 +75,8 @@ class PackageController extends BaseController
 
     var buyPackageService = _repository.buyPackage(customerId, packageId);
 
+    HyperDialog.showLoading();
+
     await callDataService(
       buyPackageService,
       onSuccess: (bool response) {
@@ -89,6 +91,14 @@ class PackageController extends BaseController
 
         if (response?.statusCode == 400) {
           if (response?.data['message'].contains('Thanh toán thất bại')) {
+            HyperDialog.show(
+              title: 'Thất bại',
+              content:
+                  'Số dư không đủ. Vui lòng nạp thêm tiền để thực hiện giao dịch',
+              primaryButtonText: 'OK',
+            );
+          }
+          if (response?.data['message'].contains('Số tiền trong ví không đủ')) {
             HyperDialog.show(
               title: 'Thất bại',
               content:
@@ -141,7 +151,8 @@ class PackageController extends BaseController
 
   int get currentDistance =>
       ((currentPackage.value?.currentDistances ?? 0) / 1000).round();
-  int get limitDistances => currentPackage.value?.limitDistances ?? 0;
+  int get limitDistances =>
+      ((currentPackage.value?.limitDistances ?? 0) / 1000).round();
   int get currentCardSwipes => currentPackage.value?.currentCardSwipes ?? 0;
   int get limitCardSwipes => currentPackage.value?.limitCardSwipes ?? 0;
   int get currentNumberOfTrips =>
@@ -152,6 +163,7 @@ class PackageController extends BaseController
   Timer? countdownTimer;
 
   void _startCounter() {
+    countdownTimer?.cancel();
     countdownTimer = Timer.periodic(
       const Duration(seconds: 1),
       (_) => _setCountDown(),

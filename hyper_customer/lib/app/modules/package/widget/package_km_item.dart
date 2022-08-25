@@ -31,8 +31,6 @@ class PackageKmItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int valueKm = (value / 1000).round().toInt();
-    int totalKm = (total / 1000).round().toInt();
     if (total == 0) return Container();
     return Container(
       padding: EdgeInsets.symmetric(
@@ -81,7 +79,7 @@ class PackageKmItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '$valueKm',
+                        '${min(value, total)}',
                         style: h6.copyWith(
                           color: !isDisable
                               ? AppColors.softBlack
@@ -92,7 +90,7 @@ class PackageKmItem extends StatelessWidget {
                         width: 3.w,
                       ),
                       Text(
-                        '/$totalKm $unit',
+                        '/$total $unit',
                         style: body2.copyWith(
                           color: !isDisable
                               ? AppColors.lightBlack

@@ -113,8 +113,13 @@ class DateTimeUtils {
     return formatDuration(duration);
   }
 
-  static String durationToString(int hours) {
+  static String hoursToString(int hours) {
     var duration = Duration(hours: hours);
+    return formatDurationOnlyDayAndHour(duration);
+  }
+
+  static String daysToString(int days) {
+    var duration = Duration(days: days);
     return formatDurationOnlyDayAndHour(duration);
   }
 }

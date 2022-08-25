@@ -73,7 +73,7 @@ class PackageCard extends GetView<PackageController> {
                             width: 2.w,
                           ),
                           Text(
-                            DateTimeUtils.durationToString(model.duration ?? 0),
+                            '${model.duration ?? 0} ngày',
                             style: body1.copyWith(color: AppColors.lightBlack),
                           ),
                         ],
@@ -112,8 +112,10 @@ class PackageCard extends GetView<PackageController> {
                                 title: 'Xác nhận',
                                 content: 'Bạn có chắc chắn muốn mua gói này?',
                                 primaryButtonText: 'Đồng ý',
-                                primaryOnPressed: () {
-                                  controller.buyPackage(model.id ?? '');
+                                primaryOnPressed: () async {
+                                  await controller.buyPackage(model.id ?? '');
+                                  controller.fetchPackages();
+                                  controller.getCurrentPackage();
                                 },
                                 secondaryButtonText: 'Huỷ',
                                 secondaryOnPressed: () {

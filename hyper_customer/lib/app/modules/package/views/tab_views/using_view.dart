@@ -35,7 +35,6 @@ class UsingView extends GetView<PackageController> {
                   child: SmartRefresher(
                     controller: refreshController,
                     onRefresh: () async {
-                      await Future.delayed(const Duration(seconds: 1));
                       await controller.getCurrentPackage();
                       refreshController.refreshCompleted();
                     },
@@ -195,7 +194,7 @@ class UsingView extends GetView<PackageController> {
                   child: SmartRefresher(
                     controller: refreshController,
                     onRefresh: () async {
-                      await Future.delayed(const Duration(seconds: 1));
+                      await controller.getCurrentPackage();
                       refreshController.refreshCompleted();
                     },
                     header: WaterDropMaterialHeader(

@@ -45,6 +45,7 @@ abstract class InputStyles {
       ),
       labelText: labelText,
       hintText: hintText,
+      counterText: "",
       suffixIcon: state
           ? TextButton(
               onPressed: suffixAction,

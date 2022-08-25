@@ -103,7 +103,6 @@ class RegisterController extends BaseController
     qrController = controller;
     controller.resumeCamera();
     controller.scannedDataStream.listen((scanData) async {
-      if (HyperDialog.isOpen) return;
       result = scanData;
       String? data = result?.code;
 

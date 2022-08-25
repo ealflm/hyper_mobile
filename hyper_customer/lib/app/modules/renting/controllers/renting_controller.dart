@@ -15,7 +15,6 @@ import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
-import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:hyper_customer/app/data/models/rent_stations_model.dart';
 import 'package:hyper_customer/app/data/repository/goong_repository.dart';
@@ -59,9 +58,9 @@ class RentingController extends BaseController with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
     debugPrint('Current State = $state');
-    if (state == AppLifecycleState.resumed && HyperDialog.isOpen) {
-      Get.back();
-    }
+    // if (state == AppLifecycleState.resumed && HyperDialog.isOpen) {
+    //   Get.back();
+    // }
   }
 
   Future<void> init() async {

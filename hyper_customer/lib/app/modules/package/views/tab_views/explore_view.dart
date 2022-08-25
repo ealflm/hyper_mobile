@@ -89,10 +89,12 @@ class ExploreView extends GetView<PackageController> {
                     children: [
                       Container(
                         padding: EdgeInsets.only(top: 20.h),
-                        child: Text(
-                          'Không có gói',
-                          style: body2.copyWith(
-                            color: AppColors.description,
+                        child: Center(
+                          child: Text(
+                            'Không có gói',
+                            style: body2.copyWith(
+                              color: AppColors.description,
+                            ),
                           ),
                         ),
                       ),

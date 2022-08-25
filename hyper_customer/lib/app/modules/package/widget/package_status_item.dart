@@ -79,7 +79,7 @@ class PackageStatusItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '${value.round()}',
+                        '${min(value, total)}',
                         style: h6.copyWith(
                           color: !isDisable
                               ? AppColors.softBlack

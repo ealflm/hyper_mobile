@@ -20,7 +20,6 @@ class ScanController extends GetxController {
 
   @override
   void onInit() {
-    HyperDialog.isOpen = false;
     if (Get.arguments != null) {
       var data = Get.arguments as Map<String, dynamic>;
       if (data.containsKey('scanMode')) {
@@ -40,7 +39,6 @@ class ScanController extends GetxController {
     qrController = controller;
     controller.resumeCamera();
     controller.scannedDataStream.listen((scanData) async {
-      if (HyperDialog.isOpen) return;
       result = scanData;
       String? data = result?.code;
 

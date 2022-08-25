@@ -192,11 +192,12 @@ class PaymentView extends GetView<PaymentController> {
                 if (value < 5000) {
                   return 'Số tiền tối thiểu là 5.000 VNĐ';
                 }
-                if (value > 10000000) {
+                if (value > 50000000) {
                   return 'Số tiền tối đa là 50.000.000 VNĐ';
                 }
                 return null;
               },
+              maxLength: 10,
               onSaved: (value) => controller.depositText = value,
               focusNode: controller.depositFocusNode,
               controller: controller.depositController,

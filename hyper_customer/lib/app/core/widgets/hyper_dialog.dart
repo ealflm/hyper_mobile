@@ -8,7 +8,6 @@ import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:lottie/lottie.dart';
 
 abstract class HyperDialog {
-  static bool isOpen = false;
   static Future<void> show({
     String title = '',
     String content = '',
@@ -18,10 +17,7 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
-    if (isOpen) {
-      Get.back();
-    }
-    isOpen = true;
+    navigator?.popUntil((route) => !Get.isDialogOpen!);
     await Get.dialog(
       AlertDialog(
         title: Text(
@@ -58,10 +54,6 @@ abstract class HyperDialog {
         ],
       ),
       barrierDismissible: barrierDismissible,
-    ).then(
-      (value) {
-        isOpen = false;
-      },
     );
   }
 
@@ -74,10 +66,7 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
-    if (isOpen) {
-      Get.back();
-    }
-    isOpen = true;
+    navigator?.popUntil((route) => !Get.isDialogOpen!);
     await Get.dialog(
       AlertDialog(
         title: Text(
@@ -87,7 +76,7 @@ abstract class HyperDialog {
         contentPadding: EdgeInsets.only(left: 24.w, right: 24.w, top: 20.h),
         content: Lottie.asset(
           AppAnimationAssets.earthLoadingClean,
-          height: 100.r,
+          height: 60.r,
         ),
         actions: [
           if (secondaryButtonText != null && secondaryButtonText.isNotEmpty)
@@ -115,10 +104,6 @@ abstract class HyperDialog {
         ],
       ),
       barrierDismissible: barrierDismissible,
-    ).then(
-      (value) {
-        isOpen = false;
-      },
     );
   }
 
@@ -131,10 +116,8 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
-    if (isOpen) {
-      Get.back();
-    }
-    isOpen = true;
+    navigator?.popUntil((route) => !Get.isDialogOpen!);
+
     await Get.dialog(
       AlertDialog(
         title: Text(
@@ -175,10 +158,6 @@ abstract class HyperDialog {
         ],
       ),
       barrierDismissible: barrierDismissible,
-    ).then(
-      (value) {
-        isOpen = false;
-      },
     );
   }
 
@@ -191,10 +170,7 @@ abstract class HyperDialog {
     Function()? primaryOnPressed,
     Function()? secondaryOnPressed,
   }) async {
-    if (isOpen) {
-      Get.back();
-    }
-    isOpen = true;
+    navigator?.popUntil((route) => !Get.isDialogOpen!);
     await Get.dialog(
       AlertDialog(
         title: Text(
@@ -247,10 +223,6 @@ abstract class HyperDialog {
         ],
       ),
       barrierDismissible: barrierDismissible,
-    ).then(
-      (value) {
-        isOpen = false;
-      },
     );
   }
 }
