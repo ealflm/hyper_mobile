@@ -238,7 +238,7 @@ class SignalR {
 
   Future<void> findDriver(LocationModel locationModel) async {
     var data = jsonEncode(locationModel.toJson());
-    connection.invoke("FindDriver", args: [data, 'true']);
+    connection.invoke("FindDriver", args: [data, 'true', 'false']);
     debugPrint('SignalR: Finding Driver - $data');
   }
 
