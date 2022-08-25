@@ -1,11 +1,10 @@
+import 'package:antdesign_icons/antdesign_icons.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
-import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
-import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/data/models/notification_model.dart';
 
@@ -40,6 +39,8 @@ class NotificationItem extends StatelessWidget {
                 _payPal()
               else if ((model?.title ?? '').contains('trả tiền dư'))
                 _refund()
+              else if ((model?.title ?? '').contains('Mua gói dịch vụ'))
+                _package()
               else
                 _default(),
               SizedBox(
@@ -85,6 +86,28 @@ class NotificationItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Container _package() {
+    return Container(
+      width: 40.r,
+      height: 40.r,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.blue,
+      ),
+      child: Stack(
+        children: [
+          Center(
+            child: Icon(
+              AntIcons.giftFilled,
+              size: 26.r,
+              color: AppColors.white,
+            ),
+          ),
+        ],
       ),
     );
   }

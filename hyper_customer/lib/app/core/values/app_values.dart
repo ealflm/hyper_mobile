@@ -17,6 +17,7 @@ abstract class AppValues {
 
   static const double overviewZoomLevel = 10.8;
   static const double focusZoomLevel = 13.7;
+  static const double focusZoomHyperLevel = 16;
   static const double navigationModeZoomLevel = 17;
   static const double showBusStationMarkerZoomLevel = 12.8;
 

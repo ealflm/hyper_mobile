@@ -214,6 +214,20 @@ class Bottom extends GetWidget<RentingController> {
                       color: AppColors.description,
                     ),
                   ),
+                  if (controller.selectedStation.value?.totalVehicle == 0)
+                    Text(
+                      'Tạm thời hết xe cho thuê',
+                      style: body1.copyWith(
+                        color: AppColors.softRed,
+                      ),
+                    )
+                  else
+                    Text(
+                      'Số xe có thể thuê: ${controller.selectedStation.value?.totalVehicle}',
+                      style: body1.copyWith(
+                        color: AppColors.softBlack,
+                      ),
+                    ),
                   SizedBox(
                     height: 10.h,
                   ),

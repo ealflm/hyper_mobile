@@ -37,27 +37,12 @@ class SearchItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Đi qua $stationNumber trạm',
-                style: subtitle1.copyWith(color: AppColors.description),
+                'Đi qua $stationNumber tuyến',
+                style: subtitle1.copyWith(color: AppColors.softBlack),
               ),
               Text(
                 'Đón xe tại trạm: $firstStationName',
-                style: subtitle1.copyWith(color: AppColors.description),
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Giá vé: ',
-                    style: subtitle1.copyWith(color: AppColors.description),
-                  ),
-                  Text(
-                    NumberUtils.vnd(price),
-                    style: subtitle1.copyWith(
-                      color: AppColors.softBlack,
-                      fontWeight: FontWeights.medium,
-                    ),
-                  ),
-                ],
+                style: subtitle1.copyWith(color: AppColors.softBlack),
               ),
               SizedBox(
                 height: 10.h,

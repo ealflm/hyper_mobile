@@ -176,7 +176,9 @@ class Bottom extends GetWidget<BusDirectionController> {
               ),
               ElevatedButton(
                 onPressed: () {
-                  controller.goToCurrentLocation();
+                  controller.mapController.moveToCurrentLocation(
+                    zoom: AppValues.focusZoomHyperLevel,
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   shape: const CircleBorder(),

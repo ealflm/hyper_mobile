@@ -63,6 +63,7 @@ class Items {
   String? createdDate;
   String? modifiedDate;
   int? status;
+  int? totalVehicle;
 
   Items(
       {this.id,
@@ -75,7 +76,8 @@ class Items {
       this.latitude,
       this.createdDate,
       this.modifiedDate,
-      this.status});
+      this.status,
+      this.totalVehicle});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -89,6 +91,7 @@ class Items {
     createdDate = json['createdDate'];
     modifiedDate = json['modifiedDate'];
     status = json['status'];
+    totalVehicle = json['totalVehicle'];
   }
 
   Map<String, dynamic> toJson() {
@@ -104,6 +107,7 @@ class Items {
     data['createdDate'] = createdDate;
     data['modifiedDate'] = modifiedDate;
     data['status'] = status;
+    data['totalVehicle'] = totalVehicle;
     return data;
   }
 }
