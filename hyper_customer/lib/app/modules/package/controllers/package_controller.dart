@@ -137,7 +137,9 @@ class PackageController extends BaseController
       onSuccess: (CurrentPackage response) {
         currentPackage(response);
       },
-      onError: (dioError) {},
+      onError: (dioError) {
+        currentPackage(null);
+      },
     );
 
     if (currentPackage.value != null) {

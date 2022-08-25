@@ -78,7 +78,11 @@ class SignalR {
   /// Stops the connection
   void stop() {
     _autoReconnect = false;
-    connection.stop();
+    try {
+      connection.stop();
+    } catch (e) {
+      //
+    }
   }
 
   Future<void> _openConnection() async {

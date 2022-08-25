@@ -41,6 +41,10 @@ class TransactionItem extends StatelessWidget {
                 _payPal()
               else if ((model?.content ?? '').contains('Mua gói dịch vụ'))
                 _package()
+              else if ((model?.content ?? '').contains('Hoàn tiền'))
+                _refund()
+              else if ((model?.content ?? '').contains('Hoàn trả'))
+                _refund()
               else if ((model?.content ?? '').contains('trả tiền dư'))
                 _refund()
               else

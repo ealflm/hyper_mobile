@@ -87,10 +87,9 @@ class AccountController extends GetxController {
     fingerprintOnChanged(fingerprintState.value);
   }
 
-  void logout() {
+  void logout() async {
     TokenManager.instance.clearToken();
     NotificationController.instance.unregisterNotification();
-    SignalR.instance.stop();
     Get.offAllNamed(Routes.LOGIN);
   }
 }
