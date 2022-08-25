@@ -12,8 +12,8 @@ import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 
-class RentingItem extends StatelessWidget {
-  const RentingItem({
+class BookingItem extends StatelessWidget {
+  const BookingItem({
     Key? key,
     required this.model,
   }) : super(key: key);
@@ -80,6 +80,10 @@ class RentingItem extends StatelessWidget {
                               fontSize: 14.r,
                             ),
                           ),
+                          if (model?.status == 6)
+                            _chip('Hoàn thành')
+                          else if (model?.status == 0)
+                            _chip('Huỷ bỏ')
                         ],
                       ),
                     ),
@@ -115,6 +119,18 @@ class RentingItem extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _chip(String text) {
+    return Container(
+      color: text == 'Hoàn thành' ? AppColors.primary400 : AppColors.softRed,
+      child: Text(
+        text,
+        style: caption.copyWith(
+          color: AppColors.white,
         ),
       ),
     );

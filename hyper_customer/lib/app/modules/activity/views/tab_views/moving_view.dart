@@ -7,6 +7,8 @@ import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
 import 'package:hyper_customer/app/modules/activity/controllers/activity_controller.dart';
+import 'package:hyper_customer/app/modules/activity/widgets/booking_item.dart';
+import 'package:hyper_customer/app/modules/activity/widgets/busing_item.dart';
 import 'package:hyper_customer/app/modules/activity/widgets/renting_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -41,6 +43,22 @@ class MovingView extends GetView<ActivityController> {
                   itemBuilder: (context, index) {
                     CustomerTrips? item =
                         controller.activity.value?.customerTrips?[index];
+
+                    Widget widget = Container();
+                    if (item?.serviceTypeName == 'Đặt xe') {
+                      widget = BookingItem(
+                        model: item,
+                      );
+                    } else if (item?.serviceTypeName == 'Thuê xe') {
+                      widget = RentingItem(
+                        model: item,
+                      );
+                    } else if (item?.serviceTypeName == 'Đi xe buýt') {
+                      widget = BusingItem(
+                        model: item,
+                      );
+                    }
+
                     if (item?.filter == 0) {
                       return Column(
                         children: [
@@ -58,9 +76,7 @@ class MovingView extends GetView<ActivityController> {
                               ],
                             ),
                           ),
-                          RentingItem(
-                            model: item,
-                          ),
+                          widget
                         ],
                       );
                     } else if (item?.filter == 1) {
@@ -80,15 +96,11 @@ class MovingView extends GetView<ActivityController> {
                               ],
                             ),
                           ),
-                          RentingItem(
-                            model: item,
-                          ),
+                          widget
                         ],
                       );
                     }
-                    return RentingItem(
-                      model: controller.activity.value?.customerTrips?[index],
-                    );
+                    return widget;
                   })
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
