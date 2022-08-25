@@ -25,15 +25,17 @@ class RentingItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {
-          Get.toNamed(
-            Routes.SCAN,
-            arguments: {
-              'scanMode': ScanMode.returnVehicle,
-              'customerTrips': model,
-            },
-          );
-        },
+        onTap: model?.status == 4
+            ? () {
+                Get.toNamed(
+                  Routes.SCAN,
+                  arguments: {
+                    'scanMode': ScanMode.returnVehicle,
+                    'customerTrips': model,
+                  },
+                );
+              }
+            : () {},
         child: Ink(
           padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),
           child: Row(
@@ -113,6 +115,13 @@ class RentingItem extends StatelessWidget {
                                   fontWeight: FontWeights.regular,
                                 ),
                               ),
+                              if (model?.status == 4)
+                                Text(
+                                  'Nhấn để trả xe',
+                                  style: body2.copyWith(
+                                    color: AppColors.gray,
+                                  ),
+                                ),
                             ],
                           ),
                         ],

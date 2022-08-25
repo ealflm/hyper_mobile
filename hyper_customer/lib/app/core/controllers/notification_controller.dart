@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/account/controllers/account_controller.dart';
+import 'package:hyper_customer/app/modules/activity/controllers/activity_controller.dart';
+import 'package:hyper_customer/app/modules/home/controllers/home_controller.dart';
+import 'package:hyper_customer/app/modules/package/controllers/package_controller.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/app/modules/notification/controllers/notification_controller.dart'
     as nt;
@@ -35,35 +39,74 @@ class NotificationController {
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
+    FirebaseMessaging.onMessage.listen(
+      (RemoteMessage message) {
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
 
-      debugPrint('Notification: Foreground message received');
+        debugPrint('Notification: Foreground message received');
 
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id + '.123',
-              channel.name,
-              sound: const RawResourceAndroidNotificationSound(
-                'sound_notification',
+        if (notification != null && android != null) {
+          flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id + '.123',
+                channel.name,
+                sound: const RawResourceAndroidNotificationSound(
+                  'sound_notification',
+                ),
+                channelDescription: channel.description,
+                importance: Importance.max,
+                priority: Priority.high,
+                icon: 'mipmap/ic_launcher',
               ),
-              channelDescription: channel.description,
-              importance: Importance.max,
-              priority: Priority.high,
-              icon: 'mipmap/ic_launcher',
             ),
-          ),
-        );
-      }
-    });
+          );
+        }
+
+        loadAll();
+      },
+    );
 
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
+  late HomeController _homeController;
+  late PackageController _packageController;
+  late ActivityController _activityController;
+  late AccountController _accountController;
+
+  void loadAll() {
+    Get.put(
+      HomeController(),
+      permanent: true,
+    );
+    _homeController = Get.find<HomeController>();
+    _homeController.init();
+
+    Get.put(
+      PackageController(),
+      permanent: true,
+    );
+    _packageController = Get.find<PackageController>();
+    _packageController.init();
+
+    Get.put(
+      ActivityController(),
+      permanent: true,
+    );
+    _activityController = Get.find<ActivityController>();
+    _activityController.init();
+
+    Get.put(
+      AccountController(),
+      permanent: true,
+    );
+    _accountController = Get.find<AccountController>();
+    _accountController.init();
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(

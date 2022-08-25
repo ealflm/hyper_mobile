@@ -25,15 +25,7 @@ class BusingItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () {
-          Get.toNamed(
-            Routes.SCAN,
-            arguments: {
-              'scanMode': ScanMode.returnVehicle,
-              'customerTrips': model,
-            },
-          );
-        },
+        onTap: () {},
         child: Ink(
           padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),
           child: Row(
