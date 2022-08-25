@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/modules/booking/controllers/booking_controller.dart';
@@ -14,17 +15,23 @@ class BookingView extends GetView<BookingController> {
   const BookingView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _appBar(),
-      body: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 180.h),
-            child: const HyperMap(),
-          ),
-          const Bottom(),
-          const SearchRoute(),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        SignalR.instance.stop();
+        return true;
+      },
+      child: Scaffold(
+        appBar: _appBar(),
+        body: Stack(
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 180.h),
+              child: const HyperMap(),
+            ),
+            const Bottom(),
+            const SearchRoute(),
+          ],
+        ),
       ),
     );
   }
@@ -38,6 +45,7 @@ class BookingView extends GetView<BookingController> {
           size: 18.r,
         ),
         onPressed: () {
+          SignalR.instance.stop();
           Get.back();
         },
       ),

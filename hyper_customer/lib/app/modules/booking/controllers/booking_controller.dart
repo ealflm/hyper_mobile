@@ -1,10 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
-import 'package:hyper_customer/app/core/controllers/bus_station_controller.dart';
 import 'package:hyper_customer/app/core/controllers/hyper_map_controller.dart';
+import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/data/models/bus_direction_model.dart';
@@ -49,6 +48,7 @@ class BookingController extends BaseController {
 
   @override
   void onInit() {
+    SignalR.instance.start();
     super.onInit();
   }
 
