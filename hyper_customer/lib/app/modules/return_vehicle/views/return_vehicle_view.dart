@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
@@ -11,8 +10,8 @@ import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/status_bar.dart';
 import 'package:hyper_customer/app/core/widgets/unfocus.dart';
+import 'package:hyper_customer/app/modules/activity/controllers/activity_controller.dart';
 import 'package:hyper_customer/app/modules/return_vehicle/controllers/return_vehicle_controller.dart';
-import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:lottie/lottie.dart';
 
 import '../models/state.dart';
@@ -93,7 +92,7 @@ class ReturnVehicleView extends GetView<ReturnVehicleController> {
                           ),
                           Obx(
                             () {
-                              if (controller.state.value == ViewState.error) {
+                              if (controller.state.value != ViewState.error) {
                                 return _bottomSuccess();
                               } else {
                                 return Container();
@@ -120,11 +119,12 @@ class ReturnVehicleView extends GetView<ReturnVehicleController> {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              Get.offAllNamed(Routes.MAIN);
+              Get.find<ActivityController>().fetchActivity();
+              Get.back();
             },
             style: ButtonStyles.primary(),
             child: Text(
-              'Màn hình chính',
+              'Quay lại',
               style: buttonBold,
             ),
           ),
@@ -207,7 +207,7 @@ class ReturnVehicleView extends GetView<ReturnVehicleController> {
               height: 10.h,
             ),
             Text(
-              'Trả xe thành công',
+              'Gửi yêu cầu trả xe thành công',
               style: subtitle1.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.lightBlack,
@@ -216,28 +216,6 @@ class ReturnVehicleView extends GetView<ReturnVehicleController> {
             SizedBox(
               height: 20.h,
             ),
-            Column(
-              children: [
-                _detailItem(
-                  'Tên chuyến',
-                  'Hello',
-                ),
-                const Divider(
-                  color: AppColors.line,
-                ),
-                _detailItem(
-                  'Tổng số trạm',
-                  'Hello',
-                ),
-                const Divider(
-                  color: AppColors.line,
-                ),
-                _detailItem(
-                  'Khoảng cách',
-                  'Hello',
-                ),
-              ],
-            )
           ],
         ),
       ],

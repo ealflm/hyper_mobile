@@ -80,6 +80,14 @@ class RentingItem extends StatelessWidget {
                               fontSize: 14.r,
                             ),
                           ),
+                          if (model?.status == 4)
+                            _chip('Đang thuê')
+                          else if (model?.status == 5)
+                            _chip('Quá hạn')
+                          else if (model?.status == 6)
+                            _chip('Đã trả xe')
+                          else if (model?.status == 7)
+                            _chip('Đã gửi yêu cầu')
                         ],
                       ),
                     ),
@@ -115,6 +123,32 @@ class RentingItem extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _chip(String text) {
+    Color color = AppColors.yellow;
+    if (text == 'Đang thuê') {
+      color = AppColors.blue;
+    } else if (text == 'Quá hạn') {
+      color = AppColors.softRed;
+    } else if (text == 'Đã trả xe') {
+      color = AppColors.primary400;
+    } else if (text == 'Đã gửi yêu cầu') {
+      color = AppColors.yellow;
+    }
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 1.w, horizontal: 8.h),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(9.r),
+      ),
+      child: Text(
+        text,
+        style: caption.copyWith(
+          color: AppColors.white,
         ),
       ),
     );

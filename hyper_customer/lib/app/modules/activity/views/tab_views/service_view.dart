@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -8,10 +6,8 @@ import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
-import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/modules/activity/controllers/activity_controller.dart';
 import 'package:hyper_customer/app/modules/activity/widgets/service_item.dart';
-import 'package:hyper_customer/app/modules/activity/widgets/transaction_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ServiceView extends GetView<ActivityController> {
@@ -30,7 +26,6 @@ class ServiceView extends GetView<ActivityController> {
           child: SmartRefresher(
             controller: refreshController,
             onRefresh: () async {
-              await Future.delayed(const Duration(seconds: 1));
               await controller.fetchActivity();
               refreshController.refreshCompleted();
             },

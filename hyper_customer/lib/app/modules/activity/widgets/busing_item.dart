@@ -80,6 +80,7 @@ class BusingItem extends StatelessWidget {
                               fontSize: 14.r,
                             ),
                           ),
+                          if (model?.status == 6) _chip('Hoàn thành')
                         ],
                       ),
                     ),
@@ -115,6 +116,26 @@ class BusingItem extends StatelessWidget {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _chip(String text) {
+    Color color = AppColors.yellow;
+    if (text == 'Hoàn thành') {
+      color = AppColors.primary400;
+    }
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 1.w, horizontal: 8.h),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(9.r),
+      ),
+      child: Text(
+        text,
+        style: caption.copyWith(
+          color: AppColors.white,
         ),
       ),
     );

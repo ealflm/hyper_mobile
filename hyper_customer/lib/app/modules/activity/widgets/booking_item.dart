@@ -26,13 +26,13 @@ class BookingItem extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          Get.toNamed(
-            Routes.SCAN,
-            arguments: {
-              'scanMode': ScanMode.returnVehicle,
-              'customerTrips': model,
-            },
-          );
+          // Get.toNamed(
+          //   Routes.SCAN,
+          //   arguments: {
+          //     'scanMode': ScanMode.returnVehicle,
+          //     'customerTrips': model,
+          //   },
+          // );
         },
         child: Ink(
           padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),
@@ -126,7 +126,11 @@ class BookingItem extends StatelessWidget {
 
   Widget _chip(String text) {
     return Container(
-      color: text == 'Hoàn thành' ? AppColors.primary400 : AppColors.softRed,
+      padding: EdgeInsets.symmetric(vertical: 1.w, horizontal: 8.h),
+      decoration: BoxDecoration(
+        color: text == 'Hoàn thành' ? AppColors.primary400 : AppColors.softRed,
+        borderRadius: BorderRadius.circular(9.r),
+      ),
       child: Text(
         text,
         style: caption.copyWith(
