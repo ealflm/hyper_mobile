@@ -1,19 +1,23 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/controllers/notification_controller.dart';
-import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_customer/app/data/models/user_model.dart';
+import 'package:hyper_customer/app/data/repository/repository.dart';
+import 'package:hyper_customer/app/modules/scan/models/scan_mode.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 import 'package:hyper_customer/app/routes/app_pages.dart';
 import 'package:local_auth/local_auth.dart';
 // ignore: depend_on_referenced_packages
 import 'package:local_auth_android/local_auth_android.dart';
 
-class AccountController extends GetxController {
+class AccountController extends BaseController {
   var fingerprintState = false.obs;
   Rx<User?> user = Rx<User?>(null);
+  final Repository _repository = Get.find(tag: (Repository).toString());
 
   @override
   void onInit() {
@@ -24,6 +28,106 @@ class AccountController extends GetxController {
   void init() {
     _loadUser();
     _getFingerprintMode();
+    getCardStatus();
+  }
+
+  Rx<bool> cardStatus = false.obs;
+
+  void getCardStatus() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    var cardService = _repository.getCardStatus(customerId);
+
+    await callDataService(
+      cardService,
+      onSuccess: (bool response) {
+        cardStatus.value = true;
+      },
+      onError: (DioError dioError) {
+        cardStatus.value = false;
+      },
+    );
+  }
+
+  Future<bool> removeCard() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    var cardService = _repository.removeCard(customerId);
+
+    bool result = false;
+
+    await callDataService(
+      cardService,
+      onSuccess: (bool response) {
+        result = true;
+      },
+      onError: (DioError dioError) {
+        result = false;
+      },
+    );
+
+    return result;
+  }
+
+  Future<bool> updateCard(String code) async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+    var cardService = _repository.updateCard(customerId, code);
+
+    bool result = false;
+
+    await callDataService(
+      cardService,
+      onSuccess: (bool response) {
+        result = true;
+      },
+      onError: (DioError dioError) {
+        result = false;
+      },
+    );
+
+    return result;
+  }
+
+  void toggleCardStatus() async {
+    if (cardStatus.value == false) {
+      String code = await Get.toNamed(
+        Routes.SCAN,
+        arguments: {
+          'scanMode': ScanMode.cardFromAccount,
+        },
+      );
+
+      HyperDialog.showLoading();
+
+      bool result = await updateCard(code);
+
+      if (result == true) {
+        cardStatus.value = true;
+        HyperDialog.show(
+          title: 'Thành công',
+          content: 'Liên kết thẻ thành công',
+          primaryButtonText: 'Ok',
+          primaryOnPressed: Get.back,
+        );
+      } else {
+        HyperDialog.show(
+          title: 'Thất bại',
+          content: 'Liên kết thất bại',
+          primaryButtonText: 'Ok',
+          primaryOnPressed: Get.back,
+        );
+      }
+    } else {
+      bool result = await removeCard();
+      if (result == true) {
+        cardStatus.value = false;
+      } else {
+        HyperDialog.show(
+          title: 'Thất bại',
+          content: 'Huỷ liên kết thất bại',
+          primaryButtonText: 'Ok',
+          primaryOnPressed: Get.back,
+        );
+      }
+    }
   }
 
   void _getFingerprintMode() async {

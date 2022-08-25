@@ -102,14 +102,26 @@ class AccountView extends GetView<AccountController> {
                         SizedBox(
                           height: 5.h,
                         ),
-                        CardItem(
-                          onPress: () {
-                            // TO DO
-                          },
-                          icon: Icons.credit_card,
-                          text: 'Trạng thái thẻ',
-                          description: 'Đã liên kết',
-                          color: AppColors.hardBlue,
+                        Obx(
+                          () => CardItem(
+                            onPress: () {
+                              controller.toggleCardStatus();
+                            },
+                            icon: Icons.credit_card,
+                            text: 'Trạng thái thẻ',
+                            description: controller.cardStatus.value
+                                ? 'Đã liên kết'
+                                : 'Chưa liên kết',
+                            color: AppColors.hardBlue,
+                            child: IgnorePointer(
+                              ignoring: true,
+                              child: Switch(
+                                activeColor: AppColors.primary400,
+                                onChanged: (value) {},
+                                value: controller.cardStatus.value,
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),

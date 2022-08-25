@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/base/base_controller.dart';
 import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/data/models/activity_model.dart';
-import 'package:hyper_customer/app/data/models/order_model.dart';
 import 'package:hyper_customer/app/data/repository/repository.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
 
@@ -63,7 +62,9 @@ class ActivityController extends BaseController
       onSuccess: (Activity response) {
         result = response;
       },
-      onError: (DioError dioError) {},
+      onError: (DioError dioError) {
+        result = null;
+      },
     );
 
     bool flag = false;

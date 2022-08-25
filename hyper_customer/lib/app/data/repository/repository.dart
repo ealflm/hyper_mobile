@@ -29,6 +29,8 @@ abstract class Repository {
 
   Future<bool> removeCard(String customerId);
 
+  Future<bool> getCardStatus(String customerId);
+
   Future<RentStations> getRentStations();
 
   Future<VehicleRental> getVehicleRental(String id);

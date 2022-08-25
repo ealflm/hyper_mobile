@@ -134,6 +134,20 @@ class RepositoryImpl extends BaseRepository implements Repository {
   }
 
   @override
+  Future<bool> getCardStatus(String customerId) {
+    var endpoint = "${DioProvider.baseUrl}/card-match/$customerId";
+    var dioCall = dioTokenClient.get(endpoint);
+
+    try {
+      return callApi(dioCall).then((response) {
+        return true;
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
   Future<RentStations> getRentStations() {
     var endpoint = "${DioProvider.baseUrl}/rentStation/list";
     var param = {

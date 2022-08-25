@@ -66,7 +66,9 @@ class PackageController extends BaseController
       onSuccess: (List<Package> response) {
         packages(response);
       },
-      onError: (dioError) {},
+      onError: (dioError) {
+        packages(null);
+      },
     );
   }
 

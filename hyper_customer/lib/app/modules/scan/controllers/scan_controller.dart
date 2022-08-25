@@ -104,7 +104,17 @@ class ScanController extends GetxController {
         );
 
         await qrController?.resumeCamera();
+      } else if (data.startsWith(AppValues.cardLinkQRPrefix) &&
+          (scanMode.value == ScanMode.cardFromAccount ||
+              scanMode.value == ScanMode.all)) {
+        var code = data.substring(AppValues.cardLinkQRPrefix.length);
+        qrController?.pauseCamera();
+
+        Get.back(result: code);
+
+        await qrController?.resumeCamera();
       } else {
+        qrController?.pauseCamera();
         HyperDialog.show(
           title: 'Không hỗ trợ',
           content: 'Hyper không hỗ trợ đọc QR code này',
