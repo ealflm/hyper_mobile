@@ -287,6 +287,8 @@ class BookingDirectionController extends BaseController {
       id: customerId,
       latitude: startPlaceLocation?.latitude ?? 0.0,
       longitude: startPlaceLocation?.longitude ?? 0.0,
+      endLatitude: endPlaceLocation?.latitude ?? 0.0,
+      endLongitude: endPlaceLocation?.longitude ?? 0.0,
       priceBookingId: motocyclePrice.value?.priceOfBookingServiceId ?? '',
       price: motocyclePrice.value?.totalPrice ?? 0.0,
       distance: distance,
