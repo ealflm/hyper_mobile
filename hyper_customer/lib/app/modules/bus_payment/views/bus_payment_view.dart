@@ -168,7 +168,7 @@ class BusPaymentView extends GetView<BusPaymentController> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: controller.busPaymentSecond,
+            onPressed: controller.busPayment,
             style: ButtonStyles.primary(),
             child: Text(
               'Thanh toán',
@@ -265,33 +265,80 @@ class BusPaymentView extends GetView<BusPaymentController> {
                     SizedBox(
                       height: 10.h,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Tổng tiền',
-                              style: subtitle1.copyWith(
-                                fontWeight: FontWeights.regular,
-                                color: AppColors.lightBlack,
-                              ),
+                    Obx(
+                      () => controller.busTrip.value?.isUsePackage == false
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Tổng tiền',
+                                      style: subtitle1.copyWith(
+                                        fontWeight: FontWeights.regular,
+                                        color: AppColors.lightBlack,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text(
+                                      NumberUtils.vnd(
+                                          controller.busTrip.value?.price),
+                                      style: subtitle1.copyWith(
+                                        color: AppColors.softBlack,
+                                        fontWeight: FontWeights.medium,
+                                        fontSize: 18.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Tổng tiền',
+                                      style: subtitle1.copyWith(
+                                        fontWeight: FontWeights.regular,
+                                        color: AppColors.lightBlack,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text(
+                                      NumberUtils.vnd(
+                                          controller.busTrip.value?.price),
+                                      style: subtitle1.copyWith(
+                                        decoration: TextDecoration.lineThrough,
+                                        color: AppColors.gray,
+                                        fontWeight: FontWeights.medium,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Sử dụng gói dịch vụ',
+                                      style: subtitle1.copyWith(
+                                        color: AppColors.softBlack,
+                                      ),
+                                    ),
+                                    Text(
+                                      NumberUtils.vnd(0),
+                                      style: subtitle1.copyWith(
+                                        color: AppColors.softBlack,
+                                        fontWeight: FontWeights.medium,
+                                        fontSize: 18.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Text(
-                              NumberUtils.vnd(controller.busTrip.value?.price),
-                              style: subtitle1.copyWith(
-                                color: AppColors.softBlack,
-                                fontWeight: FontWeights.medium,
-                                fontSize: 18.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
                     ),
                   ],
                 )
@@ -405,25 +452,43 @@ class BusPaymentView extends GetView<BusPaymentController> {
             SizedBox(
               height: 10.h,
             ),
-            Text(
-              'Giao dịch thành công',
-              style: subtitle1.copyWith(
-                fontWeight: FontWeights.medium,
-                color: AppColors.lightBlack,
-              ),
+            Obx(
+              () => controller.busTrip.value?.isUsePackage == false
+                  ? Column(
+                      children: [
+                        Text(
+                          'Giao dịch thành công',
+                          style: subtitle1.copyWith(
+                            fontWeight: FontWeights.medium,
+                            color: AppColors.lightBlack,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Text(
+                          NumberUtils.vnd(controller.busTrip.value?.price),
+                          style: h5.copyWith(
+                            fontWeight: FontWeights.medium,
+                            color: AppColors.softBlack,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Text(
+                          'Sử dụng gói dịch vụ thành công',
+                          style: subtitle1.copyWith(
+                            fontWeight: FontWeights.medium,
+                            color: AppColors.lightBlack,
+                          ),
+                        ),
+                      ],
+                    ),
             ),
             SizedBox(
-              height: 5.h,
-            ),
-            Text(
-              NumberUtils.vnd(controller.busTrip.value?.price),
-              style: h5.copyWith(
-                fontWeight: FontWeights.medium,
-                color: AppColors.softBlack,
-              ),
-            ),
-            SizedBox(
-              height: 20.h,
+              height: 30.h,
             ),
             Obx(
               () => controller.busTrip.value != null

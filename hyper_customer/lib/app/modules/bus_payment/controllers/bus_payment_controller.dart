@@ -80,8 +80,8 @@ class BusPaymentController extends BaseController {
 
     await callDataService(
       busPaymentService,
-      onSuccess: (bool response) {
-        state.value = response ? ViewState.success : ViewState.error;
+      onSuccess: (int response) {
+        state.value = ViewState.success;
       },
       onError: (DioError dioError) {
         state.value = ViewState.error;
@@ -110,8 +110,8 @@ class BusPaymentController extends BaseController {
 
     await callDataService(
       busPaymentService,
-      onSuccess: (bool response) {
-        state.value = response ? ViewState.done : ViewState.error;
+      onSuccess: (int response) {
+        state.value = ViewState.done;
       },
       onError: (DioError dioError) {
         state.value = ViewState.error;

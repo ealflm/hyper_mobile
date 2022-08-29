@@ -3,6 +3,7 @@ class BusTrip {
   int? totalStation;
   int? distance;
   double? price;
+  bool? isUsePackage;
 
   BusTrip({this.name, this.totalStation, this.distance, this.price});
 
@@ -11,6 +12,7 @@ class BusTrip {
     totalStation = int.tryParse(json['totalStation'].toString());
     distance = int.tryParse(json['distance'].toStringAsFixed(0));
     price = double.tryParse(json['price'].toString());
+    isUsePackage = json['isUsePackage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,7 @@ class BusTrip {
     data['totalStation'] = totalStation;
     data['distance'] = distance;
     data['price'] = price;
+    data['isUsePackage'] = isUsePackage;
     return data;
   }
 }

@@ -242,7 +242,7 @@ class RepositoryImpl extends BaseRepository implements Repository {
   }
 
   @override
-  Future<bool> busPayment({
+  Future<int> busPayment({
     required String customerId,
     required String uid,
     required LatLng location,
@@ -259,7 +259,7 @@ class RepositoryImpl extends BaseRepository implements Repository {
 
     try {
       return callApi(dioCall).then((response) {
-        return true;
+        return response.statusCode ?? 0;
       });
     } catch (e) {
       rethrow;

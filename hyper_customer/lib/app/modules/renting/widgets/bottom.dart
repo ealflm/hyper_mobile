@@ -5,6 +5,7 @@ import 'package:hyper_customer/app/core/utils/date_time_utils.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/box_decorations.dart';
 import 'package:hyper_customer/app/core/values/button_styles.dart';
+import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_button.dart';
 import 'package:hyper_customer/app/modules/renting/controllers/renting_controller.dart';
@@ -214,22 +215,54 @@ class Bottom extends GetWidget<RentingController> {
                       color: AppColors.description,
                     ),
                   ),
+                  const Divider(),
                   if (controller.selectedStation.value?.totalVehicle == 0)
                     Text(
                       'Tạm thời hết xe cho thuê',
                       style: body1.copyWith(
                         color: AppColors.softRed,
+                        fontWeight: FontWeights.medium,
                       ),
                     )
                   else
-                    Text(
-                      'Số xe có thể thuê: ${controller.selectedStation.value?.totalVehicle}',
-                      style: body1.copyWith(
-                        color: AppColors.softBlack,
+                    RichText(
+                      text: TextSpan(
+                        text: 'Số xe có thể thuê: ',
+                        style: subtitle1.copyWith(
+                          color: AppColors.softBlack,
+                        ),
+                        children: [
+                          TextSpan(
+                            text:
+                                '${controller.selectedStation.value?.totalVehicle}',
+                            style: subtitle1.copyWith(
+                              color: AppColors.softBlack,
+                              fontWeight: FontWeights.medium,
+                            ),
+                          )
+                        ],
                       ),
                     ),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Công ty vận tải: ',
+                      style: subtitle1.copyWith(
+                        color: AppColors.softBlack,
+                      ),
+                      children: [
+                        TextSpan(
+                          text:
+                              '${controller.selectedStation.value?.companyName}',
+                          style: subtitle1.copyWith(
+                            color: AppColors.softBlack,
+                            fontWeight: FontWeights.medium,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                   SizedBox(
-                    height: 10.h,
+                    height: 20.h,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,

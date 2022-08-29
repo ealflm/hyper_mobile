@@ -46,7 +46,7 @@ abstract class Repository {
 
   Future<BusTrip> getBusTrip(String id, String customerId);
 
-  Future<bool> busPayment({
+  Future<int> busPayment({
     required String customerId,
     required String uid,
     required LatLng location,
