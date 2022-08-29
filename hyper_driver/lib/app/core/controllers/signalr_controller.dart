@@ -212,7 +212,7 @@ class SignalR extends BaseController {
     // Get place
 
     customerName.value =
-        mapper['customer']['firstName'] + mapper['customer']['lastName'];
+        mapper['customer']['firstName'] + ' ' + mapper['customer']['lastName'];
     customerPhone.value = mapper['customer']['phone'];
 
     startLocation.value = LatLng(

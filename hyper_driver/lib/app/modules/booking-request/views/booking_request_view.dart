@@ -58,10 +58,10 @@ class BookingRequestView extends GetView<BookingRequestController> {
                     height: 20.h,
                   ),
                   _searchInput(),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  _distance(),
+                  // SizedBox(
+                  //   height: 10.h,
+                  // ),
+                  // _distance(),
                 ],
               ),
               Row(

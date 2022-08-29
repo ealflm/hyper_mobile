@@ -206,16 +206,7 @@ class LoginController extends BaseController {
         password!,
       );
 
-      String route = Routes.MAIN;
-
-      bool isBooking = TokenManager.instance.isBookingRole();
-      if (isBooking) {
-        route = '${Routes.MAIN}?appInit=true&isBooking=true';
-      } else {
-        route = '${Routes.MAIN}?appInit=true';
-      }
-
-      Get.offAllNamed(route);
+      Get.offAllNamed('${Routes.MAIN}?appInit=true');
     }
   }
 
@@ -246,16 +237,7 @@ class LoginController extends BaseController {
         password,
       );
 
-      String route = Routes.MAIN;
-
-      bool isBooking = TokenManager.instance.isBookingRole();
-      if (isBooking) {
-        route = '${Routes.MAIN}?appInit=true&isBooking=true';
-      } else {
-        route = '${Routes.MAIN}?appInit=true';
-      }
-
-      Get.offAllNamed(route);
+      Get.offAllNamed('${Routes.MAIN}?appInit=true');
     }
   }
 

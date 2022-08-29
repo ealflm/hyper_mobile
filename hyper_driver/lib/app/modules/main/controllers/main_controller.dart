@@ -16,6 +16,7 @@ import 'package:hyper_driver/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_driver/app/modules/notification/controllers/notification_controller.dart';
 import 'package:hyper_driver/app/modules/notification/views/notification_view.dart';
+import 'package:hyper_driver/app/network/dio_token_manager.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
@@ -45,7 +46,7 @@ class MainController extends GetxController {
       app.NotificationController.instance.registerNotification();
     }
 
-    if (Get.parameters['isBooking'] == 'true') {
+    if (TokenManager.instance.isBookingRole()) {
       isBooking.value = true;
     } else {
       currentTab.value = 2;

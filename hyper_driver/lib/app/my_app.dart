@@ -21,12 +21,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     String initialRoute = AppPages.INITIAL;
     if (TokenManager.instance.hasToken) {
-      bool isBooking = TokenManager.instance.isBookingRole();
-      if (isBooking) {
-        initialRoute = '${Routes.MAIN}?appInit=true&isBooking=true';
-      } else {
-        initialRoute = '${Routes.MAIN}?appInit=true';
-      }
+      initialRoute = '${Routes.MAIN}?appInit=true';
     }
 
     return ScreenUtilInit(
