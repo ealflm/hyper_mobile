@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/values/box_decorations.dart';
 import 'package:hyper_driver/app/core/values/button_styles.dart';
@@ -132,26 +133,37 @@ class BookingRequestView extends GetView<BookingRequestController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _start(
-                      title: '117 Nguyễn Đình Chiểu',
-                      content: '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
-                    ),
-                    _space(),
-                    _end(
-                      title: '117 Nguyễn Đình Chiểu',
-                      content: '117 Nguyễn Đình Chiểu, Quận 3, TP Hồ Chí Minh',
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          Obx(
+            () => SignalR.instance.startPlace.value != null &&
+                    SignalR.instance.endLocation.value != null
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            _start(
+                              title:
+                                  SignalR.instance.startPlace.value?.name ?? '',
+                              content: SignalR.instance.startPlace.value
+                                      ?.formattedAddress ??
+                                  '',
+                            ),
+                            _space(),
+                            _end(
+                              title:
+                                  SignalR.instance.endPlace.value?.name ?? '',
+                              content: SignalR.instance.endPlace.value
+                                      ?.formattedAddress ??
+                                  '',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                : const Text('Đã có lỗi xảy ra'),
           ),
         ],
       ),

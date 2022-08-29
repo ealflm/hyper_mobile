@@ -4,8 +4,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hyper_driver/app/core/base/base_controller.dart';
 import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
 import 'package:hyper_driver/app/core/model/driver_response_model.dart';
+import 'package:hyper_driver/app/data/models/place_detail_model.dart';
+import 'package:hyper_driver/app/data/repository/goong_repository.dart';
+import 'package:hyper_driver/app/data/repository/goong_repository_impl.dart';
 import 'package:hyper_driver/app/modules/pick-up/controllers/pick_up_controller.dart';
 import 'package:hyper_driver/app/modules/pick-up/models/view_state.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
@@ -21,7 +25,7 @@ enum HubState {
   connected,
 }
 
-class SignalR {
+class SignalR extends BaseController {
   static final SignalR _instance = SignalR._internal();
   static SignalR get instance => _instance;
   SignalR._internal();
@@ -189,11 +193,34 @@ class SignalR {
     Get.offAllNamed(Routes.MAIN);
   }
 
+  Rx<LatLng?> startLocation = Rx<LatLng?>(null);
+  Rx<LatLng?> endLocation = Rx<LatLng?>(null);
+
+  Rx<PlaceDetail?> startPlace = Rx<PlaceDetail?>(null);
+  Rx<PlaceDetail?> endPlace = Rx<PlaceDetail?>(null);
+
   void _bookingRequest(List<Object>? parameters) async {
     debugPrint('SignalR: Booking request');
 
     var mapper = parameters?[0] as Map<String, dynamic>;
+
     var driver = jsonEncode(DriverResponseModel.fromJson(mapper).toJson());
+
+    // Get place
+
+    startLocation.value = LatLng(
+      mapper['customer']['latitude'],
+      mapper['customer']['longitude'],
+    );
+    endLocation.value = LatLng(
+      mapper['customer']['endLatitude'],
+      mapper['customer']['endLongitude'],
+    );
+    startPlace.value =
+        await fetchPlaceDetail(startLocation.value ?? LatLng(0, 0));
+    endPlace.value = await fetchPlaceDetail(endLocation.value ?? LatLng(0, 0));
+
+    // Get place
 
     var result = await Get.toNamed(Routes.BOOKING_REQUEST);
 
@@ -330,4 +357,41 @@ class SignalR {
       return false;
     }
   }
+
+  // Region API
+
+  Future<PlaceDetail?> fetchPlaceDetail(LatLng location) async {
+    PlaceDetail? result;
+
+    GoongRepository repository = Get.find(tag: (GoongRepository).toString());
+
+    var placeIdService = repository.getPlaceId(location);
+    String? placeId;
+
+    await callDataService(
+      placeIdService,
+      onSuccess: (String response) {
+        placeId = response;
+      },
+      onError: (dioError) {},
+    );
+
+    if (placeId == null) {
+      return result;
+    }
+
+    var placeDetailService = repository.getPlaceDetail(placeId!);
+
+    await callDataService(
+      placeDetailService,
+      onSuccess: (PlaceDetail response) {
+        result = response;
+      },
+      onError: (dioError) {},
+    );
+
+    return result;
+  }
+
+  // End Region
 }

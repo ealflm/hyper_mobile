@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:hyper_driver/app/bindings/initial_binding.dart';
 import 'package:hyper_driver/app/core/controllers/network_controller.dart';
 import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
+import 'package:hyper_driver/app/data/repository/goong_repository.dart';
+import 'package:hyper_driver/app/data/repository/goong_repository_impl.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/config/map_config.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -14,6 +18,12 @@ import 'config/env_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  Get.lazyPut<GoongRepository>(
+    () => GoongRepositoryImpl(),
+    tag: (GoongRepository).toString(),
+    fenix: true,
+  );
 
   Logger.root.level = Level.ALL;
   Logger.root.onRecord.listen((LogRecord rec) {

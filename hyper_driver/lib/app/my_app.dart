@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:hyper_driver/app/bindings/initial_binding.dart';
 import 'package:hyper_driver/app/core/values/app_colors.dart';
 import 'package:hyper_driver/app/core/widgets/scroll_behavior.dart';
+import 'package:hyper_driver/app/data/repository/goong_repository.dart';
+import 'package:hyper_driver/app/data/repository/goong_repository_impl.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
 import 'package:hyper_driver/app/routes/app_pages.dart';
 
