@@ -9,8 +9,6 @@ import 'package:hyper_customer/app/modules/activity/controllers/activity_control
 import 'package:hyper_customer/app/modules/home/controllers/home_controller.dart';
 import 'package:hyper_customer/app/modules/package/controllers/package_controller.dart';
 import 'package:hyper_customer/app/network/dio_token_manager.dart';
-import 'package:hyper_customer/app/modules/notification/controllers/notification_controller.dart'
-    as nt;
 
 import '../../../config/firebase_options.dart';
 

@@ -62,5 +62,7 @@ abstract class Repository {
 
   Future<bool> registerNotification(String customerId, String code);
 
-  Future<List<Notification>> getNotifications(String customerId);
+  Future<List<Notification>> getNotifications(String driverId);
+
+  Future<bool> clearNotifications(String driverId);
 }

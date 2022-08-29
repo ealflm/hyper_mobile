@@ -438,8 +438,8 @@ class RepositoryImpl extends BaseRepository implements Repository {
   }
 
   @override
-  Future<List<Notification>> getNotifications(String customerId) {
-    var endpoint = "${DioProvider.baseUrl}/notification/$customerId";
+  Future<List<Notification>> getNotifications(String driverId) {
+    var endpoint = "${DioProvider.baseUrl}/notification/$driverId";
 
     var dioCall = dioTokenClient.get(endpoint);
 
@@ -451,6 +451,23 @@ class RepositoryImpl extends BaseRepository implements Repository {
             result.add(Notification.fromJson(v));
           });
           return result;
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> clearNotifications(String driverId) {
+    var endpoint = "${DioProvider.baseUrl}/notification/$driverId";
+
+    var dioCall = dioTokenClient.put(endpoint);
+
+    try {
+      return callApi(dioCall).then(
+        (response) {
+          return true;
         },
       );
     } catch (e) {

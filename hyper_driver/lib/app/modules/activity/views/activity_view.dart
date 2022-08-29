@@ -21,16 +21,12 @@ class ActivityView extends GetView<ActivityController> {
             child: Column(
               children: [
                 _header(),
-                SizedBox(height: 8.h),
-                GetBuilder<ActivityController>(
-                  init: ActivityController(),
-                  initState: (_) {},
-                  builder: (_) {
-                    return PageStorage(
-                      bucket: controller.bucket,
-                      child: controller.currentScreen,
-                    );
-                  },
+                SizedBox(
+                  height: 30.h,
+                ),
+                Text(
+                  'Tính năng chưa được phát triển',
+                  style: subtitle1.copyWith(color: AppColors.softBlack),
                 ),
               ],
             ),

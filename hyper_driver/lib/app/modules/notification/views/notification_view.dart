@@ -16,20 +16,23 @@ class NotificationView extends GetView<NotificationController> {
   Widget build(BuildContext context) {
     RefreshController refreshController =
         RefreshController(initialRefresh: false);
-    double statusBarHeight = MediaQuery.of(context).padding.top;
 
     return Scaffold(
       //extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios_new,
-            color: Colors.black,
-            size: 18.r,
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(
+              shape: const CircleBorder(),
+              primary: AppColors.softBlack,
+            ),
+            onPressed: controller.clearNotifications,
+            child: Icon(
+              Icons.delete_sweep_outlined,
+              size: 26.r,
+            ),
           ),
-          onPressed: () => Get.back(),
-        ),
-        titleSpacing: 0,
+        ],
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         foregroundColor: AppColors.black,
@@ -42,6 +45,7 @@ class NotificationView extends GetView<NotificationController> {
           ),
         ),
       ),
+
       body: Obx(
         () => SizedBox(
           width: double.infinity,

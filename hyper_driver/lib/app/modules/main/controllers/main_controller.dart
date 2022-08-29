@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/controllers/hyper_map_controller.dart';
-import 'package:hyper_driver/app/core/controllers/notification_controller.dart';
+import 'package:hyper_driver/app/core/controllers/notification_controller.dart'
+    as app;
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
 import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/utils/utils.dart';
@@ -12,20 +13,20 @@ import 'package:hyper_driver/app/modules/account/views/account_view.dart';
 import 'package:hyper_driver/app/modules/activity/controllers/activity_controller.dart';
 import 'package:hyper_driver/app/modules/activity/views/activity_view.dart';
 import 'package:hyper_driver/app/modules/home/controllers/home_controller.dart';
-import 'package:hyper_driver/app/modules/package/controllers/package_controller.dart';
-import 'package:hyper_driver/app/modules/package/views/package_view.dart';
+import 'package:hyper_driver/app/modules/notification/controllers/notification_controller.dart';
+import 'package:hyper_driver/app/modules/notification/views/notification_view.dart';
 
 class MainController extends GetxController {
   late HomeController _homeController;
   late ActivityController _activityController;
-  late PackageController _packageController;
+  late NotificationController _notificationController;
   late AccountController _accountController;
 
   var currentTab = 0.obs;
   final List<Widget> _screens = [
     Container(),
     const ActivityView(),
-    const PackageView(),
+    const NotificationView(),
     const AccountView(),
   ];
 
@@ -38,7 +39,7 @@ class MainController extends GetxController {
   void onInit() async {
     if (Get.parameters['appInit'] == 'true') {
       SignalR.instance.start();
-      NotificationController.instance.registerNotification();
+      app.NotificationController.instance.registerNotification();
     }
 
     initController();
@@ -65,11 +66,11 @@ class MainController extends GetxController {
     _activityController.init();
 
     Get.put(
-      PackageController(),
+      NotificationController(),
       permanent: true,
     );
-    _packageController = Get.find<PackageController>();
-    _packageController.init();
+    _notificationController = Get.find<NotificationController>();
+    _notificationController.init();
 
     Get.put(
       AccountController(),

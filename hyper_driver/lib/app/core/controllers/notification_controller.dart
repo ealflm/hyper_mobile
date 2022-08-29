@@ -5,6 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/data/repository/repository.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
+import 'package:hyper_driver/app/modules/notification/controllers/notification_controller.dart'
+    as nt;
 
 import '../../../config/firebase_options.dart';
 
@@ -59,9 +61,22 @@ class NotificationController {
           ),
         );
       }
+
+      loadAll();
     });
 
     // FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
+  late nt.NotificationController _notificationController;
+
+  void loadAll() {
+    Get.put(
+      nt.NotificationController(),
+      permanent: true,
+    );
+    _notificationController = Get.find<nt.NotificationController>();
+    _notificationController.init();
   }
 
   Future<void> _firebaseMessagingBackgroundHandler(

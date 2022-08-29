@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:hyper_driver/app/core/base/base_controller.dart';
 import 'package:hyper_driver/app/core/utils/date_time_utils.dart';
+import 'package:hyper_driver/app/core/utils/utils.dart';
 import 'package:hyper_driver/app/data/models/notification_model.dart';
 import 'package:hyper_driver/app/data/repository/repository.dart';
 import 'package:hyper_driver/app/network/dio_token_manager.dart';
@@ -22,9 +23,9 @@ class NotificationController extends BaseController {
   }
 
   Future<void> fetchNotifications() async {
-    String customerId = TokenManager.instance.user?.driverId ?? '';
+    String driverId = TokenManager.instance.user?.driverId ?? '';
 
-    var notificationService = _repository.getNotifications(customerId);
+    var notificationService = _repository.getNotifications(driverId);
 
     List<Notification> result = [];
 
@@ -50,5 +51,23 @@ class NotificationController extends BaseController {
     }
 
     notifications(result);
+  }
+
+  Future<void> clearNotifications() async {
+    String driverId = TokenManager.instance.user?.driverId ?? '';
+
+    var notificationService = _repository.clearNotifications(driverId);
+
+    await callDataService(
+      notificationService,
+      onSuccess: (bool response) {
+        Utils.showToast('Đã xoá thông báo');
+      },
+      onError: ((dioError) {
+        Utils.showToast('Không thể kết nối');
+      }),
+    );
+
+    fetchNotifications();
   }
 }
