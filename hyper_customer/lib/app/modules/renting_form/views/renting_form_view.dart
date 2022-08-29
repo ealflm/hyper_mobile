@@ -270,14 +270,14 @@ class RentingFormView extends GetView<RentingFormController> {
               height: 10.h,
             ),
             Text(
-              'Kết nối thất bại',
+              'Không thể thanh toán',
               style: h6.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
               ),
             ),
             Text(
-              'Đã có lỗi xảy ra trong quá trình xử lí',
+              'Số dư không đủ',
               style: subtitle1.copyWith(
                 color: AppColors.lightBlack,
               ),
@@ -344,14 +344,14 @@ class RentingFormView extends GetView<RentingFormController> {
               height: 10.h,
             ),
             Text(
-              'Kết nối thất bại',
+              'Không thể thuê',
               style: h6.copyWith(
                 fontWeight: FontWeights.medium,
                 color: AppColors.softBlack,
               ),
             ),
             Text(
-              'Đã có lỗi xảy ra trong quá trình xử lí',
+              'Xe đã được thuê',
               style: subtitle1.copyWith(
                 color: AppColors.lightBlack,
               ),

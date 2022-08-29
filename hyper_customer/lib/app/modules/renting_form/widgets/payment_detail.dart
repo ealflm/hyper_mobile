@@ -62,11 +62,24 @@ class PaymentDetail extends GetView<RentingFormController> {
               width: 10.w,
             ),
             Expanded(
-              child: Text(
-                'Phí thu hồi xe sẽ được hoàn trả sau khi xe được trả lại đúng thời hạn',
-                style: body2.copyWith(
-                  color: AppColors.description,
-                ),
+              child: Column(
+                children: [
+                  Text(
+                    'Phí thu hồi xe sẽ được hoàn trả sau khi xe được trả lại đúng thời hạn',
+                    style: body2.copyWith(
+                      color: AppColors.description,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.h,
+                  ),
+                  Text(
+                    'Yêu cầu trả xe đúng trạm của công ty vận tải',
+                    style: body2.copyWith(
+                      color: AppColors.description,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

@@ -56,9 +56,13 @@ class RentingFormController extends BaseController
   void payment() async {
     state.value = ViewState.loading;
     bool orderCreated = await createOrder();
-    bool rentCustomerTripCreated = await createRentCustomerTrip();
-    if (orderCreated && rentCustomerTripCreated) {
-      state.value = ViewState.paymentSuccessful;
+    if (orderCreated) {
+      bool rentCustomerTripCreated = await createRentCustomerTrip();
+      if (orderCreated && rentCustomerTripCreated) {
+        state.value = ViewState.paymentSuccessful;
+      } else {
+        state.value = ViewState.paymentFailed;
+      }
     } else {
       state.value = ViewState.paymentFailed;
     }
