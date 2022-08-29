@@ -82,7 +82,6 @@ class RentingFormController extends BaseController
           modePrice: 1,
         ),
         OrderDetailsInfos(
-          priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
           content: 'Phí thu hồi xe',
           quantity: 1,
           price: AppValues.recallFee.toInt(),
@@ -101,7 +100,6 @@ class RentingFormController extends BaseController
           modePrice: 0,
         ),
         OrderDetailsInfos(
-          priceOfRentingServiceId: vehicleRental?.priceOfRentingServiceId ?? '',
           content: 'Phí thu hồi xe',
           quantity: 1,
           price: AppValues.recallFee.toInt(),
