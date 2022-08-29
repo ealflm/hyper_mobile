@@ -210,6 +210,23 @@ class SignalR {
     Get.find<BookingDirectionController>().getOffFeedBack(customerTripId);
   }
 
+  Future<List<LatLng>> getMatchingDriverInfos() async {
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    String? str = await connection.invoke(
+      "GetDriverByCustomer",
+      args: [customerId],
+    ) as String;
+
+    Map<String, dynamic> map = jsonDecode(str);
+
+    List<LatLng> result = <LatLng>[];
+
+    result.add(LatLng(map['Latitude'], map['Longitude']));
+
+    return result;
+  }
+
   Future<List<LatLng>> getDriverInfos(LatLng location) async {
     String customerId = TokenManager.instance.user?.customerId ?? '';
     var data = {

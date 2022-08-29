@@ -376,8 +376,8 @@ class Bottom extends GetWidget<BookingDirectionController> {
     return SlidingUpPanel(
       color: Colors.transparent,
       boxShadow: const [],
-      maxHeight: 530.h,
-      minHeight: 270.h,
+      maxHeight: 540.h,
+      minHeight: 300.h,
       panelBuilder: (sc) {
         return SingleChildScrollView(
           controller: sc,
@@ -447,13 +447,13 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                       ],
                                     ),
                                   ),
-                                  Text(
-                                    '100 phút',
-                                    style: subtitle1.copyWith(
-                                      color: AppColors.softBlack,
-                                      fontWeight: FontWeights.medium,
-                                    ),
-                                  ),
+                                  // Text(
+                                  //   '100 phút',
+                                  //   style: subtitle1.copyWith(
+                                  //     color: AppColors.softBlack,
+                                  //     fontWeight: FontWeights.medium,
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ],
@@ -494,11 +494,23 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                         ),
                                         Obx(
                                           () {
-                                            return Text(
-                                              '${controller.driverResponse.value?.driver?.lastName} ${controller.driverResponse.value?.driver?.firstName}',
-                                              style: subtitle1.copyWith(
-                                                color: AppColors.softBlack,
-                                              ),
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${controller.driverResponse.value?.driver?.lastName} ${controller.driverResponse.value?.driver?.firstName}',
+                                                  style: subtitle1.copyWith(
+                                                    color: AppColors.softBlack,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${controller.driverResponse.value?.driver?.phone}',
+                                                  style: subtitle2.copyWith(
+                                                    color: AppColors.softBlack,
+                                                  ),
+                                                ),
+                                              ],
                                             );
                                           },
                                         ),
@@ -688,8 +700,8 @@ class Bottom extends GetWidget<BookingDirectionController> {
     return SlidingUpPanel(
       color: Colors.transparent,
       boxShadow: const [],
-      maxHeight: 530.h,
-      minHeight: 270.h,
+      maxHeight: 540.h,
+      minHeight: 300.h,
       panelBuilder: (sc) {
         return SingleChildScrollView(
           controller: sc,
@@ -806,11 +818,23 @@ class Bottom extends GetWidget<BookingDirectionController> {
                                         ),
                                         Obx(
                                           () {
-                                            return Text(
-                                              '${controller.driverResponse.value?.driver?.lastName} ${controller.driverResponse.value?.driver?.firstName}',
-                                              style: subtitle1.copyWith(
-                                                color: AppColors.softBlack,
-                                              ),
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  '${controller.driverResponse.value?.driver?.lastName} ${controller.driverResponse.value?.driver?.firstName}',
+                                                  style: subtitle1.copyWith(
+                                                    color: AppColors.softBlack,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${controller.driverResponse.value?.driver?.phone}',
+                                                  style: subtitle2.copyWith(
+                                                    color: AppColors.softBlack,
+                                                  ),
+                                                ),
+                                              ],
                                             );
                                           },
                                         ),

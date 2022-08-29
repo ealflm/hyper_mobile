@@ -313,9 +313,15 @@ class BookingDirectionController extends BaseController {
   }
 
   void fetchDriverInfos() async {
-    driverInfos.value = await SignalR.instance.getDriverInfos(
-      startPlaceLocation ?? LatLng(0, 0),
-    );
+    if (bookingState.value == BookingState.select ||
+        bookingState.value == BookingState.finding ||
+        bookingState.value == BookingState.failed) {
+      driverInfos.value = await SignalR.instance.getDriverInfos(
+        startPlaceLocation ?? LatLng(0, 0),
+      );
+    } else {
+      driverInfos.value = await SignalR.instance.getMatchingDriverInfos();
+    }
 
     List<Marker> markers = [];
     for (LatLng item in driverInfos.value) {
