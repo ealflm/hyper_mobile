@@ -72,11 +72,24 @@ class Finished extends GetView<PickUpController> {
                         color: AppColors.lightBlack,
                       ),
                     ),
-                    Text(
-                      'Baroibeo',
-                      style: subtitle1.copyWith(
-                        fontSize: 18.sp,
-                        color: AppColors.softBlack,
+                    Obx(
+                      () => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            SignalR.instance.customerName.value,
+                            style: subtitle1.copyWith(
+                              fontSize: 18.sp,
+                              color: AppColors.softBlack,
+                            ),
+                          ),
+                          Text(
+                            SignalR.instance.customerPhone.value,
+                            style: subtitle1.copyWith(
+                              color: AppColors.softBlack,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -117,23 +130,25 @@ class Finished extends GetView<PickUpController> {
             width: 10.w,
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '117 Nguyễn Đình Chiểu',
-                  style: subtitle1.copyWith(
-                    fontSize: 18.sp,
-                    color: AppColors.softBlack,
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    SignalR.instance.endPlace.value?.name ?? '',
+                    style: subtitle1.copyWith(
+                      fontSize: 18.sp,
+                      color: AppColors.softBlack,
+                    ),
                   ),
-                ),
-                Text(
-                  '117 Nguyễn Đình Chiểu, Phường 6, Quận 3, Hồ Chí Minh',
-                  style: body2.copyWith(
-                    color: AppColors.lightBlack,
+                  Text(
+                    SignalR.instance.endPlace.value?.formattedAddress ?? '',
+                    style: body2.copyWith(
+                      color: AppColors.lightBlack,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

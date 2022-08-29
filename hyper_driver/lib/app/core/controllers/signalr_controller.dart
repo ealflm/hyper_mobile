@@ -199,6 +199,9 @@ class SignalR extends BaseController {
   Rx<PlaceDetail?> startPlace = Rx<PlaceDetail?>(null);
   Rx<PlaceDetail?> endPlace = Rx<PlaceDetail?>(null);
 
+  Rx<String> customerName = Rx<String>('');
+  Rx<String> customerPhone = Rx<String>('');
+
   void _bookingRequest(List<Object>? parameters) async {
     debugPrint('SignalR: Booking request');
 
@@ -207,6 +210,10 @@ class SignalR extends BaseController {
     var driver = jsonEncode(DriverResponseModel.fromJson(mapper).toJson());
 
     // Get place
+
+    customerName.value =
+        mapper['customer']['firstName'] + mapper['customer']['lastName'];
+    customerPhone.value = mapper['customer']['phone'];
 
     startLocation.value = LatLng(
       mapper['customer']['latitude'],
