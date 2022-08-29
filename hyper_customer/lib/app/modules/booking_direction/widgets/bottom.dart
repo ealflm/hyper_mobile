@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/number_utils.dart';
+import 'package:hyper_customer/app/core/utils/utils.dart';
 import 'package:hyper_customer/app/core/values/app_animation_assets.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
@@ -192,6 +193,9 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     onPressed: () {
                       controller.changeVehicle(Vehicle.motorcycle);
                     },
+                    priceAfterDiscount:
+                        controller.motocyclePrice.value?.priceAfterDiscount ??
+                            0,
                   ),
                 ),
                 Obx(
@@ -202,8 +206,15 @@ class Bottom extends GetWidget<BookingDirectionController> {
                     isSelected: controller.vehicle.value == Vehicle.car,
                     price: controller.carPrice.value?.totalPrice ?? 0.0,
                     onPressed: () {
-                      controller.changeVehicle(Vehicle.car);
+                      // controller.changeVehicle(Vehicle.car);
+                      HyperDialog.show(
+                        title: 'Chưa phát triển',
+                        content: 'Tính năng chưa được phát triển',
+                        primaryButtonText: 'OK',
+                      );
                     },
+                    priceAfterDiscount:
+                        controller.carPrice.value?.priceAfterDiscount ?? 0,
                   ),
                 ),
               ],

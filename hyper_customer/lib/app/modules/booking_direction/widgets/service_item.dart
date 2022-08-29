@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
@@ -14,6 +15,7 @@ class ServiceItem extends StatelessWidget {
     required this.isSelected,
     required this.onPressed,
     required this.price,
+    required this.priceAfterDiscount,
   }) : super(key: key);
 
   final String svgAsset;
@@ -22,6 +24,7 @@ class ServiceItem extends StatelessWidget {
   final bool isSelected;
   final Function() onPressed;
   final double price;
+  final int priceAfterDiscount;
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +73,30 @@ class ServiceItem extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                  NumberUtils.vnd(price),
-                  style: subtitle2.copyWith(color: AppColors.softBlack),
-                )
+                if (priceAfterDiscount == 0)
+                  Text(
+                    NumberUtils.vnd(price),
+                    style: subtitle2.copyWith(color: AppColors.softBlack),
+                  )
+                else
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        NumberUtils.vnd(price),
+                        style: subtitle2.copyWith(
+                          decoration: TextDecoration.lineThrough,
+                          color: AppColors.softBlack,
+                        ),
+                      ),
+                      Text(
+                        NumberUtils.intToVnd(priceAfterDiscount),
+                        style: subtitle1.copyWith(
+                          color: AppColors.softBlack,
+                        ),
+                      ),
+                    ],
+                  )
               ],
             ),
           ),

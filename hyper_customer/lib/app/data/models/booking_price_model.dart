@@ -2,6 +2,7 @@ class BookingPrice {
   String? priceOfBookingServiceId;
   String? vehicleTypeId;
   int? fixedPrice;
+  int? priceAfterDiscount;
   int? fixedDistance;
   int? pricePerKilometer;
   double? totalPrice;
@@ -21,6 +22,7 @@ class BookingPrice {
     fixedDistance = json['fixedDistance'];
     pricePerKilometer = json['pricePerKilometer'];
     totalPrice = (json['totalPrice'] / 1000.0).round() * 1000.0;
+    priceAfterDiscount = json['priceAfterDiscount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -31,6 +33,7 @@ class BookingPrice {
     data['fixedDistance'] = fixedDistance;
     data['pricePerKilometer'] = pricePerKilometer;
     data['totalPrice'] = totalPrice;
+    data['priceAfterDiscount'] = priceAfterDiscount;
     return data;
   }
 }
