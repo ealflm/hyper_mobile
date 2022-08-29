@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hyper_customer/app/core/widgets/hyper_dialog.dart';
@@ -9,8 +7,6 @@ import 'package:latlong2/latlong.dart';
 class MapLocationController {
   LatLng? location;
   LocationPermission? permission;
-
-  StreamSubscription<Position>? _positionStream;
 
   Future<void> init() async {
     await loadLocation();
@@ -23,33 +19,35 @@ class MapLocationController {
   }
 
   Future<bool> loadLocation() async {
-    if (_positionStream != null) return true;
+    try {
+      location = await _getCurrentLocation();
+      return true;
+    } catch (e) {
+      permission = await Geolocator.checkPermission();
 
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        await _deniedDialog();
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          await _deniedDialog();
+        }
       }
+
+      if (permission == LocationPermission.deniedForever) {
+        await _deniedForeverDialog();
+      }
+
+      return Future.error('Unknown error');
     }
-
-    if (permission == LocationPermission.deniedForever) {
-      await _deniedForeverDialog();
-    }
-
-    _positionStream?.cancel();
-    _positionStream = Geolocator.getPositionStream().listen(
-      (Position? position) async {
-        location = LatLng(position?.latitude ?? 0, position?.longitude ?? 0);
-      },
-    );
-
-    return true;
   }
 
-  Future<LatLng> getCurrentLocation() async {
-    return location ?? LatLng(0, 0);
+  Future<LatLng> _getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition();
+      LatLng result = LatLng(position.latitude, position.longitude);
+      return result;
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   Future<void> _deniedDialog() async {
