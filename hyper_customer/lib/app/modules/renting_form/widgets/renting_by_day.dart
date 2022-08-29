@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:hyper_customer/app/core/utils/number_utils.dart';
 import 'package:hyper_customer/app/core/values/app_assets.dart';
 import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/font_weights.dart';
 import 'package:hyper_customer/app/core/values/text_styles.dart';
 import 'package:hyper_customer/app/modules/renting_form/controllers/renting_day_count_controller.dart';
+import 'package:hyper_customer/app/modules/renting_form/controllers/renting_form_controller.dart';
 
 class RentingByDay extends GetWidget<RentingDayCountController> {
   const RentingByDay({
@@ -127,6 +129,21 @@ class RentingByDay extends GetWidget<RentingDayCountController> {
             const Divider(
               color: AppColors.line,
             ),
+            GetBuilder<RentingFormController>(
+              builder: (controller) {
+                double pricePerDay =
+                    (controller.vehicleRental?.pricePerDay ?? 0).toDouble();
+                double priceByDay = pricePerDay * controller.dayNum;
+
+                return _detailItem(
+                  'Tạm tính',
+                  NumberUtils.vnd(priceByDay),
+                );
+              },
+            ),
+            const Divider(
+              color: AppColors.line,
+            ),
             SizedBox(
               height: 20.h,
             ),
@@ -160,6 +177,28 @@ class RentingByDay extends GetWidget<RentingDayCountController> {
           ],
         );
       },
+    );
+  }
+
+  Row _detailItem(String key, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          key,
+          style: subtitle1.copyWith(
+            fontWeight: FontWeights.regular,
+            color: AppColors.lightBlack,
+          ),
+        ),
+        Text(
+          value,
+          style: subtitle1.copyWith(
+            color: AppColors.softBlack,
+            fontWeight: FontWeights.medium,
+          ),
+        ),
+      ],
     );
   }
 
