@@ -176,7 +176,7 @@ class HyperMap extends GetWidget<BookingDirectionController> {
             ),
             Obx(
               () => Opacity(
-                opacity: controller.bookingState.value == BookingState.select
+                opacity: controller.bookingState.value != BookingState.finding
                     ? 1
                     : 0,
                 child: LocationMarkerLayerWidget(

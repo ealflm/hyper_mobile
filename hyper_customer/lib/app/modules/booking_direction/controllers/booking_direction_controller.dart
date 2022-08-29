@@ -12,7 +12,9 @@ import 'package:hyper_customer/app/core/model/location_model.dart';
 import 'package:hyper_customer/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_customer/app/core/utils/map_polyline_utils.dart';
 import 'package:hyper_customer/app/core/utils/utils.dart';
+import 'package:hyper_customer/app/core/values/app_colors.dart';
 import 'package:hyper_customer/app/core/values/app_values.dart';
+import 'package:hyper_customer/app/core/values/shadow_styles.dart';
 import 'package:hyper_customer/app/data/models/booking_price_model.dart';
 import 'package:hyper_customer/app/data/models/directions_model.dart';
 import 'package:hyper_customer/app/data/models/place_detail_model.dart';
@@ -328,9 +330,21 @@ class BookingDirectionController extends BaseController {
       markers.add(
         Marker(
           point: item,
-          width: 18.r,
-          height: 18.r,
-          builder: (context) => const Icon(Icons.motorcycle),
+          width: 26.r,
+          height: 26.r,
+          builder: (context) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              color: AppColors.hardBlue,
+              boxShadow: ShadowStyles.map,
+            ),
+            child: Icon(
+              Icons.motorcycle,
+              size: 20.r,
+              color: AppColors.white,
+            ),
+          ),
         ),
       );
     }
