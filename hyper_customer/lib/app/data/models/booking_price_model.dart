@@ -22,7 +22,7 @@ class BookingPrice {
     fixedDistance = json['fixedDistance'];
     pricePerKilometer = json['pricePerKilometer'];
     totalPrice = (json['totalPrice'] / 1000.0).round() * 1000.0;
-    priceAfterDiscount = json['priceAfterDiscount'];
+    priceAfterDiscount = json['priceAfterDiscount'].round();
   }
 
   Map<String, dynamic> toJson() {

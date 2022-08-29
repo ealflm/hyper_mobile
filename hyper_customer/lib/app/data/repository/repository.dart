@@ -78,7 +78,11 @@ abstract class Repository {
 
   Future<bool> clearNotifications(String customerId);
 
-  Future<BookingPrice> getBookingPrice(double distance, int seat);
+  Future<BookingPrice> getBookingPrice(
+    String customerId,
+    double distance,
+    int seat,
+  );
 
   Future<bool> returnVehicle(String code, String customerTripId);
 

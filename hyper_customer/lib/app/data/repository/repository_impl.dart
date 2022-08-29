@@ -521,10 +521,15 @@ class RepositoryImpl extends BaseRepository implements Repository {
   }
 
   @override
-  Future<BookingPrice> getBookingPrice(double distance, int seat) {
+  Future<BookingPrice> getBookingPrice(
+    String customerId,
+    double distance,
+    int seat,
+  ) {
     var endpoint = "${DioProvider.baseUrl}/booking";
 
     var param = {
+      "customerId": customerId,
       "distance": distance,
       "seat": seat,
     };

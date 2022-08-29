@@ -247,7 +247,10 @@ class BookingDirectionController extends BaseController {
   Future<BookingPrice?> getBookingPrice(double distance, int seat) async {
     BookingPrice? result;
 
-    var bookingPriceService = _repository.getBookingPrice(distance, seat);
+    String customerId = TokenManager.instance.user?.customerId ?? '';
+
+    var bookingPriceService =
+        _repository.getBookingPrice(customerId, distance, seat);
 
     await callDataService(
       bookingPriceService,
