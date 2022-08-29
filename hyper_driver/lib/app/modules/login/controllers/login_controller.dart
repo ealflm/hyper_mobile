@@ -205,7 +205,17 @@ class LoginController extends BaseController {
         phoneNumber.value,
         password!,
       );
-      Get.offAllNamed('${Routes.MAIN}?appInit=true');
+
+      String route = Routes.MAIN;
+
+      bool isBooking = TokenManager.instance.isBookingRole();
+      if (isBooking) {
+        route = '${Routes.MAIN}?appInit=true&isBooking=true';
+      } else {
+        route = '${Routes.MAIN}?appInit=true';
+      }
+
+      Get.offAllNamed(route);
     }
   }
 
@@ -235,7 +245,17 @@ class LoginController extends BaseController {
         phone,
         password,
       );
-      Get.offAllNamed('${Routes.MAIN}?appInit=true');
+
+      String route = Routes.MAIN;
+
+      bool isBooking = TokenManager.instance.isBookingRole();
+      if (isBooking) {
+        route = '${Routes.MAIN}?appInit=true&isBooking=true';
+      } else {
+        route = '${Routes.MAIN}?appInit=true';
+      }
+
+      Get.offAllNamed(route);
     }
   }
 

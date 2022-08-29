@@ -8,6 +8,7 @@ import 'package:hyper_driver/app/core/controllers/notification_controller.dart'
 import 'package:hyper_driver/app/core/controllers/setting_controller.dart';
 import 'package:hyper_driver/app/core/controllers/signalr_controller.dart';
 import 'package:hyper_driver/app/core/utils/utils.dart';
+import 'package:hyper_driver/app/core/widgets/hyper_dialog.dart';
 import 'package:hyper_driver/app/modules/account/controllers/account_controller.dart';
 import 'package:hyper_driver/app/modules/account/views/account_view.dart';
 import 'package:hyper_driver/app/modules/activity/controllers/activity_controller.dart';
@@ -35,11 +36,19 @@ class MainController extends GetxController {
 
   var activityLoading = false.obs;
 
+  var isBooking = false.obs;
+
   @override
   void onInit() async {
     if (Get.parameters['appInit'] == 'true') {
       SignalR.instance.start();
       app.NotificationController.instance.registerNotification();
+    }
+
+    if (Get.parameters['isBooking'] == 'true') {
+      isBooking.value = true;
+    } else {
+      currentTab.value = 2;
     }
 
     initController();
@@ -81,6 +90,25 @@ class MainController extends GetxController {
   }
 
   void changeTab(int index) {
+    if (!isBooking.value) {
+      if (index == 0) {
+        HyperDialog.show(
+          title: 'Chưa phát triển',
+          content: 'Tính năng chưa được phát triển',
+          primaryButtonText: 'OK',
+        );
+        return;
+      }
+      if (index == 1) {
+        HyperDialog.show(
+          title: 'Chưa phát triển',
+          content: 'Tính năng chưa được phát triển',
+          primaryButtonText: 'OK',
+        );
+        return;
+      }
+    }
+
     currentTab.value = index;
     switch (index) {
       case 0:

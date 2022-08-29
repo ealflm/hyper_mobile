@@ -60,6 +60,10 @@ class TokenManager extends Interceptor {
     }
   }
 
+  bool isBookingRole() {
+    return user?.vehicleId != null && user?.vehicleId != "";
+  }
+
   Future<void> saveToken(String? token) async {
     var prefs = await SharedPreferences.getInstance();
 

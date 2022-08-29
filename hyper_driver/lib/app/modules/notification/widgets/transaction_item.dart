@@ -41,6 +41,8 @@ class NotificationItem extends StatelessWidget {
                 _refund()
               else if ((model?.title ?? '').contains('Mua gói dịch vụ'))
                 _package()
+              else if ((model?.title ?? '').contains('Đánh giá'))
+                _rate()
               else
                 _default(),
               SizedBox(
@@ -103,6 +105,28 @@ class NotificationItem extends StatelessWidget {
           Center(
             child: Icon(
               AntIcons.giftFilled,
+              size: 26.r,
+              color: AppColors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _rate() {
+    return Container(
+      width: 40.r,
+      height: 40.r,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColors.yellow,
+      ),
+      child: Stack(
+        children: [
+          Center(
+            child: Icon(
+              Icons.star,
               size: 26.r,
               color: AppColors.white,
             ),
